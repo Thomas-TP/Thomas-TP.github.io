@@ -134,7 +134,9 @@
         </footer>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
     <script>
         const languageSelect = document.getElementById('languageSelect');
 
@@ -181,7 +183,8 @@
                 css3Skill: "CSS3",
                 gitSkill: "Git",
                 githubSkill: "GitHub",
-                githubChart: "GitHub Activity Chart"
+                githubChart: "GitHub Activity Chart",
+                locationPopup: "I am located in Gland!"
             },
             fr: {
                 welcome: "Bienvenue sur la page professionnelle de Thomas-TP",
@@ -219,12 +222,13 @@
                 namePlaceholder: "Votre nom",
                 emailPlaceholder: "Votre email",
                 messagePlaceholder: "Votre message",
-                 javascriptSkill: "JavaScript",
+                javascriptSkill: "JavaScript",
                 html5Skill: "HTML5",
                 css3Skill: "CSS3",
                 gitSkill: "Git",
                 githubSkill: "GitHub",
-                githubChart: "Graphique d'activité GitHub"
+                githubChart: "Graphique d'activité GitHub",
+                locationPopup: "Je suis situé à Gland !"
             }
         };
 
@@ -240,8 +244,12 @@
                         element.placeholder = translations[language][key]; // Translate placeholders for input fields
                     } else if (element.tagName === 'TEXTAREA') {
                         element.placeholder = translations[language][key]; // Translate placeholders for textarea
+                    } else if (key === 'locationPopup') {
+                        // Find the marker and update the popup content
+                        if (window.marker) {
+                            window.marker.bindPopup(translations[language][key]).openPopup();
+                        }
                     }
-
                     else {
                         element.innerHTML = translations[language][key];
                     }
@@ -249,16 +257,29 @@
             });
         }
 
+        let map;
+        let marker;
+
         function initMap() {
-            var map = L.map('map').setView([46.2044, 6.1432], 10); // Coordonnées de Genève, zoom 10
+            // Destroy existing map and marker if they exist
+            if (map) {
+                map.remove();
+            }
+             // Coordinates for Gland, Switzerland
+            const glandCoordinates = [46.4269, 6.2597];
+
+            map = L.map('map').setView(glandCoordinates, 13); // Zoom level 13
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
-            L.marker([46.2044, 6.1432]).addTo(map) // Marqueur à Genève
-                .bindPopup('I am located near Geneva!') // Popup
-                .openPopup();
+             // Use the global marker variable
+            marker = L.marker(glandCoordinates).addTo(map);
+            marker.bindPopup(translations[languageSelect.value].locationPopup).openPopup();
+
+            // Store the marker in the window object
+            window.marker = marker;
         }
 
         // Event listener for language selection
@@ -268,9 +289,11 @@
             initMap(); // Re-initialiser la carte après la traduction (si nécessaire)
         });
 
-        // Initial content update on page load
-        updateContent(languageSelect.value);
-        initMap();
+         // Call the functions after the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            updateContent(languageSelect.value);
+            initMap();
+        });
     </script>
 </body>
 </html>
