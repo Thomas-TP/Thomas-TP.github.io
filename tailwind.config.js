@@ -7,17 +7,26 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Define a softer color palette
-        primary: '#3b82f6',       // A more gentle blue
-        secondary: '#fcd34d',     // A softer yellow
-        accent: '#dc2626',        // A more muted red
-        neutral: '#6b7280',       // A medium gray for text
-        background: '#f5f5f5',    // A light gray for the background
-        'primary-dark': '#2563eb',  // Darker shade of primary for hover/active states
+        primary: '#6366f1',       // Indigo
+        secondary: '#f59e0b',     // Ambre
+        accent: '#dc2626',        // Rouge
+        neutral: '#4a5568',       // Gris foncé
+        background: '#f8fafc',    // Gris très clair
+        'primary-dark': '#4f46e5',  // Version plus foncée du primaire
       },
       fontFamily: {
-        'sans': ['Roboto', 'sans-serif'],
+        'sans': ['Inter', 'sans-serif'], // Une police sans-serif moderne
         'serif': ['Merriweather', 'serif'],
+      },
+      container: {  //Ajout de la configuration container
+        center: true,
+        padding: {
+          DEFAULT: '1rem',
+          sm: '2rem',
+          lg: '4rem',
+          xl: '5rem',
+          '2xl': '6rem',
+        },
       },
     },
   },
@@ -27,6 +36,6 @@ module.exports = {
     require('daisyui'),
   ],
   daisyui: {
-    themes: ["light", "dark"], // Enable both light and dark themes
+    themes: ["light"], //On force le theme light
   },
 }
