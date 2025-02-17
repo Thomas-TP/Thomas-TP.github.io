@@ -7,6 +7,8 @@
     <meta name="description" content="Page professionnelle de Thomas-TP, développeur web. Présentation de projets, compétences et contact.">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.0.0/dist/full.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPvknvV9LmBIAMxMQvO1aLpYSASFjJkNvoAKM/19OIcpY2eqj6z7WQO0m4jmfOjo9I7HA==" crossorigin=""/>
+
     <style>
         /* Add any custom styles here - Keep it minimal! */
     </style>
@@ -63,7 +65,7 @@
               <div id="projects" class="text-lg">
                   <strong data-key="xCloneTitle">X-clone</strong><br>
                   <p data-key="xCloneDescription">A realistic clone of X built with JavaScript.</p>
-                  <p> <a href="#" data-key="projectLink">Lien vers le projet</a></p> <!-- Ajoutez un lien vers votre projet ici -->
+                  <p> <a href="#" data-key="projectLink">Link to project</a></p> <!-- Ajoutez un lien vers votre projet ici -->
               </div>
               <!-- Example project list (adjust based on your actual projects) -->
               <ul class="list-disc list-inside text-lg">
@@ -72,34 +74,58 @@
               </ul>
           </section>
 
-          <!-- Skills Section -->
+           <!-- Skills Section -->
           <section id="skillsSection" class="py-20">
               <h2 class="text-3xl font-semibold mb-6" data-key="skillsTitle">Skills & Tools</h2>
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">  <!-- Grille pour les compétences -->
-                <div>
-                  <h3 class="font-semibold" data-key="languagesTitle">Languages</h3>
-                  <p data-key="languagesList">JavaScript, HTML, CSS</p>
-                </div>
-                <div>
-                  <h3 class="font-semibold" data-key="toolsTitle">Tools</h3>
-                  <p data-key="toolsList">Git, GitHub, VS Code</p>
-                </div>
-                <div>
-                  <h3 class="font-semibold" data-key="frameworksTitle">Frameworks</h3>
-                  <p data-key="frameworksList">React, Tailwind CSS (if applicable)</p>
-                </div>
+              <div class="flex flex-wrap gap-2">
+                  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black" alt="JavaScript" data-key="javascriptSkill">
+                  <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white" alt="HTML5" data-key="html5Skill">
+                  <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white" alt="CSS3" data-key="css3Skill">
+                  <img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white" alt="Git" data-key="gitSkill">
+                  <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" alt="GitHub" data-key="githubSkill">
+                  <!-- Ajoutez d'autres badges pour vos compétences -->
               </div>
           </section>
 
-          <!-- Contact Section -->
+          <!-- Section Activité GitHub -->
+          <section id="githubActivitySection" class="py-20 bg-gray-200 rounded-lg">
+              <h2 class="text-3xl font-semibold mb-6" data-key="githubActivityTitle">GitHub Activity</h2>
+              <img src="https://ghchart.rshah.org/Thomas-TP" alt="GitHub activity chart" data-key="githubChart"/>
+          </section>
+
+          <!-- Section Carte -->
+          <section id="locationSection" class="py-20 bg-gray-200 rounded-lg">
+              <h2 class="text-3xl font-semibold mb-6" data-key="locationTitle">Location</h2>
+              <div id="map" style="height: 300px;"></div>
+          </section>
+
+          <!-- Section Contact -->
           <section id="contactSection" class="py-20 bg-gray-200 rounded-lg">
               <h2 class="text-3xl font-semibold mb-6" data-key="contactTitle">Contact</h2>
-              <p id="contact" class="text-lg">
+
+              <form name="contact" method="POST" data-netlify="true">
+                  <input type="hidden" name="form-name" value="contact" />
+                  <div class="mb-4">
+                      <label class="block text-gray-700 text-sm font-bold mb-2" htmlFor="name" data-key="nameLabel">Name:</label>
+                      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Your Name" name="name" data-key="namePlaceholder">
+                  </div>
+                  <div class="mb-4">
+                      <label class="block text-gray-700 text-sm font-bold mb-2" htmlFor="email" data-key="emailLabel">Email:</label>
+                      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Your Email" name="email" data-key="emailPlaceholder">
+                  </div>
+                  <div class="mb-6">
+                      <label class="block text-gray-700 text-sm font-bold mb-2" htmlFor="message" data-key="messageLabel">Message:</label>
+                      <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="message" placeholder="Your Message" name="message" data-key="messagePlaceholder"></textarea>
+                  </div>
+                  <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" data-key="submitButton">Send</button>
+              </form>
+
+              <p class="text-lg">
                   Twitter: <a href="https://twitter.com/Leo86475265" target="_blank" rel="noopener noreferrer" data-key="twitterLink">@Leo86475265</a><br>
                   ORCID: <a href="#" target="_blank" rel="noopener noreferrer" data-key="orcidLink">0009-0006-6167-6989</a>
               </p>
               <p>LinkedIn: <a href="https://www.linkedin.com/in/thomas-p-6850772aa/" target="_blank" rel="noopener noreferrer" data-key="linkedinLink">Thomas P. on LinkedIn</a></p>
-              <p data-key="email">Email: <a href="mailto:your-email@example.com" data-key="emailLink">your-email@example.com</a></p> <!-- Ajouter votre email -->
+              <p data-key="email">Email: <a href="mailto:your-email@example.com" data-key="emailLink">your-email@example.com</a></p>
           </section>
         </main> <!-- Fin du contenu principal -->
 
@@ -108,6 +134,7 @@
         </footer>
     </div>
 
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
     <script>
         const languageSelect = document.getElementById('languageSelect');
 
@@ -139,7 +166,22 @@
                 orcidLink: "0009-0006-6167-6989",
                 linkedinLink: "Thomas P. on LinkedIn",
                 email: "Email:",
-                emailLink: "your-email@example.com"
+                emailLink: "your-email@example.com",
+                githubActivityTitle: "GitHub Activity",
+                locationTitle: "Location",
+                nameLabel: "Name:",
+                emailLabel: "Email:",
+                messageLabel: "Message:",
+                submitButton: "Send",
+                namePlaceholder: "Your Name",
+                emailPlaceholder: "Your Email",
+                messagePlaceholder: "Your Message",
+                javascriptSkill: "JavaScript",
+                html5Skill: "HTML5",
+                css3Skill: "CSS3",
+                gitSkill: "Git",
+                githubSkill: "GitHub",
+                githubChart: "GitHub Activity Chart"
             },
             fr: {
                 welcome: "Bienvenue sur la page professionnelle de Thomas-TP",
@@ -167,7 +209,22 @@
                 orcidLink: "0009-0006-6167-6989",
                 linkedinLink: "Thomas P. sur LinkedIn",
                 email: "Email :",
-                emailLink: "your-email@example.com"
+                emailLink: "your-email@example.com",
+                githubActivityTitle: "Activité GitHub",
+                locationTitle: "Localisation",
+                nameLabel: "Nom :",
+                emailLabel: "Email :",
+                messageLabel: "Message :",
+                submitButton: "Envoyer",
+                namePlaceholder: "Votre nom",
+                emailPlaceholder: "Votre email",
+                messagePlaceholder: "Votre message",
+                 javascriptSkill: "JavaScript",
+                html5Skill: "HTML5",
+                css3Skill: "CSS3",
+                gitSkill: "Git",
+                githubSkill: "GitHub",
+                githubChart: "Graphique d'activité GitHub"
             }
         };
 
@@ -177,24 +234,43 @@
             elements.forEach(element => {
                 const key = element.dataset.key;
                 if (translations[language] && translations[language][key]) {
-                    // Check if the element is an <a> tag
                     if (element.tagName === 'A') {
                         element.textContent = translations[language][key];
-                    } else {
+                    } else if (element.tagName === 'INPUT' && (element.type === 'text' || element.type === 'email')) {
+                        element.placeholder = translations[language][key]; // Translate placeholders for input fields
+                    } else if (element.tagName === 'TEXTAREA') {
+                        element.placeholder = translations[language][key]; // Translate placeholders for textarea
+                    }
+
+                    else {
                         element.innerHTML = translations[language][key];
                     }
                 }
             });
         }
 
+        function initMap() {
+            var map = L.map('map').setView([46.2044, 6.1432], 10); // Coordonnées de Genève, zoom 10
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            L.marker([46.2044, 6.1432]).addTo(map) // Marqueur à Genève
+                .bindPopup('I am located near Geneva!') // Popup
+                .openPopup();
+        }
+
         // Event listener for language selection
         languageSelect.addEventListener('change', (event) => {
             const language = event.target.value;
             updateContent(language);
+            initMap(); // Re-initialiser la carte après la traduction (si nécessaire)
         });
 
         // Initial content update on page load
         updateContent(languageSelect.value);
+        initMap();
     </script>
 </body>
 </html>
