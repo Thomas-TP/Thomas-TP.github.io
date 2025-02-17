@@ -25,7 +25,4 @@ module.exports = {
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
   ],
-  daisyui: {
-    themes: ["light"], //On force le theme light
-  },
 }
