@@ -4,20 +4,21 @@ module.exports = {
     './index.html',
     './src/**/*.{js,jsx,ts,tsx,vue}',
   ],
-  darkMode: 'class',
+  darkMode: 'class', // Enable dark mode based on class
   theme: {
     extend: {
       colors: {
-        primary: '#2563eb',      // Un bleu plus moderne
-        secondary: '#facc15',    // Un jaune plus doux
-        accent: '#e11d48',       // Un rouge pour les accents
-        neutral: '#4b5563',      // Gris plus foncé
-        background: '#f9fafb',   // Gris très clair pour l'arrière-plan
-        'primary-dark': '#1e40af', // Version plus foncée de la couleur primaire
+        // Define a softer color palette
+        primary: '#3b82f6',       // A more gentle blue
+        secondary: '#fcd34d',     // A softer yellow
+        accent: '#dc2626',        // A more muted red
+        neutral: '#6b7280',       // A medium gray for text
+        background: '#f5f5f5',    // A light gray for the background
+        'primary-dark': '#2563eb',  // Darker shade of primary for hover/active states
       },
       fontFamily: {
-        'sans': ['Roboto', 'sans-serif'], // Utilisez Roboto comme police sans-serif
-        'serif': ['Merriweather', 'serif'], // Utilisez Merriweather comme police serif
+        'sans': ['Roboto', 'sans-serif'],
+        'serif': ['Merriweather', 'serif'],
       },
     },
   },
@@ -27,6 +28,6 @@ module.exports = {
     require('daisyui'),
   ],
   daisyui: {
-    themes: ["light", "dark"],
+    themes: ["light", "dark"], // Enable both light and dark themes
   },
 }
