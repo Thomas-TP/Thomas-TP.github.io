@@ -1,59 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thomas-TP's Professional Page</title>
     <meta name="description" content="Page professionnelle de Thomas-TP, développeur web. Présentation de projets, compétences et contact.">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.0.0/dist/full.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/heroicons@2.0.16/script.js"></script>
+
     <style>
-      html {
-        scroll-behavior: smooth;
-      }
+        /* Ajoutez ici vos styles personnalisés - Gardez-les au minimum! */
     </style>
 </head>
 <body class="bg-background text-neutral font-sans">
+    <div class="container mx-auto p-4">
+        <!-- Section d'en-tête -->
+        <header class="flex justify-between items-center py-6">
+            <a href="/" class="text-3xl font-bold text-primary hover:text-primary-dark transition-colors duration-200" aria-label="Homepage">Thomas-TP</a>
+            <select id="languageSelect" class="bg-white border border-gray-300 rounded-md p-2 shadow-sm text-neutral">
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+            </select>
+        </header>
 
-    <!-- Barre de Navigation -->
-    <nav class="bg-white shadow-md sticky top-0 z-10">
-      <div class="container mx-auto py-4 px-6 flex items-center justify-between">
-        <a href="#" class="text-xl font-semibold text-primary">Thomas-TP</a>
-        <div class="space-x-4">
-          <a href="#about" class="hover:text-primary transition-colors">À propos</a>
-          <a href="#educationSection" class="hover:text-primary transition-colors">Formation</a>
-          <a href="#projectsSection" class="hover:text-primary transition-colors">Projets</a>
-          <a href="#contactSection" class="hover:text-primary transition-colors">Contact</a>
-        </div>
-      </div>
-    </nav>
-
-    <div class="container mx-auto py-8">
-
-        <!-- Hero Section -->
+        <!-- Section Hero -->
         <section id="hero" class="relative py-24 rounded-lg overflow-hidden" style="background-image: url('image/background.jpg'); background-size: cover; background-position: center;">
             <div class="absolute inset-0 bg-gradient-to-r from-primary to-secondary opacity-20"></div>
             <div class="relative text-center text-white">
-                <h2 id="welcome" class="text-5xl font-bold mb-4 font-serif" data-key="welcome">Welcome to Thomas-TP's Professional Page</h2>
+                <h2 id="welcome" class="text-4xl font-bold mb-4 font-serif" data-key="welcome">Welcome to Thomas-TP's Professional Page</h2>
                 <p id="description" class="text-xl font-light" data-key="description">This is a professional GitHub Page showcasing my projects and achievements.</p>
             </div>
         </section>
 
         <main>
-          <!-- À propos -->
-          <section id="about" class="py-16">
+          <!-- Section À propos -->
+          <section id="about" class="py-20">
               <h2 class="text-3xl font-semibold mb-6 font-serif" data-key="aboutMeTitle">About Me</h2>
               <p id="aboutMeText" class="text-lg" data-key="aboutMeDescription">👋 Hello, I'm Thomas! Passionate about web development, currently enhancing skills in JavaScript and front-end technologies while working on X-clone.</p>
               <!-- Ajouter une photo de profil serait un plus -->
           </section>
 
-          <!-- Formation -->
-          <section id="educationSection" class="py-16 bg-white rounded-lg shadow-md">
-              <h2 class="text-2xl font-semibold mb-4" data-key="educationTitle">Education</h2>
+          <!-- Section Formation -->
+          <section id="educationSection" class="py-20 bg-gray-100 rounded-lg shadow-sm">
+              <h2 class="text-3xl font-semibold mb-6 font-serif" data-key="educationTitle">Education</h2>
               <p id="education" class="text-lg" data-key="educationDescription">
                   Geneva Institute of Technology<br>
                   CFC d'informaticien, Informatique<br>
@@ -61,9 +55,9 @@
               </p>
           </section>
 
-          <!-- Certifications -->
-          <section id="certificationsSection" class="py-16 bg-white rounded-lg shadow-md">
-              <h2 class="text-2xl font-semibold mb-4" data-key="certificationsTitle">Certifications</h2>
+          <!-- Section Certifications -->
+          <section id="certificationsSection" class="py-20">
+              <h2 class="text-3xl font-semibold mb-6 font-serif" data-key="certificationsTitle">Certifications</h2>
               <ul id="certifications" class="list-disc list-inside text-lg" data-key="certificationsList">
                   <li>IOT - Programming Hub (Dec 2024) - Certification ID: 99de3518f3787d2</li>
                   <li>English for IT 1 - Cisco Networking Academy (Oct 2024)</li>
@@ -72,22 +66,22 @@
               </ul>
           </section>
 
-          <!-- Projets -->
-          <section id="projectsSection" class="py-16 bg-white rounded-lg shadow-md">
-              <h2 class="text-2xl font-semibold mb-4" data-key="projectsTitle">Projects</h2>
+          <!-- Section Projets -->
+          <section id="projectsSection" class="py-20 bg-gray-100 rounded-lg shadow-sm">
+              <h2 class="text-3xl font-semibold mb-6 font-serif" data-key="projectsTitle">Projects</h2>
               <div id="projects" class="text-lg">
                   <strong data-key="xCloneTitle">X-clone</strong><br>
                   <p data-key="xCloneDescription">A realistic clone of X built with JavaScript.</p>
                   <p> <a href="#" class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="projectLink">Link to project</a></p>
               </div>
               <ul class="list-disc list-inside text-lg">
-                  <li><a href="https://github.com/Thomas-TP" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="project1">Check my Github</a></li>
+                  <li><a href="https://github.com/Thomas-TP" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="project1" aria-label="Check my Github">Check my Github</a></li>
               </ul>
           </section>
 
-           <!-- Compétences -->
-          <section id="skillsSection" class="py-16 bg-white rounded-lg shadow-md">
-              <h2 class="text-2xl font-semibold mb-4" data-key="skillsTitle">Skills & Tools</h2>
+           <!-- Section Compétences -->
+          <section id="skillsSection" class="py-20">
+              <h2 class="text-3xl font-semibold mb-6 font-serif" data-key="skillsTitle">Skills & Tools</h2>
               <div class="flex flex-wrap gap-2">
                   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black" alt="JavaScript" data-key="javascriptSkill">
                   <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white" alt="HTML5" data-key="html5Skill">
@@ -97,17 +91,17 @@
               </div>
           </section>
 
-          <!-- Activité GitHub -->
-          <section id="githubActivitySection" class="py-16 bg-white rounded-lg shadow-md">
-              <h2 class="text-2xl font-semibold mb-4" data-key="githubActivityTitle">GitHub Activity</h2>
-              <a href="https://git.io/streak-stats">
+          <!-- Section Activité GitHub -->
+          <section id="githubActivitySection" class="py-20 bg-gray-100 rounded-lg shadow-sm">
+              <h2 class="text-3xl font-semibold mb-6 font-serif" data-key="githubActivityTitle">GitHub Activity</h2>
+              <a href="https://git.io/streak-stats" aria-label="GitHub Streak">
                   <img src="https://github-readme-streak-stats.herokuapp.com/?user=Thomas-TP&theme=transparent&hide_border=true&date_format=j%20M%5B%20Y%5D" alt="GitHub Streak" data-key="githubChart"/>
               </a>
           </section>
 
-          <!-- Contact -->
-          <section id="contactSection" class="py-16 bg-white rounded-lg shadow-md">
-              <h2 class="text-2xl font-semibold mb-4" data-key="contactTitle">Contact</h2>
+          <!-- Section Contact -->
+          <section id="contactSection" class="py-20 bg-gray-100 rounded-lg shadow-sm">
+              <h2 class="text-3xl font-semibold mb-6 font-serif" data-key="contactTitle">Contact</h2>
 
               <form name="contact" method="POST" data-netlify="true" class="max-w-lg mx-auto">
                   <input type="hidden" name="form-name" value="contact" />
@@ -146,18 +140,6 @@
             © 2024 Thomas-TP
         </footer>
     </div>
-  <script>
-    // JavaScript pour l'animation de défilement fluide
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
-  </script>
     <script src="script.js"></script>
 </body>
 </html>
