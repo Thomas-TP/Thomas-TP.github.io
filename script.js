@@ -20,7 +20,7 @@ const translations = {
         contactTitle: "Contact",
         twitterLink: "@Leo86475265",
         orcidLink: "0009-0006-6167-6989",
-        linkedinLink: "Thomas P. sur LinkedIn",
+        linkedinLink: "Thomas P. on LinkedIn",
         email: "Email:",
         emailLink: "your-email@example.com",
         githubActivityTitle: "GitHub Activity",
@@ -34,7 +34,7 @@ const translations = {
         javascriptSkill: "JavaScript",
         html5Skill: "HTML5",
         css3Skill: "CSS3",
-        gitSkill: "Git",
+        gitSkill: "GitHub",
         githubSkill: "GitHub",
         githubChart: "GitHub Activity Chart"
     },
