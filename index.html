@@ -24,8 +24,8 @@
 
         <!-- Hero Section -->
         <section id="hero" class="text-center py-20 bg-blue-500 text-white rounded-lg">
-            <h2 id="welcome" class="text-5xl font-extrabold mb-4">Welcome to Thomas-TP's Professional Page</h2>
-            <p id="description" class="text-xl">This is a professional GitHub Page showcasing my projects and achievements.</p>
+            <h2 id="welcome" class="text-5xl font-extrabold mb-4" data-key="welcome">Welcome to Thomas-TP's Professional Page</h2>
+            <p id="description" class="text-xl" data-key="description">This is a professional GitHub Page showcasing my projects and achievements.</p>
         </section>
 
         <main>  <!-- Main Content -->
@@ -86,7 +86,7 @@
                 </div>
                 <div>
                   <h3 class="font-semibold" data-key="frameworksTitle">Frameworks</h3>
-                  <p data-key="frameworksList">React, Tailwind CSS (si applicable)</p>
+                  <p data-key="frameworksList">React, Tailwind CSS (if applicable)</p>
                 </div>
               </div>
           </section>
@@ -95,11 +95,11 @@
           <section id="contactSection" class="py-20 bg-gray-200 rounded-lg">
               <h2 class="text-3xl font-semibold mb-6" data-key="contactTitle">Contact</h2>
               <p id="contact" class="text-lg">
-                  Twitter: <a href="https://twitter.com/Leo86475265" target="_blank" rel="noopener noreferrer">@Leo86475265</a><br>
-                  ORCID: <a href="#" target="_blank" rel="noopener noreferrer">0009-0006-6167-6989</a>
+                  Twitter: <a href="https://twitter.com/Leo86475265" target="_blank" rel="noopener noreferrer" data-key="twitterLink">@Leo86475265</a><br>
+                  ORCID: <a href="#" target="_blank" rel="noopener noreferrer" data-key="orcidLink">0009-0006-6167-6989</a>
               </p>
-              <p>LinkedIn: <a href="https://www.linkedin.com/in/thomas-p-6850772aa/" target="_blank" rel="noopener noreferrer">Thomas P. on LinkedIn</a></p>
-              <p>Email: <a href="mailto:your-email@example.com">your-email@example.com</a></p> <!-- Ajouter votre email -->
+              <p>LinkedIn: <a href="https://www.linkedin.com/in/thomas-p-6850772aa/" target="_blank" rel="noopener noreferrer" data-key="linkedinLink">Thomas P. on LinkedIn</a></p>
+              <p data-key="email">Email: <a href="mailto:your-email@example.com" data-key="emailLink">your-email@example.com</a></p> <!-- Ajouter votre email -->
           </section>
         </main> <!-- Fin du contenu principal -->
 
@@ -134,7 +134,12 @@
                 toolsList: "Git, GitHub, VS Code",
                 frameworksTitle: "Frameworks",
                 frameworksList: "React, Tailwind CSS (if applicable)",
-                contactTitle: "Contact"
+                contactTitle: "Contact",
+                twitterLink: "@Leo86475265",
+                orcidLink: "0009-0006-6167-6989",
+                linkedinLink: "Thomas P. on LinkedIn",
+                email: "Email:",
+                emailLink: "your-email@example.com"
             },
             fr: {
                 welcome: "Bienvenue sur la page professionnelle de Thomas-TP",
@@ -157,7 +162,12 @@
                 toolsList: "Git, GitHub, VS Code",
                 frameworksTitle: "Frameworks",
                 frameworksList: "React, Tailwind CSS (si applicable)",
-                contactTitle: "Contact"
+                contactTitle: "Contact",
+                twitterLink: "@Leo86475265",
+                orcidLink: "0009-0006-6167-6989",
+                linkedinLink: "Thomas P. sur LinkedIn",
+                email: "Email :",
+                emailLink: "your-email@example.com"
             }
         };
 
@@ -167,7 +177,12 @@
             elements.forEach(element => {
                 const key = element.dataset.key;
                 if (translations[language] && translations[language][key]) {
-                    element.innerHTML = translations[language][key];
+                    // Check if the element is an <a> tag
+                    if (element.tagName === 'A') {
+                        element.textContent = translations[language][key];
+                    } else {
+                        element.innerHTML = translations[language][key];
+                    }
                 }
             });
         }
