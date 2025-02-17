@@ -12,7 +12,7 @@ module.exports = {
         secondary: '#fdd835',     // A softer yellow
         accent: '#dc2626',        // A more muted red
         neutral: '#374151',       // A slightly darker gray for text
-        background: '#f9fafb',    // A light gray for the background
+        background: '#ffffff',    // White background
         'primary-dark': '#2563eb',  // Darker shade of primary
       },
       fontFamily: {
