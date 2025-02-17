@@ -4,7 +4,6 @@ module.exports = {
     './index.html',
     './src/**/*.{js,jsx,ts,tsx,vue}',
   ],
-  darkMode: 'class', // Enable dark mode based on class
   theme: {
     extend: {
       colors: {
