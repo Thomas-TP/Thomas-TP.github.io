@@ -23,23 +23,23 @@
         </header>
 
         <!-- Hero Section -->
-        <section class="text-center py-20 bg-blue-500 text-white rounded-lg">
+        <section id="hero" class="text-center py-20 bg-blue-500 text-white rounded-lg">
             <h2 id="welcome" class="text-5xl font-extrabold mb-4">Welcome to Thomas-TP's Professional Page</h2>
             <p id="description" class="text-xl">This is a professional GitHub Page showcasing my projects and achievements.</p>
         </section>
 
         <main>  <!-- Main Content -->
           <!-- About Section -->
-          <section class="py-20">
-              <h2 class="text-3xl font-semibold mb-6">About Me</h2>
-              <p class="text-lg">👋 Hello, I'm Thomas! I'm a passionate web developer from Switzerland, currently working on X-clone and enhancing my skills in JavaScript and front-end development.</p>
+          <section id="about" class="py-20">
+              <h2 class="text-3xl font-semibold mb-6" data-key="aboutMeTitle">About Me</h2>
+              <p id="aboutMeText" class="text-lg" data-key="aboutMeDescription">👋 Hello, I'm Thomas! Passionate about web development, currently enhancing skills in JavaScript and front-end technologies while working on X-clone. </p>
               <!-- Ajouter une photo de profil serait un plus -->
           </section>
 
           <!-- Education Section -->
-          <section class="py-20 bg-gray-200 rounded-lg">
-              <h2 class="text-3xl font-semibold mb-6">Education</h2>
-              <p id="education" class="text-lg">
+          <section id="educationSection" class="py-20 bg-gray-200 rounded-lg">
+              <h2 class="text-3xl font-semibold mb-6" data-key="educationTitle">Education</h2>
+              <p id="education" class="text-lg" data-key="educationDescription">
                   Geneva Institute of Technology<br>
                   CFC d'informaticien, Informatique<br>
                   August 2024 - July 2028
@@ -47,9 +47,9 @@
           </section>
 
           <!-- Certifications Section -->
-          <section class="py-20">
-              <h2 class="text-3xl font-semibold mb-6">Certifications</h2>
-              <ul id="certifications" class="list-disc list-inside text-lg">
+          <section id="certificationsSection" class="py-20">
+              <h2 class="text-3xl font-semibold mb-6" data-key="certificationsTitle">Certifications</h2>
+              <ul id="certifications" class="list-disc list-inside text-lg" data-key="certificationsList">
                   <li>IOT - Programming Hub (Dec 2024) - Certification ID: 99de3518f3787d2</li>
                   <li>English for IT 1 - Cisco Networking Academy (Oct 2024)</li>
                   <li>Linux Essentials - Programming Hub (Mar 2024) - Certification ID: 1709284761076</li>
@@ -58,41 +58,47 @@
           </section>
 
           <!-- Projects Section -->
-          <section class="py-20 bg-gray-200 rounded-lg">
-              <h2 class="text-3xl font-semibold mb-6">Projects</h2>
+          <section id="projectsSection" class="py-20 bg-gray-200 rounded-lg">
+              <h2 class="text-3xl font-semibold mb-6" data-key="projectsTitle">Projects</h2>
               <div id="projects" class="text-lg">
-                  <strong>X-clone</strong><br>
-                  A realistic clone of X built with JavaScript.
-                  <p> <a href="#">Lien vers le projet</a></p> <!-- Ajoutez un lien vers votre projet ici -->
+                  <strong data-key="xCloneTitle">X-clone</strong><br>
+                  <p data-key="xCloneDescription">A realistic clone of X built with JavaScript.</p>
+                  <p> <a href="#" data-key="projectLink">Lien vers le projet</a></p> <!-- Ajoutez un lien vers votre projet ici -->
               </div>
+              <!-- Example project list (adjust based on your actual projects) -->
+              <ul class="list-disc list-inside text-lg">
+                  <li><a href="https://github.com/Thomas-TP" target="_blank" rel="noopener noreferrer" data-key="project1">Check my Github</a></li>
+                  <!-- Add more projects here -->
+              </ul>
           </section>
 
           <!-- Skills Section -->
-          <section class="py-20">
-              <h2 class="text-3xl font-semibold mb-6">Skills & Tools</h2>
+          <section id="skillsSection" class="py-20">
+              <h2 class="text-3xl font-semibold mb-6" data-key="skillsTitle">Skills & Tools</h2>
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">  <!-- Grille pour les compétences -->
                 <div>
-                  <h3 class="font-semibold">Languages</h3>
-                  <p>JavaScript, HTML, CSS</p>
+                  <h3 class="font-semibold" data-key="languagesTitle">Languages</h3>
+                  <p data-key="languagesList">JavaScript, HTML, CSS</p>
                 </div>
                 <div>
-                  <h3 class="font-semibold">Tools</h3>
-                  <p>Git, GitHub, VS Code</p>
+                  <h3 class="font-semibold" data-key="toolsTitle">Tools</h3>
+                  <p data-key="toolsList">Git, GitHub, VS Code</p>
                 </div>
                 <div>
-                  <h3 class="font-semibold">Frameworks</h3>
-                  <p>React, Tailwind CSS (si applicable)</p>
+                  <h3 class="font-semibold" data-key="frameworksTitle">Frameworks</h3>
+                  <p data-key="frameworksList">React, Tailwind CSS (si applicable)</p>
                 </div>
               </div>
           </section>
 
           <!-- Contact Section -->
-          <section class="py-20 bg-gray-200 rounded-lg">
-              <h2 class="text-3xl font-semibold mb-6">Contact</h2>
+          <section id="contactSection" class="py-20 bg-gray-200 rounded-lg">
+              <h2 class="text-3xl font-semibold mb-6" data-key="contactTitle">Contact</h2>
               <p id="contact" class="text-lg">
-                  Twitter: <a href="https://twitter.com/Leo86475265">@Leo86475265</a><br>
-                  ORCID: <a href="#">0009-0006-6167-6989</a>
+                  Twitter: <a href="https://twitter.com/Leo86475265" target="_blank" rel="noopener noreferrer">@Leo86475265</a><br>
+                  ORCID: <a href="#" target="_blank" rel="noopener noreferrer">0009-0006-6167-6989</a>
               </p>
+              <p>LinkedIn: <a href="https://www.linkedin.com/in/thomas-p-6850772aa/" target="_blank" rel="noopener noreferrer">Thomas P. on LinkedIn</a></p>
               <p>Email: <a href="mailto:your-email@example.com">your-email@example.com</a></p> <!-- Ajouter votre email -->
           </section>
         </main> <!-- Fin du contenu principal -->
@@ -104,45 +110,76 @@
 
     <script>
         const languageSelect = document.getElementById('languageSelect');
-        const welcomeText = {
-            en: "Welcome to Thomas-TP's Professional Page",
-            fr: "Bienvenue sur la page professionnelle de Thomas-TP"
-        };
-        const descriptionText = {
-            en: "This is a professional GitHub Page showcasing my projects and achievements.",
-            fr: "Ceci est une page professionnelle GitHub présentant mes projets et réalisations."
-        };
-        const educationText = {
-            en: "Geneva Institute of Technology<br>CFC d'informaticien, Informatique<br>August 2024 - July 2028",
-            fr: "Institut de Technologie de Genève<br>CFC d'informaticien, Informatique<br>août 2024 - juil. 2028"
-        };
-        const certificationsText = {
-            en: "<li>IOT - Programming Hub (Dec 2024) - Certification ID: 99de3518f3787d2</li><li>English for IT 1 - Cisco Networking Academy (Oct 2024)</li><li>Linux Essentials - Programming Hub (Mar 2024) - Certification ID: 1709284761076</li><li>Machine Learning - Programming Hub (Feb 2024) - Certification ID: 1709194876030</li>",
-            fr: "<li>IOT - Programming Hub (déc. 2024) - Identifiant de la certification : 99de3518f3787d2</li><li>English for IT 1 - Cisco Networking Academy (oct. 2024)</li><li>Linux Essentials - Programming Hub (mars 2024) - Identifiant de la certification : 1709284761076</li><li>Machine Learning - Programming Hub (févr. 2024) - Identifiant de la certification : 1709194876030</li>"
-        };
-        const projectsText = {
-            en: "<strong>X-clone</strong><br>A realistic clone of X built with JavaScript.",
-            fr: "<strong>X-clone</strong><br>Un clone réaliste de X construit avec JavaScript."
-        };
-        const skillsText = {
-            en: "JavaScript, HTML, CSS<br>Git, GitHub<br>Web development frameworks and libraries",
-            fr: "JavaScript, HTML, CSS<br>Git, GitHub<br>Frameworks et bibliothèques de développement web"
-        };
-        const contactText = {
-            en: "Twitter: @Leo86475265<br>ORCID: 0009-0006-6167-6989",
-            fr: "Twitter : @Leo86475265<br>ORCID : 0009-0006-6167-6989"
+
+        // Translation data (using data-key attributes)
+        const translations = {
+            en: {
+                welcome: "Welcome to Thomas-TP's Professional Page",
+                description: "This is a professional GitHub Page showcasing my projects and achievements.",
+                aboutMeTitle: "About Me",
+                aboutMeDescription: "👋 Hello, I'm Thomas! Passionate about web development, currently enhancing skills in JavaScript and front-end technologies while working on X-clone.",
+                educationTitle: "Education",
+                educationDescription: "Geneva Institute of Technology<br>CFC d'informaticien, Informatique<br>August 2024 - July 2028",
+                certificationsTitle: "Certifications",
+                certificationsList: "<li>IOT - Programming Hub (Dec 2024) - Certification ID: 99de3518f3787d2</li><li>English for IT 1 - Cisco Networking Academy (Oct 2024)</li><li>Linux Essentials - Programming Hub (Mar 2024) - Certification ID: 1709284761076</li><li>Machine Learning - Programming Hub (Feb 2024) - Certification ID: 1709194876030</li>",
+                projectsTitle: "Projects",
+                xCloneTitle: "X-clone",
+                xCloneDescription: "A realistic clone of X built with JavaScript.",
+                projectLink: "Link to project",
+                project1: "Check my Github",
+                skillsTitle: "Skills & Tools",
+                languagesTitle: "Languages",
+                languagesList: "JavaScript, HTML, CSS",
+                toolsTitle: "Tools",
+                toolsList: "Git, GitHub, VS Code",
+                frameworksTitle: "Frameworks",
+                frameworksList: "React, Tailwind CSS (if applicable)",
+                contactTitle: "Contact"
+            },
+            fr: {
+                welcome: "Bienvenue sur la page professionnelle de Thomas-TP",
+                description: "Ceci est une page professionnelle GitHub présentant mes projets et réalisations.",
+                aboutMeTitle: "À propos de moi",
+                aboutMeDescription: "👋 Bonjour, je suis Thomas ! Passionné par le développement web, je travaille actuellement à améliorer mes compétences en JavaScript et les technologies front-end tout en travaillant sur X-clone.",
+                educationTitle: "Formation",
+                educationDescription: "Institut de Technologie de Genève<br>CFC d'informaticien, Informatique<br>août 2024 - juil. 2028",
+                certificationsTitle: "Certifications",
+                certificationsList: "<li>IOT - Programming Hub (déc. 2024) - Identifiant de la certification : 99de3518f3787d2</li><li>English for IT 1 - Cisco Networking Academy (oct. 2024)</li><li>Linux Essentials - Programming Hub (mars 2024) - Identifiant de la certification : 1709284761076</li><li>Machine Learning - Programming Hub (févr. 2024) - Identifiant de la certification : 1709194876030</li>",
+                projectsTitle: "Projets",
+                xCloneTitle: "X-clone",
+                xCloneDescription: "Un clone réaliste de X construit avec JavaScript.",
+                projectLink: "Lien vers le projet",
+                project1: "Voir mon Github",
+                skillsTitle: "Compétences et outils",
+                languagesTitle: "Langages",
+                languagesList: "JavaScript, HTML, CSS",
+                toolsTitle: "Outils",
+                toolsList: "Git, GitHub, VS Code",
+                frameworksTitle: "Frameworks",
+                frameworksList: "React, Tailwind CSS (si applicable)",
+                contactTitle: "Contact"
+            }
         };
 
+        // Function to update text content based on the selected language
+        function updateContent(language) {
+            const elements = document.querySelectorAll('[data-key]');
+            elements.forEach(element => {
+                const key = element.dataset.key;
+                if (translations[language] && translations[language][key]) {
+                    element.innerHTML = translations[language][key];
+                }
+            });
+        }
+
+        // Event listener for language selection
         languageSelect.addEventListener('change', (event) => {
             const language = event.target.value;
-            document.getElementById('welcome').innerHTML = welcomeText[language];
-            document.getElementById('description').innerHTML = descriptionText[language];
-            document.getElementById('education').innerHTML = educationText[language];
-            document.getElementById('certifications').innerHTML = certificationsText[language];
-            document.getElementById('projects').innerHTML = projectsText[language];
-            document.getElementById('skills').innerHTML = skillsText[language];
-            document.getElementById('contact').innerHTML = contactText[language];
+            updateContent(language);
         });
+
+        // Initial content update on page load
+        updateContent(languageSelect.value);
     </script>
 </body>
 </html>
