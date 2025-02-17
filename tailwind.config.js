@@ -27,6 +27,6 @@ module.exports = {
     require('daisyui'),
   ],
   daisyui: {
-    themes: ["light", "dark"], // Enable both light and dark themes
+    themes: ["light"], //On force le theme light
   },
 }
