@@ -4,25 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thomas-TP's Professional Page</title>
+    <meta name="description" content="Page professionnelle de Thomas-TP, développeur web. Présentation de projets, compétences et contact.">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.0.0/dist/full.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/flowbite@1.4.7/dist/flowbite.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/tailwind-elements@1.0.0/dist/css/index.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/@headlessui/react@latest/dist/headlessui.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/@material-tailwind/react@latest/dist/material-tailwind.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wind-ui/dist/wind-ui.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kometa-ui/dist/kometa-ui.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/meraki-ui/dist/meraki-ui.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lofi-ui/dist/lofi-ui.min.css">
     <style>
-        /* Add any custom styles here */
+        /* Add any custom styles here - Keep it minimal! */
     </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
     <div class="container mx-auto p-4">
         <!-- Header Section -->
         <header class="flex justify-between items-center py-6">
-            <h1 class="text-4xl font-bold">Thomas-TP</h1>
+            <a href="/" class="text-4xl font-bold text-blue-600 hover:text-blue-800">Thomas-TP</a>  <!-- Lien vers la page d'accueil -->
             <select id="languageSelect" class="bg-white border border-gray-300 rounded-md p-2">
                 <option value="en">English</option>
                 <option value="fr">Français</option>
@@ -35,63 +28,80 @@
             <p id="description" class="text-xl">This is a professional GitHub Page showcasing my projects and achievements.</p>
         </section>
 
-        <!-- About Section -->
-        <section class="py-20">
-            <h2 class="text-3xl font-semibold mb-6">About Me</h2>
-            <p class="text-lg">👋 Hello, I'm Thomas! I'm a passionate web developer from Switzerland, currently working on X-clone and enhancing my skills in JavaScript and front-end development.</p>
-        </section>
+        <main>  <!-- Main Content -->
+          <!-- About Section -->
+          <section class="py-20">
+              <h2 class="text-3xl font-semibold mb-6">About Me</h2>
+              <p class="text-lg">👋 Hello, I'm Thomas! I'm a passionate web developer from Switzerland, currently working on X-clone and enhancing my skills in JavaScript and front-end development.</p>
+              <!-- Ajouter une photo de profil serait un plus -->
+          </section>
 
-        <!-- Education Section -->
-        <section class="py-20 bg-gray-200 rounded-lg">
-            <h2 class="text-3xl font-semibold mb-6">Education</h2>
-            <p id="education" class="text-lg">
-                Geneva Institute of Technology<br>
-                CFC d'informaticien, Informatique<br>
-                August 2024 - July 2028
-            </p>
-        </section>
+          <!-- Education Section -->
+          <section class="py-20 bg-gray-200 rounded-lg">
+              <h2 class="text-3xl font-semibold mb-6">Education</h2>
+              <p id="education" class="text-lg">
+                  Geneva Institute of Technology<br>
+                  CFC d'informaticien, Informatique<br>
+                  August 2024 - July 2028
+              </p>
+          </section>
 
-        <!-- Certifications Section -->
-        <section class="py-20">
-            <h2 class="text-3xl font-semibold mb-6">Certifications</h2>
-            <ul id="certifications" class="list-disc list-inside text-lg">
-                <li>IOT - Programming Hub (Dec 2024) - Certification ID: 99de3518f3787d2</li>
-                <li>English for IT 1 - Cisco Networking Academy (Oct 2024)</li>
-                <li>Linux Essentials - Programming Hub (Mar 2024) - Certification ID: 1709284761076</li>
-                <li>Machine Learning - Programming Hub (Feb 2024) - Certification ID: 1709194876030</li>
-            </ul>
-        </section>
+          <!-- Certifications Section -->
+          <section class="py-20">
+              <h2 class="text-3xl font-semibold mb-6">Certifications</h2>
+              <ul id="certifications" class="list-disc list-inside text-lg">
+                  <li>IOT - Programming Hub (Dec 2024) - Certification ID: 99de3518f3787d2</li>
+                  <li>English for IT 1 - Cisco Networking Academy (Oct 2024)</li>
+                  <li>Linux Essentials - Programming Hub (Mar 2024) - Certification ID: 1709284761076</li>
+                  <li>Machine Learning - Programming Hub (Feb 2024) - Certification ID: 1709194876030</li>
+              </ul>
+          </section>
 
-        <!-- Projects Section -->
-        <section class="py-20 bg-gray-200 rounded-lg">
-            <h2 class="text-3xl font-semibold mb-6">Projects</h2>
-            <div id="projects" class="text-lg">
-                <strong>X-clone</strong><br>
-                A realistic clone of X built with JavaScript.
-            </div>
-        </section>
+          <!-- Projects Section -->
+          <section class="py-20 bg-gray-200 rounded-lg">
+              <h2 class="text-3xl font-semibold mb-6">Projects</h2>
+              <div id="projects" class="text-lg">
+                  <strong>X-clone</strong><br>
+                  A realistic clone of X built with JavaScript.
+                  <p> <a href="#">Lien vers le projet</a></p> <!-- Ajoutez un lien vers votre projet ici -->
+              </div>
+          </section>
 
-        <!-- Skills Section -->
-        <section class="py-20">
-            <h2 class="text-3xl font-semibold mb-6">Skills & Tools</h2>
-            <p id="skills" class="text-lg">
-                JavaScript, HTML, CSS<br>
-                Git, GitHub<br>
-                Web development frameworks and libraries
-            </p>
-        </section>
+          <!-- Skills Section -->
+          <section class="py-20">
+              <h2 class="text-3xl font-semibold mb-6">Skills & Tools</h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">  <!-- Grille pour les compétences -->
+                <div>
+                  <h3 class="font-semibold">Languages</h3>
+                  <p>JavaScript, HTML, CSS</p>
+                </div>
+                <div>
+                  <h3 class="font-semibold">Tools</h3>
+                  <p>Git, GitHub, VS Code</p>
+                </div>
+                <div>
+                  <h3 class="font-semibold">Frameworks</h3>
+                  <p>React, Tailwind CSS (si applicable)</p>
+                </div>
+              </div>
+          </section>
 
-        <!-- Contact Section -->
-        <section class="py-20 bg-gray-200 rounded-lg">
-            <h2 class="text-3xl font-semibold mb-6">Contact</h2>
-            <p id="contact" class="text-lg">
-                Twitter: @Leo86475265<br>
-                ORCID: 0009-0006-6167-6989
-            </p>
-        </section>
+          <!-- Contact Section -->
+          <section class="py-20 bg-gray-200 rounded-lg">
+              <h2 class="text-3xl font-semibold mb-6">Contact</h2>
+              <p id="contact" class="text-lg">
+                  Twitter: <a href="https://twitter.com/Leo86475265">@Leo86475265</a><br>
+                  ORCID: <a href="#">0009-0006-6167-6989</a>
+              </p>
+              <p>Email: <a href="mailto:your-email@example.com">your-email@example.com</a></p> <!-- Ajouter votre email -->
+          </section>
+        </main> <!-- Fin du contenu principal -->
+
+        <footer class="text-center py-4 text-gray-500">
+            © 2024 Thomas-TP
+        </footer>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@1.4.7/dist/flowbite.js"></script>
     <script>
         const languageSelect = document.getElementById('languageSelect');
         const welcomeText = {
