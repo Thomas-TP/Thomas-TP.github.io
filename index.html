@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,39 +14,39 @@
     <script src="https://cdn.jsdelivr.net/npm/heroicons@2.0.16/script.js"></script>
 
     <style>
-        /* Add any custom styles here - Keep it minimal! */
+        /* Ajoutez ici vos styles personnalisés - Gardez-les au minimum! */
     </style>
 </head>
-<body class="bg-background text-neutral font-sans">
+<body class="bg-background text-neutral font-sans dark:bg-gray-800 dark:text-gray-200">
     <div class="container mx-auto p-4">
-        <!-- Header Section -->
+        <!-- Section d'en-tête -->
         <header class="flex justify-between items-center py-6">
-            <a href="/" class="text-4xl font-bold text-primary hover:text-primary-dark transition-colors duration-200">Thomas-TP</a>  <!-- Lien vers la page d'accueil -->
-            <select id="languageSelect" class="bg-white border border-gray-300 rounded-md p-2 shadow-sm">
+            <a href="/" class="text-3xl font-bold text-primary hover:text-primary-dark transition-colors duration-200" aria-label="Homepage">Thomas-TP</a>
+            <select id="languageSelect" class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md p-2 shadow-sm text-neutral dark:text-gray-300">
                 <option value="en">English</option>
                 <option value="fr">Français</option>
             </select>
         </header>
 
-        <!-- Hero Section -->
+        <!-- Section Hero -->
         <section id="hero" class="relative py-24 rounded-lg overflow-hidden" style="background-image: url('image/background.jpg'); background-size: cover; background-position: center;">
             <div class="absolute inset-0 bg-gradient-to-r from-primary to-secondary opacity-20"></div>
             <div class="relative text-center text-white">
-                <h2 id="welcome" class="text-5xl font-bold mb-4 font-serif" data-key="welcome">Welcome to Thomas-TP's Professional Page</h2>
+                <h2 id="welcome" class="text-4xl font-bold mb-4 font-serif" data-key="welcome">Welcome to Thomas-TP's Professional Page</h2>
                 <p id="description" class="text-xl font-light" data-key="description">This is a professional GitHub Page showcasing my projects and achievements.</p>
             </div>
         </section>
 
-        <main>  <!-- Main Content -->
-          <!-- About Section -->
+        <main>
+          <!-- Section À propos -->
           <section id="about" class="py-20">
               <h2 class="text-3xl font-semibold mb-6 font-serif" data-key="aboutMeTitle">About Me</h2>
-              <p id="aboutMeText" class="text-lg" data-key="aboutMeDescription">👋 Hello, I'm Thomas! Passionate about web development, currently enhancing skills in JavaScript and front-end technologies while working on X-clone. </p>
+              <p id="aboutMeText" class="text-lg" data-key="aboutMeDescription">👋 Hello, I'm Thomas! Passionate about web development, currently enhancing skills in JavaScript and front-end technologies while working on X-clone.</p>
               <!-- Ajouter une photo de profil serait un plus -->
           </section>
 
-          <!-- Education Section -->
-          <section id="educationSection" class="py-20 bg-gray-100 rounded-lg shadow-sm">
+          <!-- Section Formation -->
+          <section id="educationSection" class="py-20 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm">
               <h2 class="text-3xl font-semibold mb-6 font-serif" data-key="educationTitle">Education</h2>
               <p id="education" class="text-lg" data-key="educationDescription">
                   Geneva Institute of Technology<br>
@@ -55,7 +55,7 @@
               </p>
           </section>
 
-          <!-- Certifications Section -->
+          <!-- Section Certifications -->
           <section id="certificationsSection" class="py-20">
               <h2 class="text-3xl font-semibold mb-6 font-serif" data-key="certificationsTitle">Certifications</h2>
               <ul id="certifications" class="list-disc list-inside text-lg" data-key="certificationsList">
@@ -66,22 +66,20 @@
               </ul>
           </section>
 
-          <!-- Projects Section -->
-          <section id="projectsSection" class="py-20 bg-gray-100 rounded-lg shadow-sm">
+          <!-- Section Projets -->
+          <section id="projectsSection" class="py-20 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm">
               <h2 class="text-3xl font-semibold mb-6 font-serif" data-key="projectsTitle">Projects</h2>
               <div id="projects" class="text-lg">
                   <strong data-key="xCloneTitle">X-clone</strong><br>
                   <p data-key="xCloneDescription">A realistic clone of X built with JavaScript.</p>
-                  <p> <a href="#" class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="projectLink">Link to project</a></p> <!-- Ajoutez un lien vers votre projet ici -->
+                  <p> <a href="#" class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="projectLink">Link to project</a></p>
               </div>
-              <!-- Example project list (adjust based on your actual projects) -->
               <ul class="list-disc list-inside text-lg">
-                  <li><a href="https://github.com/Thomas-TP" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="project1">Check my Github</a></li>
-                  <!-- Add more projects here -->
+                  <li><a href="https://github.com/Thomas-TP" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="project1" aria-label="Check my Github">Check my Github</a></li>
               </ul>
           </section>
 
-           <!-- Skills Section -->
+           <!-- Section Compétences -->
           <section id="skillsSection" class="py-20">
               <h2 class="text-3xl font-semibold mb-6 font-serif" data-key="skillsTitle">Skills & Tools</h2>
               <div class="flex flex-wrap gap-2">
@@ -90,36 +88,34 @@
                   <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white" alt="CSS3" data-key="css3Skill">
                   <img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white" alt="Git" data-key="gitSkill">
                   <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" alt="GitHub" data-key="githubSkill">
-                  <!-- Ajoutez d'autres badges pour vos compétences -->
               </div>
           </section>
 
           <!-- Section Activité GitHub -->
-          <section id="githubActivitySection" class="py-20 bg-gray-100 rounded-lg shadow-sm">
+          <section id="githubActivitySection" class="py-20 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm">
               <h2 class="text-3xl font-semibold mb-6 font-serif" data-key="githubActivityTitle">GitHub Activity</h2>
-              <a href="https://git.io/streak-stats">
+              <a href="https://git.io/streak-stats" aria-label="GitHub Streak">
                   <img src="https://github-readme-streak-stats.herokuapp.com/?user=Thomas-TP&theme=transparent&hide_border=true&date_format=j%20M%5B%20Y%5D" alt="GitHub Streak" data-key="githubChart"/>
               </a>
           </section>
 
-
           <!-- Section Contact -->
-          <section id="contactSection" class="py-20 bg-gray-100 rounded-lg shadow-sm">
+          <section id="contactSection" class="py-20 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm">
               <h2 class="text-3xl font-semibold mb-6 font-serif" data-key="contactTitle">Contact</h2>
 
-              <form name="contact" method="POST" data-netlify="true">
+              <form name="contact" method="POST" data-netlify="true" class="max-w-lg mx-auto">
                   <input type="hidden" name="form-name" value="contact" />
                   <div class="mb-4">
-                      <label class="block text-gray-700 text-sm font-bold mb-2" htmlFor="name" data-key="nameLabel">Name:</label>
-                      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Your Name" name="name" data-key="namePlaceholder">
+                      <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="name" data-key="nameLabel">Name:</label>
+                      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-800 dark:border-gray-600" id="name" type="text" placeholder="Your Name" name="name" data-key="namePlaceholder">
                   </div>
                   <div class="mb-4">
-                      <label class="block text-gray-700 text-sm font-bold mb-2" htmlFor="email" data-key="emailLabel">Email:</label>
-                      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Your Email" name="email" data-key="emailPlaceholder">
+                      <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="email" data-key="emailLabel">Email:</label>
+                      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-800 dark:border-gray-600" id="email" type="email" placeholder="Your Email" name="email" data-key="emailPlaceholder">
                   </div>
                   <div class="mb-6">
-                      <label class="block text-gray-700 text-sm font-bold mb-2" htmlFor="message" data-key="messageLabel">Message:</label>
-                      <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="message" placeholder="Your Message" name="message" data-key="messagePlaceholder"></textarea>
+                      <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="message" data-key="messageLabel">Message:</label>
+                      <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline dark:bg-gray-800 dark:border-gray-600" id="message" placeholder="Your Message" name="message" data-key="messagePlaceholder"></textarea>
                   </div>
                   <button class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200" type="submit" data-key="submitButton">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2 inline-block">
@@ -129,16 +125,18 @@
                   </button>
               </form>
 
-              <p class="text-lg">
-                  Twitter: <a href="https://twitter.com/Leo86475265" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="twitterLink">@Leo86475265</a><br>
-                  ORCID: <a href="#" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="orcidLink">0009-0006-6167-6989</a>
-              </p>
-              <p>LinkedIn: <a href="https://www.linkedin.com/in/thomas-p-6850772aa/" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="linkedinLink">Thomas P. on LinkedIn</a></p>
-              <p data-key="email">Email: <a href="mailto:your-email@example.com"  class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="emailLink">your-email@example.com</a></p>
+              <div class="mt-8">
+                <p class="text-lg">
+                    Twitter: <a href="https://twitter.com/Leo86475265" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="twitterLink" aria-label="My Twitter Profile">@Leo86475265</a><br>
+                    ORCID: <a href="#" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="orcidLink" aria-label="My ORCID Profile">0009-0006-6167-6989</a>
+                </p>
+                <p>LinkedIn: <a href="https://www.linkedin.com/in/thomas-p-6850772aa/" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="linkedinLink" aria-label="My LinkedIn Profile">Thomas P. on LinkedIn</a></p>
+                <p data-key="email">Email: <a href="mailto:your-email@example.com"  class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="emailLink" aria-label="Send me an email">your-email@example.com</a></p>
+              </div>
           </section>
-        </main> <!-- Fin du contenu principal -->
+        </main>
 
-        <footer class="text-center py-4 text-gray-500">
+        <footer class="text-center py-4 text-gray-500 dark:text-gray-400">
             © 2024 Thomas-TP
         </footer>
     </div>
