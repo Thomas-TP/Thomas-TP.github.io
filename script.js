@@ -17,12 +17,6 @@ const translations = {
         projectLink: "Link to project",
         project1: "Check my Github",
         skillsTitle: "Skills & Tools",
-        languagesTitle: "Languages",
-        languagesList: "JavaScript, HTML, CSS",
-        toolsTitle: "Tools",
-        toolsList: "Git, GitHub, VS Code",
-        frameworksTitle: "Frameworks",
-        frameworksList: "React, Tailwind CSS (if applicable)",
         contactTitle: "Contact",
         twitterLink: "@Leo86475265",
         orcidLink: "0009-0006-6167-6989",
@@ -59,12 +53,6 @@ const translations = {
         projectLink: "Lien vers le projet",
         project1: "Voir mon Github",
         skillsTitle: "Compétences et outils",
-        languagesTitle: "Langages",
-        languagesList: "JavaScript, HTML, CSS",
-        toolsTitle: "Outils",
-        toolsList: "Git, GitHub, VS Code",
-        frameworksTitle: "Frameworks",
-        frameworksList: "React, Tailwind CSS (si applicable)",
         contactTitle: "Contact",
         twitterLink: "@Leo86475265",
         orcidLink: "0009-0006-6167-6989",
@@ -79,7 +67,7 @@ const translations = {
         namePlaceholder: "Votre nom",
         emailPlaceholder: "Votre email",
         messagePlaceholder: "Votre message",
-        javascriptSkill: "JavaScript",
+         javascriptSkill: "JavaScript",
         html5Skill: "HTML5",
         css3Skill: "CSS3",
         gitSkill: "Git",
@@ -94,12 +82,11 @@ function updateContent(language) {
     elements.forEach(element => {
         const key = element.dataset.key;
         if (translations[language] && translations[language][key]) {
-            if (element.tagName === 'A') {
-                element.textContent = translations[language][key];
-            } else if (element.tagName === 'INPUT' && (element.type === 'text' || element.type === 'email')) {
-                element.placeholder = translations[language][key]; // Translate placeholders for input fields
+            // Correctly handle different element types
+            if (element.tagName === 'INPUT' && (element.type === 'text' || element.type === 'email')) {
+                element.placeholder = translations[language][key];
             } else if (element.tagName === 'TEXTAREA') {
-                element.placeholder = translations[language][key]; // Translate placeholders for textarea
+                element.placeholder = translations[language][key];
             } else {
                 element.innerHTML = translations[language][key];
             }
@@ -108,12 +95,16 @@ function updateContent(language) {
 }
 
 // Event listener for language selection
-languageSelect.addEventListener('change', (event) => {
-    const language = event.target.value;
-    updateContent(language);
-});
+if (languageSelect) {
+    languageSelect.addEventListener('change', (event) => {
+        const language = event.target.value;
+        updateContent(language);
+    });
+}
 
 // Call the functions after the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    updateContent(languageSelect.value);
+    if (languageSelect) {
+        updateContent(languageSelect.value);
+    }
 });
