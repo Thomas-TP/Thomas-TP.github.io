@@ -18,7 +18,7 @@
     </style>
 </head>
 <body class="bg-background text-neutral font-sans">
-    <div class="container mx-auto p-4">
+    <div class="container mx-auto p-6">
         <!-- Section d'en-tête -->
         <header class="flex justify-between items-center py-6">
             <a href="/" class="text-3xl font-bold text-primary hover:text-primary-dark transition-colors duration-200" aria-label="Homepage">Thomas-TP</a>
@@ -39,14 +39,14 @@
 
         <main>
           <!-- Section À propos -->
-          <section id="about" class="py-20">
+          <section id="about" class="py-24">
               <h2 class="text-3xl font-semibold mb-8 font-serif" data-key="aboutMeTitle">About Me</h2>
               <p id="aboutMeText" class="text-lg" data-key="aboutMeDescription">👋 Hello, I'm Thomas! Passionate about web development, currently enhancing skills in JavaScript and front-end technologies while working on X-clone.</p>
               <!-- Ajouter une photo de profil serait un plus -->
           </section>
 
           <!-- Section Formation -->
-          <section id="educationSection" class="py-20 bg-gray-100 rounded-xl shadow-md">
+          <section id="educationSection" class="py-24 bg-gray-50 rounded-xl shadow-md">
               <h2 class="text-3xl font-semibold mb-8 font-serif" data-key="educationTitle">Education</h2>
               <p id="education" class="text-lg" data-key="educationDescription">
                   Geneva Institute of Technology<br>
@@ -56,7 +56,7 @@
           </section>
 
           <!-- Section Certifications -->
-          <section id="certificationsSection" class="py-20">
+          <section id="certificationsSection" class="py-24">
               <h2 class="text-3xl font-semibold mb-8 font-serif" data-key="certificationsTitle">Certifications</h2>
               <ul id="certifications" class="list-disc list-inside text-lg" data-key="certificationsList">
                   <li>IOT - Programming Hub (Dec 2024) - Certification ID: 99de3518f3787d2</li>
@@ -67,7 +67,7 @@
           </section>
 
           <!-- Section Projets -->
-          <section id="projectsSection" class="py-20 bg-gray-100 rounded-xl shadow-md">
+          <section id="projectsSection" class="py-24 bg-gray-50 rounded-xl shadow-md">
               <h2 class="text-3xl font-semibold mb-8 font-serif" data-key="projectsTitle">Projects</h2>
               <div id="projects" class="text-lg">
                   <strong data-key="xCloneTitle">X-clone</strong><br>
@@ -80,7 +80,7 @@
           </section>
 
            <!-- Section Compétences -->
-          <section id="skillsSection" class="py-20">
+          <section id="skillsSection" class="py-24">
               <h2 class="text-3xl font-semibold mb-8 font-serif" data-key="skillsTitle">Skills & Tools</h2>
               <div class="flex flex-wrap gap-2">
                   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black" alt="JavaScript" data-key="javascriptSkill">
@@ -92,7 +92,7 @@
           </section>
 
           <!-- Section Activité GitHub -->
-          <section id="githubActivitySection" class="py-20 bg-gray-100 rounded-xl shadow-md">
+          <section id="githubActivitySection" class="py-24 bg-gray-50 rounded-xl shadow-md">
               <h2 class="text-3xl font-semibold mb-8 font-serif" data-key="githubActivityTitle">GitHub Activity</h2>
               <a href="https://git.io/streak-stats" aria-label="GitHub Streak">
                   <img src="https://github-readme-streak-stats.herokuapp.com/?user=Thomas-TP&theme=transparent&hide_border=true&date_format=j%20M%5B%20Y%5D" alt="GitHub Streak" data-key="githubChart"/>
@@ -100,24 +100,24 @@
           </section>
 
           <!-- Section Contact -->
-          <section id="contactSection" class="py-20 bg-gray-100 rounded-xl shadow-md">
+          <section id="contactSection" class="py-24 bg-gray-50 rounded-xl shadow-md">
               <h2 class="text-3xl font-semibold mb-8 font-serif" data-key="contactTitle">Contact</h2>
 
               <form name="contact" method="POST" data-netlify="true" class="max-w-lg mx-auto">
                   <input type="hidden" name="form-name" value="contact" />
                   <div class="mb-4">
                       <label class="block text-gray-700 text-sm font-bold mb-2" htmlFor="name" data-key="nameLabel">Name:</label>
-                      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Your Name" name="name" data-key="namePlaceholder">
+                      <input class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Your Name" name="name" data-key="namePlaceholder">
                   </div>
                   <div class="mb-4">
                       <label class="block text-gray-700 text-sm font-bold mb-2" htmlFor="email" data-key="emailLabel">Email:</label>
-                      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Your Email" name="email" data-key="emailPlaceholder">
+                      <input class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Your Email" name="email" data-key="emailPlaceholder">
                   </div>
                   <div class="mb-6">
                       <label class="block text-gray-700 text-sm font-bold mb-2" htmlFor="message" data-key="messageLabel">Message:</label>
-                      <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="message" placeholder="Your Message" name="message" data-key="messagePlaceholder"></textarea>
+                      <textarea class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="message" placeholder="Your Message" name="message" data-key="messagePlaceholder"></textarea>
                   </div>
-                  <button class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200" type="submit" data-key="submitButton">
+                  <button class="bg-primary hover:bg-primary-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200" type="submit" data-key="submitButton">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2 inline-block">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.188A7.178 7.178 0 0112 2.25c4.416 0 8.288 2.882 9.731 7.731L18 12m-18 0l6 6m-6-6h13.5a3 3 0 110 6H5.25A3 3 0 013 12z" />
                       </svg>
@@ -127,11 +127,11 @@
 
               <div class="mt-8">
                 <p class="text-lg">
-                    Twitter: <a href="https://twitter.com/Leo86475265" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="twitterLink">@Leo86475265</a><br>
-                    ORCID: <a href="#" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="orcidLink">0009-0006-6167-6989</a>
+                    Twitter: <a href="https://twitter.com/Leo86475265" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors duration-200 hover:underline" data-key="twitterLink">@Leo86475265</a><br>
+                    ORCID: <a href="#" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors duration-200 hover:underline" data-key="orcidLink">0009-0006-6167-6989</a>
                 </p>
-                <p>LinkedIn: <a href="https://www.linkedin.com/in/thomas-p-6850772aa/" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="linkedinLink">Thomas P. on LinkedIn</a></p>
-                <p data-key="email">Email: <a href="mailto:your-email@example.com"  class="text-blue-500 hover:text-blue-700 transition-colors duration-200" data-key="emailLink">your-email@example.com</a></p>
+                <p>LinkedIn: <a href="https://www.linkedin.com/in/thomas-p-6850772aa/" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors duration-200 hover:underline" data-key="linkedinLink">Thomas P. on LinkedIn</a></p>
+                <p data-key="email">Email: <a href="mailto:your-email@example.com"  class="text-blue-500 hover:text-blue-700 transition-colors duration-200 hover:underline" data-key="emailLink">your-email@example.com</a></p>
               </div>
           </section>
         </main>
