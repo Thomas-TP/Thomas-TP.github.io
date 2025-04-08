@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thomas P. | Informaticien</title>
+    <meta name="description" content="Portfolio professionnel de Thomas P., Informaticien passionné. Découvrez mes projets, compétences et formations.">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <style>
+        :root {
+            --primary: #4f76f7;
+            --primary-dark: #2563eb;
+            --secondary: #fdd835;
+            --accent: #dc2626;
+            --neutral: #374151;
+            --light-gray: #f3f4f6;
+            --dark-gray: #1f2937;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+        
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .skill-badge {
+            transition: all 0.3s ease;
+        }
+        
+        .skill-badge:hover {
+            transform: scale(1.05);
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--primary);
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 20px;
+            width: 2px;
+            height: calc(100% + 10px);
+            background-color: #e5e7eb;
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .timeline-item {
+                padding-left: 25px;
+            }
+            
+            .timeline-item::before {
+                width: 10px;
+                height: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+    <!-- Header avec navigation -->
+    <header class="fixed w-full bg-white shadow-md z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-2xl font-bold text-primary" data-key="name">Thomas P.</a>
+                
+                <div class="hidden md:flex space-x-6">
+                    <a href="#about" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors" data-key="aboutLink">À propos</a>
+                    <a href="#education" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors" data-key="educationLink">Formation</a>
+                    <a href="#skills" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors" data-key="skillsLink">Compétences</a>
+                    <a href="#projects" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors" data-key="projectsLink">Projets</a>
+                    <a href="#certifications" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors" data-key="certificationsLink">Certifications</a>
+                    <a href="#contact" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors" data-key="contactLink">Contact</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <select id="languageSelect" class="bg-white border border-gray-300 rounded-md p-1 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option value="fr">Français</option>
+                        <option value="en">English</option>
+                    </select>
+                    
+                    <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Menu mobile -->
+            <div id="mobileMenu" class="md:hidden hidden pt-4 pb-2">
+                <div class="flex flex-col space-y-3">
+                    <a href="#about" class="font-medium text-gray-700 hover:text-primary transition-colors" data-key="aboutLink">À propos</a>
+                    <a href="#education" class="font-medium text-gray-700 hover:text-primary transition-colors" data-key="educationLink">Formation</a>
+                    <a href="#skills" class="font-medium text-gray-700 hover:text-primary transition-colors" data-key="skillsLink">Compétences</a>
+                    <a href="#projects" class="font-medium text-gray-700 hover:text-primary transition-colors" data-key="projectsLink">Projets</a>
+                    <a href="#certifications" class="font-medium text-gray-700 hover:text-primary transition-colors" data-key="certificationsLink">Certifications</a>
+                    <a href="#contact" class="font-medium text-gray-700 hover:text-primary transition-colors" data-key="contactLink">Contact</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section Hero -->
+    <section id="hero" class="pt-28 pb-20 md:pt-32 md:pb-24 gradient-bg text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4" data-key="heroTitle">Informaticien Passionné</h1>
+                    <p class="text-xl mb-8 opacity-90" data-key="heroSubtitle">Étudiant a Geneva Institute of Technology</p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#projects" class="btn-primary px-6 py-3 rounded-full font-semibold shadow-lg flex items-center">
+                            <span data-key="viewProjects">Voir mes projets</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <a href="#contact" class="bg-white text-primary hover:bg-gray-100 px-6 py-3 rounded-full font-semibold shadow-lg transition-colors">
+                            <span data-key="contactMe">Me contacter</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="relative">
+                        <div class="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white shadow-xl">
+                            <img src="image/profile.jpg" alt="Thomas P." class="w-full h-full object-cover">
+                        </div>
+                        <div class="absolute -bottom-4 -right-4 bg-white text-primary p-4 rounded-full shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section À propos -->
+    <section id="about" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="section-title text-3xl font-bold text-gray-800" data-key="aboutTitle">À propos de moi</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-8">
+                <div>
+                    <p class="text-lg text-gray-700 leading-relaxed mb-6" data-key="aboutDescription">
+                        👋 Bonjour, je suis Thomas ! Informaticien originaire de Suisse, je suis actuellement étudiant a Geneva Institute of Technology où je poursuis un CFC d'informaticien.
+                    </p>
+                    <p class="text-lg text-gray-700 leading-relaxed mb-6" data-key="aboutDescription2">
+                        Je travaille actuellement sur X-clone, un projet personnel qui me permet d'améliorer mes compétences en JavaScript et technologies front-end. Passionné par l'innovation et les nouvelles technologies, je m'intéresse particulièrement au développement web, à l'IOT et au machine learning.
+                    </p>
+                    <div class="flex flex-wrap gap-4 mt-8">
+                        <a href="https://github.com/Thomas-TP" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-gray-800 hover:bg-black text-white px-4 py-2 rounded-md transition-colors">
+                            <i class="fab fa-github"></i>
+                            <span>GitHub</span>
+                        </a>
+                        <a href="https://www.linkedin.com/in/thomas-p-6850772aa/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors">
+                            <i class="fab fa-linkedin"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="https://twitter.com/Leo86475265" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded-md transition-colors">
+                            <i class="fab fa-twitter"></i>
+                            <span>Twitter</span>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800" data-key="quickInfo">Informations rapides</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                <div>
+                                    <span class="font-medium text-gray-700" data-key="currentStatus">Statut actuel:</span>
+                                    <p class="text-gray-600" data-key="studentDeveloper">Informaticien</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <div>
+                                    <span class="font-medium text-gray-700" data-key="location">Localisation:</span>
+                                    <p class="text-gray-600">Suisse-Vaud</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                                <div>
+                                    <span class="font-medium text-gray-700" data-key="education">Formation:</span>
+                                    <p class="text-gray-600" data-key="educationInfo">CFC d'informaticien - Geneva Institute of Technology</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                </svg>
+                                <div>
+                                    <span class="font-medium text-gray-700" data-key="interests">Intérêts:</span>
+                                    <p class="text-gray-600" data-key="interestsList">Développement Web, IOT, Machine Learning</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                <div>
+                                    <span class="font-medium text-gray-700" data-key="email">Email:</span>
+                                    <p class="text-gray-600">
+                                        <a href="mailto:contact@thomas-p.dev" class="text-primary hover:underline">thomas@prudhomme.li</a>
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Formation -->
+    <section id="education" class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="section-title text-3xl font-bold text-gray-800" data-key="educationTitle">Formation</h2>
+            <div class="mt-10 max-w-3xl mx-auto">
+                <div class="timeline-item">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold text-gray-800">Geneva Institute of Technology</h3>
+                        <p class="text-primary font-medium">CFC d'informaticien, Informatique</p>
+                        <p class="text-gray-600">août 2024 - juillet 2028</p>
+                        <p class="mt-3 text-gray-700">Formation professionnelle en informatique</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold text-gray-800">FuturPlus Lausanne</h3>
+                        <p class="text-primary font-medium">Préapprentissage</p>
+                        <p class="text-gray-600">décembre 2023 - juin 2024</p>
+                        <p class="mt-3 text-gray-700">École de préapprentissage préparant aux formations professionnelles en informatique.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold text-gray-800">Grand-Champ</h3>
+                        <p class="text-primary font-medium">Certificat de fin d'école obligatoire</p>
+                        <p class="text-gray-600">septembre 2020 - juin 2023</p>
+                        <p class="mt-3 text-gray-700">Formation scolaire obligatoire.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Compétences -->
+    <section id="skills" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="section-title text-3xl font-bold text-gray-800" data-key="skillsTitle">Compétences & Outils</h2>
+            
+            <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-6 text-gray-800" data-key="technicalSkills">Compétences techniques</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-gray-700">JavaScript</span>
+                                <span class="text-gray-600">Expérimenté</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-primary h-2.5 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-gray-700">HTML5</span>
+                                <span class="text-gray-600">Avancé</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-primary h-2.5 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-gray-700">CSS3</span>
+                                <span class="text-gray-600">Avancé</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-primary h-2.5 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-gray-700">Git & GitHub</span>
+                                <span class="text-gray-600">Expérimenté</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-primary h-2.5 rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-gray-700">Linux</span>
+                                <span class="text-gray-600">Intermédiaire</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-primary h-2.5 rounded-full" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-gray-700">Machine Learning</span>
+                                <span class="text-gray-600">Débutant</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-primary h-2.5 rounded-full" style="width: 50%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-6 text-gray-800" data-key="otherSkills">Autres compétences</h3>
+                    
+                    <div class="flex flex-wrap gap-3">
+                        <span class="skill-badge bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 text-gray-700">IOT</span>
+                        <span class="skill-badge bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 text-gray-700">English IT</span>
+                        <span class="skill-badge bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 text-gray-700">Microsoft 365</span>
+                        <span class="skill-badge bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 text-gray-700">SketchUp</span>
+                        <span class="skill-badge bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 text-gray-700">Responsive Design</span>
+                        <span class="skill-badge bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 text-gray-700">UI/UX Design</span>
+                        <span class="skill-badge bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 text-gray-700">Web Development</span>
+                        <span class="skill-badge bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 text-gray-700">Front-end</span>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mt-10 mb-6 text-gray-800" data-key="languages">Langues</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-gray-700">Français</span>
+                                <span class="text-gray-600">Langue maternelle</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-primary h-2.5 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-gray-700">Anglais</span>
+                                <span class="text-gray-600">Professionnel</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-primary h-2.5 rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Projets -->
+    <section id="projects" class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="section-title text-3xl font-bold text-gray-800" data-key="projectsTitle">Projets</h2>
+            
+            <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="h-48 bg-gray-200 flex items-center justify-center">
+                        <img src="image/background.jpg" alt="X-clone" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">X-clone</h3>
+                        <p class="text-gray-600 mb-4">Un clone réaliste de X construit avec JavaScript, HTML et CSS.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">JavaScript</span>
+                            <span class="bg-orange-100 text-orange-800 text-xs font-medium px-2.5 py-0.5 rounded">HTML</span>
+                            <span class="bg-pink-100 text-pink-800 text-xs font-medium px-2.5 py-0.5 rounded">CSS</span>
+                        </div>
+                        <a href="https://github.com/Thomas-TP/X-clone" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-primary hover:text-primary-dark">
+                            <span>Voir sur GitHub</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="h-48 bg-gray-800 flex items-center justify-center text-white">
+                        <div class="text-center p-6">
+                            <i class="fab fa-github text-5xl mb-2"></i>
+                            <h3 class="text-xl font-semibold">Plus de projets à venir</h3>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Explorez mon GitHub</h3>
+                        <p class="text-gray-600 mb-4">Découvrez mes autres projets et contributions sur GitHub.</p>
+                        <a href="https://github.com/Thomas-TP" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-primary hover:text-primary-dark">
+                            <span>Visiter mon profil GitHub</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- GitHub Activity -->
+            <div class="mt-16">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-6" data-key="githubActivityTitle">Activité GitHub</h3>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <a href="https://git.io/streak-stats" class="block">
+                        <img src="https://github-readme-streak-stats.herokuapp.com/?user=Thomas-TP&theme=transparent&hide_border=true&date_format=j%20M%5B%20Y%5D" alt="GitHub Streak" class="mx-auto">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Certifications -->
+    <section id="certifications" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="section-title text-3xl font-bold text-gray-800" data-key="certificationsTitle">Certifications</h2>
+            
+            <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">GitHub Foundation</h3>
+                    </div>
+                    <p class="text-gray-600 mb-2">Délivré par GitHub</p>
+                    <p class="text-gray-500 text-sm">février 2025 - février 2028</p>
+                </div>
+                
+                <div class="card bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-green-100 p-3 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">IOT</h3>
+                    </div>
+                    <p class="text-gray-600 mb-2">Délivré par Programming Hub</p>
+                    <p class="text-gray-500 text-sm">décembre 2024</p>
+                    <p class="text-gray-500 text-sm mt-2">ID: 99de3518f3787d2</p>
+                </div>
+                
+                <div class="card bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">English for IT 1</h3>
+                    </div>
+                    <p class="text-gray-600 mb-2">Délivré par Cisco Networking Academy</p>
+                    <p class="text-gray-500 text-sm">octobre 2024</p>
+                </div>
+                
+                <div class="card bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-yellow-100 p-3 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">Linux Essentials</h3>
+                    </div>
+                    <p class="text-gray-600 mb-2">Délivré par Programming Hub</p>
+                    <p class="text-gray-500 text-sm">mars 2024</p>
+                    <p class="text-gray-500 text-sm mt-2">ID: 1709284761076</p>
+                </div>
+                
+                <div class="card bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-purple-100 p-3 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">Machine Learning</h3>
+                    </div>
+                    <p class="text-gray-600 mb-2">Délivré par Programming Hub</p>
+                    <p class="text-gray-500 text-sm">février 2024</p>
+                    <p class="text-gray-500 text-sm mt-2">ID: 1709194876030</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Contact -->
+    <section id="contact" class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="section-title text-3xl font-bold text-gray-800" data-key="contactTitle">Contact</h2>
+            
+            <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div>
+                    <h3 class="text-xl font-semibold mb-6 text-gray-800" data-key="getInTouch">Entrer en contact</h3>
+                    <p class="text-gray-700 mb-6" data-key="contactText">
+                        N'hésitez pas à me contacter pour discuter de projets, opportunités de collaboration ou simplement pour échanger sur le développement web et les technologies.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="bg-primary/10 p-3 rounded-full mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-800" data-key="emailContact">Email</h4>
+                                <a href="mailto:contact@thomas-p.dev" class="text-primary hover:underline">thomas@prudhomme.li</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-primary/10 p-3 rounded-full mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-800" data-key="socialMedia">Réseaux sociaux</h4>
+                                <div class="flex space-x-3 mt-2">
+                                    <a href="https://www.linkedin.com/in/thomas-p-6850772aa/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">
+                                        <i class="fab fa-linkedin fa-lg"></i>
+                                    </a>
+                                    <a href="https://github.com/Thomas-TP" target="_blank" rel="noopener noreferrer" class="text-gray-800 hover:text-gray-600">
+                                        <i class="fab fa-github fa-lg"></i>
+                                    </a>
+                                    <a href="https://twitter.com/Leo86475265" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-600">
+                                        <i class="fab fa-twitter fa-lg"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-primary/10 p-3 rounded-full mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-800" data-key="otherProfiles">Autres profils</h4>
+                                <p class="text-gray-600">
+                                    ORCID: <a href="https://orcid.org/0009-0006-6167-6989" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">0009-0006-6167-6989</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-6 text-gray-800" data-key="sendMessage">Envoyer un message</h3>
+                    
+                    <form name="contact" method="POST" data-netlify="true" class="space-y-4">
+                        <input type="hidden" name="form-name" value="contact" />
+                        
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1" data-key="nameLabel">Nom</label>
+                            <input type="text" id="name" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required data-key="namePlaceholder" placeholder="Votre nom">
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1" data-key="emailLabel">Email</label>
+                            <input type="email" id="email" name="email" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required data-key="emailPlaceholder" placeholder="Votre email">
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700 mb-1" data-key="messageLabel">Message</label>
+                            <textarea id="message" name="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required data-key="messagePlaceholder" placeholder="Votre message"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary px-6 py-3 rounded-md font-semibold shadow-md flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                            </svg>
+                            <span data-key="submitButton">Envoyer</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-10 bg-gray-800 text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h2 class="text-2xl font-bold">Thomas P.</h2>
+                    <p class="text-gray-400 mt-2" data-key="footerTagline">Informaticien | Étudiant a Geneva Institute of Technology</p>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <a href="https://github.com/Thomas-TP" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/thomas-p-6850772aa/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-linkedin fa-lg"></i>
+                    </a>
+                    <a href="https://twitter.com/Leo86475265" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-twitter fa-lg"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Thomas P. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Menu mobile toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+        
+        // Système de traduction
+        const languageSelect = document.getElementById('languageSelect');
+
+        // Translation data (using data-key attributes)
+        const translations = {
+            en: {
+                aboutLink: "About",
+                educationLink: "Education",
+                skillsLink: "Skills",
+                projectsLink: "Projects",
+                certificationsLink: "Certifications",
+                contactLink: "Contact",
+                heroTitle: "Passionate IT",
+                heroSubtitle: "Student at Geneva Institute of Technology.",
+                viewProjects: "View my projects",
+                contactMe: "Contact me",
+                aboutTitle: "About Me",
+                aboutDescription: "👋 Hello, I'm Thomas! Passionate IT from Switzerland, I'm currently a student at Geneva Institute of Technology where I'm pursuing a CFC in IT",
+                aboutDescription2: "I'm currently working on X-clone, a personal project that allows me to improve my skills in JavaScript and front-end technologies. Passionate about innovation and new technologies, I'm particularly interested in web development, IOT and machine learning.",
+                quickInfo: "Quick Info",
+                currentStatus: "Current Status:",
+                studentDeveloper: "Student & IT",
+                location: "Location:",
+                education: "Education:",
+                educationInfo: "CFC in Computer Science - Geneva Institute of Technology",
+                interests: "Interests:",
+                interestsList: "Web Development, IOT, Machine Learning",
+                email: "Email:",
+                educationTitle: "Education",
+                skillsTitle: "Skills & Tools",
+                technicalSkills: "Technical Skills",
+                otherSkills: "Other Skills",
+                languages: "Languages",
+                projectsTitle: "Projects",
+                githubActivityTitle: "GitHub Activity",
+                certificationsTitle: "Certifications",
+                contactTitle: "Contact",
+                getInTouch: "Get in Touch",
+                contactText: "Feel free to contact me to discuss projects, collaboration opportunities or simply to exchange about web development and technologies.",
+                emailContact: "Email",
+                socialMedia: "Social Media",
+                otherProfiles: "Other Profiles",
+                sendMessage: "Send a Message",
+                nameLabel: "Name",
+                emailLabel: "Email",
+                messageLabel: "Message",
+                submitButton: "Send",
+                namePlaceholder: "Your name",
+                emailPlaceholder: "Your email",
+                messagePlaceholder: "Your message",
+                footerTagline: "IT | Student at Geneva Institute of Technology"
+            },
+            fr: {
+                aboutLink: "À propos",
+                educationLink: "Formation",
+                skillsLink: "Compétences",
+                projectsLink: "Projets",
+                certificationsLink: "Certifications",
+                contactLink: "Contact",
+                heroTitle: "Développeur Web Passionné",
+                heroSubtitle: "Étudiant a Geneva Institute of Technology, spécialisé en développement web et technologies front-end.",
+                viewProjects: "Voir mes projets",
+                contactMe: "Me contacter",
+                aboutTitle: "À propos de moi",
+                aboutDescription: "👋 Bonjour, je suis Thomas ! Informaticien passionné originaire de Suisse, je suis actuellement étudiant au Geneva Institute of Technology où je poursuis un CFC d'informaticien.",
+                aboutDescription2: "Je travaille actuellement sur X-clone, un projet personnel qui me permet d'améliorer mes compétences en JavaScript et technologies front-end. Passionné par l'innovation et les nouvelles technologies, je m'intéresse particulièrement au développement web, à l'IOT et au machine learning.",
+                quickInfo: "Informations rapides",
+                currentStatus: "Statut actuel:",
+                studentDeveloper: "Étudiant & Informaticien",
+                location: "Localisation:",
+                education: "Formation:",
+                educationInfo: "CFC d'informaticien - Geneva Institute of Technology",
+                interests: "Intérêts:",
+                interestsList: "Développement Web, IOT, Machine Learning",
+                email: "Email:",
+                educationTitle: "Formation",
+                skillsTitle: "Compétences & Outils",
+                technicalSkills: "Compétences techniques",
+                otherSkills: "Autres compétences",
+                languages: "Langues",
+                projectsTitle: "Projets",
+                githubActivityTitle: "Activité GitHub",
+                certificationsTitle: "Certifications",
+                contactTitle: "Contact",
+                getInTouch: "Entrer en contact",
+                contactText: "N'hésitez pas à me contacter pour discuter de projets, opportunités de collaboration ou simplement pour échanger sur le développement web et les technologies.",
+                emailContact: "Email",
+                socialMedia: "Réseaux sociaux",
+                otherProfiles: "Autres profils",
+                sendMessage: "Envoyer un message",
+                nameLabel: "Nom",
+                emailLabel: "Email",
+                messageLabel: "Message",
+                submitButton: "Envoyer",
+                namePlaceholder: "Votre nom",
+                emailPlaceholder: "Votre email",
+                messagePlaceholder: "Votre message",
+                footerTagline: "Informaticien | Étudiant au Geneva Institute of Technology"
+            }
+        };
+
+        // Function to update text content based on the selected language
+        function updateContent(language) {
+            const elements = document.querySelectorAll('[data-key]');
+            elements.forEach(element => {
+                const key = element.dataset.key;
+                if (translations[language] && translations[language][key]) {
+                    // Correctly handle different element types
+                    if (element.tagName === 'INPUT' && (element.type === 'text' || element.type === 'email')) {
+                        element.placeholder = translations[language][key];
+                    } else if (element.tagName === 'TEXTAREA') {
+                        element.placeholder = translations[language][key];
+                    } else {
+                        element.innerHTML = translations[language][key];
+                    }
+                }
+            });
+        }
+
+        // Event listener for language selection
+        if (languageSelect) {
+            languageSelect.addEventListener('change', (event) => {
+                const language = event.target.value;
+                updateContent(language);
+            });
+        }
+
+        // Call the functions after the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            if (languageSelect) {
+                updateContent(languageSelect.value);
+            }
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80, // Adjust for header height
+                            behavior: 'smooth'
+                        });
+                        
+                        // Close mobile menu if open
+                        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                            mobileMenu.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
