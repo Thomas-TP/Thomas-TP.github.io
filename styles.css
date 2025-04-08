@@ -1,0 +1,86 @@
+/* Styles supplémentaires pour améliorer la responsivité et les performances */
+
+/* Optimisations pour les appareils mobiles */
+@media (max-width: 640px) {
+  .hero-content {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  .section-padding {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  .profile-image {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+/* Optimisations pour les tablettes */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .profile-image {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+/* Amélioration des animations et transitions */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Optimisations de performance */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Amélioration de l'accessibilité */
+:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Optimisation du chargement des polices */
+body {
+  font-display: swap;
+}
+
+/* Amélioration des contrastes pour l'accessibilité */
+.text-gray-400 {
+  color: #9ca3af;
+}
+
+.text-gray-600 {
+  color: #4b5563;
+}
+
+/* Optimisation pour l'impression */
+@media print {
+  .no-print {
+    display: none;
+  }
+  
+  body {
+    font-size: 12pt;
+    color: #000;
+    background-color: #fff;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #000;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: none;
+  }
+}
