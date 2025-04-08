@@ -1,0 +1,229 @@
+/* Animations optimisées pour le lancement du site */
+
+/* Utilisation de will-change pour optimiser les performances */
+.will-animate {
+  will-change: opacity, transform;
+}
+
+/* Animation de fondu à l'entrée */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Animation de glissement vers le haut */
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Animation de glissement vers la droite */
+@keyframes slideRight {
+  from {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Animation de glissement vers la gauche */
+@keyframes slideLeft {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Animation de zoom */
+@keyframes zoomIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Animation de rotation pour les icônes */
+@keyframes rotateIn {
+  from {
+    transform: rotate(-10deg) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Classes d'animation avec délais différents */
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease forwards;
+  opacity: 0;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.6s ease forwards;
+  opacity: 0;
+}
+
+.animate-slideRight {
+  animation: slideRight 0.6s ease forwards;
+  opacity: 0;
+}
+
+.animate-slideLeft {
+  animation: slideLeft 0.6s ease forwards;
+  opacity: 0;
+}
+
+.animate-zoomIn {
+  animation: zoomIn 0.6s ease forwards;
+  opacity: 0;
+}
+
+.animate-rotateIn {
+  animation: rotateIn 0.6s ease forwards;
+  opacity: 0;
+}
+
+/* Délais d'animation */
+.delay-100 {
+  animation-delay: 0.1s;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-300 {
+  animation-delay: 0.3s;
+}
+
+.delay-400 {
+  animation-delay: 0.4s;
+}
+
+.delay-500 {
+  animation-delay: 0.5s;
+}
+
+.delay-600 {
+  animation-delay: 0.6s;
+}
+
+.delay-700 {
+  animation-delay: 0.7s;
+}
+
+/* Animation de chargement initial */
+.page-transition {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--primary);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.7s cubic-bezier(0.86, 0, 0.07, 1);
+  transform: translateY(0);
+  will-change: transform;
+}
+
+.page-transition.loaded {
+  transform: translateY(-100%);
+}
+
+.page-transition-logo {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: white;
+  opacity: 0;
+  animation: logoReveal 1s ease forwards;
+}
+
+@keyframes logoReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Masquer initialement le contenu jusqu'à ce que la page soit chargée */
+body.loading {
+  overflow: hidden;
+}
+
+body.loaded .content-container {
+  opacity: 1;
+}
+
+.content-container {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Optimisation pour les appareils à faible puissance */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fadeIn,
+  .animate-slideUp,
+  .animate-slideRight,
+  .animate-slideLeft,
+  .animate-zoomIn,
+  .animate-rotateIn {
+    animation: fadeIn 0.3s ease forwards;
+  }
+  
+  .page-transition {
+    transition: transform 0.5s ease;
+  }
+  
+  .page-transition-logo {
+    animation: fadeIn 0.5s ease forwards;
+  }
+  
+  .delay-100, .delay-200, .delay-300, 
+  .delay-400, .delay-500, .delay-600, .delay-700 {
+    animation-delay: 0.1s;
+  }
+}
+
+/* Optimisation pour les navigateurs plus anciens */
+@supports not (animation-fill-mode: forwards) {
+  .animate-fadeIn, .animate-slideUp, 
+  .animate-slideRight, .animate-slideLeft,
+  .animate-zoomIn, .animate-rotateIn {
+    opacity: 1;
+  }
+}
