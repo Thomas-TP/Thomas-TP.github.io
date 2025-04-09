@@ -1,0 +1,278 @@
+/* Styles pour les animations de texte dynamiques */
+
+/* Animation de machine à écrire */
+.typewriter {
+    overflow: hidden;
+    border-right: 2px solid var(--primary);
+    white-space: nowrap;
+    margin: 0 auto;
+    letter-spacing: 0.1em;
+    animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: var(--primary) }
+}
+
+/* Animation de révélation lettre par lettre */
+.letter-reveal {
+    display: inline-block;
+}
+
+.letter-reveal span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(20px);
+    animation-name: revealLetter;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.38, 0.005, 0.215, 1);
+}
+
+@keyframes revealLetter {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animation de texte qui se dévoile */
+.text-reveal {
+    position: relative;
+    display: inline-block;
+}
+
+.text-reveal::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary);
+    animation: revealText 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+@keyframes revealText {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0;
+    }
+}
+
+/* Animation de texte avec effet de glitch */
+.glitch {
+    position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch::before {
+    left: 2px;
+    text-shadow: -1px 0 var(--accent);
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim-1 5s linear infinite alternate-reverse;
+}
+
+.glitch::after {
+    left: -2px;
+    text-shadow: -1px 0 var(--secondary);
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim-2 5s linear infinite alternate-reverse;
+}
+
+@keyframes glitch-anim-1 {
+    0% {
+        clip: rect(2px, 9999px, 28px, 0);
+    }
+    10% {
+        clip: rect(42px, 9999px, 73px, 0);
+    }
+    20% {
+        clip: rect(61px, 9999px, 78px, 0);
+    }
+    30% {
+        clip: rect(15px, 9999px, 13px, 0);
+    }
+    40% {
+        clip: rect(26px, 9999px, 48px, 0);
+    }
+    50% {
+        clip: rect(42px, 9999px, 46px, 0);
+    }
+    60% {
+        clip: rect(67px, 9999px, 93px, 0);
+    }
+    70% {
+        clip: rect(24px, 9999px, 92px, 0);
+    }
+    80% {
+        clip: rect(89px, 9999px, 99px, 0);
+    }
+    90% {
+        clip: rect(33px, 9999px, 97px, 0);
+    }
+    100% {
+        clip: rect(81px, 9999px, 77px, 0);
+    }
+}
+
+@keyframes glitch-anim-2 {
+    0% {
+        clip: rect(81px, 9999px, 94px, 0);
+    }
+    10% {
+        clip: rect(26px, 9999px, 24px, 0);
+    }
+    20% {
+        clip: rect(38px, 9999px, 18px, 0);
+    }
+    30% {
+        clip: rect(95px, 9999px, 23px, 0);
+    }
+    40% {
+        clip: rect(57px, 9999px, 97px, 0);
+    }
+    50% {
+        clip: rect(28px, 9999px, 49px, 0);
+    }
+    60% {
+        clip: rect(45px, 9999px, 52px, 0);
+    }
+    70% {
+        clip: rect(66px, 9999px, 16px, 0);
+    }
+    80% {
+        clip: rect(40px, 9999px, 31px, 0);
+    }
+    90% {
+        clip: rect(76px, 9999px, 69px, 0);
+    }
+    100% {
+        clip: rect(26px, 9999px, 84px, 0);
+    }
+}
+
+/* Animation de texte avec effet de dégradé */
+.gradient-text {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: gradientText 5s linear infinite;
+}
+
+@keyframes gradientText {
+    0% {
+        background-position: 0% center;
+    }
+    50% {
+        background-position: 100% center;
+    }
+    100% {
+        background-position: 0% center;
+    }
+}
+
+/* Animation de texte avec effet de flou */
+.blur-text {
+    filter: blur(5px);
+    opacity: 0;
+    animation: blurText 1s forwards;
+}
+
+@keyframes blurText {
+    0% {
+        filter: blur(5px);
+        opacity: 0;
+    }
+    100% {
+        filter: blur(0);
+        opacity: 1;
+    }
+}
+
+/* Animation de texte avec effet de rebond */
+.bounce-text span {
+    display: inline-block;
+    animation: bounceText 1s ease forwards;
+    transform: translateY(50px);
+    opacity: 0;
+}
+
+@keyframes bounceText {
+    0% {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    60% {
+        transform: translateY(-20px);
+        opacity: 1;
+    }
+    80% {
+        transform: translateY(10px);
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Adaptation pour le thème sombre */
+.dark-theme .text-reveal::after {
+    background-color: var(--primary-dark);
+}
+
+.dark-theme .gradient-text {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* Adaptation pour les utilisateurs qui préfèrent réduire les animations */
+@media (prefers-reduced-motion: reduce) {
+    .typewriter,
+    .letter-reveal span,
+    .text-reveal::after,
+    .glitch::before,
+    .glitch::after,
+    .gradient-text,
+    .blur-text,
+    .bounce-text span {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        clip: auto !important;
+        text-shadow: none !important;
+    }
+    
+    .typewriter {
+        border-right: none;
+    }
+    
+    .text-reveal::after {
+        display: none;
+    }
+}

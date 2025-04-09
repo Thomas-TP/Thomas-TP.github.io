@@ -1,0 +1,216 @@
+/* Styles pour les micro-animations des éléments d'interface */
+
+/* Animations pour les boutons */
+.btn-animated {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.btn-animated::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+    z-index: 0;
+}
+
+.btn-animated:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-animated:active {
+    transform: scale(0.95);
+}
+
+.btn-animated > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Effet de pulsation pour les icônes */
+.icon-pulse {
+    animation: iconPulse 2s infinite;
+}
+
+@keyframes iconPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Effet de flottement pour les cartes */
+.card-float {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-float:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Effet 3D pour les cartes */
+.card-3d {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+.card-3d:hover {
+    transform: rotateX(5deg) rotateY(5deg);
+    box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Effet de perspective au survol */
+.hover-perspective {
+    transition: transform 0.3s ease;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+.hover-perspective:hover {
+    transform: perspective(1000px) rotateX(var(--rotateX)) rotateY(var(--rotateY));
+}
+
+/* Effet d'ondulation au clic */
+.ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%, -50%);
+    transform-origin: 50% 50%;
+}
+
+.ripple:focus:not(:active)::after {
+    animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0) translate(-50%, -50%);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(20, 20) translate(-50%, -50%);
+        opacity: 0;
+    }
+}
+
+/* Effet de brillance au survol */
+.shine {
+    position: relative;
+    overflow: hidden;
+}
+
+.shine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+    transform: skewX(-25deg);
+    transition: left 0.7s ease;
+}
+
+.shine:hover::before {
+    left: 150%;
+}
+
+/* Effet de rotation pour les icônes */
+.rotate-hover {
+    transition: transform 0.3s ease;
+}
+
+.rotate-hover:hover {
+    transform: rotate(15deg);
+}
+
+/* Effet de secousse pour attirer l'attention */
+.shake-attention {
+    animation: shake 4s cubic-bezier(.36,.07,.19,.97) infinite;
+    animation-play-state: paused;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+.shake-attention:hover {
+    animation-play-state: running;
+}
+
+@keyframes shake {
+    0%, 98%, 100% {
+        transform: translate3d(0, 0, 0);
+    }
+    99% {
+        transform: translate3d(-1px, 0, 0);
+    }
+    99.5% {
+        transform: translate3d(2px, 0, 0);
+    }
+    99.8% {
+        transform: translate3d(-2px, 0, 0);
+    }
+}
+
+/* Effet de rebond pour les badges */
+.badge-bounce:hover {
+    animation: badgeBounce 0.5s ease;
+}
+
+@keyframes badgeBounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+/* Adaptation pour le thème sombre */
+.dark-theme .btn-animated::before {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.dark-theme .shine::before {
+    background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+}
+
+/* Adaptation pour les utilisateurs qui préfèrent réduire les animations */
+@media (prefers-reduced-motion: reduce) {
+    .btn-animated, .card-float, .card-3d, .hover-perspective, .ripple, .shine, .rotate-hover, .shake-attention, .badge-bounce {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+    }
+    
+    .btn-animated::before, .ripple::after, .shine::before {
+        display: none !important;
+    }
+}
