@@ -144,25 +144,30 @@
     </style>
 </head>
 <body class="bg-white text-gray-800 loading">
-    <!-- Animation de transition de page -->
+    <!-- Animation de transition de page améliorée -->
     <div class="page-transition">
-        <div class="page-transition-logo">Thomas P.</div>
+        <div class="particles" id="particles"></div>
+        <div class="page-transition-content">
+            <div class="page-transition-logo">Thomas P.</div>
+            <div class="page-transition-tagline">Informaticien Passionné</div>
+            <div class="page-transition-loader"></div>
+        </div>
     </div>
 
     <div class="content-container">
         <!-- Header avec navigation -->
-        <header class="fixed w-full bg-white shadow-md z-50 animate-fadeIn">
+        <header class="fixed w-full bg-white shadow-md z-50 animate-slideDown">
             <div class="container mx-auto px-4 py-3">
                 <div class="flex justify-between items-center">
-                    <a href="#" class="text-2xl font-bold text-primary animate-fadeIn" data-key="name">Thomas P.</a>
+                    <a href="#" class="text-2xl font-bold text-primary animate-bounceIn" data-key="name">Thomas P.</a>
                     
                     <div class="hidden md:flex space-x-6">
-                        <a href="#about" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors animate-fadeIn delay-100" data-key="aboutLink">À propos</a>
-                        <a href="#education" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors animate-fadeIn delay-200" data-key="educationLink">Formation</a>
-                        <a href="#skills" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors animate-fadeIn delay-300" data-key="skillsLink">Compétences</a>
-                        <a href="#projects" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors animate-fadeIn delay-400" data-key="projectsLink">Projets</a>
-                        <a href="#certifications" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors animate-fadeIn delay-500" data-key="certificationsLink">Certifications</a>
-                        <a href="#contact" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors animate-fadeIn delay-600" data-key="contactLink">Contact</a>
+                        <a href="#about" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors animate-blurIn delay-100" data-key="aboutLink">À propos</a>
+                        <a href="#education" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors animate-blurIn delay-200" data-key="educationLink">Formation</a>
+                        <a href="#skills" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors animate-blurIn delay-300" data-key="skillsLink">Compétences</a>
+                        <a href="#projects" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors animate-blurIn delay-400" data-key="projectsLink">Projets</a>
+                        <a href="#certifications" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors animate-blurIn delay-500" data-key="certificationsLink">Certifications</a>
+                        <a href="#contact" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors animate-blurIn delay-600" data-key="contactLink">Contact</a>
                     </div>
                     
                     <div class="flex items-center space-x-4 animate-fadeIn delay-700">
@@ -171,7 +176,7 @@
                             <option value="en">English</option>
                         </select>
                         
-                        <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none">
+                        <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none animate-rotateIn delay-800">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
@@ -198,26 +203,26 @@
             <div class="container mx-auto px-4">
                 <div class="flex flex-col md:flex-row items-center">
                     <div class="md:w-1/2 mb-10 md:mb-0">
-                        <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-slideRight delay-300" data-key="heroTitle">Informaticien Passionné</h1>
-                        <p class="text-xl mb-8 opacity-90 animate-slideRight delay-400" data-key="heroSubtitle">Étudiant a Geneva Institute of Technology</p>
+                        <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-slideUpBounce delay-300" data-key="heroTitle">Informaticien Passionné</h1>
+                        <p class="text-xl mb-8 opacity-90 animate-slideRight delay-500" data-key="heroSubtitle">Étudiant a Geneva Institute of Technology</p>
                         <div class="flex flex-wrap gap-4">
-                            <a href="#projects" class="btn-primary px-6 py-3 rounded-full font-semibold shadow-lg flex items-center animate-slideRight delay-500">
+                            <a href="#projects" class="btn-primary btn-animated px-6 py-3 rounded-full font-semibold shadow-lg flex items-center animate-slideRight delay-700">
                                 <span data-key="viewProjects">Voir mes projets</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 animate-pulse" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                                 </svg>
                             </a>
-                            <a href="#contact" class="bg-white text-gray-800 hover:bg-gray-100 px-6 py-3 rounded-full font-semibold shadow-lg transition-colors animate-slideRight delay-600">
+                            <a href="#contact" class="bg-white text-gray-800 hover:bg-gray-100 px-6 py-3 rounded-full font-semibold shadow-lg transition-colors animate-slideRight delay-900">
                                 <span data-key="contactMe">Me contacter</span>
                             </a>
                         </div>
                     </div>
                     <div class="md:w-1/2 flex justify-center">
-                        <div class="relative animate-zoomIn delay-300">
+                        <div class="relative animate-flip delay-500">
                             <div class="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white shadow-xl">
                                 <img src="image/profile.jpg" alt="Thomas P." class="w-full h-full object-cover">
                             </div>
-                            <div class="absolute -bottom-4 -right-4 bg-white text-primary p-4 rounded-full shadow-lg animate-rotateIn delay-700">
+                            <div class="absolute -bottom-4 -right-4 bg-white text-primary p-4 rounded-full shadow-lg animate-swing delay-1000">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -230,11 +235,11 @@
         </section>
 
         <!-- Section À propos -->
-        <section id="about" class="py-20 bg-gray-50 will-animate">
+        <section id="about" class="py-20 bg-gray-50 section-reveal">
             <div class="container mx-auto px-4">
                 <h2 class="section-title text-3xl font-bold text-gray-800" data-key="aboutTitle">À propos de moi</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-8">
-                    <div class="will-animate">
+                    <div class="section-reveal">
                         <p class="text-lg text-gray-700 leading-relaxed mb-6" data-key="aboutDescription">
                             👋 Bonjour, je suis Thomas ! Informaticien originaire de Suisse, je suis actuellement étudiant a Geneva Institute of Technology où je poursuis un CFC d'informaticien.
                         </p>
@@ -242,22 +247,22 @@
                             Je travaille actuellement sur X-clone, un projet personnel qui me permet d'améliorer mes compétences en JavaScript et technologies front-end. Passionné par l'innovation et les nouvelles technologies, je m'intéresse particulièrement au développement web, à l'IOT et au machine learning.
                         </p>
                         <div class="flex flex-wrap gap-4 mt-8">
-                            <a href="https://github.com/Thomas-TP" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-gray-800 hover:bg-black text-white px-4 py-2 rounded-md transition-colors">
+                            <a href="https://github.com/Thomas-TP" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-gray-800 hover:bg-black text-white px-4 py-2 rounded-md transition-colors btn-animated">
                                 <i class="fab fa-github"></i>
                                 <span>GitHub</span>
                             </a>
-                            <a href="https://www.linkedin.com/in/thomas-p-6850772aa/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors">
+                            <a href="https://www.linkedin.com/in/thomas-p-6850772aa/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors btn-animated">
                                 <i class="fab fa-linkedin"></i>
                                 <span>LinkedIn</span>
                             </a>
-                            <a href="https://twitter.com/Leo86475265" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded-md transition-colors">
+                            <a href="https://twitter.com/Leo86475265" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded-md transition-colors btn-animated">
                                 <i class="fab fa-twitter"></i>
                                 <span>Twitter</span>
                             </a>
                         </div>
                     </div>
-                    <div class="will-animate">
-                        <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="section-reveal">
+                        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
                             <h3 class="text-xl font-semibold mb-4 text-gray-800" data-key="quickInfo">Informations rapides</h3>
                             <ul class="space-y-3">
                                 <li class="flex items-start">
@@ -316,28 +321,28 @@
         </section>
 
         <!-- Section Formation -->
-        <section id="education" class="py-20 will-animate">
+        <section id="education" class="py-20 section-reveal">
             <div class="container mx-auto px-4">
                 <h2 class="section-title text-3xl font-bold text-gray-800" data-key="educationTitle">Formation</h2>
                 <div class="mt-10 max-w-3xl mx-auto">
-                    <div class="timeline-item will-animate">
-                        <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="timeline-item section-reveal">
+                        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
                             <h3 class="text-xl font-semibold text-gray-800">Geneva Institute of Technology</h3>
                             <p class="text-primary font-medium">CFC d'informaticien, Informatique</p>
                             <p class="text-gray-600">août 2024 - juillet 2028</p>
                             <p class="mt-3 text-gray-700">Formation professionnelle en informatique</p>
                         </div>
                     </div>
-                    <div class="timeline-item will-animate">
-                        <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="timeline-item section-reveal">
+                        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
                             <h3 class="text-xl font-semibold text-gray-800">FuturPlus Lausanne</h3>
                             <p class="text-primary font-medium">Préapprentissage</p>
                             <p class="text-gray-600">décembre 2023 - juin 2024</p>
                             <p class="mt-3 text-gray-700">École de préapprentissage préparant aux formations professionnelles en informatique.</p>
                         </div>
                     </div>
-                    <div class="timeline-item will-animate">
-                        <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="timeline-item section-reveal">
+                        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
                             <h3 class="text-xl font-semibold text-gray-800">Grand-Champ</h3>
                             <p class="text-primary font-medium">Certificat de fin d'école obligatoire</p>
                             <p class="text-gray-600">septembre 2020 - juin 2023</p>
@@ -349,12 +354,12 @@
         </section>
 
         <!-- Section Compétences -->
-        <section id="skills" class="py-20 bg-gray-50 will-animate">
+        <section id="skills" class="py-20 bg-gray-50 section-reveal">
             <div class="container mx-auto px-4">
                 <h2 class="section-title text-3xl font-bold text-gray-800" data-key="skillsTitle">Compétences & Outils</h2>
                 
                 <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="will-animate">
+                    <div class="section-reveal">
                         <h3 class="text-xl font-semibold mb-6 text-gray-800" data-key="technicalSkills">Compétences techniques</h3>
                         
                         <div class="space-y-4">
@@ -363,8 +368,8 @@
                                     <span class="font-medium text-gray-700">JavaScript</span>
                                     <span class="text-gray-600">Expérimenté</span>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 85%"></div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="85%"></div>
                                 </div>
                             </div>
                             
@@ -373,8 +378,8 @@
                                     <span class="font-medium text-gray-700">HTML5</span>
                                     <span class="text-gray-600">Avancé</span>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 90%"></div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="90%"></div>
                                 </div>
                             </div>
                             
@@ -383,8 +388,8 @@
                                     <span class="font-medium text-gray-700">CSS3</span>
                                     <span class="text-gray-600">Avancé</span>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 90%"></div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="90%"></div>
                                 </div>
                             </div>
                             
@@ -393,8 +398,8 @@
                                     <span class="font-medium text-gray-700">Git & GitHub</span>
                                     <span class="text-gray-600">Expérimenté</span>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 80%"></div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="80%"></div>
                                 </div>
                             </div>
                             
@@ -403,8 +408,8 @@
                                     <span class="font-medium text-gray-700">Linux</span>
                                     <span class="text-gray-600">Intermédiaire</span>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 70%"></div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="70%"></div>
                                 </div>
                             </div>
                             
@@ -413,14 +418,14 @@
                                     <span class="font-medium text-gray-700">Machine Learning</span>
                                     <span class="text-gray-600">Débutant</span>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 50%"></div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="50%"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="will-animate">
+                    <div class="section-reveal">
                         <h3 class="text-xl font-semibold mb-6 text-gray-800" data-key="otherSkills">Autres compétences</h3>
                         
                         <div class="flex flex-wrap gap-3">
@@ -442,8 +447,8 @@
                                     <span class="font-medium text-gray-700">Français</span>
                                     <span class="text-gray-600">Langue maternelle</span>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 100%"></div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="100%"></div>
                                 </div>
                             </div>
                             
@@ -452,8 +457,8 @@
                                     <span class="font-medium text-gray-700">Anglais</span>
                                     <span class="text-gray-600">Professionnel</span>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 75%"></div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="75%"></div>
                                 </div>
                             </div>
                         </div>
@@ -463,12 +468,12 @@
         </section>
 
         <!-- Section Projets -->
-        <section id="projects" class="py-20 will-animate">
+        <section id="projects" class="py-20 section-reveal">
             <div class="container mx-auto px-4">
                 <h2 class="section-title text-3xl font-bold text-gray-800" data-key="projectsTitle">Projets</h2>
                 
                 <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="card bg-white rounded-xl overflow-hidden shadow-md will-animate">
+                    <div class="card bg-white rounded-xl overflow-hidden shadow-md card-hover section-reveal">
                         <div class="h-48 bg-gray-200 flex items-center justify-center">
                             <img src="image/background.jpg" alt="X-clone" class="w-full h-full object-cover">
                         </div>
@@ -480,7 +485,7 @@
                                 <span class="bg-orange-100 text-orange-800 text-xs font-medium px-2.5 py-0.5 rounded">HTML</span>
                                 <span class="bg-pink-100 text-pink-800 text-xs font-medium px-2.5 py-0.5 rounded">CSS</span>
                             </div>
-                            <a href="https://github.com/Thomas-TP/X-clone" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-primary hover:text-primary-dark">
+                            <a href="https://github.com/Thomas-TP/X-clone" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-primary hover:text-primary-dark btn-animated">
                                 <span>Voir sur GitHub</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -489,17 +494,17 @@
                         </div>
                     </div>
                     
-                    <div class="card bg-white rounded-xl overflow-hidden shadow-md will-animate">
+                    <div class="card bg-white rounded-xl overflow-hidden shadow-md card-hover section-reveal">
                         <div class="h-48 bg-gray-800 flex items-center justify-center text-white">
                             <div class="text-center p-6">
-                                <i class="fab fa-github text-5xl mb-2"></i>
+                                <i class="fab fa-github text-5xl mb-2 animate-pulse"></i>
                                 <h3 class="text-xl font-semibold">Plus de projets à venir</h3>
                             </div>
                         </div>
                         <div class="p-6">
                             <h3 class="text-xl font-semibold text-gray-800 mb-2">Explorez mon GitHub</h3>
                             <p class="text-gray-600 mb-4">Découvrez mes autres projets et contributions sur GitHub.</p>
-                            <a href="https://github.com/Thomas-TP" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-primary hover:text-primary-dark">
+                            <a href="https://github.com/Thomas-TP" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-primary hover:text-primary-dark btn-animated">
                                 <span>Visiter mon profil GitHub</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -510,9 +515,9 @@
                 </div>
                 
                 <!-- GitHub Activity -->
-                <div class="mt-16 will-animate">
+                <div class="mt-16 section-reveal">
                     <h3 class="text-2xl font-semibold text-gray-800 mb-6" data-key="githubActivityTitle">Activité GitHub</h3>
-                    <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="bg-white p-6 rounded-xl shadow-md card-hover">
                         <a href="https://git.io/streak-stats">
                             <img src="https://streak-stats.demolab.com/?user=Thomas-TP&theme=transparent&hide_border=true" alt="GitHub Streak" class="mx-auto">
                           </a>                      
@@ -522,12 +527,12 @@
         </section>
 
         <!-- Section Certifications -->
-        <section id="certifications" class="py-20 bg-gray-50 will-animate">
+        <section id="certifications" class="py-20 bg-gray-50 section-reveal">
             <div class="container mx-auto px-4">
                 <h2 class="section-title text-3xl font-bold text-gray-800" data-key="certificationsTitle">Certifications</h2>
                 
                 <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="card bg-white p-6 rounded-xl shadow-md will-animate">
+                    <div class="card bg-white p-6 rounded-xl shadow-md card-hover section-reveal">
                         <div class="flex items-center mb-4">
                             <div class="bg-blue-100 p-3 rounded-full mr-4">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -540,7 +545,7 @@
                         <p class="text-gray-500 text-sm">février 2025 - février 2028</p>
                     </div>
                     
-                    <div class="card bg-white p-6 rounded-xl shadow-md will-animate">
+                    <div class="card bg-white p-6 rounded-xl shadow-md card-hover section-reveal">
                         <div class="flex items-center mb-4">
                             <div class="bg-green-100 p-3 rounded-full mr-4">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -554,7 +559,7 @@
                         <p class="text-gray-500 text-sm mt-2">ID: 99de3518f3787d2</p>
                     </div>
                     
-                    <div class="card bg-white p-6 rounded-xl shadow-md will-animate">
+                    <div class="card bg-white p-6 rounded-xl shadow-md card-hover section-reveal">
                         <div class="flex items-center mb-4">
                             <div class="bg-blue-100 p-3 rounded-full mr-4">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -567,7 +572,7 @@
                         <p class="text-gray-500 text-sm">octobre 2024</p>
                     </div>
                     
-                    <div class="card bg-white p-6 rounded-xl shadow-md will-animate">
+                    <div class="card bg-white p-6 rounded-xl shadow-md card-hover section-reveal">
                         <div class="flex items-center mb-4">
                             <div class="bg-yellow-100 p-3 rounded-full mr-4">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -581,7 +586,7 @@
                         <p class="text-gray-500 text-sm mt-2">ID: 1709284761076</p>
                     </div>
                     
-                    <div class="card bg-white p-6 rounded-xl shadow-md will-animate">
+                    <div class="card bg-white p-6 rounded-xl shadow-md card-hover section-reveal">
                         <div class="flex items-center mb-4">
                             <div class="bg-purple-100 p-3 rounded-full mr-4">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -599,12 +604,12 @@
         </section>
 
         <!-- Section Contact -->
-        <section id="contact" class="py-20 will-animate">
+        <section id="contact" class="py-20 section-reveal">
             <div class="container mx-auto px-4">
                 <h2 class="section-title text-3xl font-bold text-gray-800" data-key="contactTitle">Contact</h2>
                 
                 <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div class="will-animate">
+                    <div class="section-reveal">
                         <h3 class="text-xl font-semibold mb-6 text-gray-800" data-key="getInTouch">Entrer en contact</h3>
                         <p class="text-gray-700 mb-6" data-key="contactText">
                             N'hésitez pas à me contacter pour discuter de projets, opportunités de collaboration ou simplement pour échanger sur le développement web et les technologies.
@@ -661,7 +666,7 @@
                         </div>
                     </div>
                     
-                    <div class="will-animate">
+                    <div class="section-reveal">
                         <h3 class="text-xl font-semibold mb-6 text-gray-800" data-key="sendMessage">Envoyer un message</h3>
                         
                         <form name="contact" method="POST" data-netlify="true" class="space-y-4">
@@ -682,7 +687,7 @@
                                 <textarea id="message" name="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required data-key="messagePlaceholder" placeholder="Votre message"></textarea>
                             </div>
                             
-                            <button type="submit" class="btn-primary px-6 py-3 rounded-md font-semibold shadow-md flex items-center">
+                            <button type="submit" class="btn-primary btn-animated px-6 py-3 rounded-md font-semibold shadow-md flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                                     <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
                                 </svg>
@@ -695,7 +700,7 @@
         </section>
 
         <!-- Footer -->
-        <footer class="py-10 bg-gray-800 text-white will-animate">
+        <footer class="py-10 bg-gray-800 text-white section-reveal">
             <div class="container mx-auto px-4">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="mb-6 md:mb-0">
@@ -726,6 +731,37 @@
     <!-- Script pour les animations -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Créer les particules pour l'animation de chargement
+            function createParticles() {
+                const particlesContainer = document.getElementById('particles');
+                const particleCount = 30;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    
+                    // Position aléatoire
+                    const posX = Math.random() * 100;
+                    const posY = Math.random() * 100;
+                    const size = Math.random() * 6 + 2;
+                    const delay = Math.random() * 2;
+                    const duration = Math.random() * 2 + 2;
+                    
+                    particle.style.left = `${posX}%`;
+                    particle.style.top = `${posY}%`;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.opacity = Math.random() * 0.5 + 0.3;
+                    particle.style.animationDelay = `${delay}s`;
+                    particle.style.animationDuration = `${duration}s`;
+                    
+                    particlesContainer.appendChild(particle);
+                }
+            }
+            
+            // Créer les particules
+            createParticles();
+            
             // Attendre que tout soit chargé
             window.addEventListener('load', function() {
                 // Ajouter un délai pour l'animation de chargement
@@ -737,29 +773,42 @@
                     document.body.classList.remove('loading');
                     document.body.classList.add('loaded');
                     
+                    // Animer les barres de compétences
+                    setTimeout(function() {
+                        document.querySelectorAll('.skill-progress').forEach(progress => {
+                            const width = progress.getAttribute('data-width');
+                            progress.style.width = width;
+                            progress.style.transition = 'width 1s ease-in-out';
+                        });
+                    }, 500);
+                    
                     // Activer les animations des sections au défilement
                     const observer = new IntersectionObserver((entries) => {
                         entries.forEach(entry => {
                             if (entry.isIntersecting) {
-                                const elements = entry.target.querySelectorAll('.will-animate');
+                                entry.target.classList.add('revealed');
+                                
+                                // Animer les éléments à l'intérieur de la section
+                                const elements = entry.target.querySelectorAll('.section-reveal');
                                 elements.forEach((el, index) => {
                                     setTimeout(() => {
-                                        el.classList.add('animate-fadeIn');
-                                    }, index * 100);
+                                        el.classList.add('revealed');
+                                    }, index * 150);
                                 });
-                                entry.target.classList.add('animate-fadeIn');
+                                
                                 observer.unobserve(entry.target);
                             }
                         });
                     }, {
-                        threshold: 0.1
+                        threshold: 0.15,
+                        rootMargin: '0px 0px -100px 0px'
                     });
                     
                     // Observer les sections
-                    document.querySelectorAll('section:not(#hero)').forEach(section => {
+                    document.querySelectorAll('section:not(#hero), footer').forEach(section => {
                         observer.observe(section);
                     });
-                }, 1500); // Délai de 1.5 secondes pour l'animation de chargement
+                }, 2500); // Délai de 2.5 secondes pour l'animation de chargement
             });
             
             // Menu mobile
