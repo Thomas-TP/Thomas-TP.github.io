@@ -141,6 +141,11 @@
                 height: 10px;
             }
         }
+        
+        /* Styles spécifiques pour les barres de compétences */
+        .skill-progress {
+            transition: width 2s ease-in-out; /* Ralentissement de la transition à 2s */
+        }
     </style>
 </head>
 <body class="bg-white text-gray-800 loading">
@@ -369,7 +374,7 @@
                                     <span class="text-gray-600">Expérimenté</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="85%"></div>
+                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="85%" data-delay="0"></div>
                                 </div>
                             </div>
                             
@@ -379,7 +384,7 @@
                                     <span class="text-gray-600">Avancé</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="90%"></div>
+                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="90%" data-delay="400"></div>
                                 </div>
                             </div>
                             
@@ -389,7 +394,7 @@
                                     <span class="text-gray-600">Avancé</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="90%"></div>
+                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="90%" data-delay="800"></div>
                                 </div>
                             </div>
                             
@@ -399,7 +404,7 @@
                                     <span class="text-gray-600">Expérimenté</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="80%"></div>
+                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="80%" data-delay="1200"></div>
                                 </div>
                             </div>
                             
@@ -409,7 +414,7 @@
                                     <span class="text-gray-600">Intermédiaire</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="70%"></div>
+                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="70%" data-delay="1600"></div>
                                 </div>
                             </div>
                             
@@ -419,7 +424,7 @@
                                     <span class="text-gray-600">Débutant</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="50%"></div>
+                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="50%" data-delay="2000"></div>
                                 </div>
                             </div>
                         </div>
@@ -448,7 +453,7 @@
                                     <span class="text-gray-600">Langue maternelle</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="100%"></div>
+                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="100%" data-delay="2400"></div>
                                 </div>
                             </div>
                             
@@ -458,7 +463,7 @@
                                     <span class="text-gray-600">Professionnel</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="75%"></div>
+                                    <div class="bg-blue-600 h-2.5 rounded-full skill-progress" style="width: 0%" data-width="75%" data-delay="2800"></div>
                                 </div>
                             </div>
                         </div>
@@ -773,20 +778,17 @@
                     document.body.classList.remove('loading');
                     document.body.classList.add('loaded');
                     
-                    // Animer les barres de compétences
-                    setTimeout(function() {
-                        document.querySelectorAll('.skill-progress').forEach(progress => {
-                            const width = progress.getAttribute('data-width');
-                            progress.style.width = width;
-                            progress.style.transition = 'width 1s ease-in-out';
-                        });
-                    }, 500);
-                    
                     // Activer les animations des sections au défilement
                     const observer = new IntersectionObserver((entries) => {
                         entries.forEach(entry => {
                             if (entry.isIntersecting) {
                                 entry.target.classList.add('revealed');
+                                
+                                // Si c'est la section des compétences, animer les barres de progression
+                                if (entry.target.id === 'skills') {
+                                    // Délai initial plus long pour laisser le temps de voir la section
+                                    setTimeout(animateSkillBars, 1000);
+                                }
                                 
                                 // Animer les éléments à l'intérieur de la section
                                 const elements = entry.target.querySelectorAll('.section-reveal');
@@ -810,6 +812,21 @@
                     });
                 }, 2500); // Délai de 2.5 secondes pour l'animation de chargement
             });
+            
+            // Fonction pour animer les barres de compétences avec délais progressifs
+            function animateSkillBars() {
+                const skillBars = document.querySelectorAll('.skill-progress');
+                
+                skillBars.forEach(bar => {
+                    const width = bar.getAttribute('data-width');
+                    const delay = parseInt(bar.getAttribute('data-delay')) || 0;
+                    
+                    // Utiliser le délai spécifique pour chaque barre
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, delay);
+                });
+            }
             
             // Menu mobile
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
