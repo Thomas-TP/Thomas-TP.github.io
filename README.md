@@ -40,7 +40,7 @@ Ce site a été construit en utilisant les technologies et outils suivants :
 (Vous pouvez ajouter ici une capture d'écran de la page d'accueil de votre site)
 
 Exemple de code pour une image en Markdown :
-`![Aperçu du site thomastp.me](URL_DE_VOTRE_CAPTURE_D_ECRAN.png)`
+`![Aperçu du site thomastp.me](image/apercu.png)`
 
 ## 🌐 Accéder au Site
 
