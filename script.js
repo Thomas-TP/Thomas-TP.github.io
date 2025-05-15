@@ -101,8 +101,72 @@ if (languageSelect) {
     });
 }
 
-// Call the functions after the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', function() {
+// PWA Service Worker Registration
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/service-worker.js") // Assurez-vous que le chemin est correct
+      .then(registration => {
+        console.log("ServiceWorker registration successful with scope: ", registration.scope);
+      })
+      .catch(error => {
+        console.log("ServiceWorker registration failed: ", error);
+      });
+  });
+}
+
+// Contact Form Submission with SMTP.js (INSECURE - User Acknowledged Risks)
+document.addEventListener("DOMContentLoaded", function() {
+    const contactForm = document.getElementById("contactForm");
+    if (contactForm) {
+        contactForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const message = document.getElementById("message").value;
+            const submitButton = contactForm.querySelector("button[type=\"submit\"]");
+            const originalButtonText = submitButton.innerHTML;
+
+            if (!name || !email || !message) {
+                alert("Veuillez remplir tous les champs du formulaire.");
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.innerHTML = "Envoi en cours..."; // Update button text
+
+            // !!! INSECURE: Credentials directly in code !!!
+            // User has been warned and accepted the risk.
+            const userGmail = "superleoteo@gmail.com";
+            const appPassword = "xlcnrhphxivjpnyc"; // This is the app password provided by the user
+            const recipientEmail = "Thomas+SiteWeb@prudhomme.li";
+
+            Email.send({
+                Host: "smtp.gmail.com",
+                Username: userGmail,
+                Password: appPassword,
+                To: recipientEmail,
+                From: userGmail, // Gmail might rewrite this to the authenticated user
+                Subject: `Nouveau message de ${name} via le site thomastp.me`,
+                Body: `Nom: ${name}<br>Email: ${email}<br>Message: ${message}`
+            }).then(
+                responseMessage => {
+                    alert("Message envoyé avec succès ! Merci.");
+                    contactForm.reset();
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                }
+            ).catch(
+                error => {
+                    console.error("Erreur lors de l\"envoi de l\"email: ", error);
+                    alert("Une erreur s\"est produite lors de l\"envoi du message. Veuillez réessayer plus tard ou me contacter directement par email.");
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                }
+            );
+        });
+    }
+
+    // Initialize language content
     if (languageSelect) {
         updateContent(languageSelect.value);
     }
