@@ -114,55 +114,36 @@ if ("serviceWorker" in navigator) {
   });
 }
 
-// Contact Form Submission with SMTP.js (INSECURE - User Acknowledged Risks)
+// Contact Form Submission with mailto link
 document.addEventListener("DOMContentLoaded", function() {
     const contactForm = document.getElementById("contactForm");
     if (contactForm) {
         contactForm.addEventListener("submit", function(e) {
             e.preventDefault();
             const name = document.getElementById("name").value;
-            const email = document.getElementById("email").value;
+            const emailFrom = document.getElementById("email").value;
             const message = document.getElementById("message").value;
-            const submitButton = contactForm.querySelector("button[type=\"submit\"]");
-            const originalButtonText = submitButton.innerHTML;
+            const recipientEmail = "Thomas+SiteWeb@prudhomme.li";
 
-            if (!name || !email || !message) {
+            if (!name || !emailFrom || !message) {
                 alert("Veuillez remplir tous les champs du formulaire.");
                 return;
             }
 
-            submitButton.disabled = true;
-            submitButton.innerHTML = "Envoi en cours..."; // Update button text
+            const subject = `Message de ${name} via le site thomastp.me`;
+            const body = `Nom: ${name}\nEmail de l'expéditeur: ${emailFrom}\n\nMessage:\n${message}`;
+            
+            let mailtoLink = `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            // Attempt to add reply-to if supported, though mailto has limited support for it.
+            // It's better to include the sender's email in the body.
+            // mailtoLink += `&reply-to=${encodeURIComponent(emailFrom)}`;
 
-            // !!! INSECURE: Credentials directly in code !!!
-            // User has been warned and accepted the risk.
-            const userGmail = "superleoteo@gmail.com";
-            const appPassword = "xlcnrhphxivjpnyc"; // This is the app password provided by the user
-            const recipientEmail = "Thomas+SiteWeb@prudhomme.li";
-
-            Email.send({
-                Host: "smtp.gmail.com",
-                Username: userGmail,
-                Password: appPassword,
-                To: recipientEmail,
-                From: userGmail, // Gmail might rewrite this to the authenticated user
-                Subject: `Nouveau message de ${name} via le site thomastp.me`,
-                Body: `Nom: ${name}<br>Email: ${email}<br>Message: ${message}`
-            }).then(
-                responseMessage => {
-                    alert("Message envoyé avec succès ! Merci.");
-                    contactForm.reset();
-                    submitButton.disabled = false;
-                    submitButton.innerHTML = originalButtonText;
-                }
-            ).catch(
-                error => {
-                    console.error("Erreur lors de l\"envoi de l\"email: ", error);
-                    alert("Une erreur s\"est produite lors de l\"envoi du message. Veuillez réessayer plus tard ou me contacter directement par email.");
-                    submitButton.disabled = false;
-                    submitButton.innerHTML = originalButtonText;
-                }
-            );
+            window.location.href = mailtoLink;
+            // Optionally, reset the form after a short delay, though the page might navigate away
+            // setTimeout(() => {
+            //     contactForm.reset();
+            // }, 500);
         });
     }
 
