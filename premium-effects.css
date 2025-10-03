@@ -1,0 +1,536 @@
+/* ============================================
+   EFFETS PREMIUM - SITE HIGH-TECH À 1 MILLION
+   ============================================ */
+
+/* ===== FOND DE PARTICULES INTERACTIVES ===== */
+.particles-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.particle-premium {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, var(--primary), transparent);
+    border-radius: 50%;
+    opacity: 0;
+    animation: particleFloat 15s infinite ease-in-out;
+    filter: blur(1px);
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translate(0, 100vh) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), -100vh) scale(1.5);
+        opacity: 0;
+    }
+}
+
+/* ===== GRILLE CYBERPUNK ANIMÉE ===== */
+.cyber-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.03;
+    background-image: 
+        linear-gradient(rgba(79, 118, 247, 0.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79, 118, 247, 0.5) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+    0% {
+        transform: perspective(500px) rotateX(60deg) translateY(0);
+    }
+    100% {
+        transform: perspective(500px) rotateX(60deg) translateY(50px);
+    }
+}
+
+.dark-theme .cyber-grid {
+    opacity: 0.08;
+}
+
+/* ===== EFFETS NÉON PREMIUM ===== */
+.neon-border {
+    position: relative;
+    border: 2px solid transparent;
+    background: linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
+                linear-gradient(135deg, var(--primary), #667eea, #764ba2) border-box;
+    animation: neonPulse 3s ease-in-out infinite;
+}
+
+@keyframes neonPulse {
+    0%, 100% {
+        box-shadow: 
+            0 0 5px var(--primary),
+            0 0 10px var(--primary),
+            0 0 20px var(--primary),
+            inset 0 0 10px rgba(79, 118, 247, 0.1);
+    }
+    50% {
+        box-shadow: 
+            0 0 10px var(--primary),
+            0 0 20px var(--primary),
+            0 0 40px var(--primary),
+            inset 0 0 20px rgba(79, 118, 247, 0.2);
+    }
+}
+
+/* ===== TRANSITIONS LIQUIDES ===== */
+.liquid-transition {
+    transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.liquid-morph {
+    transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ===== EFFET HOLOGRAPHIQUE ===== */
+.holographic {
+    position: relative;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0.1) 100%
+    );
+    background-size: 200% 200%;
+    animation: holographicShift 3s ease infinite;
+}
+
+.holographic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(79, 118, 247, 0.1) 50%,
+        transparent 70%
+    );
+    animation: holographicScan 4s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes holographicShift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+@keyframes holographicScan {
+    0% {
+        transform: translateX(-100%) skewX(-15deg);
+    }
+    100% {
+        transform: translateX(200%) skewX(-15deg);
+    }
+}
+
+/* ===== GLOW INTERACTIF ===== */
+.interactive-glow {
+    position: relative;
+    overflow: hidden;
+}
+
+.interactive-glow::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(79, 118, 247, 0.4) 0%,
+        rgba(79, 118, 247, 0.2) 40%,
+        transparent 70%
+    );
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.interactive-glow:hover::after {
+    width: 400px;
+    height: 400px;
+}
+
+/* ===== STAGGER ANIMATIONS ===== */
+.stagger-item {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: staggerFadeIn 0.6s ease forwards;
+}
+
+.stagger-item:nth-child(1) { animation-delay: 0.1s; }
+.stagger-item:nth-child(2) { animation-delay: 0.2s; }
+.stagger-item:nth-child(3) { animation-delay: 0.3s; }
+.stagger-item:nth-child(4) { animation-delay: 0.4s; }
+.stagger-item:nth-child(5) { animation-delay: 0.5s; }
+.stagger-item:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes staggerFadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== EFFET DE VAGUE SUR HOVER ===== */
+.wave-effect {
+    position: relative;
+    overflow: hidden;
+}
+
+.wave-effect::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(79, 118, 247, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.wave-effect:hover::before {
+    width: 300%;
+    height: 300%;
+    opacity: 1;
+}
+
+/* ===== BOUTONS PREMIUM ULTRA-MODERNES ===== */
+.btn-premium {
+    position: relative;
+    padding: 1rem 2.5rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--primary), #667eea);
+    color: white;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 
+        0 4px 15px rgba(79, 118, 247, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.7s ease;
+}
+
+.btn-premium::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50px;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--primary), #667eea, #764ba2);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.btn-premium:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 
+        0 8px 30px rgba(79, 118, 247, 0.6),
+        0 0 40px rgba(79, 118, 247, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-premium:hover::before {
+    left: 100%;
+}
+
+.btn-premium:hover::after {
+    opacity: 1;
+}
+
+.btn-premium:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+/* ===== CARTES PREMIUM AVEC EFFET 3D ===== */
+.card-premium {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-premium::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(135deg, transparent, rgba(79, 118, 247, 0.5), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.card-premium:hover {
+    transform: translateY(-15px) rotateX(5deg) rotateY(5deg) translateZ(20px);
+    box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.15),
+        0 0 60px rgba(79, 118, 247, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.card-premium:hover::before {
+    opacity: 1;
+}
+
+/* ===== TEXTE AVEC EFFET MACHINE À ÉCRIRE ===== */
+.typewriter {
+    overflow: hidden;
+    border-right: 3px solid var(--primary);
+    white-space: nowrap;
+    animation: typing 3.5s steps(40, end), blink 0.75s step-end infinite;
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes blink {
+    from, to {
+        border-color: transparent;
+    }
+    50% {
+        border-color: var(--primary);
+    }
+}
+
+/* ===== EFFET DE SCAN FUTURISTE ===== */
+.scan-line {
+    position: relative;
+    overflow: hidden;
+}
+
+.scan-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    animation: scan 2s linear infinite;
+    opacity: 0.7;
+    box-shadow: 0 0 10px var(--primary);
+}
+
+@keyframes scan {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(500px);
+    }
+}
+
+/* ===== EFFET DE BRILLANCE MÉTALLIQUE ===== */
+.metallic-shine {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.1) 40%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.1) 60%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: metallicShine 3s linear infinite;
+}
+
+@keyframes metallicShine {
+    0% {
+        background-position: 200% center;
+    }
+    100% {
+        background-position: -200% center;
+    }
+}
+
+/* ===== OVERLAY PREMIUM AVEC BRUIT ===== */
+.premium-overlay {
+    position: relative;
+}
+
+.premium-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.05"/></svg>');
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    opacity: 0.3;
+}
+
+/* ===== TRANSITIONS DE NAVIGATION LIQUIDES ===== */
+.page-transition-liquid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary), #667eea);
+    transform: translateX(-100%);
+    transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+    z-index: 9998;
+    pointer-events: none;
+    opacity: 0.95;
+}
+
+.page-transition-liquid::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: liquidSpin 0.8s linear infinite;
+}
+
+@keyframes liquidSpin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.page-transition-liquid.active {
+    transform: translateX(0);
+}
+
+.page-transition-liquid.leaving {
+    transform: translateX(100%);
+    transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* ===== EFFET DE PROFONDEUR ISOMÉTRIQUE ===== */
+.isometric {
+    transform: rotateX(51deg) rotateZ(43deg);
+    transform-style: preserve-3d;
+}
+
+.isometric-shadow {
+    box-shadow: 
+        -20px 20px 40px rgba(0, 0, 0, 0.2),
+        -40px 40px 80px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== LOADING SKELETON PREMIUM ===== */
+.skeleton-premium {
+    background: linear-gradient(
+        90deg,
+        rgba(79, 118, 247, 0.05) 25%,
+        rgba(79, 118, 247, 0.15) 50%,
+        rgba(79, 118, 247, 0.05) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeletonShimmer 2s ease-in-out infinite;
+}
+
+@keyframes skeletonShimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .card-premium:hover {
+        transform: translateY(-10px) scale(1.02);
+    }
+    
+    .btn-premium {
+        padding: 0.875rem 2rem;
+    }
+    
+    .cyber-grid {
+        opacity: 0.02;
+    }
+}
+
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
+.card-premium,
+.btn-premium,
+.holographic,
+.interactive-glow {
+    will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .particle-premium,
+    .cyber-grid,
+    .holographic,
+    .scan-line::after,
+    .metallic-shine {
+        animation: none;
+    }
+    
+    .card-premium:hover {
+        transform: translateY(-10px);
+    }
+}
