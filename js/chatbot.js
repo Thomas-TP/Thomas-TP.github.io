@@ -1,9 +1,11 @@
 /**
- * Chatbot intégré avec Botpress - Interface personnalisée
- * Utilise l'API Botpress pour les réponses IA tout en gardant l'interface Material 3
- * Animations premium et design responsive
- * Version 3.0 - Intégration Botpress
+ * Chatbot - Widget Botpress Standard
+ * Interface personnalisée supprimée, utilisation du widget officiel Botpress
  */
+
+document.addEventListener("DOMContentLoaded", () => {
+  console.log('🤖 Widget Botpress standard activé');
+});
 
 /**
  * Fonction pour récupérer les traductions depuis l'objet global
@@ -88,16 +90,8 @@ async function initBotpressConnection() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Masquer le widget Botpress s'il existe
-  hideBotpressWidget();
-
-  // Initialiser la connexion Botpress
-  initBotpressConnection();
-
-  // Initialisation du chatbot avec un léger délai
-  setTimeout(() => {
-    initChatbot();
-  }, 800);
+  // Interface personnalisée désactivée - utilisation du widget Botpress standard
+  console.log('🤖 Widget Botpress standard activé - interface personnalisée désactivée');
 });
 
 /**
