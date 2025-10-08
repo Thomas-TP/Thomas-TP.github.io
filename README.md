@@ -1,7 +1,9 @@
 # 🚀 Portfolio Thomas Prudhomme
 
 <div align="center">
-  <img src="assets/images/profile.jpg" alt="Thomas Prudhomme" width="150" style="border-radius: 50%; border: 3px solid #007acc;"/>
+  <img src="assets/images/profile.jpg" alt="Thomas Pru- 🤖 Intelligence Artificielle** : Chatbot conversationnel pour l'interaction utilisateur
+- 📧 **Formulaire de Contact Avancé** : Intégré avec Formspree avec validation, sujets prédéfinis, et design premium
+- 🎨 Animations Modernes** : CSS3, JavaScript, effets visuels subtilsomme" width="150" style="border-radius: 50%; border: 3px solid #007acc;"/>
   <h1>👋 Bienvenue sur mon Portfolio</h1>
   <p><em>Informaticien passionné • Développeur Full-Stack • Innovateur</em></p>
 
@@ -85,14 +87,15 @@ Ce portfolio n'est pas qu'un simple CV numérique - c'est une expérience intera
     </tr>
     <tr>
       <td align="center">
-        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/tailwindcss/tailwindcss-plain.svg" width="50"/><br/>
-        <b>Thème Dynamique</b><br/>
-        <small>Clair & Sombre</small>
-      </td>
-      <td align="center">
         <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" width="50"/><br/>
         <b>Chatbot IA</b><br/>
         <small>Botpress intégré</small>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/badge/Formspree-Contact-blue?style=for-the-badge&logo=formspree"/>
+        <br/>
+        <b>Formulaire Contact</b><br/>
+        <small>Avancé avec sujets prédéfinis</small>
       </td>
       <td align="center">
         <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/github/github-original.svg" width="50"/><br/>
