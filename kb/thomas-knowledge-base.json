@@ -6,7 +6,7 @@
     "lastUpdated": "2025-10-08",
     "languages": ["fr", "en"],
     "author": "Thomas Prudhomme",
-    "contact": "thomas.prudhomme@edu.ge.ch"
+    "contact": "thomas@prudhomme.li"
   },
   "profile": {
     "fullName": "Thomas Prudhomme",
@@ -21,7 +21,7 @@
     "institution": "Geneva Institute of Technology",
     "studyPeriod": "2024-2028",
     "location": "Suisse",
-    "email": "thomas.prudhomme@edu.ge.ch",
+    "email": "thomas@prudhomme.li",
     "summary": {
       "fr": "Informaticien suisse passionné, étudiant en CFC d'informaticien au Geneva Institute of Technology. Expérience professionnelle à l'EPFL, développement de projets personnels en JavaScript et technologies web.",
       "en": "Passionate Swiss IT professional, studying for CFC in IT at Geneva Institute of Technology. Professional experience at EPFL, developing personal projects in JavaScript and web technologies."
@@ -253,7 +253,7 @@
     }
   ],
   "contact": {
-    "email": "thomas.prudhomme@edu.ge.ch",
+    "email": "thomas@prudhomme.li",
     "location": "Suisse",
     "education_institution": "Geneva Institute of Technology",
     "current_status": {
