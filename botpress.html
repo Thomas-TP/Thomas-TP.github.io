@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thomas Prudhomme - Base de Connaissances Botpress</title>
+    <meta name="description" content="Base de connaissances complète pour Thomas Prudhomme - Informaticien passionné, étudiant CFC à Geneva Institute of Technology. Expérience EPFL, projets personnels, certifications, compétences techniques.">
+    <meta name="keywords" content="Thomas Prudhomme, informaticien, Geneva Institute of Technology, EPFL, développement web, JavaScript, Python, certifications, projets informatiques">
+    <meta name="author" content="Thomas Prudhomme">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://thomastp.me/botpress">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://thomastp.me/botpress">
+    <meta property="og:title" content="Thomas Prudhomme - Base de Connaissances Botpress">
+    <meta property="og:description" content="Base de connaissances complète pour Thomas Prudhomme - Informaticien passionné, étudiant CFC à Geneva Institute of Technology.">
+    <meta property="og:image" content="https://thomastp.me/image/profile.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://thomastp.me/botpress">
+    <meta property="twitter:title" content="Thomas Prudhomme - Base de Connaissances Botpress">
+    <meta property="twitter:description" content="Base de connaissances complète pour Thomas Prudhomme - Informaticien passionné, étudiant CFC à Geneva Institute of Technology.">
+    <meta property="twitter:image" content="https://thomastp.me/image/profile.jpg">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #3498db;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .skill-category {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .skill-item {
+            margin: 8px 0;
+            padding: 5px 0;
+        }
+
+        .skill-level {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .project-card, .certification-card, .experience-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .project-tech, .certification-issuer {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .contact-item {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .contact-item i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .language-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        .language-toggle:hover {
+            background: #2980b9;
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline-item {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -35px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #3498db;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: #3498db;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .language-toggle {
+                position: static;
+                margin: 20px auto;
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="language-toggle" onclick="toggleLanguage()">🇫🇷 Français / 🇬🇧 English</button>
+
+    <!-- Profil Principal -->
+    <div class="container" id="profile-section">
+        <div class="profile-header">
+            <img src="image/profile.jpg" alt="Thomas Prudhomme" class="profile-image">
+            <h1 data-fr="Thomas Prudhomme - Base de Connaissances" data-en="Thomas Prudhomme - Knowledge Base">Thomas Prudhomme - Base de Connaissances</h1>
+            <p data-fr="Informaticien passionné et étudiant CFC à Geneva Institute of Technology" data-en="Passionate IT student pursuing CFC at Geneva Institute of Technology">
+                Informaticien passionné et étudiant CFC à Geneva Institute of Technology
+            </p>
+        </div>
+
+        <div class="highlight">
+            <h3 data-fr="Résumé Professionnel" data-en="Professional Summary">Résumé Professionnel</h3>
+            <p data-fr="Thomas est un informaticien suisse passionné, actuellement étudiant en CFC d'informaticien au Geneva Institute of Technology. Il possède une expérience professionnelle à l'EPFL et développe activement des projets personnels en JavaScript et technologies web. Ses intérêts principaux incluent le développement web, l'IoT et le machine learning." data-en="Thomas is a passionate Swiss IT professional, currently studying for a CFC in IT at Geneva Institute of Technology. He has professional experience at EPFL and actively develops personal projects in JavaScript and web technologies. His main interests include web development, IoT, and machine learning.">
+                Thomas est un informaticien suisse passionné, actuellement étudiant en CFC d'informaticien au Geneva Institute of Technology. Il possède une expérience professionnelle à l'EPFL et développe activement des projets personnels en JavaScript et technologies web. Ses intérêts principaux incluent le développement web, l'IoT et le machine learning.
+            </p>
+        </div>
+    </div>
+
+    <!-- Expérience Professionnelle -->
+    <div class="container" id="experience-section">
+        <h2 data-fr="Expérience Professionnelle" data-en="Professional Experience">Expérience Professionnelle</h2>
+
+        <div class="experience-card">
+            <h3 data-fr="Stage d'Informaticien - EPFL" data-en="IT Intern - EPFL">Stage d'Informaticien - EPFL</h3>
+            <p data-fr="École Polytechnique Fédérale de Lausanne" data-en="École Polytechnique Fédérale de Lausanne"><strong>École Polytechnique Fédérale de Lausanne</strong></p>
+            <p data-fr="Lausanne, Suisse | 2024 - Présent" data-en="Lausanne, Switzerland | 2024 - Present">Lausanne, Suisse | 2024 - Présent</p>
+            <p data-fr="Stage d'informatique dans l'une des institutions académiques les plus prestigieuses au monde. Responsabilités incluant l'informatique, le développement, l'infrastructure IT et le support technique." data-en="IT internship at one of the world's most prestigious academic institutions. Responsibilities include IT, development, IT infrastructure, and technical support.">
+                Stage d'informatique dans l'une des institutions académiques les plus prestigieuses au monde. Responsabilités incluant l'informatique, le développement, l'infrastructure IT et le support technique.
+            </p>
+            <div class="project-tech">
+                <strong data-fr="Compétences développées:" data-en="Skills developed:">Compétences développées:</strong> IT, Développement, Infrastructure IT, Support Technique
+            </div>
+        </div>
+    </div>
+
+    <!-- Formation -->
+    <div class="container" id="education-section">
+        <h2 data-fr="Formation" data-en="Education">Formation</h2>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <h3 data-fr="CFC d'Informaticien" data-en="CFC in IT">CFC d'Informaticien</h3>
+                <p data-fr="Geneva Institute of Technology | 2024 - 2028" data-en="Geneva Institute of Technology | 2024 - 2028">Geneva Institute of Technology | 2024 - 2028</p>
+                <p data-fr="Formation professionnelle complète en informatique" data-en="Complete professional training in computer science">Formation professionnelle complète en informatique</p>
+            </div>
+
+            <div class="timeline-item">
+                <h3 data-fr="Préapprentissage" data-en="Pre-apprenticeship">Préapprentissage</h3>
+                <p data-fr="FuturPlus Lausanne | 2023 - 2024" data-en="FuturPlus Lausanne | 2023 - 2024">FuturPlus Lausanne | 2023 - 2024</p>
+                <p data-fr="Préparation à la formation professionnelle en informatique" data-en="Preparation for professional training in computer science">Préparation à la formation professionnelle en informatique</p>
+            </div>
+
+            <div class="timeline-item">
+                <h3 data-fr="Scolarité obligatoire" data-en="Compulsory schooling">Scolarité obligatoire</h3>
+                <p data-fr="Grand-Champ | 2020 - 2023" data-en="Grand-Champ | 2020 - 2023">Grand-Champ | 2020 - 2023</p>
+                <p data-fr="Formation scolaire obligatoire" data-en="Compulsory school education">Formation scolaire obligatoire</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compétences -->
+    <div class="container" id="skills-section">
+        <h2 data-fr="Compétences Techniques" data-en="Technical Skills">Compétences Techniques</h2>
+
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3 data-fr="Langages de Programmation" data-en="Programming Languages">Langages de Programmation</h3>
+                <div class="skill-item">
+                    <strong>JavaScript</strong>
+                    <div class="skill-level" data-fr="Expérimenté" data-en="Experienced">Expérimenté</div>
+                </div>
+                <div class="skill-item">
+                    <strong>HTML5</strong>
+                    <div class="skill-level" data-fr="Avancé" data-en="Advanced">Avancé</div>
+                </div>
+                <div class="skill-item">
+                    <strong>CSS3</strong>
+                    <div class="skill-level" data-fr="Avancé" data-en="Advanced">Avancé</div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 data-fr="Outils & Technologies" data-en="Tools & Technologies">Outils & Technologies</h3>
+                <div class="skill-item">
+                    <strong>Git & GitHub</strong>
+                    <div class="skill-level" data-fr="Expérimenté" data-en="Experienced">Expérimenté</div>
+                </div>
+                <div class="skill-item">
+                    <strong>Linux</strong>
+                    <div class="skill-level" data-fr="Intermédiaire" data-en="Intermediate">Intermédiaire</div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 data-fr="Intelligence Artificielle" data-en="Artificial Intelligence">Intelligence Artificielle</h3>
+                <div class="skill-item">
+                    <strong>Machine Learning</strong>
+                    <div class="skill-level" data-fr="Débutant" data-en="Beginner">Débutant</div>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 data-fr="Langues" data-en="Languages">Langues</h3>
+                <div class="skill-item">
+                    <strong>Français</strong>
+                    <div class="skill-level" data-fr="Langue maternelle" data-en="Native language">Langue maternelle</div>
+                </div>
+                <div class="skill-item">
+                    <strong>Anglais</strong>
+                    <div class="skill-level" data-fr="Professionnel" data-en="Professional">Professionnel</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projets -->
+    <div class="container" id="projects-section">
+        <h2 data-fr="Projets" data-en="Projects">Projets</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th data-fr="Projet" data-en="Project">Projet</th>
+                    <th data-fr="Description" data-en="Description">Description</th>
+                    <th data-fr="Technologies" data-en="Technologies">Technologies</th>
+                    <th data-fr="Statut" data-en="Status">Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>X-clone</strong></td>
+                    <td data-fr="Clone de Twitter avec fonctionnalités de publication, suivi, likes/retweets et chat IA (Grok). Interface responsive développée en HTML/CSS/JavaScript avec stockage local." data-en="Twitter clone with publishing, following, likes/retweets and AI chat (Grok) features. Responsive interface built with HTML/CSS/JavaScript with local storage.">Clone de Twitter avec fonctionnalités de publication, suivi, likes/retweets et chat IA (Grok). Interface responsive développée en HTML/CSS/JavaScript avec stockage local.</td>
+                    <td>HTML5, CSS3, JavaScript, Local Storage</td>
+                    <td data-fr="En développement" data-en="In development">En développement</td>
+                </tr>
+                <tr>
+                    <td><strong>Tank.io</strong></td>
+                    <td data-fr="Jeu 2D inspiré des jeux .io avec modes solo (IA) et multijoueur LAN. Prototype jouable avec Canvas optimisé." data-en="2D game inspired by .io games with solo (AI) and LAN multiplayer modes. Playable prototype with optimized Canvas.">Jeu 2D inspiré des jeux .io avec modes solo (IA) et multijoueur LAN. Prototype jouable avec Canvas optimisé.</td>
+                    <td>JavaScript, HTML5 Canvas</td>
+                    <td data-fr="Prototype" data-en="Prototype">Prototype</td>
+                </tr>
+                <tr>
+                    <td><strong>PowerShell Empire</strong></td>
+                    <td data-fr="Framework post-exploitation puissant pour Windows utilisant PowerShell pour le pentesting et la sécurité offensive." data-en="Powerful post-exploitation framework for Windows using PowerShell for pentesting and offensive security.">Framework post-exploitation puissant pour Windows utilisant PowerShell pour le pentesting et la sécurité offensive.</td>
+                    <td>PowerShell, Sécurité</td>
+                    <td data-fr="Terminé" data-en="Completed">Terminé</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Certifications -->
+    <div class="container" id="certifications-section">
+        <h2 data-fr="Certifications" data-en="Certifications">Certifications</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th data-fr="Certification" data-en="Certification">Certification</th>
+                    <th data-fr="Organisme" data-en="Issuer">Organisme</th>
+                    <th data-fr="Date" data-en="Date">Date</th>
+                    <th data-fr="ID" data-en="ID">ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>GitHub Foundation</strong></td>
+                    <td>GitHub</td>
+                    <td>2025</td>
+                    <td>N/A</td>
+                </tr>
+                <tr>
+                    <td><strong>IoT</strong></td>
+                    <td>Programming Hub</td>
+                    <td>2024</td>
+                    <td>99de3518f3787d2</td>
+                </tr>
+                <tr>
+                    <td><strong>English for IT 1</strong></td>
+                    <td>Cisco Networking Academy</td>
+                    <td>2024</td>
+                    <td>N/A</td>
+                </tr>
+                <tr>
+                    <td><strong>Linux Essentials</strong></td>
+                    <td>Programming Hub</td>
+                    <td>2024</td>
+                    <td>1709284761076</td>
+                </tr>
+                <tr>
+                    <td><strong>Machine Learning</strong></td>
+                    <td>Programming Hub</td>
+                    <td>2024</td>
+                    <td>1709194876030</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Contact -->
+    <div class="container" id="contact-section">
+        <h2 data-fr="Informations de Contact" data-en="Contact Information">Informations de Contact</h2>
+
+        <div class="contact-info">
+            <h3 data-fr="Coordonnées" data-en="Contact Details">Coordonnées</h3>
+
+            <div class="contact-item">
+                <span data-fr="📧 Email:" data-en="📧 Email:">📧 Email:</span> thomas.prudhomme@edu.ge.ch
+            </div>
+
+            <div class="contact-item">
+                <span data-fr="📍 Localisation:" data-en="📍 Location:">📍 Localisation:</span> Suisse
+            </div>
+
+            <div class="contact-item">
+                <span data-fr="🎓 Formation:" data-en="🎓 Education:">🎓 Formation:</span> Geneva Institute of Technology
+            </div>
+
+            <div class="contact-item">
+                <span data-fr="💼 Statut:" data-en="💼 Status:">💼 Statut:</span> Étudiant CFC en Informatique
+            </div>
+        </div>
+
+        <div class="highlight">
+            <h3 data-fr="Réseaux Sociaux & Liens" data-en="Social Media & Links">Réseaux Sociaux & Liens</h3>
+            <ul>
+                <li><strong>GitHub:</strong> <a href="https://github.com/thomas-tp" target="_blank">github.com/thomas-tp</a></li>
+                <li><strong>LinkedIn:</strong> Profil professionnel (lien à ajouter)</li>
+                <li><strong>Portfolio:</strong> <a href="https://thomastp.me" target="_blank">thomastp.me</a></li>
+                <li><strong>Twitter/X:</strong> @thomas_tp_dev</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Métadonnées pour Botpress -->
+    <div class="container" id="metadata-section" style="background: #f0f8ff; border-left: 4px solid #1e90ff;">
+        <h2 data-fr="Métadonnées pour Base de Connaissances" data-en="Knowledge Base Metadata">Métadonnées pour Base de Connaissances</h2>
+
+        <h3 data-fr="Informations Structurées" data-en="Structured Information">Informations Structurées</h3>
+        <table>
+            <tbody>
+                <tr>
+                    <td><strong data-fr="Nom complet:" data-en="Full name:">Nom complet:</strong></td>
+                    <td>Thomas Prudhomme</td>
+                </tr>
+                <tr>
+                    <td><strong data-fr="Profession:" data-en="Profession:">Profession:</strong></td>
+                    <td data-fr="Informaticien / Étudiant CFC" data-en="IT Professional / CFC Student">Informaticien / Étudiant CFC</td>
+                </tr>
+                <tr>
+                    <td><strong data-fr="Établissement:" data-en="Institution:">Établissement:</strong></td>
+                    <td>Geneva Institute of Technology</td>
+                </tr>
+                <tr>
+                    <td><strong data-fr="Années d'études:" data-en="Study years:">Années d'études:</strong></td>
+                    <td>2024-2028</td>
+                </tr>
+                <tr>
+                    <td><strong data-fr="Expérience EPFL:" data-en="EPFL Experience:">Expérience EPFL:</strong></td>
+                    <td data-fr="Stage d'informatique (2024-présent)" data-en="IT Internship (2024-present)">Stage d'informatique (2024-présent)</td>
+                </tr>
+                <tr>
+                    <td><strong data-fr="Projets principaux:" data-en="Main projects:">Projets principaux:</strong></td>
+                    <td>X-clone, Tank.io, PowerShell Empire</td>
+                </tr>
+                <tr>
+                    <td><strong data-fr="Technologies maîtrisées:" data-en="Mastered technologies:">Technologies maîtrisées:</strong></td>
+                    <td>JavaScript, HTML5, CSS3, Git, Linux</td>
+                </tr>
+                <tr>
+                    <td><strong data-fr="Certifications obtenues:" data-en="Certifications obtained:">Certifications obtenues:</strong></td>
+                    <td>5 certifications (GitHub, IoT, Linux, ML, English)</td>
+                </tr>
+                <tr>
+                    <td><strong data-fr="Langues:" data-en="Languages:">Langues:</strong></td>
+                    <td data-fr="Français (natif), Anglais (professionnel)" data-en="French (native), English (professional)">Français (natif), Anglais (professionnel)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Système de traduction pour la page Botpress
+        let currentLanguage = 'fr';
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'fr' ? 'en' : 'fr';
+            updatePageLanguage();
+        }
+
+        function updatePageLanguage() {
+            const elements = document.querySelectorAll('[data-fr], [data-en]');
+            elements.forEach(element => {
+                const text = element.getAttribute(`data-${currentLanguage}`);
+                if (text) {
+                    if (element.tagName === 'TH' || element.tagName === 'TD') {
+                        element.textContent = text;
+                    } else {
+                        element.textContent = text;
+                    }
+                }
+            });
+
+            // Mettre à jour le bouton de langue
+            const toggleBtn = document.querySelector('.language-toggle');
+            toggleBtn.textContent = currentLanguage === 'fr' ? '🇫🇷 Français / 🇬🇧 English' : '🇬🇧 English / 🇫🇷 Français';
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePageLanguage();
+        });
+    </script>
+</body>
+</html>

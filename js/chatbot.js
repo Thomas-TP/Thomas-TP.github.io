@@ -5,6 +5,19 @@
  * Version 2.0 - Suggestions de questions rapides
  */
 
+/**
+ * Fonction pour récupérer les traductions depuis l'objet global
+ * @param {string} key - La clé de traduction
+ * @returns {string} - Le texte traduit ou la clé si non trouvée
+ */
+function getTranslation(key) {
+  // Récupère l'objet de traductions depuis la fenêtre (défini dans index.html)
+  if (window.translations && window.currentLanguage && window.translations[window.currentLanguage] && window.translations[window.currentLanguage][key]) {
+    return window.translations[window.currentLanguage][key];
+  }
+  return key; // Retourne la clé si la traduction n'est pas trouvée
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   // Masquer le widget Botpress s'il existe
   hideBotpressWidget();
@@ -74,12 +87,16 @@ function initChatbot() {
   const suggestionButtons = document.querySelectorAll(".suggestion-btn");
   suggestionButtons.forEach(btn => {
     btn.addEventListener("click", () => {
-      const question = btn.getAttribute("data-question");
+      const questionKey = btn.getAttribute("data-question-key");
+      const question = getTranslation(questionKey);
       chatbotInput.value = question;
       sendMessage();
       hideSuggestions();
     });
   });
+  
+  // Écouter les changements de langue pour mettre à jour les textes du chatbot
+  window.addEventListener('languageChanged', updateChatbotTexts);
   
   // Animation du bouton après 3 secondes
   setTimeout(() => {
@@ -91,7 +108,9 @@ function initChatbot() {
   const showWelcome = () => {
     if (!welcomeShown) {
       setTimeout(() => {
-        addBotMessage("👋 Bonjour ! Je suis l'assistant virtuel de Thomas. Comment puis-je vous aider ?");
+        // Utilise la traduction pour le message de bienvenue
+        const welcomeMessage = getTranslation('chatbotWelcome') || "👋 Bonjour ! Je suis l'assistant virtuel de Thomas. Comment puis-je vous aider ?";
+        addBotMessage(welcomeMessage);
       }, 600);
       welcomeShown = true;
     }
@@ -142,10 +161,10 @@ function createChatbotElements() {
 
       <!-- Suggestions de questions rapides -->
       <div id="chatbot-suggestions" class="chatbot-suggestions">
-        <button class="suggestion-btn" data-question="Parle-moi de tes projets">💼 Projets</button>
-        <button class="suggestion-btn" data-question="Quelles sont tes compétences ?">🛠️ Compétences</button>
-        <button class="suggestion-btn" data-question="Quelle est ta formation ?">🎓 Formation</button>
-        <button class="suggestion-btn" data-question="Comment te contacter ?">📧 Contact</button>
+        <button class="suggestion-btn" data-question-key="chatbotQuestionProjects"><span data-key="chatbotProjects">💼 Projets</span></button>
+        <button class="suggestion-btn" data-question-key="chatbotQuestionSkills"><span data-key="chatbotSkills">🛠️ Compétences</span></button>
+        <button class="suggestion-btn" data-question-key="chatbotQuestionEducation"><span data-key="chatbotEducation">🎓 Formation</span></button>
+        <button class="suggestion-btn" data-question-key="chatbotQuestionContact"><span data-key="chatbotContact">📧 Contact</span></button>
       </div>
 
       <!-- Pied du chatbot (saisie) -->
@@ -471,4 +490,26 @@ function showSuggestions() {
   if (suggestions) {
     suggestions.classList.remove("hidden");
   }
+}
+
+/**
+ * Met à jour les textes du chatbot selon la langue sélectionnée
+ */
+function updateChatbotTexts() {
+  // Met à jour les boutons de suggestion
+  const suggestionSpans = document.querySelectorAll("#chatbot-suggestions .suggestion-btn span[data-key]");
+  suggestionSpans.forEach(span => {
+    const key = span.getAttribute("data-key");
+    const translatedText = getTranslation(key);
+    span.textContent = translatedText;
+  });
+  
+  // Met à jour le placeholder de l'input si nécessaire
+  const input = document.getElementById("chatbot-input");
+  if (input && input.placeholder) {
+    // Vous pouvez ajouter une clé de traduction pour le placeholder si souhaité
+    // input.placeholder = getTranslation('chatbotPlaceholder');
+  }
+  
+  // Les boutons utilisent maintenant les clés de traduction, donc ils se mettent à jour automatiquement
 }
