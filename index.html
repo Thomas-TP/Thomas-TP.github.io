@@ -2485,13 +2485,20 @@
     </script>
     <!-- Botpress API (masqué, utilisé en arrière-plan) -->
     <script>
-        // Masquer le widget Botpress par défaut
+        // Configuration Botpress pour intégration personnalisée
         window.botpressWebChat = {
             init: function() {},
-            // Configuration pour utiliser Botpress en API uniquement
-            hideWidget: true
+            hideWidget: true,
+            // Configuration pour l'API Botpress
+            botId: 'your-bot-id', // À remplacer par ton Bot ID réel
+            hostUrl: 'https://your-botpress-instance.com', // À remplacer par ton URL Botpress
+            messagingUrl: 'https://your-botpress-instance.com',
+            clientId: 'your-client-id' // À remplacer par ton Client ID
         };
     </script>
+    <!-- SDK Botpress pour intégration personnalisée -->
+    <script src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
+    <script src="https://cdn.botpress.cloud/webchat/v1/botpress.js"></script>
     
     <!-- Scripts non-bloquants -->
     <script src="https://smtpjs.com/v3/smtp.js" defer></script>

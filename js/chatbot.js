@@ -1,8 +1,8 @@
 /**
- * Chatbot 100% Personnalisé pour Thomas P.
- * Interface moderne Material 3 avec mode sombre/clair
+ * Chatbot intégré avec Botpress - Interface personnalisée
+ * Utilise l'API Botpress pour les réponses IA tout en gardant l'interface Material 3
  * Animations premium et design responsive
- * Version 2.0 - Suggestions de questions rapides
+ * Version 3.0 - Intégration Botpress
  */
 
 /**
@@ -18,10 +18,82 @@ function getTranslation(key) {
   return key; // Retourne la clé si la traduction n'est pas trouvée
 }
 
+// Configuration Botpress
+let botpressClient = null;
+let botpressConfig = null;
+
+/**
+ * Charge la configuration Botpress
+ */
+async function loadBotpressConfig() {
+  try {
+    // Importer la configuration
+    const configModule = await import('./botpress-config.js');
+    botpressConfig = configModule.default;
+
+    // Validation de la configuration
+    if (!botpressConfig.botId || botpressConfig.botId === 'your-bot-id-here') {
+      console.warn('⚠️ Botpress Bot ID non configuré. Utilisation du mode fallback.');
+      return false;
+    }
+
+    if (!botpressConfig.hostUrl || botpressConfig.hostUrl === 'https://your-instance.botpress.cloud') {
+      console.warn('⚠️ Botpress Host URL non configurée. Utilisation du mode fallback.');
+      return false;
+    }
+
+    console.log('✅ Configuration Botpress chargée:', botpressConfig.botId);
+    return true;
+  } catch (error) {
+    console.error('❌ Erreur lors du chargement de la configuration Botpress:', error);
+    return false;
+  }
+}
+
+/**
+ * Initialise la connexion Botpress
+ */
+async function initBotpressConnection() {
+  try {
+    // Charger la configuration d'abord
+    const configLoaded = await loadBotpressConfig();
+    if (!configLoaded) {
+      console.log('ℹ️ Configuration Botpress incomplète - mode fallback activé');
+      return;
+    }
+
+    // Attendre que le SDK Botpress soit chargé
+    if (typeof bp !== 'undefined') {
+      botpressClient = bp;
+
+      // Configuration de l'événement pour recevoir les messages
+      bp.on('message', (message) => {
+        if (message.type === 'text') {
+          addBotMessage(message.payload.text);
+        }
+      });
+
+      // Configuration avancée si disponible
+      if (botpressConfig.debugMode) {
+        console.log('🔧 Mode debug Botpress activé');
+      }
+
+      console.log('🤖 Connexion Botpress établie avec succès');
+    } else {
+      console.warn('⚠️ SDK Botpress non chargé, utilisation du mode fallback');
+    }
+  } catch (error) {
+    console.error('❌ Erreur lors de l\'initialisation Botpress:', error);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   // Masquer le widget Botpress s'il existe
   hideBotpressWidget();
-  
+
+  // Initialiser la connexion Botpress
+  initBotpressConnection();
+
   // Initialisation du chatbot avec un léger délai
   setTimeout(() => {
     initChatbot();
@@ -263,13 +335,12 @@ function sendMessage() {
   hideSuggestions();
   
   // Génère une réponse après un délai (simule le temps de réflexion)
-  setTimeout(() => {
+  setTimeout(async () => {
     // Masque l'indicateur de frappe
     hideTypingIndicator();
-    
-    // Génère et affiche la réponse
-    const response = generateResponse(message);
-    addBotMessage(response);
+
+    // Envoie le message à Botpress
+    await sendMessageToBotpress(message);
   }, 800 + Math.random() * 1200); // Délai aléatoire entre 0.8 et 2 secondes
 }
 
@@ -357,119 +428,73 @@ function scrollToBottom() {
 }
 
 /**
- * Génère une réponse en fonction du message de l'utilisateur
+ * Envoie un message à Botpress et gère la réponse
+ * @param {string} message - Le message de l'utilisateur
+ */
+async function sendMessageToBotpress(message) {
+  try {
+    if (botpressClient && typeof bp !== 'undefined' && botpressConfig) {
+      // Utiliser l'API Botpress avec la configuration
+      await bp.sendMessage(message);
+
+      if (botpressConfig.debugMode) {
+        console.log('📤 Message envoyé à Botpress:', message);
+      }
+    } else {
+      // Fallback vers les réponses locales si Botpress n'est pas disponible
+      console.warn('⚠️ Botpress non disponible ou mal configuré, utilisation du mode fallback');
+      const fallbackResponse = generateFallbackResponse(message);
+      addBotMessage(fallbackResponse);
+    }
+  } catch (error) {
+    console.error('❌ Erreur lors de l\'envoi du message à Botpress:', error);
+    // Fallback en cas d'erreur
+    const fallbackResponse = generateFallbackResponse(message);
+    addBotMessage(fallbackResponse);
+  }
+}
+
+/**
+ * Génère une réponse de fallback (ancienne logique)
  * @param {string} message - Le message de l'utilisateur
  * @returns {string} - La réponse générée
  */
-function generateResponse(message) {
+function generateFallbackResponse(message) {
   // Convertit le message en minuscules pour faciliter la comparaison
   const lowerMessage = message.toLowerCase();
-  
-  // Définition des réponses possibles
+
+  // Définition des réponses possibles (version simplifiée pour fallback)
   const responses = {
-    // Salutations
     salutations: {
       triggers: ["bonjour", "salut", "hello", "hey", "coucou", "bonsoir"],
-      answers: [
-        "Bonjour ! Comment puis-je vous aider aujourd'hui ?",
-        "Salut ! Que puis-je faire pour vous ?",
-        "Hello ! En quoi puis-je vous être utile ?"
-      ]
+      answers: ["Bonjour ! Je suis l'assistant virtuel de Thomas. Comment puis-je vous aider ?"]
     },
-    
-    // Questions sur Thomas
     thomas: {
       triggers: ["thomas", "qui est thomas", "parle moi de thomas", "informaticien"],
-      answers: [
-        "Thomas est un informaticien passionné, actuellement étudiant au Geneva Institute of Technology.",
-        "Thomas est un développeur web qui travaille sur plusieurs projets, dont X-clone.",
-        "Thomas est spécialisé en développement web, IOT et machine learning."
-      ]
+      answers: ["Thomas est un informaticien passionné, étudiant au Geneva Institute of Technology avec une expérience à l'EPFL."]
     },
-    
-    // Questions sur les projets
     projets: {
       triggers: ["projets", "projet", "x-clone", "travail", "portfolio"],
-      answers: [
-        "Thomas travaille actuellement sur X-clone, un projet personnel qui lui permet d'améliorer ses compétences en JavaScript et technologies front-end.",
-        "Vous pouvez consulter les projets de Thomas dans la section 'Projets' de ce site.",
-        "Thomas a plusieurs projets en cours, notamment dans le développement web et l'IOT."
-      ]
+      answers: ["Thomas travaille sur X-clone et d'autres projets. Découvrez-les sur son portfolio !"]
     },
-    
-    // Questions sur les compétences
-    competences: {
-      triggers: ["compétences", "competences", "skills", "technologies", "langages", "programmation"],
-      answers: [
-        "Thomas maîtrise plusieurs technologies comme JavaScript, HTML5, CSS3 et GitHub.",
-        "Les compétences de Thomas incluent le développement web, l'IOT et le machine learning.",
-        "Thomas possède des compétences en développement front-end et back-end."
-      ]
-    },
-    
-    // Questions sur la formation
-    formation: {
-      triggers: ["formation", "études", "etudes", "école", "ecole", "geneva", "institut"],
-      answers: [
-        "Thomas est actuellement étudiant au Geneva Institute of Technology où il poursuit un CFC d'informaticien.",
-        "Thomas étudie l'informatique au Geneva Institute of Technology depuis 2024.",
-        "La formation de Thomas au Geneva Institute of Technology se terminera en 2028."
-      ]
-    },
-    
-    // Questions sur le contact
     contact: {
-      triggers: ["contact", "email", "mail", "téléphone", "telephone", "contacter"],
-      answers: [
-        "Vous pouvez contacter Thomas via le formulaire de contact disponible sur ce site.",
-        "Pour contacter Thomas, utilisez la section 'Contact' de ce site ou ses réseaux sociaux.",
-        "Thomas est disponible sur LinkedIn, GitHub et Twitter. Vous trouverez les liens dans la section 'À propos'."
-      ]
-    },
-    
-    // Remerciements
-    remerciements: {
-      triggers: ["merci", "thanks", "thank you", "cool", "super", "génial", "genial"],
-      answers: [
-        "Je vous en prie ! N'hésitez pas si vous avez d'autres questions.",
-        "Avec plaisir ! Je suis là pour vous aider.",
-        "De rien ! Avez-vous besoin d'autre chose ?"
-      ]
-    },
-    
-    // Au revoir
-    aurevoir: {
-      triggers: ["au revoir", "bye", "ciao", "adieu", "à bientôt", "a bientot"],
-      answers: [
-        "Au revoir ! N'hésitez pas à revenir si vous avez d'autres questions.",
-        "À bientôt ! Passez une excellente journée.",
-        "Au revoir et merci de votre visite !"
-      ]
+      triggers: ["contact", "email", "contacter"],
+      answers: ["Vous pouvez contacter Thomas via le formulaire de contact ou par email."]
     }
   };
-  
-  // Parcourt les catégories de réponses
+
+  // Recherche de correspondance
   for (const category in responses) {
     const { triggers, answers } = responses[category];
-    
-    // Vérifie si le message contient l'un des déclencheurs
     for (const trigger of triggers) {
       if (lowerMessage.includes(trigger)) {
-        // Retourne une réponse aléatoire de cette catégorie
         return answers[Math.floor(Math.random() * answers.length)];
       }
     }
   }
-  
-  // Réponses par défaut si aucune correspondance n'est trouvée
-  const defaultResponses = [
-    "Je ne suis pas sûr de comprendre. Pouvez-vous reformuler votre question ?",
-    "Désolé, je n'ai pas d'information sur ce sujet. Puis-je vous aider avec autre chose ?",
-    "Intéressant ! Malheureusement, je n'ai pas de réponse précise à cette question.",
-    "N'hésitez pas à me poser des questions sur Thomas, ses projets ou ses compétences."
-  ];
-  
-  return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+
+  // Réponse par défaut
+  return "Je suis l'assistant virtuel de Thomas. Pour des réponses plus précises, Botpress doit être configuré avec votre instance.";
 }
 
 /**
