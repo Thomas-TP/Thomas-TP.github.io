@@ -1,0 +1,566 @@
+/* ==================================
+   EFFETS MODERNES ET HIGH-TECH 2025
+   ================================== */
+
+/* ===== GLASSMORPHISM ===== */
+.glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+.dark-theme .glass-card {
+    background: rgba(31, 41, 55, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Appliquer glassmorphism à toutes les cartes */
+.card, .card-hover, .bg-white.shadow-md, .bg-white.rounded-lg, .bg-white.rounded-xl {
+    background: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark-theme .card, 
+.dark-theme .card-hover, 
+.dark-theme .bg-white.shadow-md, 
+.dark-theme .bg-white.rounded-lg, 
+.dark-theme .bg-white.rounded-xl {
+    background: rgba(31, 41, 55, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ===== CURSEUR PERSONNALISÉ ===== */
+body {
+    cursor: none;
+}
+
+.custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.2s ease;
+    opacity: 0;
+    mix-blend-mode: difference;
+    will-change: transform;
+    transform: translate(-50%, -50%);
+}
+
+.custom-cursor.active {
+    opacity: 0.8;
+}
+
+.custom-cursor-dot {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background-color: var(--primary);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10001;
+    transition: transform 0.08s cubic-bezier(0.23, 1, 0.32, 1);
+    opacity: 0;
+    will-change: transform;
+    transform: translate(-50%, -50%);
+}
+
+.custom-cursor-dot.active {
+    opacity: 1;
+}
+
+/* Curseur au hover des liens */
+.custom-cursor.hover {
+    transform: translate(-50%, -50%) scale(1.8);
+    border-color: var(--primary);
+    opacity: 0.6;
+}
+
+.custom-cursor-dot.hover {
+    transform: translate(-50%, -50%) scale(1.5);
+}
+
+/* ===== GRADIENTS ANIMÉS ===== */
+.animated-gradient {
+    background: linear-gradient(
+        -45deg,
+        var(--primary),
+        var(--primary-dark),
+        #667eea,
+        #764ba2
+    );
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* ===== MESH GRADIENT (Fond moderne) ===== */
+.mesh-gradient {
+    position: relative;
+    overflow: hidden;
+}
+
+.mesh-gradient::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(79, 118, 247, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(102, 126, 234, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(118, 75, 162, 0.2) 0%, transparent 50%);
+    animation: meshMove 20s ease infinite;
+}
+
+@keyframes meshMove {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    33% {
+        transform: translate(5%, 10%) rotate(120deg);
+    }
+    66% {
+        transform: translate(-5%, 5%) rotate(240deg);
+    }
+}
+
+/* ===== EFFETS DE HOVER MODERNES ===== */
+.hover-lift-3d {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-lift-3d:hover {
+    transform: translateY(-12px) rotateX(5deg) rotateY(5deg);
+}
+
+.hover-glow {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.hover-glow::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(79, 118, 247, 0.4), transparent);
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.hover-glow:hover::after {
+    width: 300%;
+    height: 300%;
+}
+
+/* ===== BOUTONS MODERNES ===== */
+.btn-modern {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    border: none;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.btn-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.btn-modern:hover::before {
+    left: 100%;
+}
+
+.btn-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(79, 118, 247, 0.4);
+}
+
+/* ===== CARTES AVEC EFFET DE PROFONDEUR ===== */
+.card-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-3d:hover {
+    transform: perspective(1000px) rotateY(5deg) rotateX(5deg) translateZ(20px);
+}
+
+/* ===== EFFET NÉON ===== */
+.neon-text {
+    text-shadow: 
+        0 0 10px rgba(79, 118, 247, 0.8),
+        0 0 20px rgba(79, 118, 247, 0.6),
+        0 0 30px rgba(79, 118, 247, 0.4),
+        0 0 40px rgba(79, 118, 247, 0.2);
+    animation: neonPulse 2s ease-in-out infinite;
+}
+
+@keyframes neonPulse {
+    0%, 100% {
+        text-shadow: 
+            0 0 10px rgba(79, 118, 247, 0.8),
+            0 0 20px rgba(79, 118, 247, 0.6),
+            0 0 30px rgba(79, 118, 247, 0.4);
+    }
+    50% {
+        text-shadow: 
+            0 0 20px rgba(79, 118, 247, 1),
+            0 0 30px rgba(79, 118, 247, 0.8),
+            0 0 40px rgba(79, 118, 247, 0.6),
+            0 0 50px rgba(79, 118, 247, 0.4);
+    }
+}
+
+/* ===== PARALLAXE ===== */
+.parallax-layer {
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ===== SKELETON LOADING MODERNE ===== */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeletonLoading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonLoading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.dark-theme .skeleton {
+    background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+    background-size: 200% 100%;
+}
+
+/* ===== BADGES ANIMÉS ===== */
+.badge-modern {
+    position: relative;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.badge-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.badge-modern:hover::before {
+    left: 100%;
+}
+
+.badge-modern:hover {
+    transform: translateY(-2px) scale(1.05);
+}
+
+/* Améliorer les badges de compétences existants */
+.skill-badge {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    border: 1px solid transparent;
+    background: linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
+                linear-gradient(135deg, transparent, var(--primary), transparent) border-box;
+}
+
+.skill-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(79, 118, 247, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.skill-badge:hover::before {
+    left: 100%;
+}
+
+.skill-badge:hover {
+    transform: translateY(-4px) scale(1.1);
+    box-shadow: 
+        0 10px 25px rgba(0, 0, 0, 0.15),
+        0 0 30px rgba(79, 118, 247, 0.3);
+    border-color: rgba(79, 118, 247, 0.5);
+}
+
+/* Barres de progression avec effet néon */
+.skill-progress {
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: visible;
+}
+
+.skill-progress::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: 0;
+    width: 6px;
+    height: calc(100% + 4px);
+    background: linear-gradient(180deg, transparent, var(--primary), transparent);
+    border-radius: 3px;
+    box-shadow: 0 0 15px var(--primary), 0 0 30px var(--primary);
+    opacity: 0.8;
+    animation: progressGlow 2s ease-in-out infinite;
+}
+
+@keyframes progressGlow {
+    0%, 100% {
+        box-shadow: 0 0 15px var(--primary), 0 0 30px var(--primary);
+        opacity: 0.8;
+    }
+    50% {
+        box-shadow: 0 0 25px var(--primary), 0 0 50px var(--primary);
+        opacity: 1;
+    }
+}
+
+/* ===== EFFET SHIMMER ===== */
+.shimmer {
+    position: relative;
+    overflow: hidden;
+}
+
+.shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shimmerSlide 3s infinite;
+}
+
+@keyframes shimmerSlide {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 200%;
+    }
+}
+
+/* ===== TYPOGRAPHIE MODERNE ===== */
+.text-gradient {
+    background: linear-gradient(135deg, var(--primary) 0%, #667eea 50%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% auto;
+    animation: textGradientShift 3s ease infinite;
+}
+
+@keyframes textGradientShift {
+    0%, 100% {
+        background-position: 0% center;
+    }
+    50% {
+        background-position: 100% center;
+    }
+}
+
+/* Gradient blanc pour texte hero */
+.text-gradient-white {
+    background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, #c7d2fe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% auto;
+    animation: textGradientShift 4s ease infinite;
+}
+
+/* Amélioration des titres de sections */
+.section-title {
+    position: relative;
+    display: inline-block;
+    font-size: clamp(1.875rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -12px;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), #667eea);
+    border-radius: 2px;
+    box-shadow: 0 2px 10px rgba(79, 118, 247, 0.4);
+}
+
+/* ===== BORDURES ANIMÉES ===== */
+.border-animated {
+    position: relative;
+    border: 2px solid transparent;
+}
+
+.border-animated::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--primary), #667eea, #764ba2, var(--primary));
+    background-size: 300% 300%;
+    border-radius: inherit;
+    z-index: -1;
+    animation: borderRotate 3s linear infinite;
+}
+
+@keyframes borderRotate {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+/* ===== OMBRES MODERNES ===== */
+.shadow-modern {
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.05),
+        0 8px 16px rgba(0, 0, 0, 0.1),
+        0 16px 32px rgba(0, 0, 0, 0.1),
+        0 32px 64px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-modern-colored {
+    box-shadow: 
+        0 4px 8px rgba(79, 118, 247, 0.1),
+        0 8px 16px rgba(79, 118, 247, 0.15),
+        0 16px 32px rgba(79, 118, 247, 0.2);
+}
+
+/* Amélioration des ombres des cartes */
+.card, .card-hover {
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.05),
+        0 10px 15px -3px rgba(0, 0, 0, 0.08);
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+}
+
+.card:hover, .card-hover:hover {
+    box-shadow: 
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04),
+        0 0 60px rgba(79, 118, 247, 0.2);
+    transform: translateY(-12px) scale(1.03) rotateX(2deg);
+}
+
+.dark-theme .card:hover, 
+.dark-theme .card-hover:hover {
+    box-shadow: 
+        0 20px 25px -5px rgba(0, 0, 0, 0.3),
+        0 10px 10px -5px rgba(0, 0, 0, 0.2),
+        0 0 60px rgba(124, 157, 255, 0.3);
+}
+
+/* Effet de profondeur sur les cartes */
+.card::after,
+.card-hover::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, var(--primary), transparent, var(--primary));
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.5s ease;
+}
+
+.card:hover::after,
+.card-hover:hover::after {
+    opacity: 0.15;
+    animation: borderGlow 2s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+    0%, 100% { opacity: 0.15; }
+    50% { opacity: 0.3; }
+}
+
+/* ===== RESPONSIVE POUR MOBILE ===== */
+@media (max-width: 768px) {
+    body {
+        cursor: auto;
+    }
+    
+    .custom-cursor,
+    .custom-cursor-dot {
+        display: none;
+    }
+    
+    .hover-lift-3d:hover {
+        transform: translateY(-8px);
+    }
+}
+
+/* ===== AMÉLIORATION DES PERFORMANCES ===== */
+@media (prefers-reduced-motion: reduce) {
+    .animated-gradient,
+    .mesh-gradient::before,
+    .neon-text,
+    .shimmer::after,
+    .text-gradient,
+    .border-animated::before {
+        animation: none;
+    }
+    
+    .hover-lift-3d,
+    .card-3d {
+        transform: none !important;
+    }
+}
