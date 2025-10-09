@@ -92,6 +92,9 @@ async function initBotpressConnection() {
 document.addEventListener("DOMContentLoaded", () => {
   // Interface personnalisée désactivée - utilisation du widget Botpress standard
   console.log('🤖 Widget Botpress standard activé - interface personnalisée désactivée');
+
+  // Initialiser le chatbot personnalisé si souhaité (actuellement désactivé)
+  // initChatbot();
 });
 
 /**
