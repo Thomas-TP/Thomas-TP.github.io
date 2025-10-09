@@ -1,0 +1,314 @@
+{
+  "metadata": {
+    "name": "Thomas Prudhomme - Knowledge Base",
+    "description": "Base de connaissances complète et structurée pour Thomas Prudhomme",
+    "version": "1.0",
+    "lastUpdated": "2025-10-08",
+    "languages": ["fr", "en"],
+    "author": "Thomas Prudhomme",
+    "contact": "thomas@prudhomme.li"
+  },
+  "profile": {
+    "fullName": "Thomas Prudhomme",
+    "title": {
+      "fr": "Informaticien Passionné",
+      "en": "Passionate IT Professional"
+    },
+    "currentStatus": {
+      "fr": "Étudiant CFC en Informatique",
+      "en": "CFC IT Student"
+    },
+    "institution": "Geneva Institute of Technology",
+    "studyPeriod": "2024-2028",
+    "location": "Suisse",
+    "email": "thomas@prudhomme.li",
+    "summary": {
+      "fr": "Informaticien suisse passionné, étudiant en CFC d'informaticien au Geneva Institute of Technology. Expérience professionnelle à l'EPFL, développement de projets personnels en JavaScript et technologies web.",
+      "en": "Passionate Swiss IT professional, studying for CFC in IT at Geneva Institute of Technology. Professional experience at EPFL, developing personal projects in JavaScript and web technologies."
+    }
+  },
+  "experience": [
+    {
+      "id": "epfl_internship",
+      "position": {
+        "fr": "Stage d'Informaticien",
+        "en": "IT Intern"
+      },
+      "company": "École Polytechnique Fédérale de Lausanne (EPFL)",
+      "location": "Lausanne, Suisse",
+      "period": "2024 - Présent",
+      "description": {
+        "fr": "Stage d'informatique dans l'une des institutions académiques les plus prestigieuses au monde. Responsabilités incluant l'informatique, le développement, l'infrastructure IT et le support technique.",
+        "en": "IT internship at one of the world's most prestigious academic institutions. Responsibilities include IT, development, IT infrastructure, and technical support."
+      },
+      "skills": ["IT", "Développement", "Infrastructure IT", "Support Technique"],
+      "type": "internship"
+    }
+  ],
+  "education": [
+    {
+      "id": "cfc_it",
+      "degree": {
+        "fr": "CFC d'Informaticien",
+        "en": "CFC in IT"
+      },
+      "institution": "Geneva Institute of Technology",
+      "period": "2024-2028",
+      "description": {
+        "fr": "Formation professionnelle complète en informatique",
+        "en": "Complete professional training in computer science"
+      },
+      "type": "professional_training"
+    },
+    {
+      "id": "pre_apprenticeship",
+      "degree": {
+        "fr": "Préapprentissage",
+        "en": "Pre-apprenticeship"
+      },
+      "institution": "FuturPlus Lausanne",
+      "period": "2023-2024",
+      "description": {
+        "fr": "Préparation à la formation professionnelle en informatique",
+        "en": "Preparation for professional training in computer science"
+      },
+      "type": "preparation"
+    },
+    {
+      "id": "compulsory_schooling",
+      "degree": {
+        "fr": "Scolarité obligatoire",
+        "en": "Compulsory schooling"
+      },
+      "institution": "Grand-Champ",
+      "period": "2020-2023",
+      "description": {
+        "fr": "Formation scolaire obligatoire",
+        "en": "Compulsory school education"
+      },
+      "type": "secondary_education"
+    }
+  ],
+  "skills": {
+    "programming_languages": [
+      {
+        "name": "JavaScript",
+        "level": {
+          "fr": "Expérimenté",
+          "en": "Experienced"
+        },
+        "proficiency": 4
+      },
+      {
+        "name": "HTML5",
+        "level": {
+          "fr": "Avancé",
+          "en": "Advanced"
+        },
+        "proficiency": 5
+      },
+      {
+        "name": "CSS3",
+        "level": {
+          "fr": "Avancé",
+          "en": "Advanced"
+        },
+        "proficiency": 5
+      }
+    ],
+    "tools_technologies": [
+      {
+        "name": "Git & GitHub",
+        "level": {
+          "fr": "Expérimenté",
+          "en": "Experienced"
+        },
+        "proficiency": 4
+      },
+      {
+        "name": "Linux",
+        "level": {
+          "fr": "Intermédiaire",
+          "en": "Intermediate"
+        },
+        "proficiency": 3
+      }
+    ],
+    "ai_ml": [
+      {
+        "name": "Machine Learning",
+        "level": {
+          "fr": "Débutant",
+          "en": "Beginner"
+        },
+        "proficiency": 2
+      }
+    ],
+    "languages": [
+      {
+        "name": "Français",
+        "level": {
+          "fr": "Langue maternelle",
+          "en": "Native language"
+        },
+        "proficiency": 5
+      },
+      {
+        "name": "Anglais",
+        "level": {
+          "fr": "Professionnel",
+          "en": "Professional"
+        },
+        "proficiency": 4
+      }
+    ]
+  },
+  "projects": [
+    {
+      "id": "x_clone",
+      "name": "X-clone",
+      "description": {
+        "fr": "Clone de Twitter avec fonctionnalités de publication, suivi, likes/retweets et chat IA (Grok). Interface responsive développée en HTML/CSS/JavaScript avec stockage local.",
+        "en": "Twitter clone with publishing, following, likes/retweets and AI chat (Grok) features. Responsive interface built with HTML/CSS/JavaScript with local storage."
+      },
+      "technologies": ["HTML5", "CSS3", "JavaScript", "Local Storage"],
+      "status": {
+        "fr": "En développement",
+        "en": "In development"
+      },
+      "type": "web_application",
+      "featured": true
+    },
+    {
+      "id": "tank_io",
+      "name": "Tank.io",
+      "description": {
+        "fr": "Jeu 2D inspiré des jeux .io avec modes solo (IA) et multijoueur LAN. Prototype jouable avec Canvas optimisé.",
+        "en": "2D game inspired by .io games with solo (AI) and LAN multiplayer modes. Playable prototype with optimized Canvas."
+      },
+      "technologies": ["JavaScript", "HTML5 Canvas"],
+      "status": {
+        "fr": "Prototype",
+        "en": "Prototype"
+      },
+      "type": "game",
+      "featured": true
+    },
+    {
+      "id": "powershell_empire",
+      "name": "PowerShell Empire",
+      "description": {
+        "fr": "Framework post-exploitation puissant pour Windows utilisant PowerShell pour le pentesting et la sécurité offensive.",
+        "en": "Powerful post-exploitation framework for Windows using PowerShell for pentesting and offensive security."
+      },
+      "technologies": ["PowerShell", "Sécurité"],
+      "status": {
+        "fr": "Terminé",
+        "en": "Completed"
+      },
+      "type": "security_tool",
+      "featured": true
+    }
+  ],
+  "certifications": [
+    {
+      "id": "github_foundation",
+      "name": "GitHub Foundation",
+      "issuer": "GitHub",
+      "date": "2025",
+      "id_number": null,
+      "category": "development_tools"
+    },
+    {
+      "id": "iot_certification",
+      "name": "IoT",
+      "issuer": "Programming Hub",
+      "date": "2024",
+      "id_number": "99de3518f3787d2",
+      "category": "iot"
+    },
+    {
+      "id": "english_it_1",
+      "name": "English for IT 1",
+      "issuer": "Cisco Networking Academy",
+      "date": "2024",
+      "id_number": null,
+      "category": "language"
+    },
+    {
+      "id": "linux_essentials",
+      "name": "Linux Essentials",
+      "issuer": "Programming Hub",
+      "date": "2024",
+      "id_number": "1709284761076",
+      "category": "operating_systems"
+    },
+    {
+      "id": "machine_learning",
+      "name": "Machine Learning",
+      "issuer": "Programming Hub",
+      "date": "2024",
+      "id_number": "1709194876030",
+      "category": "artificial_intelligence"
+    }
+  ],
+  "contact": {
+    "email": "thomas@prudhomme.li",
+    "location": "Suisse",
+    "education_institution": "Geneva Institute of Technology",
+    "current_status": {
+      "fr": "Étudiant CFC en Informatique",
+      "en": "CFC IT Student"
+    },
+    "social_links": {
+      "github": "https://github.com/thomas-tp",
+      "linkedin": "Profil à ajouter",
+      "portfolio": "https://thomastp.me",
+      "twitter": "@thomas_tp_dev"
+    }
+  },
+  "interests": {
+    "primary": ["Web Development", "IoT", "Machine Learning"],
+    "description": {
+      "fr": "Passionné par l'innovation et les nouvelles technologies, particulièrement intéressé par le développement web, l'IoT et le machine learning.",
+      "en": "Passionate about innovation and new technologies, particularly interested in web development, IoT, and machine learning."
+    }
+  },
+  "botpress_optimization": {
+    "structured_data_types": [
+      "personal_profile",
+      "professional_experience",
+      "education_history",
+      "technical_skills",
+      "project_portfolio",
+      "certifications",
+      "contact_information"
+    ],
+    "search_keywords": [
+      "Thomas Prudhomme",
+      "informaticien",
+      "Geneva Institute of Technology",
+      "EPFL",
+      "développement web",
+      "JavaScript",
+      "HTML5",
+      "CSS3",
+      "GitHub",
+      "Linux",
+      "Machine Learning",
+      "IoT",
+      "X-clone",
+      "Tank.io",
+      "PowerShell Empire"
+    ],
+    "query_patterns": [
+      "Qui est Thomas ?",
+      "Quelle formation a Thomas ?",
+      "Quels projets développe Thomas ?",
+      "Quelles compétences techniques a Thomas ?",
+      "Comment contacter Thomas ?",
+      "Où travaille Thomas ?",
+      "Quelles certifications a Thomas ?"
+    ]
+  }
+}
