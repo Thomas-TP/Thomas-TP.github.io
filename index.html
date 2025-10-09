@@ -35,11 +35,6 @@
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
-    <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
-    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
-    <meta http-equiv="Cross-Origin-Resource-Policy" content="cross-origin">
 
     <!-- Content Security Policy (CSP) -->
     <meta http-equiv="Content-Security-Policy" content="
@@ -2741,25 +2736,6 @@
       "clientId": "a3373812-d38b-45f3-8f2e-4bf06a35f547",
       "selector": "#webchat"
     });
-    </script>
-    
-    <!-- Scripts de sécurité -->
-    <script src="js/security-monitor.js?v=2.4" defer></script>
-    
-    <!-- Service Worker pour le cache et la sécurité -->
-    <script>
-        // Enregistrer le Service Worker pour la sécurité et le cache
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/js/service-worker.js?v=2.4')
-                    .then(function(registration) {
-                        console.log('Service Worker enregistré avec succès:', registration.scope);
-                    })
-                    .catch(function(error) {
-                        console.log('Échec de l\'enregistrement du Service Worker:', error);
-                    });
-            });
-        }
     </script>
 </body>
 </html>
