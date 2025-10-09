@@ -1,0 +1,757 @@
+ImmuniWeb® Community Edition | Website Security Test
+
+Summary of thomastp.me [Desktop version]
+Website Security Test
+Provided "as is" without any warranty of any kind.
+thomastp.me was tested 4 times during the last 12 months.
+
+Your final score:
+
+Tested on:
+
+Oct 9th, 2025 11:17:41 GMT+0
+
+Server IP:
+
+185.199.108.153
+
+A
+B
+
+Reverse DNS: cdn-185-199-108-153.github.com
+Location:
+
+Los Angeles, United States
+
+Client:
+
+Desktop version
+
+C
+F
+
+C+
+
+Web Software
+Security Test
+
+GDPR
+Compliance Test
+
+PCI DSS
+Compliance Test
+
+Content
+Security Policy Test
+
+Headers
+Security Test
+
+2 ISSUES FOUND
+
+NO ISSUES FOUND
+
+1 ISSUE FOUND
+
+MISSING
+
+NO MAJOR ISSUES
+FOUND
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+1 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+Table of Contents
+Protection from Data Scraping Analysis
+DNSSEC Analysis
+Web Server Security Test
+Web Software Security Test
+GDPR Compliance Test
+PCI DSS Compliance Test
+HTTP Headers Security Test
+Content Security Policy Test
+Cookies Privacy and Security Analysis
+External Content Privacy and Security Analysis
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+2 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+Protection from Data Scraping Analysis
+Many companies rely on AI bots to scrape website content, using the collected data to train their machine learning models.
+To safeguard information, website owners can apply different techniques to detect, limit, or block scraping activities carried
+out by these bots.
+
+Robots.txt Rules
+
+User-Agent Blocks
+
+Meta Tags
+
+Protection vs. Bots
+
+0
+
+0
+
+0
+
+0
+
+Default Rules
+The website has the following default access rules for all crawlers defined in robots.txt, unless overridden by more specific
+rules below.
+
+User-agent: *
+Allow: /
+Allow: /botpress.html
+Allow: /kb/thomas-knowledge-base.json
+Allow: /CV/ThomasPrudhommeCV.pdf
+Allow: /sitemap.xml
+
+Raw Value
+
+GPTBot by OpenAI
+Robots.txt Directives
+No specific rule for GPTBot User-Agent(s) was found in robots.txt; default rules
+apply.
+
+Information
+
+Server-side Blocking
+No server-side User-Agent-based blocking detected for GPTBot.
+
+Information
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+3 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+Gemini by Google
+To control whether your website’s content can be used to train Google’s AI models (such as Gemini), Google follows the
+special Google-Extended User-Agent directive in your robots.txt file.
+
+Robots.txt Directives
+No rule is specified for the Google-Extended User-Agent, so Google imposes no
+restrictions on AI training and may use any content that its crawlers are allowed to
+access.
+
+Information
+
+However, Google-Extended does not crawl your site directly. Instead, it respects the access granted to other Google
+crawlers: Googlebot, Googlebot-Image, Googlebot-Video, Googlebot-News, GoogleOther, GoogleOther-Image, GoogleOtherVideo.
+No rule is specified for Google in robots.txt; default rules apply.
+
+Information
+
+Claude by Anthropic
+Robots.txt Directives
+No specific rule for ClaudeBot, Claude-User, Claude-SearchBot User-Agent(s) was
+found in robots.txt; default rules apply.
+
+Information
+
+Server-side Blocking
+No server-side User-Agent-based blocking detected for ClaudeBot, Claude-User,
+Claude-SearchBot.
+
+Information
+
+Perplexity by Perplexity AI
+Robots.txt Directives
+No specific rule for PerplexityBot User-Agent(s) was found in robots.txt; default rules
+apply.
+
+Information
+
+Server-side Blocking
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+4 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+No server-side User-Agent-based blocking detected for PerplexityBot, PerplexityUser.
+
+Information
+
+Copilot by Microsoft
+Meta Tag Restrictions
+No meta tag restricting usage of website's content found.
+
+Information
+
+Server-side Blocking
+No server-side User-Agent-based blocking detected for Bingbot, BingPreview.
+
+Information
+
+DeepSeek by Hangzhou DeepSeek Artificial Intelligence
+DeepSeek does not have public policy confirming that it will follow rules as defined in robots.txt. Use server-side blocking
+based on User-Agent to restrict access.
+
+Server-side Blocking
+No server-side User-Agent-based blocking detected for DeepSeekBot.
+
+Information
+
+Meta AI by Meta
+Robots.txt Directives
+No specific rule for Meta-ExternalAgent User-Agent(s) was found in robots.txt;
+default rules are ignored by this bot.
+
+Information
+
+Server-side Blocking
+No server-side User-Agent-based blocking detected for Meta AI Crawler.
+
+Information
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+5 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+AmazonBot by Amazon
+Robots.txt Directives
+No specific rule for AmazonBot User-Agent(s) was found in robots.txt; default rules
+apply.
+
+Information
+
+Meta Tag Restrictions
+No meta tag restricting usage of website's content found.
+
+Information
+
+Server-side Blocking
+No server-side User-Agent-based blocking detected for Amazonbot.
+
+Information
+
+Apple Intelligence by Apple
+To control whether your website’s content can be used to train Apple’s AI models (Apple Intelligence), Apple follows the
+special Applebot-Extended User-Agent directive in your robots.txt file.
+
+Robots.txt Directives
+No rule is specified for the Apple-Extended User-Agent, so Apple imposes no
+restrictions on AI training and may use any content that its crawlers are allowed to
+access.
+
+Information
+
+Applebot-Extended does not crawl your site directly. Instead, it respects the access granted to other Apple crawlers:
+Applebot. If no Applebot rule is present, Applebot follows the rules defined for Googlebot.
+No rule is specified for Apple was found in robots.txt; general rules apply.
+
+Information
+
+Server-side Blocking
+No server-side User-Agent-based blocking detected for Applebot.
+
+Information
+
+Doubao by ByteDance
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+6 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+Doubao is an AI chatbot developed by ByteDance, the company behind TikTok. ByteDance operates the Bytespider web
+crawler, which may collect website content — potentially for training Doubao and other AI models. ByteDance does not have
+a public policy confirming that Bytespider will follow robots.txt rules. Use server-side blocking based on User-Agent to
+restrict access.
+
+Server-side Blocking
+No server-side User-Agent-based blocking detected for Bytespider.
+
+Information
+
+Custom Bot
+A custom test crawler User-Agent used to check for simple keyword-based User-Agent blocks. Not associated with any real
+service and does not actually crawl the content on websites.
+
+Server-side Blocking
+No server-side User-Agent-based blocking detected for Custom Bot.
+
+Information
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+7 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+DNSSEC Analysis
+DNSSEC (Domain Name System Security Extensions) is a security protocol that protects against DNS spoofing by ensuring
+the authenticity and integrity of DNS data.
+
+Domain thomastp.me has 4 unsigned DNS records of A type:
+Type
+
+Domain name
+
+IP Address
+
+A
+
+thomastp.me
+
+185.199.108.153
+
+A
+
+thomastp.me
+
+185.199.109.153
+
+A
+
+thomastp.me
+
+185.199.110.153
+
+A
+
+thomastp.me
+
+185.199.111.153
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+8 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+Web Server Security Test
+HTTP RESPONSE
+200
+
+HTTP VERSIONS
+HTTP/1.0
+
+HTTP/1.1
+
+NPN
+N/A
+
+HTTP/2
+
+ALPN
+
+CONTENT ENCODING
+
+SERVER SIGNATURE
+
+None
+
+GitHub.com
+
+WAF
+
+LOCATION
+
+HTTP METHODS ENABLED
+
+No WAF detected
+
+N/A
+
+H2
+
+✔ GET
+
+✔ HEAD
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+9 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+Web Software Security Test
+
+Web Software Found
+
+2
+
+Web Software
+Outdated
+
+Web Software
+Vulnerabilities
+
+2
+
+0
+
+The following security vulnerabilities are known to be present in the fingerprinted version of web software. To run a
+comprehensive vulnerability scan of your web application, please use ImmuniWeb® Neuron.
+
+Fingerprinted CMS & Vulnerabilities
+No CMS were fingerprinted on the website.
+
+Information
+
+Fingerprinted CMS Components & Vulnerabilities
+
+React
+
+18.3.1
+
+The component is outdated. No known security vulnerabilities found. Update to the most recent version 19.1.1.
+
+Core-js
+
+3.18.3—3.38.1
+
+The component is outdated. We fingerprinted several possible versions of the component due to slow speed of the web
+server or modifications in the component code. Current most recent version is 3.45.1.
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+10 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+GDPR Compliance Test
+If the website processes or stores personal data of the EU residents, the following requirements of EU GDPR may apply:
+
+PRIVACY POLICY
+Privacy Policy was found on the website.
+
+Good configuration
+
+WEBSITE SECURITY
+No publicly known vulnerabilities were found in the website CMS or its components.
+
+Good configuration
+
+TLS ENCRYPTION
+HTTPS encryption is present on the web server.
+
+Good configuration
+
+COOKIE PROTECTION
+No cookies with personal or tracking information seem to be sent.
+
+Information
+
+COOKIE DISCLAIMER
+No third-party cookies or cookies with tracking information seem to be sent.
+
+Information
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+11 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+PCI DSS Compliance Test
+If the website falls into a CDE (Cardholder Data Environment) scope, the following Requirements of PCI DSS may apply:
+
+REQUIREMENT 6.3
+No publicly known vulnerabilities seem to be present in the fingerprinted versions of
+the website CMS and its components.
+
+Good configuration
+
+REQUIREMENT 6.4
+No WAF was detected on the website. Implement a WAF to protect the website
+against common web attacks.
+
+Misconfiguration or
+weakness
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+12 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+HTTP Headers Security Test
+Some HTTP headers related to security and privacy are missing or misconfigured.
+
+Misconfiguration or
+weakness
+
+MISSING REQUIRED HTTP HEADERS
+Strict-Transport-Security (HSTS)
+
+X-Frame-Options
+
+X-Content-Type-Options
+
+MISSING OPTIONAL HTTP HEADERS
+Permissions-Policy
+
+SERVER
+Web server does not disclose its version.
+
+Good configuration
+
+Raw HTTP Header
+
+Server: GitHub.com
+
+ACCESS-CONTROL-ALLOW-ORIGIN
+The header is properly set.
+
+Good configuration
+
+Raw HTTP Header
+
+Access-Control-Allow-Origin: *
+
+CACHE-CONTROL
+The header is properly set.
+
+Good configuration
+
+Raw HTTP Header
+
+Cache-Control: max-age=600
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+13 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+Content Security Policy Test
+CONTENT-SECURITY-POLICY (CSP)
+
+The header was not sent by the server.
+
+Misconfiguration or
+weakness
+
+CONTENT-SECURITY-POLICY-REPORT-ONLY
+
+The header was not sent by the server.
+
+Information
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+14 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+Cookies Privacy and Security Analysis
+No cookies were sent by the web application.
+
+Good configuration
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+15 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+Need More? Upgrade to ImmuniWeb® AI Platform
+Get x10 more findings with 24/7 remediation support and ensure compliance:
+
+ImmuniWeb® Discovery
+
+ImmuniWeb® On-Demand
+
+Continuous Threat
+Exposure Management & TPRM
+
+Compliance-Ready Web
+Penetration Testing
+
+ImmuniWeb® Continuous
+Continuous Application
+Penetration Testing & PTaaS
+
+FREE DEMO
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+16 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+External Content Privacy and Security Analysis
+SUBRESOURCE INTEGRITY
+Subresource Integrity (SRI) is a security feature that allows browsers to verify that fetched resources (scripts and
+stylesheets) are delivered without unexpected alterations. The integrity of third-party resources is ensured by validating their
+cryptographic hashes.
+
+SRI is correctly implemented for 1 out of 11 third-party JavaScripts and CSS files.
+Ensure that SRI is applied to all external JavaScripts and CSS files for complete
+security.
+
+Information
+
+EXTERNAL CONTENT
+External web content (e.g. images, video, CSS or JavaScript) can improve website loading time. However, the external
+content can also put privacy of website visitors at risk given that some information about them is transmitted to the third
+parties operating the external resources, sometimes even without proper HTTPS encryption or user consent.
+
+External HTTP Requests
+
+Failed HTTP Requests
+
+21
+
+1
+
+fonts.googleapis.com
+https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&amp;family=Montserrat:wght@600;700…
+
+SRI
+
+https://fonts.googleapis.com/css2?family=inter:wght@100;200;300;400;500;600;700;800&amp;display=swap
+
+SRI
+
+cdnjs.cloudflare.com
+https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css
+
+SRI
+
+https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/webfonts/fa-brands-400.woff2
+https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/webfonts/fa-solid-900.woff2
+
+cdn.botpress.cloud
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+17 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+https://cdn.botpress.cloud/webchat/v3.3/inject.js
+
+SRI
+
+https://cdn.botpress.cloud/webchat/v3.3/messagePreview.js
+
+SRI
+
+https://cdn.botpress.cloud/webchat/v3.3/fab.js
+
+SRI
+
+https://cdn.botpress.cloud/webchat/v3.3/webchat.js
+
+SRI
+
+smtpjs.com
+https://smtpjs.com/v3/smtp.js
+
+SRI
+
+cdn.jsdelivr.net
+https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css
+
+SRI
+
+files.bpcontent.cloud
+https://files.bpcontent.cloud/2025/05/15/15/20250515153102-Z9XZERAQ.js
+
+SRI
+
+https://files.bpcontent.cloud/2025/05/15/16/20250515161717-IWIQ934L.css
+
+SRI
+
+https://files.bpcontent.cloud/2025/05/15/15/20250515155746-YSTFM0M2.png
+https://files.bpcontent.cloud/2025/05/15/15/20250515155910-MI7WYQ4S.png
+
+fonts.gstatic.com
+https://fonts.gstatic.com/s/montserrat/v31/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2
+https://fonts.gstatic.com/s/poppins/v24/pxiEyp8kv8JHgFVrJJfecg.woff2
+https://fonts.gstatic.com/s/poppins/v24/pxiByp8kv8JHgFVrLEj6Z1xlFQ.woff2
+https://fonts.gstatic.com/s/poppins/v24/pxiByp8kv8JHgFVrLCz7Z1xlFQ.woff2
+
+webchat.botpress.cloud
+https://webchat.botpress.cloud/a3373812-d38b-45f3-8f2e-4bf06a35f547/users
+https://webchat.botpress.cloud/a3373812-d38b-45f3-8f2e-4bf06a35f547/users/me
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+18 / 19
+
+ImmuniWeb® Community Edition | Website Security Test
+
+The End of Report
+Upgrade from Free Community Edition to ImmuniWeb® AI Platform
+
+Full Test Results: https://www.immuniweb.com/websec/thomastp.me/QWwkURuZ/
+This document is intellectual property of ImmuniWeb SA and must never be used for any commercial purposes without
+express written permission. Please report any violations to info@immuniweb.com
+Copyright © 2025 ImmuniWeb SA
+
+19 / 19
+
+

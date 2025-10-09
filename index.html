@@ -30,6 +30,27 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/images/favicon/favicon.png">
 
+    <!-- Headers de sécurité via meta tags (pour GitHub Pages) -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+
+    <!-- Content Security Policy (CSP) -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com https://smtpjs.com https://cdn.botpress.cloud https://files.bpcontent.cloud https://webchat.botpress.cloud;
+        style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com https://files.bpcontent.cloud;
+        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+        img-src 'self' data: https: blob:;
+        connect-src 'self' https://formspree.io https://cdn.botpress.cloud https://webchat.botpress.cloud https://streak-stats.demolab.com https://git.io;
+        frame-src 'none';
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self' https://formspree.io;
+        upgrade-insecure-requests;
+    ">
+
     <!-- Preconnect pour les domaines externes (gain de 100-300ms) -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,11 +62,11 @@
     
     <!-- Tailwind en async (non-bloquant) -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"></noscript>
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" integrity="sha384-HtMZLkYo+pR5/u7zCzXxMJP6QoNnQJt1qkHM0EaOPvGDIzaVZbmYr/TlvUZ/sKAg" crossorigin="anonymous"></noscript>
     
     <!-- Fonts en display=swap pour éviter le blocage -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Montserrat:wght@600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet"></noscript>
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet" integrity="sha384-5rpzr3iJNhYTWCtoxTq09pgEw2Xw2uIBuU0/N8SdCBmpJRYUId01fykD1CEZ2YkG" crossorigin="anonymous"></noscript>
     
     <!-- CSS secondaire en lazy load -->
     <link rel="preload" href="css/animations.css?v=2.4" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -62,8 +83,8 @@
     </noscript>
     
     <!-- Font Awesome en lazy load -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" integrity="sha384-3B6NwesSXE7YJlcLI9RpRqGf2p/EgVH8BgoKTaUrmKNDkHPStTQ3EyoYjCGXaOTS" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-3B6NwesSXE7YJlcLI9RpRqGf2p/EgVH8BgoKTaUrmKNDkHPStTQ3EyoYjCGXaOTS" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
 
     <!-- PWA Manifest & Theme Color -->
     <link rel="manifest" href="manifest.json">
@@ -2639,11 +2660,11 @@
         });
     </script>
     <!-- Botpress Webchat Standard -->
-    <script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js"></script>
+    <script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js" integrity="sha384-RI6Pqgo+IcDsXAKo0BdIbgzYcXbmneOMlfTv8i8RIrYPmCo7XCDXzxqIjxLFGvJ+" crossorigin="anonymous"></script>
     <script src="https://files.bpcontent.cloud/2025/05/15/15/20250515153102-Z9XZERAQ.js" defer></script>
     
     <!-- Scripts non-bloquants -->
-    <script src="https://smtpjs.com/v3/smtp.js" defer></script>
+    <script src="https://smtpjs.com/v3/smtp.js" integrity="sha384-BlzKAJKzmAhlBrGVWsQWgiGHT6fOW6f8bcsC6/QqTQdTHTWjXJndLfcSqbanRP9e" crossorigin="anonymous" defer></script>
     <script src="js/hero-animation.js?v=2.4" defer></script>
     <script src="js/chatbot.js?v=2.4" defer></script>
 </body>
