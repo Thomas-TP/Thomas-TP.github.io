@@ -723,8 +723,16 @@
               border-color 0.3s ease;
 }
 
-/* Widget Botpress activé - styles appliqués mais widget visible */
-/* Ancienne section de masquage supprimée pour permettre l'affichage du chatbot */
+/* Masquer le widget Botpress si présent */
+#bp-embedded-webchat,
+.bpw-widget,
+.bpw-floating-button,
+[class*="bp-"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
 
 /* ===== WIDGET BOTPRESS - STYLES GLOBAUX ===== */
 #bp-embedded-webchat iframe {

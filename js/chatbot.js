@@ -29,7 +29,7 @@ let botpressConfig = null;
  */
 async function loadBotpressConfig() {
   try {
-    // Importer la configuration depuis le fichier dédié
+    // Importer la configuration
     const configModule = await import('./botpress-config.js');
     botpressConfig = configModule.default;
 
@@ -92,9 +92,6 @@ async function initBotpressConnection() {
 document.addEventListener("DOMContentLoaded", () => {
   // Interface personnalisée désactivée - utilisation du widget Botpress standard
   console.log('🤖 Widget Botpress standard activé - interface personnalisée désactivée');
-
-  // Initialiser le chatbot personnalisé si souhaité (actuellement désactivé)
-  // initChatbot();
 });
 
 /**

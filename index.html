@@ -4,31 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Forcer HTTPS sur GitHub Pages -->
-    <script>
-        if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-            window.location.protocol = 'https:';
-        }
-    </script>
-    
-    <!-- HTTP Strict Transport Security (HSTS) -->
-    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
-    
-    <!-- Content Security Policy pour la sécurité -->
-    <meta http-equiv="Content-Security-Policy" content="
-        default-src 'self';
-        script-src 'self' 'unsafe-inline' https://cdn.botpress.cloud https://files.bpcontent.cloud https://messaging.botpress.cloud https://smtpjs.com https://cdn.jsdelivr.net https://use.fontawesome.com;
-        style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com https://use.fontawesome.com;
-        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://use.fontawesome.com;
-        img-src 'self' data: https: blob:;
-        connect-src 'self' https://api.github.com https://raw.githubusercontent.com https://smtpjs.com https://cdn.botpress.cloud https://files.bpcontent.cloud https://messaging.botpress.cloud https://echo.botpress.cloud https://avatars.githubusercontent.com https://github.com wss://*.botpress.cloud wss://*.botpress.com wss://messaging.botpress.cloud;
-        frame-src 'none';
-        object-src 'none';
-        base-uri 'self';
-        form-action 'self' https://formspree.io;
-        upgrade-insecure-requests;
-    ">
-    
     <!-- Préchargement des ressources critiques -->
     <link rel="preload" href="css/styles.css?v=2.4" as="style">
     <link rel="preload" href="assets/images/profile.jpg" as="image">
@@ -65,8 +40,8 @@
     <link rel="stylesheet" href="css/styles.css?v=2.4">
     
     <!-- Tailwind en async (non-bloquant) -->
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" integrity="sha384-HtMZLkYo+pR5/u7zCzXxMJP6QoNnQJt1qkHM0EaOPvGDIzaVZbmYr/TlvUZ/sKAg" crossorigin="anonymous">
-    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" integrity="sha384-HtMZLkYo+pR5/u7zCzXxMJP6QoNnQJt1qkHM0EaOPvGDIzaVZbmYr/TlvUZ/sKAg" crossorigin="anonymous"></noscript>
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"></noscript>
     
     <!-- Fonts en display=swap pour éviter le blocage -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Montserrat:wght@600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -2664,62 +2639,11 @@
         });
     </script>
     <!-- Botpress Webchat Standard -->
-    <script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js" integrity="sha384-RI6Pqgo+IcDsXAKo0BdIbgzYcXbmneOMlfTv8i8RIrYPmCo7XCDXzxqIjxLFGvJ+" crossorigin="anonymous"></script>
-    <script>
-        // Configuration Botpress temporaire pour test
-        window.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Initialisation du widget Botpress de test...');
-
-            // Attendre que le SDK Botpress soit chargé
-            const checkBotpress = setInterval(function() {
-                if (typeof window.bp !== 'undefined') {
-                    clearInterval(checkBotpress);
-                    console.log('✅ SDK Botpress chargé');
-
-                    // Configuration de test simple
-                    window.bp('init', {
-                        botId: 'test-bot',
-                        hostUrl: 'https://echo.botpress.cloud',
-                        messagingUrl: 'https://messaging.botpress.cloud',
-                        clientId: 'webchat',
-                        botName: 'Assistant Thomas',
-                        botAvatarUrl: 'assets/images/profile.jpg',
-                        website: 'https://thomastp.me',
-                        emailAddress: 'thomas@prudhomme.li',
-                        botConversationDescription: 'Assistant virtuel de Thomas Prudhomme - Mode test',
-                        composerPlaceholder: 'Tapez votre message...',
-                        showPoweredBy: false,
-                        enableReset: true,
-                        enableDebugMode: true,
-                        onWidgetReady: function() {
-                            console.log('🤖 Widget Botpress prêt - Mode test');
-                            console.log('� Pour configurer votre vrai bot: modifiez js/botpress-config.js');
-                        }
-                    });
-
-                    // Ouvrir automatiquement le widget après un délai
-                    setTimeout(function() {
-                        console.log('🔄 Tentative d\'ouverture du widget...');
-                        window.bp('show');
-                        console.log('✅ Widget Botpress affiché (mode test)');
-                    }, 1000);
-
-                } else {
-                    console.log('⏳ Attente du SDK Botpress...');
-                }
-            }, 100);
-
-            // Timeout de sécurité
-            setTimeout(function() {
-                clearInterval(checkBotpress);
-                console.warn('⚠️ Timeout: SDK Botpress non chargé');
-                console.log('🔍 Vérifiez la console pour les erreurs CSP ou réseau');
-            }, 10000);
-        });
-    </script>
+    <script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js"></script>
+    <script src="https://files.bpcontent.cloud/2025/05/15/15/20250515153102-Z9XZERAQ.js" defer></script>
     
     <!-- Scripts non-bloquants -->
-    <script src="https://smtpjs.com/v3/smtp.js" defer integrity="sha384-BlzKAJKzmAhlBrGVWsQWgiGHT6fOW6f8bcsC6/QqTQdTHTWjXJndLfcSqbanRP9e" crossorigin="anonymous"></script>
+    <script src="https://smtpjs.com/v3/smtp.js" defer></script>
     <script src="js/hero-animation.js?v=2.4" defer></script>
     <script src="js/chatbot.js?v=2.4" defer></script>
 </body>
