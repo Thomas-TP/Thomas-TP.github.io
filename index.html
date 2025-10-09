@@ -4,6 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <!-- Forcer HTTPS sur GitHub Pages -->
+    <script>
+        if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+            window.location.protocol = 'https:';
+        }
+    </script>
+    
+    <!-- HTTP Strict Transport Security (HSTS) -->
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+    
+    <!-- Content Security Policy pour la sécurité -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' https://cdn.botpress.cloud https://files.bpcontent.cloud https://smtpjs.com https://cdn.jsdelivr.net;
+        style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+        font-src 'self' https://fonts.gstatic.com;
+        img-src 'self' data: https: blob:;
+        connect-src 'self' https://api.github.com https://raw.githubusercontent.com https://smtpjs.com https://cdn.botpress.cloud;
+        frame-src 'none';
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self' https://formspree.io;
+        upgrade-insecure-requests;
+    ">
+    
     <!-- Préchargement des ressources critiques -->
     <link rel="preload" href="css/styles.css?v=2.4" as="style">
     <link rel="preload" href="assets/images/profile.jpg" as="image">
@@ -40,8 +65,8 @@
     <link rel="stylesheet" href="css/styles.css?v=2.4">
     
     <!-- Tailwind en async (non-bloquant) -->
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"></noscript>
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" integrity="sha384-HtMZLkYo+pR5/u7zCzXxMJP6QoNnQJt1qkHM0EaOPvGDIzaVZbmYr/TlvUZ/sKAg" crossorigin="anonymous">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" integrity="sha384-HtMZLkYo+pR5/u7zCzXxMJP6QoNnQJt1qkHM0EaOPvGDIzaVZbmYr/TlvUZ/sKAg" crossorigin="anonymous"></noscript>
     
     <!-- Fonts en display=swap pour éviter le blocage -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Montserrat:wght@600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -382,18 +407,32 @@
         }
         
         #languageDropdown {
-            animation: slideDown 0.3s ease-out;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            min-width: 150px;
+            z-index: 50;
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        #languageDropdown.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .dark-theme #languageDropdown {
+            background: rgba(31, 41, 55, 0.95);
+            border-color: rgba(255, 255, 255, 0.1);
         }
         
         .language-option:first-child {
@@ -408,13 +447,37 @@
             border-radius: 16px;
         }
         
-        /* Empêcher la rotation du drapeau dans le bouton au hover */
-        #languageSelectorBtn:hover #currentLanguageFlag svg {
-            transform: none !important;
+        /* Forcer la couleur des SVG Linktree */
+        svg[viewBox="0 0 24 24"] path[d*="13.511"] {
+            fill: currentColor !important;
         }
-        
-        #currentLanguageFlag svg {
+
+        /* Styles spécifiques pour les icônes Linktree */
+        a[href*="linktr.ee"] svg {
+            color: inherit !important;
+        }
+
+        a[href*="linktr.ee"] svg path {
+            fill: currentColor !important;
+        }
+
+        /* EMPÊCHER TOUTE ROTATION DU DRAPEAU AU HOVER DU SÉLECTEUR DE LANGUE */
+        #languageSelectorBtn:hover #currentLanguageFlag svg,
+        #languageSelectorBtn #currentLanguageFlag svg,
+        #currentLanguageFlag svg,
+        #languageSelectorBtn:hover svg,
+        #languageSelectorBtn svg {
             transform: none !important;
+            transition: none !important;
+            animation: none !important;
+        }
+
+        /* S'assurer que le conteneur du drapeau reste statique */
+        #currentLanguageFlag,
+        #currentLanguageFlag * {
+            transform: none !important;
+            transition: none !important;
+            animation: none !important;
         }
     </style>
 </head>
@@ -520,7 +583,7 @@
                                 <polyline points="6 9 12 15 18 9"></polyline>
                             </svg>
                         </button>
-                        <div id="languageDropdown" class="absolute top-full mt-2 right-0 glass-card rounded-2xl shadow-xl overflow-hidden backdrop-blur-md bg-white/95 dark:bg-gray-800/95 min-w-[150px] hidden z-50">
+                        <div id="languageDropdown" class="absolute top-full mt-2 right-0 glass-card rounded-2xl shadow-xl overflow-hidden backdrop-blur-md bg-white/95 dark:bg-gray-800/95 min-w-[150px] z-50">
                             <div class="language-option px-4 py-3 cursor-pointer hover:bg-blue-50 dark:hover:bg-gradient-to-r dark:hover:from-blue-500 dark:hover:to-purple-500 hover:shadow-lg transition-all duration-300 text-gray-800 dark:text-white dark:hover:text-white font-medium flex items-center gap-2" data-lang="fr">
                                 <span class="w-5 h-5 rounded-sm overflow-hidden flex items-center justify-center flex-shrink-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" class="w-full h-full">
@@ -554,7 +617,7 @@
                     </select>
                     
                     <!-- Bouton de basculement de thème -->
-                    <button id="themeToggle" class="theme-toggle text-gray-700 focus:outline-none animate-rotateIn delay-700" aria-label="Basculer entre thème clair et sombre">
+                    <button id="themeToggle" class="theme-toggle text-gray-700 focus:outline-none animate-rotateIn delay-700" aria-label="Changer le mode thème : clair, sombre ou automatique">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
@@ -1719,14 +1782,14 @@
             // Toggle dropdown
             languageSelectorBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                languageDropdown.classList.toggle('hidden');
-                languageArrow.style.transform = languageDropdown.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+                languageDropdown.classList.toggle('show');
+                languageArrow.style.transform = languageDropdown.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
             });
             
             // Fermer dropdown en cliquant ailleurs
             document.addEventListener('click', () => {
-                if (!languageDropdown.classList.contains('hidden')) {
-                    languageDropdown.classList.add('hidden');
+                if (languageDropdown.classList.contains('show')) {
+                    languageDropdown.classList.remove('show');
                     languageArrow.style.transform = 'rotate(0deg)';
                 }
             });
@@ -1743,7 +1806,7 @@
                     currentLanguageFlag.innerHTML = '';
                     currentLanguageFlag.appendChild(flagSvg);
                     languageSelect.value = lang;
-                    languageDropdown.classList.add('hidden');
+                    languageDropdown.classList.remove('show');
                     languageArrow.style.transform = 'rotate(0deg)';
                     
                     // Déclencher le changement de langue
@@ -1753,8 +1816,8 @@
             
             // Fermer la liste de langue lors du scroll
             window.addEventListener('scroll', () => {
-                if (!languageDropdown.classList.contains('hidden')) {
-                    languageDropdown.classList.add('hidden');
+                if (languageDropdown.classList.contains('show')) {
+                    languageDropdown.classList.remove('show');
                     languageArrow.style.transform = 'rotate(0deg)';
                 }
             }, { passive: true });
@@ -2102,42 +2165,59 @@
                 });
             });
 
-            // Gestion du thème sombre
+            // Gestion du thème sombre avec mode automatique
             const themeToggle = document.getElementById('themeToggle');
             const htmlRoot = document.documentElement;
             const body = document.body;
             
             // Vérifier si un thème est déjà enregistré dans le localStorage
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                enableDarkTheme();
+            const savedTheme = localStorage.getItem('theme') || 'auto'; // Par défaut en mode auto
+            
+            // Fonction pour appliquer le thème selon la préférence système
+            function applySystemTheme() {
+                const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+                if (prefersDarkScheme.matches) {
+                    enableDarkTheme();
+                } else {
+                    disableDarkTheme();
+                }
             }
             
             // Fonction pour activer le thème sombre
             function enableDarkTheme() {
                 htmlRoot.classList.add('dark-theme');
                 body.classList.add('dark-theme');
-                localStorage.setItem('theme', 'dark');
-                updateThemeIcon(true);
+                updateThemeIcon();
             }
             
             // Fonction pour désactiver le thème sombre
             function disableDarkTheme() {
                 htmlRoot.classList.remove('dark-theme');
                 body.classList.remove('dark-theme');
-                localStorage.setItem('theme', 'light');
-                updateThemeIcon(false);
+                updateThemeIcon();
             }
             
             // Fonction pour mettre à jour l'icône du bouton de thème
-            function updateThemeIcon(isDark) {
-                if (isDark) {
+            function updateThemeIcon() {
+                const currentTheme = localStorage.getItem('theme') || 'auto';
+                const isCurrentlyDark = htmlRoot.classList.contains('dark-theme');
+                
+                if (currentTheme === 'auto') {
+                    // Icône automatique (ordinateur/moniteur)
+                    themeToggle.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    `;
+                } else if (isCurrentlyDark) {
+                    // Icône lune pour thème sombre manuel
                     themeToggle.innerHTML = `
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                         </svg>
                     `;
                 } else {
+                    // Icône soleil pour thème clair manuel
                     themeToggle.innerHTML = `
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -2146,30 +2226,44 @@
                 }
             }
             
+            // Initialiser le thème selon les préférences
+            if (savedTheme === 'dark') {
+                enableDarkTheme();
+            } else if (savedTheme === 'light') {
+                disableDarkTheme();
+            } else {
+                // Mode auto : suivre la préférence système
+                applySystemTheme();
+            }
+            
             // Initialiser l'icône du bouton de thème
-            updateThemeIcon(savedTheme === 'dark');
+            updateThemeIcon();
             
             // Ajouter l'écouteur d'événement pour le bouton de thème
             themeToggle.addEventListener('click', function() {
-                if (htmlRoot.classList.contains('dark-theme')) {
-                    disableDarkTheme();
-                } else {
+                const currentTheme = localStorage.getItem('theme') || 'auto';
+                
+                if (currentTheme === 'light') {
+                    // Passer en mode sombre
+                    localStorage.setItem('theme', 'dark');
                     enableDarkTheme();
+                } else if (currentTheme === 'dark') {
+                    // Passer en mode automatique
+                    localStorage.setItem('theme', 'auto');
+                    applySystemTheme();
+                } else {
+                    // Passer en mode clair (auto -> light)
+                    localStorage.setItem('theme', 'light');
+                    disableDarkTheme();
                 }
             });
             
-            // Vérifier également la préférence système
-            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-            
-            // Si aucun thème n'est enregistré, utiliser la préférence système
-            if (!savedTheme && prefersDarkScheme.matches) {
-                enableDarkTheme();
-            }
-            
             // Écouter les changements de préférence système
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
             prefersDarkScheme.addEventListener('change', (e) => {
-                // Ne changer automatiquement que si l'utilisateur n'a pas explicitement choisi un thème
-                if (!localStorage.getItem('theme')) {
+                // Appliquer automatiquement seulement en mode auto
+                const currentTheme = localStorage.getItem('theme') || 'auto';
+                if (currentTheme === 'auto') {
                     if (e.matches) {
                         enableDarkTheme();
                     } else {
@@ -2570,11 +2664,11 @@
         });
     </script>
     <!-- Botpress Webchat Standard -->
-    <script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js"></script>
-    <script src="https://files.bpcontent.cloud/2025/05/15/15/20250515153102-Z9XZERAQ.js" defer></script>
+    <script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js" integrity="sha384-RI6Pqgo+IcDsXAKo0BdIbgzYcXbmneOMlfTv8i8RIrYPmCo7XCDXzxqIjxLFGvJ+" crossorigin="anonymous"></script>
+    <script src="https://files.bpcontent.cloud/2025/05/15/15/20250515153102-Z9XZERAQ.js" defer integrity="sha384-1FNEjRzvkDP19R31vk7YxZVS+Sdmmqrb3W5YCw0GswOxhYU0BzzUjGn/G3qU7sKb" crossorigin="anonymous"></script>
     
     <!-- Scripts non-bloquants -->
-    <script src="https://smtpjs.com/v3/smtp.js" defer></script>
+    <script src="https://smtpjs.com/v3/smtp.js" defer integrity="sha384-BlzKAJKzmAhlBrGVWsQWgiGHT6fOW6f8bcsC6/QqTQdTHTWjXJndLfcSqbanRP9e" crossorigin="anonymous"></script>
     <script src="js/hero-animation.js?v=2.4" defer></script>
     <script src="js/chatbot.js?v=2.4" defer></script>
 </body>
