@@ -21,6 +21,6 @@
   "author": "Thomas P.",
   "license": "MIT",
   "devDependencies": {
-    "lighthouse": "^11.0.0"
+    "lighthouse": "^12.8.2"
   }
 }
