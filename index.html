@@ -17,12 +17,12 @@
     <!-- Content Security Policy pour la sécurité -->
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self';
-        script-src 'self' 'unsafe-inline' https://cdn.botpress.cloud https://files.bpcontent.cloud https://smtpjs.com https://cdn.jsdelivr.net;
+        script-src 'self' 'unsafe-inline' https://cdn.botpress.cloud https://files.bpcontent.cloud https://smtpjs.com https://cdn.jsdelivr.net https://webchat.botpress.cloud;
         style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com;
         font-src 'self' https://fonts.gstatic.com;
-        img-src 'self' data: https: blob:;
-        connect-src 'self' https://api.github.com https://raw.githubusercontent.com https://smtpjs.com https://cdn.botpress.cloud;
-        frame-src 'none';
+        img-src 'self' data: https://* blob:;
+        connect-src 'self' https://api.github.com https://raw.githubusercontent.com https://smtpjs.com https://cdn.botpress.cloud https://webchat.botpress.cloud https://streak-stats.demolab.com;
+        frame-src 'self' https://webchat.botpress.cloud;
         object-src 'none';
         base-uri 'self';
         form-action 'self' https://formspree.io;
