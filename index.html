@@ -17,11 +17,11 @@
     <!-- Content Security Policy pour la sécurité -->
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self';
-        script-src 'self' 'unsafe-inline' https://cdn.botpress.cloud https://files.bpcontent.cloud https://smtpjs.com https://cdn.jsdelivr.net https://use.fontawesome.com;
+        script-src 'self' 'unsafe-inline' https://cdn.botpress.cloud https://files.bpcontent.cloud https://messaging.botpress.cloud https://smtpjs.com https://cdn.jsdelivr.net https://use.fontawesome.com;
         style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com https://use.fontawesome.com;
         font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://use.fontawesome.com;
         img-src 'self' data: https: blob:;
-        connect-src 'self' https://api.github.com https://raw.githubusercontent.com https://smtpjs.com https://cdn.botpress.cloud https://files.bpcontent.cloud https://avatars.githubusercontent.com https://github.com wss://*.botpress.cloud wss://*.botpress.com;
+        connect-src 'self' https://api.github.com https://raw.githubusercontent.com https://smtpjs.com https://cdn.botpress.cloud https://files.bpcontent.cloud https://messaging.botpress.cloud https://avatars.githubusercontent.com https://github.com wss://*.botpress.cloud wss://*.botpress.com wss://messaging.botpress.cloud;
         frame-src 'none';
         object-src 'none';
         base-uri 'self';
@@ -2665,7 +2665,63 @@
     </script>
     <!-- Botpress Webchat Standard -->
     <script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js" integrity="sha384-RI6Pqgo+IcDsXAKo0BdIbgzYcXbmneOMlfTv8i8RIrYPmCo7XCDXzxqIjxLFGvJ+" crossorigin="anonymous"></script>
-    <script src="https://files.bpcontent.cloud/2025/05/15/15/20250515153102-Z9XZERAQ.js" integrity="sha384-1FNEjRzvkDP19R31vk7YxZVS+Sdmmqrb3W5YCw0GswOxhYU0BzzUjGn/G3qU7sKb" crossorigin="anonymous"></script>
+    <script type="module">
+        // Import de la configuration Botpress
+        import botpressConfig from './js/botpress-config.js';
+
+        // Initialisation du widget Botpress
+        window.addEventListener('DOMContentLoaded', function() {
+            // Attendre que le SDK Botpress soit chargé
+            const checkBotpress = setInterval(function() {
+                if (typeof window.bp !== 'undefined') {
+                    clearInterval(checkBotpress);
+
+                    // Validation de la configuration
+                    if (!botpressConfig.botId || botpressConfig.botId === 'your-bot-id-here') {
+                        console.warn('⚠️ Botpress Bot ID non configuré. Le widget ne sera pas affiché.');
+                        return;
+                    }
+
+                    if (!botpressConfig.hostUrl || botpressConfig.hostUrl === 'https://your-instance.botpress.cloud') {
+                        console.warn('⚠️ Botpress Host URL non configurée. Le widget ne sera pas affiché.');
+                        return;
+                    }
+
+                    // Configuration du widget
+                    const config = {
+                        botId: botpressConfig.botId,
+                        hostUrl: botpressConfig.hostUrl,
+                        messagingUrl: 'https://messaging.botpress.cloud',
+                        clientId: 'webchat',
+                        ...botpressConfig.widget
+                    };
+
+                    // Ajout des événements si définis
+                    if (botpressConfig.events) {
+                        Object.assign(config, botpressConfig.events);
+                    }
+
+                    console.log('🚀 Initialisation du widget Botpress avec config:', config);
+
+                    // Initialiser le widget
+                    window.bp('init', config);
+
+                    // Ouvrir automatiquement le widget après un délai
+                    setTimeout(function() {
+                        window.bp('show');
+                        console.log('✅ Widget Botpress affiché');
+                    }, 2000);
+
+                }
+            }, 100);
+
+            // Timeout de sécurité (10 secondes)
+            setTimeout(function() {
+                clearInterval(checkBotpress);
+                console.warn('⚠️ Timeout: SDK Botpress non chargé dans les 10 secondes');
+            }, 10000);
+        });
+    </script>
     
     <!-- Scripts non-bloquants -->
     <script src="https://smtpjs.com/v3/smtp.js" defer integrity="sha384-BlzKAJKzmAhlBrGVWsQWgiGHT6fOW6f8bcsC6/QqTQdTHTWjXJndLfcSqbanRP9e" crossorigin="anonymous"></script>

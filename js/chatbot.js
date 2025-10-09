@@ -29,7 +29,7 @@ let botpressConfig = null;
  */
 async function loadBotpressConfig() {
   try {
-    // Importer la configuration
+    // Importer la configuration depuis le fichier dédié
     const configModule = await import('./botpress-config.js');
     botpressConfig = configModule.default;
 
