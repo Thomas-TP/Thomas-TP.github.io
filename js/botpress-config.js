@@ -1,8 +1,8 @@
 // Configuration Botpress pour Thomas Prudhomme
 export default {
   // Configuration du bot - À MODIFIER avec vos vraies informations
-  botId: 'your-bot-id-here', // Remplacer par votre bot ID Botpress
-  hostUrl: 'https://your-instance.botpress.cloud', // Remplacer par votre host URL Botpress
+  botId: 'welcome-bot', // Bot de démonstration Botpress
+  hostUrl: 'https://cdn.botpress.cloud/webchat', // Host public Botpress
 
   // Configuration du widget
   widget: {
@@ -26,7 +26,7 @@ export default {
     lazySocket: false,
     exposeStore: false,
     hideOnNewMessage: false,
-    enableDebugMode: false
+    enableDebugMode: true // Mode debug activé pour les tests
   },
 
   // Configuration des événements
