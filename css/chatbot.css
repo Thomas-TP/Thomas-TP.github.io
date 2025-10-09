@@ -606,7 +606,7 @@
   transform: rotate(-45deg);
 }
 
-.chatbot-send svg {
+chatbot-send svg {
   width: 16px;
   height: 16px;
   transform: rotate(-45deg);
