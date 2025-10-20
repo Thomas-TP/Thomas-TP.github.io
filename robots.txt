@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Pages importantes pour l'indexation
+Allow: /botpress.html
+Allow: /kb/thomas-knowledge-base.json
+Allow: /CV/ThomasPrudhommeCV.pdf
+Allow: /sitemap.xml
+
+# Crawl-delay pour être poli avec le serveur
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: https://thomastp.me/sitemap.xml
