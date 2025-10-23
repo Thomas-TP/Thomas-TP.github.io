@@ -4,10 +4,10 @@
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
-  <!-- Page principale du portfolio -->
+  <!-- Page principale du portfolio - PRIORITÉ MAXIMALE -->
   <url>
     <loc>https://thomastp.me/</loc>
-    <lastmod>2025-10-08</lastmod>
+    <lastmod>2025-10-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -15,25 +15,26 @@
   <!-- Page Botpress Knowledge Base - PRIORITÉ ÉLEVÉE -->
   <url>
     <loc>https://thomastp.me/botpress.html</loc>
-    <lastmod>2025-10-08</lastmod>
+    <lastmod>2025-10-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- CV PDF -->
+  <!-- CV PDF - PRIORITÉ HAUTE -->
   <url>
     <loc>https://thomastp.me/CV/ThomasPrudhommeCV.pdf</loc>
-    <lastmod>2025-10-08</lastmod>
+    <lastmod>2025-10-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
-  <!-- Base de connaissances JSON pour Botpress -->
+  <!-- Base de connaissances JSON pour Botpress - PRIORITÉ MOYENNE -->
   <url>
     <loc>https://thomastp.me/kb/thomas-knowledge-base.json</loc>
-    <lastmod>2025-10-08</lastmod>
+    <lastmod>2025-10-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
 </urlset>
+

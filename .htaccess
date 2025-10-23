@@ -1,0 +1,167 @@
+# ============================================================================
+# .htaccess - Configuration Apache pour thomastp.me
+# Optimisé pour la sécurité, la performance et le SEO
+# ============================================================================
+
+# Activer mod_rewrite
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    
+    # Rediriger HTTP vers HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    
+    # Rediriger www vers non-www
+    RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+    RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+    
+    # Supprimer les fichiers .html de l'URL
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([^\.]+)$ $1.html [NC,L]
+</IfModule>
+
+# ============================================================================
+# Compression GZIP
+# ============================================================================
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+    AddOutputFilterByType DEFLATE application/x-font
+    AddOutputFilterByType DEFLATE application/x-font-opentype
+    AddOutputFilterByType DEFLATE application/x-font-otf
+    AddOutputFilterByType DEFLATE application/x-font-truetype
+    AddOutputFilterByType DEFLATE application/x-font-ttf
+    AddOutputFilterByType DEFLATE font/opentype
+    AddOutputFilterByType DEFLATE font/otf
+    AddOutputFilterByType DEFLATE font/ttf
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ============================================================================
+# Cache Busting et Expiration des Ressources
+# ============================================================================
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Fichiers HTML (cache court pour les mises à jour)
+    ExpiresByType text/html "access plus 1 day"
+    
+    # CSS et JavaScript (cache long avec versioning)
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType application/x-javascript "access plus 1 year"
+    
+    # Images (cache très long)
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    
+    # Polices (cache très long)
+    ExpiresByType font/ttf "access plus 1 year"
+    ExpiresByType font/otf "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
+    
+    # Documents (cache court)
+    ExpiresByType application/pdf "access plus 1 month"
+    ExpiresByType application/json "access plus 1 day"
+    
+    # Default
+    ExpiresDefault "access plus 2 days"
+</IfModule>
+
+# ============================================================================
+# En-têtes de Sécurité
+# ============================================================================
+<IfModule mod_headers.c>
+    # Strict-Transport-Security (HSTS)
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    
+    # Content Security Policy (CSP)
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com https://smtpjs.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' https://formspree.io https://streak-stats.demolab.com https://git.io; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io; upgrade-insecure-requests;"
+    
+    # X-Content-Type-Options
+    Header always set X-Content-Type-Options "nosniff"
+    
+    # X-Frame-Options
+    Header always set X-Frame-Options "DENY"
+    
+    # X-XSS-Protection
+    Header always set X-XSS-Protection "1; mode=block"
+    
+    # Referrer-Policy
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # Permissions-Policy (anciennement Feature-Policy)
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+    
+    # Remove Server Header
+    Header always unset Server
+    Header always unset X-Powered-By
+    Header always unset X-AspNet-Version
+    
+    # CORS Headers (si nécessaire)
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+</IfModule>
+
+# ============================================================================
+# Optimisation des Fichiers Statiques
+# ============================================================================
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|woff|woff2|ttf|otf|eot)$">
+    Header set Cache-Control "max-age=31536000, public"
+    Header set ETag "W/\"123456789\""
+</FilesMatch>
+
+<FilesMatch "\.(css|js)$">
+    Header set Cache-Control "max-age=31536000, public"
+</FilesMatch>
+
+<FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "max-age=86400, public"
+</FilesMatch>
+
+# ============================================================================
+# Sécurité Supplémentaire
+# ============================================================================
+
+# Empêcher l'accès aux fichiers sensibles
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "\.(env|json|lock|log|sql|bak|backup|tmp)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Empêcher l'accès aux répertoires sensibles
+<DirectoryMatch "^\.|\.git|node_modules|\.env">
+    Order allow,deny
+    Deny from all
+</DirectoryMatch>
+
+# ============================================================================
+# Gestion des Erreurs
+# ============================================================================
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html
+ErrorDocument 503 /503.html
+
+# ============================================================================
+# Optimisation des Requêtes
+# ============================================================================
+<IfModule mod_env.c>
+    # Désactiver les eTags pour les fichiers statiques (utiliser Last-Modified)
+    FileETag None
+</IfModule>
+

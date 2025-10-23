@@ -1,14 +1,62 @@
+# Robots.txt optimisé pour thomastp.me
+# Conforme aux standards GAFAM et aux bonnes pratiques SEO
+
+# Configuration par défaut pour tous les robots
 User-agent: *
 Allow: /
 
-# Pages importantes pour l'indexation
-Allow: /botpress.html
-Allow: /kb/thomas-knowledge-base.json
-Allow: /CV/ThomasPrudhommeCV.pdf
-Allow: /sitemap.xml
+# Désactiver l'indexation des répertoires non pertinents
+Disallow: /scripts/
+Disallow: /assets/js/
+Disallow: /node_modules/
+Disallow: /.git/
+Disallow: /.*\.map$
+Disallow: /.*\.backup$
 
-# Crawl-delay pour être poli avec le serveur
+# Autoriser explicitement les ressources importantes
+Allow: /assets/css/
+Allow: /assets/images/
+Allow: /assets/fonts/
+Allow: /CV/
+Allow: /kb/
+Allow: /botpress.html
+Allow: /sitemap.xml
+Allow: /robots.txt
+
+# Directives de crawl pour les moteurs de recherche
 Crawl-delay: 1
+Request-rate: 30/60
 
 # Sitemap
 Sitemap: https://thomastp.me/sitemap.xml
+
+# Directives spécifiques pour Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Directives spécifiques pour Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Bloquer les bots malveillants connus
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Autoriser les bots d'analyse de performance
+User-agent: PageSpeedInsights
+Allow: /
+
+User-agent: Lighthouse
+Allow: /
+
