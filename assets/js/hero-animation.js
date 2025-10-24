@@ -65,7 +65,8 @@ class HeroAnimation {
         this.createParticles();
         
         // Event listeners
-        window.addEventListener('resize', () => this.resize());
+        this.resizeObserver = new ResizeObserver(() => this.resize());
+        this.resizeObserver.observe(heroSection);
         heroSection.addEventListener('mousemove', (e) => this.handleMouseMove(e));
         
         // Démarrer l'animation
@@ -79,8 +80,9 @@ class HeroAnimation {
         const heroSection = document.getElementById('hero');
         if (!heroSection) return;
         
-        this.canvas.width = heroSection.offsetWidth;
-        this.canvas.height = heroSection.offsetHeight;
+        const rect = heroSection.getBoundingClientRect();
+        this.canvas.width = rect.width;
+        this.canvas.height = rect.height;
         
         // Recréer les particules si nécessaire
         if (this.particles.length === 0) {
@@ -264,6 +266,9 @@ class HeroAnimation {
     destroy() {
         if (this.animationId) {
             cancelAnimationFrame(this.animationId);
+        }
+        if (this.resizeObserver) {
+            this.resizeObserver.disconnect();
         }
         if (this.canvas && this.canvas.parentNode) {
             this.canvas.parentNode.removeChild(this.canvas);
