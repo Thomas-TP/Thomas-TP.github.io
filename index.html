@@ -1682,8 +1682,10 @@
                         }
                         
                         // Calculer la position avec offset pour le header fixe
-                        const headerHeight = document.querySelector('header').offsetHeight;
-                        const targetPosition = targetElement.offsetTop - headerHeight - 20;
+                        const headerRect = document.querySelector('header').getBoundingClientRect();
+                        const headerHeight = headerRect.height;
+                        const targetRect = targetElement.getBoundingClientRect();
+                        const targetPosition = targetRect.top + window.scrollY - headerHeight - 20;
                         
                         // Activer le flou
                         isAutoScrolling = true;
@@ -2333,7 +2335,7 @@
                 if (!heroSection) return;
                 
                 const scrollPosition = window.pageYOffset;
-                const heroHeight = heroSection.offsetHeight;
+                const heroHeight = heroSection.getBoundingClientRect().height;
                 
                 // Appliquer l'effet parallaxe seulement si on est dans la section hero
                 if (scrollPosition < heroHeight) {
@@ -2591,8 +2593,9 @@
                 const scrollPosition = window.scrollY + 150; // Offset pour le header
                 
                 sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    const sectionHeight = section.offsetHeight;
+                    const sectionRect = section.getBoundingClientRect();
+                    const sectionTop = sectionRect.top + window.scrollY;
+                    const sectionHeight = sectionRect.height;
                     
                     if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
                         currentSection = section.getAttribute('id');
