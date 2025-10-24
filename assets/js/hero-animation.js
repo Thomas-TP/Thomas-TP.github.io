@@ -59,10 +59,12 @@ class HeroAnimation {
         heroSection.insertBefore(this.canvas, heroSection.firstChild);
         
         this.ctx = this.canvas.getContext('2d');
-        this.resize();
         
-        // Créer les particules
-        this.createParticles();
+        // Créer les particules et redimensionner après le rendu initial
+        requestAnimationFrame(() => {
+            this.resize();
+            this.createParticles();
+        });
         
         // Event listeners
         this.resizeObserver = new ResizeObserver(() => this.resize());
@@ -83,6 +85,7 @@ class HeroAnimation {
         const rect = heroSection.getBoundingClientRect();
         this.canvas.width = rect.width;
         this.canvas.height = rect.height;
+        this.canvasRect = this.canvas.getBoundingClientRect();
         
         // Recréer les particules si nécessaire
         if (this.particles.length === 0) {
@@ -144,9 +147,9 @@ class HeroAnimation {
     }
 
     handleMouseMove(e) {
-        const rect = this.canvas.getBoundingClientRect();
-        this.mouseX = e.clientX - rect.left;
-        this.mouseY = e.clientY - rect.top;
+        if (!this.canvasRect) return;
+        this.mouseX = e.clientX - this.canvasRect.left;
+        this.mouseY = e.clientY - this.canvasRect.top;
     }
 
     drawParticle(particle) {
