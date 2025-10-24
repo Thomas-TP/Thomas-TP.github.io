@@ -1,0 +1,24 @@
+{
+  "name": "thomas-portfolio",
+  "version": "2.4.0",
+  "description": "Portfolio personnel de Thomas P. - Informaticien",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000",
+    "build": "echo 'Site statique - pas de build nécessaire'",
+    "optimize-images": "echo 'Utilisez un outil comme ImageOptim ou TinyPNG pour optimiser les images'",
+    "lighthouse": "npx lighthouse http://localhost:8000 --output html --output-path ./lighthouse-report.html"
+  },
+  "keywords": [
+    "portfolio",
+    "web-developer",
+    "pwa",
+    "responsive"
+  ],
+  "author": "Thomas P.",
+  "license": "MIT",
+  "devDependencies": {
+    "lighthouse": "^12.8.2"
+  }
+}
