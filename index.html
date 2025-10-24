@@ -1849,13 +1849,7 @@
                 });
             });
             
-            // Fermer la liste de langue lors du scroll
-            window.addEventListener('scroll', () => {
-                if (languageDropdown.classList.contains('show')) {
-                    languageDropdown.classList.remove('show');
-                    languageArrow.style.transform = 'rotate(0deg)';
-                }
-            }, { passive: true });
+            // Fermer la liste de langue lors du scroll (maintenant dans handleCombinedScroll)
             
             // Système de traduction
 
@@ -2450,14 +2444,47 @@
                 }
             }
             
-            // Écouter le scroll pour les deux effets
-            window.addEventListener('scroll', () => {
+            // Écouter le scroll avec un gestionnaire combiné pour optimiser les performances
+            function handleCombinedScroll() {
+                // Header scroll (hide/show)
+                requestTick();
+                
+                // Parallax et reveal animations
                 requestParallaxTick();
                 requestRevealTick();
-            }, { passive: true });
+                
+                // Barre de progression du scroll
+                updateScrollProgress();
+                
+                // Navigation active
+                updateActiveNavLink();
+                
+                // Fermer dropdown langue
+                if (languageDropdown.classList.contains('show')) {
+                    languageDropdown.classList.remove('show');
+                    languageArrow.style.transform = 'rotate(0deg)';
+                }
+                
+                // Glassmorphism du header
+                if (headerElement) {
+                    if (window.scrollY > 50) {
+                        headerElement.classList.add('glass');
+                    } else {
+                        headerElement.classList.remove('glass');
+                    }
+                }
+                
+                // Bouton back to top
+                if (backToTopBtn) {
+                    if (window.pageYOffset > 300) {
+                        backToTopBtn.classList.add('visible');
+                    } else {
+                        backToTopBtn.classList.remove('visible');
+                    }
+                }
+            }
             
-            // Révéler les éléments visibles au chargement
-            revealOnScroll();
+            window.addEventListener('scroll', handleCombinedScroll, { passive: true });
 
             // ============================================
             // CURSOR CUSTOM - VERSION FLUIDE
@@ -2568,9 +2595,9 @@
                 button.addEventListener('click', createRipple);
             });
             
-            // ============================================
-            // AJOUTER GLASSMORPHISM AUX CARTES
-            // ============================================
+            // Variables pour les éléments utilisés dans le scroll
+            const headerElement = document.querySelector('header');
+            const backToTopBtn = document.getElementById('backToTop');
             
             // Ajouter la classe glass-card aux cartes principales
             const cards = document.querySelectorAll('.card, .card-hover');
@@ -2581,17 +2608,7 @@
                 }
             });
             
-            // Ajouter glassmorphism au header après le scroll
-            const headerElement = document.querySelector('header');
-            if (headerElement) {
-                window.addEventListener('scroll', () => {
-                    if (window.scrollY > 50) {
-                        headerElement.classList.add('glass');
-                    } else {
-                        headerElement.classList.remove('glass');
-                    }
-                }, { passive: true });
-            }
+            // Ajouter glassmorphism au header après le scroll (maintenant dans handleCombinedScroll)
             
             // ============================================
             // INDICATEUR DE SECTION ACTIVE DANS LA NAVIGATION
@@ -2628,9 +2645,6 @@
                 });
             }
             
-            // Mettre à jour au scroll
-            window.addEventListener('scroll', updateActiveNavLink, { passive: true });
-            
             // Mettre à jour au chargement
             updateActiveNavLink();
         });
@@ -2639,8 +2653,7 @@
         // BOUTON BACK TO TOP
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
-            const backToTopBtn = document.getElementById('backToTop');
-            const logoLink = document.getElementById('logoLink');
+            // backToTopBtn déjà défini plus haut
             
             // Fonction pour remonter en haut
             function scrollToTop() {
@@ -2658,14 +2671,7 @@
                 });
             }
             
-            // Afficher/masquer le bouton selon le scroll
-            window.addEventListener('scroll', function() {
-                if (window.pageYOffset > 300) {
-                    backToTopBtn.classList.add('visible');
-                } else {
-                    backToTopBtn.classList.remove('visible');
-                }
-            }, { passive: true });
+            // Afficher/masquer le bouton selon le scroll (maintenant dans handleCombinedScroll)
             
             // Action au clic : retour en haut avec animation smooth
             backToTopBtn.addEventListener('click', function() {
