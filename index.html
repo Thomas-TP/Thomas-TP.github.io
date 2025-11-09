@@ -30,6 +30,13 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/images/favicon/favicon.png">
 
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#4f76f7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Thomas P.">
+
     <!-- Headers de sécurité via meta tags (pour GitHub Pages) -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
@@ -39,11 +46,11 @@
     <!-- Content Security Policy (CSP) -->
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self';
-        script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com https://smtpjs.com;
+        script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com https://smtpjs.com https://www.googletagmanager.com https://www.google-analytics.com;
         style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com;
         font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
         img-src 'self' data: https: blob:;
-        connect-src 'self' https://formspree.io https://streak-stats.demolab.com https://git.io;
+        connect-src 'self' https://formspree.io https://streak-stats.demolab.com https://git.io https://www.google-analytics.com https://analytics.google.com;
         frame-src 'none';
         object-src 'none';
         base-uri 'self';
@@ -59,6 +66,7 @@
 
     <!-- CSS critique en priorité -->
     <link rel="stylesheet" href="assets/css/styles.min.7e114403.css">
+    <link rel="stylesheet" href="assets/css/cookie-consent.css">
     
     <!-- Tailwind en async (non-bloquant) -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -512,11 +520,7 @@
             document.body.classList.remove('loading');
         });
     </script>
-    
-    <!-- Curseur personnalisé -->
-    <div class="custom-cursor"></div>
-    <div class="custom-cursor-dot"></div>
-    
+
     <!-- Grille cyberpunk de fond -->
     <div class="cyber-grid"></div>
     
@@ -804,7 +808,7 @@
                                         <picture>
                                 <source srcset="assets/images/logos/EPFL.webp" type="image/webp">
                                 <source srcset="assets/images/logos/EPFL.png" type="image/png">
-                                <img src="assets/images/logos/EPFL.png" alt="EPFL Logo" class="w-full h-full object-contain">
+                                <img src="assets/images/logos/EPFL.png" alt="EPFL Logo" class="w-full h-full object-contain" loading="lazy">
                             </picture>
                                     </div>
                                 </div>
@@ -878,7 +882,7 @@
                                     <picture>
                                 <source srcset="assets/images/logos/git.webp" type="image/webp">
                                 <source srcset="assets/images/logos/git.png" type="image/png">
-                                <img src="assets/images/logos/git.png" alt="Geneva Institute of Technology Logo" class="w-44 h-44 md:w-52 md:h-52 object-contain transition-transform hover:scale-105">
+                                <img src="assets/images/logos/git.png" alt="Geneva Institute of Technology Logo" class="w-44 h-44 md:w-52 md:h-52 object-contain transition-transform hover:scale-105" loading="lazy">
                             </picture>
                                 </div>
                             </div>
@@ -900,7 +904,7 @@
                                     <picture>
                                 <source srcset="assets/images/logos/futurplus.webp" type="image/webp">
                                 <source srcset="assets/images/logos/futurplus.png" type="image/png">
-                                <img src="assets/images/logos/futurplus.png" alt="FuturPlus Logo" class="w-44 h-44 md:w-52 md:h-52 object-contain transition-transform hover:scale-105">
+                                <img src="assets/images/logos/futurplus.png" alt="FuturPlus Logo" class="w-44 h-44 md:w-52 md:h-52 object-contain transition-transform hover:scale-105" loading="lazy">
                             </picture>
                                 </div>
                             </div>
@@ -922,7 +926,7 @@
                                     <picture>
                                 <source srcset="assets/images/logos/grandchamp.webp" type="image/webp">
                                 <source srcset="assets/images/logos/grandchamp.png" type="image/png">
-                                <img src="assets/images/logos/grandchamp.png" alt="Grand-Champ Logo" class="w-44 h-44 md:w-52 md:h-52 object-contain transition-transform hover:scale-105">
+                                <img src="assets/images/logos/grandchamp.png" alt="Grand-Champ Logo" class="w-44 h-44 md:w-52 md:h-52 object-contain transition-transform hover:scale-105" loading="lazy">
                             </picture>
                                 </div>
                             </div>
@@ -1079,7 +1083,7 @@
                             <picture class="max-w-full max-h-full flex items-center justify-center">
                                 <source srcset="assets/images/projects/tank.webp" type="image/webp">
                                 <source srcset="assets/images/projects/tank.png" type="image/png">
-                                <img src="assets/images/projects/tank.png" alt="Tank.io - jeu de tank 2D" class="max-w-full max-h-full object-contain">
+                                <img src="assets/images/projects/tank.png" alt="Tank.io - jeu de tank 2D" class="max-w-full max-h-full object-contain" loading="lazy">
                             </picture>
                         </div>
                         <div class="p-6">
@@ -1127,7 +1131,7 @@
                             <picture>
                                 <source srcset="assets/images/projects/website.webp" type="image/webp">
                                 <source srcset="assets/images/projects/website.png" type="image/png">
-                                <img src="assets/images/projects/website.png" alt="Site Web Personnel" class="w-full h-full object-contain p-6">
+                                <img src="assets/images/projects/website.png" alt="Site Web Personnel" class="w-full h-full object-contain p-6" loading="lazy">
                             </picture>
                         </div>
                         <div class="p-6">
@@ -1266,7 +1270,7 @@
                 <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div class="card bg-white rounded-xl overflow-hidden shadow-md card-hover section-reveal">
                         <div class="h-32 bg-gradient-to-br from-gray-800 to-purple-800 flex items-center justify-center text-white">
-                            <img src="assets/images/certifications/github.webp" alt="GitHub Foundation Certification" class="w-full h-full object-cover">
+                            <img src="assets/images/certifications/github.webp" alt="GitHub Foundation Certification" class="w-full h-full object-cover" loading="lazy">
                         </div>
                         <div class="p-4">
                             <h3 class="text-lg font-semibold text-gray-800 mb-2" data-key="githubCertTitle">GitHub Foundation</h3>
@@ -1277,7 +1281,7 @@
                     
                     <div class="card bg-white rounded-xl overflow-hidden shadow-md card-hover section-reveal">
                         <div class="h-32 bg-gradient-to-br from-green-500 to-cyan-500 flex items-center justify-center text-white">
-                            <img src="assets/images/certifications/iot.webp" alt="IOT Certification" class="w-full h-full object-cover">
+                            <img src="assets/images/certifications/iot.webp" alt="IOT Certification" class="w-full h-full object-cover" loading="lazy">
                         </div>
                         <div class="p-4">
                             <h3 class="text-lg font-semibold text-gray-800 mb-2" data-key="iotCertTitle">IOT</h3>
@@ -1289,7 +1293,7 @@
                     
                     <div class="card bg-white rounded-xl overflow-hidden shadow-md card-hover section-reveal">
                         <div class="h-32 bg-gradient-to-br from-blue-500 to-red-500 flex items-center justify-center text-white">
-                            <img src="assets/images/certifications/english.webp" alt="English for IT Certification" class="w-full h-full object-cover">
+                            <img src="assets/images/certifications/english.webp" alt="English for IT Certification" class="w-full h-full object-cover" loading="lazy">
                         </div>
                         <div class="p-4">
                             <h3 class="text-lg font-semibold text-gray-800 mb-2" data-key="englishCertTitle">English for IT 1</h3>
@@ -1300,7 +1304,7 @@
                     
                     <div class="card bg-white rounded-xl overflow-hidden shadow-md card-hover section-reveal">
                         <div class="h-32 bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center text-white">
-                            <img src="assets/images/certifications/linux.webp" alt="Linux Essentials Certification" class="w-full h-full object-cover">
+                            <img src="assets/images/certifications/linux.webp" alt="Linux Essentials Certification" class="w-full h-full object-cover" loading="lazy">
                         </div>
                         <div class="p-4">
                             <h3 class="text-lg font-semibold text-gray-800 mb-2" data-key="linuxCertTitle">Linux Essentials</h3>
@@ -1312,7 +1316,7 @@
                     
                     <div class="card bg-white rounded-xl overflow-hidden shadow-md card-hover section-reveal">
                         <div class="h-32 bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center text-white">
-                            <img src="assets/images/certifications/machine.webp" alt="Machine Learning Certification" class="w-full h-full object-cover">
+                            <img src="assets/images/certifications/machine.webp" alt="Machine Learning Certification" class="w-full h-full object-cover" loading="lazy">
                         </div>
                         <div class="p-4">
                             <h3 class="text-lg font-semibold text-gray-800 mb-2" data-key="mlCertTitle">Machine Learning</h3>
@@ -2487,82 +2491,6 @@
             window.addEventListener('scroll', handleCombinedScroll, { passive: true });
 
             // ============================================
-            // CURSOR CUSTOM - VERSION FLUIDE
-            // ============================================
-            
-            // Créer le curseur custom et le point central
-            const customCursor = document.createElement('div');
-            customCursor.className = 'custom-cursor';
-            document.body.appendChild(customCursor);
-            
-            const customCursorDot = document.createElement('div');
-            customCursorDot.className = 'custom-cursor-dot';
-            document.body.appendChild(customCursorDot);
-            
-            let mouseXPos = 0;
-            let mouseYPos = 0;
-            let cursorXPos = 0;
-            let cursorYPos = 0;
-            
-            // Mise à jour instantanée de la position de la souris
-            document.addEventListener('mousemove', (e) => {
-                mouseXPos = e.clientX;
-                mouseYPos = e.clientY;
-                
-                // Mise à jour INSTANTANÉE du point central (pas de délai)
-                if (customCursorDot) {
-                    customCursorDot.style.left = mouseXPos + 'px';
-                    customCursorDot.style.top = mouseYPos + 'px';
-                    customCursorDot.classList.add('active');
-                }
-                
-                if (customCursor) {
-                    customCursor.classList.add('active');
-                }
-            });
-            
-            // Animation fluide uniquement pour le cercle extérieur
-            function animateCustomCursor() {
-                // Easing pour le cercle (plus lent mais fluide)
-                const ease = 0.18;
-                cursorXPos += (mouseXPos - cursorXPos) * ease;
-                cursorYPos += (mouseYPos - cursorYPos) * ease;
-                
-                if (customCursor) {
-                    customCursor.style.left = cursorXPos + 'px';
-                    customCursor.style.top = cursorYPos + 'px';
-                }
-                
-                requestAnimationFrame(animateCustomCursor);
-            }
-            
-            animateCustomCursor();
-            
-            // Masquer le curseur quand il quitte la fenêtre
-            document.addEventListener('mouseleave', () => {
-                if (customCursor) customCursor.classList.remove('active');
-                if (customCursorDot) customCursorDot.classList.remove('active');
-            });
-            
-            document.addEventListener('mouseenter', () => {
-                if (customCursor) customCursor.classList.add('active');
-                if (customCursorDot) customCursorDot.classList.add('active');
-            });
-            
-            // Effet au hover des liens et boutons - OPTIMISÉ
-            const interactiveElems = document.querySelectorAll('a, button, .card, .skill-badge, input, textarea, select');
-            interactiveElems.forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    if (customCursor) customCursor.classList.add('hover');
-                    if (customCursorDot) customCursorDot.classList.add('hover');
-                });
-                el.addEventListener('mouseleave', () => {
-                    if (customCursor) customCursor.classList.remove('hover');
-                    if (customCursorDot) customCursorDot.classList.remove('hover');
-                });
-            });
-            
-            // ============================================
             // EFFET RIPPLE SUR LES BOUTONS
             // ============================================
             
@@ -2685,6 +2613,60 @@
             });
         });
     </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        // Enregistrement du Service Worker pour PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('✅ Service Worker enregistré avec succès:', registration.scope);
+
+                        // Vérifier les mises à jour toutes les heures
+                        setInterval(() => {
+                            registration.update();
+                        }, 60 * 60 * 1000);
+
+                        // Afficher une notification si une mise à jour est disponible
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    console.log('🔄 Nouvelle version disponible');
+
+                                    // Demander à l'utilisateur s'il veut rafraîchir
+                                    if (confirm('Une nouvelle version du site est disponible. Voulez-vous actualiser ?')) {
+                                        newWorker.postMessage({ type: 'SKIP_WAITING' });
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        });
+                    })
+                    .catch((error) => {
+                        console.error('❌ Échec de l\'enregistrement du Service Worker:', error);
+                    });
+
+                // Recharger la page si le service worker prend le contrôle
+                let refreshing = false;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (!refreshing) {
+                        refreshing = true;
+                        window.location.reload();
+                    }
+                });
+            });
+        }
+    </script>
+
+    <!-- Cookie Consent -->
+    <script src="assets/js/cookie-consent.js"></script>
+
+    <!-- Analytics (chargé uniquement avec consentement) -->
+    <script src="assets/js/analytics.js"></script>
+
     <!-- Scripts non-bloquants -->
     <script src="https://smtpjs.com/v3/smtp.js" integrity="sha384-BlzKAJKzmAhlBrGVWsQWgiGHT6fOW6f8bcsC6/QqTQdTHTWjXJndLfcSqbanRP9e" crossorigin="anonymous" defer></script>
     <script src="assets/js/hero-animation.min.32feda78.js" defer></script>

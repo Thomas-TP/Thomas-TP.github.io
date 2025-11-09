@@ -40,59 +40,6 @@
     background: transparent !important;
 }
 
-/* ===== CURSEUR PERSONNALISÉ ===== */
-body {
-    cursor: none;
-}
-
-.custom-cursor {
-    position: fixed;
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--primary);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 10000;
-    transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.2s ease;
-    opacity: 0;
-    mix-blend-mode: difference;
-    will-change: transform;
-    transform: translate(-50%, -50%);
-}
-
-.custom-cursor.active {
-    opacity: 0.8;
-}
-
-.custom-cursor-dot {
-    position: fixed;
-    width: 8px;
-    height: 8px;
-    background-color: var(--primary);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 10001;
-    transition: transform 0.08s cubic-bezier(0.23, 1, 0.32, 1);
-    opacity: 0;
-    will-change: transform;
-    transform: translate(-50%, -50%);
-}
-
-.custom-cursor-dot.active {
-    opacity: 1;
-}
-
-/* Curseur au hover des liens */
-.custom-cursor.hover {
-    transform: translate(-50%, -50%) scale(1.8);
-    border-color: var(--primary);
-    opacity: 0.6;
-}
-
-.custom-cursor-dot.hover {
-    transform: translate(-50%, -50%) scale(1.5);
-}
-
 /* ===== GRADIENTS ANIMÉS ===== */
 .animated-gradient {
     background: linear-gradient(
