@@ -1,45 +1,26 @@
 // Service Worker - Thomas P. Portfolio
-// Version 2.4.2
+// Version 2.5.0 - Build optimisé avec Vite
 
-const CACHE_VERSION = 'v2.4.2';
+const CACHE_VERSION = 'v2.5.0';
 const CACHE_NAME = `thomas-portfolio-${CACHE_VERSION}`;
 
 // Ressources essentielles à mettre en cache immédiatement
+// Note: Avec Vite, les noms de fichiers incluent des hashes dynamiques
+// Nous utilisons donc une stratégie de cache runtime au lieu de pré-caching
 const ESSENTIAL_ASSETS = [
   '/',
   '/index.html',
-  '/assets/css/styles.min.7e114403.css',
-  '/assets/css/animations.min.249f758a.css',
-  '/assets/css/dark-theme.min.d862dd83.css',
-  '/assets/css/modern-effects.min.e8282ece.css',
-  '/assets/css/premium-effects.min.55b7ec83.css',
-  '/assets/css/privacy-banner.css',
-  '/assets/js/hero-animation.min.32feda78.js',
-  '/assets/js/privacy-manager.js',
-  '/assets/js/insights.js',
-  '/assets/images/profile.webp',
-  '/assets/images/profile.jpg',
-  '/assets/images/background.webp',
   '/manifest.json'
 ];
 
-// Ressources secondaires (chargées en arrière-plan)
-const SECONDARY_ASSETS = [
-  '/assets/images/logos/EPFL.png',
-  '/assets/images/logos/EPFL.webp',
-  '/assets/images/logos/git.png',
-  '/assets/images/logos/git.webp',
-  '/assets/images/logos/futurplus.png',
-  '/assets/images/logos/futurplus.webp',
-  '/assets/images/logos/grandchamp.png',
-  '/assets/images/logos/grandchamp.webp',
-  '/assets/images/projects/tank.png',
-  '/assets/images/projects/tank.webp',
-  '/assets/images/projects/website.png',
-  '/assets/images/projects/website.webp',
-  '/assets/images/projects/empire.svg',
-  '/assets/images/projects/x.gif'
-];
+// Patterns pour les ressources à cacher au runtime
+const CACHE_PATTERNS = {
+  css: /\.css$/,
+  js: /\.js$/,
+  images: /\.(png|jpg|jpeg|webp|svg|gif)$/,
+  fonts: /\.(woff|woff2|ttf|eot)$/,
+  static: /\.(ico|xml|txt|pdf)$/
+};
 
 // Installation du Service Worker
 self.addEventListener('install', (event) => {
@@ -52,19 +33,7 @@ self.addEventListener('install', (event) => {
         return cache.addAll(ESSENTIAL_ASSETS);
       })
       .then(() => {
-        console.log('[SW] Mise en cache des ressources secondaires');
-        return caches.open(CACHE_NAME);
-      })
-      .then((cache) => {
-        // Ne pas bloquer l'installation si certaines ressources secondaires échouent
-        return Promise.allSettled(
-          SECONDARY_ASSETS.map(url =>
-            cache.add(url).catch(err => console.warn('[SW] Échec du cache:', url))
-          )
-        );
-      })
-      .then(() => {
-        console.log('[SW] Installation terminée');
+        console.log('[SW] Installation terminée - ressources seront cachées au runtime');
         return self.skipWaiting(); // Active immédiatement le nouveau SW
       })
   );
