@@ -4,6 +4,10 @@ node_modules/
 # Build outputs
 dist/
 build/
+*.min.*.css
+*.min.*.js
+*.gz
+*.br
 
 # Environment variables
 .env
