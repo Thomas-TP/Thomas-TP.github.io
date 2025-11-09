@@ -39,7 +39,7 @@
 
     <!-- Headers de sécurité via meta tags (pour GitHub Pages) -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
+    <!-- Note: X-Frame-Options ne peut être défini que via HTTP header, pas via meta tag -->
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 
@@ -66,7 +66,7 @@
 
     <!-- CSS critique en priorité -->
     <link rel="stylesheet" href="assets/css/styles.min.7e114403.css">
-    <link rel="stylesheet" href="assets/css/cookie-consent.css">
+    <link rel="stylesheet" href="assets/css/privacy-banner.css">
 
     <!-- Fix curseur - Override des fichiers minifiés -->
     <style>
@@ -2683,11 +2683,11 @@
         }
     </script>
 
-    <!-- Cookie Consent -->
-    <script src="assets/js/cookie-consent.js"></script>
+    <!-- Privacy Manager (RGPD) -->
+    <script src="assets/js/privacy-manager.js"></script>
 
-    <!-- Analytics (chargé uniquement avec consentement) -->
-    <script src="assets/js/analytics.js"></script>
+    <!-- Insights (chargé uniquement avec consentement) -->
+    <script src="assets/js/insights.js"></script>
 
     <!-- Scripts non-bloquants -->
     <script src="https://smtpjs.com/v3/smtp.js" integrity="sha384-BlzKAJKzmAhlBrGVWsQWgiGHT6fOW6f8bcsC6/QqTQdTHTWjXJndLfcSqbanRP9e" crossorigin="anonymous" defer></script>

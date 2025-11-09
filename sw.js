@@ -1,7 +1,7 @@
 // Service Worker - Thomas P. Portfolio
-// Version 2.4.1
+// Version 2.4.2
 
-const CACHE_VERSION = 'v2.4.1';
+const CACHE_VERSION = 'v2.4.2';
 const CACHE_NAME = `thomas-portfolio-${CACHE_VERSION}`;
 
 // Ressources essentielles à mettre en cache immédiatement
@@ -13,10 +13,10 @@ const ESSENTIAL_ASSETS = [
   '/assets/css/dark-theme.min.d862dd83.css',
   '/assets/css/modern-effects.min.e8282ece.css',
   '/assets/css/premium-effects.min.55b7ec83.css',
-  '/assets/css/cookie-consent.css',
+  '/assets/css/privacy-banner.css',
   '/assets/js/hero-animation.min.32feda78.js',
-  '/assets/js/cookie-consent.js',
-  '/assets/js/analytics.js',
+  '/assets/js/privacy-manager.js',
+  '/assets/js/insights.js',
   '/assets/images/profile.webp',
   '/assets/images/profile.jpg',
   '/assets/images/background.webp',
