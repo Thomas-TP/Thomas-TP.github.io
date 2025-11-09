@@ -277,6 +277,17 @@ body.dark-theme #mobileMenu a:hover {
    EFFET GLASSMORPHISM
    ============================================ */
 
+/* Force le curseur normal - override des fichiers minifiés */
+body,
+a,
+button,
+input,
+textarea,
+select,
+.card {
+  cursor: auto !important;
+}
+
 .glass-card {
   background: rgba(255, 255, 255, 0.7) !important;
   backdrop-filter: blur(20px) saturate(180%) !important;

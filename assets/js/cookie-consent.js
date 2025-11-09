@@ -63,10 +63,9 @@ class CookieConsent {
                         Vous pouvez accepter ou refuser leur utilisation.
                     </p>
                     <p class="cookie-consent-info">
-                        <small>
-                            <a href="#privacy" class="cookie-consent-link" data-key="cookieConsentLearnMore">
-                                En savoir plus sur notre politique de confidentialité
-                            </a>
+                        <small style="color: #6b7280;">
+                            Les cookies sont utilisés uniquement pour Google Analytics avec anonymisation IP.
+                            Vous pouvez modifier votre choix à tout moment en appelant <code style="background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 3px;">resetCookieConsent()</code> dans la console.
                         </small>
                     </p>
                 </div>

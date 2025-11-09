@@ -67,7 +67,14 @@
     <!-- CSS critique en priorité -->
     <link rel="stylesheet" href="assets/css/styles.min.7e114403.css">
     <link rel="stylesheet" href="assets/css/cookie-consent.css">
-    
+
+    <!-- Fix curseur - Override des fichiers minifiés -->
+    <style>
+        body, a, button, input, textarea, select, .card {
+            cursor: auto !important;
+        }
+    </style>
+
     <!-- Tailwind en async (non-bloquant) -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" integrity="sha384-HtMZLkYo+pR5/u7zCzXxMJP6QoNnQJt1qkHM0EaOPvGDIzaVZbmYr/TlvUZ/sKAg" crossorigin="anonymous"></noscript>
