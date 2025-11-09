@@ -168,6 +168,7 @@ export default defineConfig({
         const jsFiles = [
           'assets/js/privacy-manager.js',
           'assets/js/insights.js',
+          'assets/js/cv-modal.js',
           'assets/js/hero-animation.js',
           'assets/js/language-manager.js',
           'assets/js/performance-monitor.js',
