@@ -77,7 +77,6 @@
     <!-- CSS critique en priorité -->
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/privacy-banner.css">
-    <link rel="stylesheet" href="assets/css/cv-modal.css">
 
     <!-- CSS Critique inline pour améliorer FCP -->
     <style>
@@ -645,12 +644,11 @@
                     <a href="#projects" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors animate-blurIn delay-400" data-key="projectsLink">Projets</a>
                     <a href="#certifications" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors animate-blurIn delay-500" data-key="certificationsLink">Certifications</a>
                     <a href="#contact" class="nav-link font-medium text-gray-700 hover:text-primary transition-colors animate-blurIn delay-600" data-key="contactLink">Contact</a>
-                    <a href="assets/cv/ThomasPrudhommeCV.pdf" class="btn-primary px-4 py-2 rounded-lg font-medium flex items-center gap-2 animate-blurIn delay-650 hover:shadow-lg" role="button" aria-label="Voir le CV">
+                    <a href="assets/cv/ThomasPrudhommeCV.pdf" download class="btn-primary px-4 py-2 rounded-lg font-medium flex items-center gap-2 animate-blurIn delay-650 hover:shadow-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
-                        <span data-key="viewCV">Voir CV</span>
+                        <span data-key="downloadCV">CV</span>
                     </a>
                 </div>
                 
@@ -728,12 +726,11 @@
                         <a href="#projects" class="font-medium text-gray-700 hover:text-primary transition-colors" data-key="projectsLink">Projets</a>
                         <a href="#certifications" class="font-medium text-gray-700 hover:text-primary transition-colors" data-key="certificationsLink">Certifications</a>
                         <a href="#contact" class="font-medium text-gray-700 hover:text-primary transition-colors" data-key="contactLink">Contact</a>
-                        <a href="assets/cv/ThomasPrudhommeCV.pdf" class="btn-primary px-4 py-2 rounded-lg font-medium inline-flex items-center gap-2 justify-center" role="button" aria-label="Voir le CV">
+                        <a href="assets/cv/ThomasPrudhommeCV.pdf" download class="btn-primary px-4 py-2 rounded-lg font-medium inline-flex items-center gap-2 justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
-                            <span data-key="viewCV">Voir CV</span>
+                            <span data-key="downloadCV">Télécharger CV</span>
                         </a>
                     </div>
                 </div>
@@ -2741,59 +2738,11 @@
         }
     </script>
 
-    <!-- Modal de prévisualisation du CV -->
-    <div id="cvModal" class="cv-modal" style="display: none;">
-        <div class="cv-modal-overlay"></div>
-        <div class="cv-modal-content">
-            <div class="cv-modal-header">
-                <h3 class="cv-modal-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="cv-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <span data-key="cvModalTitle">Curriculum Vitae - Thomas P.</span>
-                </h3>
-                <button id="closeCvModal" class="cv-modal-close" aria-label="Fermer">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-
-            <div class="cv-modal-body">
-                <div class="cv-viewer-container">
-                    <iframe id="cvViewer" src="" class="cv-viewer" title="Prévisualisation du CV"></iframe>
-                    <div class="cv-loading">
-                        <div class="cv-spinner"></div>
-                        <p data-key="cvLoading">Chargement du CV...</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="cv-modal-footer">
-                <button id="downloadCvBtn" class="cv-action-btn cv-download-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    <span data-key="cvDownload">Télécharger</span>
-                </button>
-                <button id="printCvBtn" class="cv-action-btn cv-print-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                    </svg>
-                    <span data-key="cvPrint">Imprimer</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- Privacy Manager (RGPD) - Chargé en priorité pour RGPD -->
     <script src="assets/js/privacy-manager.js" defer></script>
 
     <!-- Insights (chargé uniquement avec consentement) -->
     <script src="assets/js/insights.js" defer></script>
-
-    <!-- CV Modal -->
-    <script src="assets/js/cv-modal.js" defer></script>
 
     <!-- Scripts non-bloquants -->
     <script src="https://smtpjs.com/v3/smtp.js" integrity="sha384-BlzKAJKzmAhlBrGVWsQWgiGHT6fOW6f8bcsC6/QqTQdTHTWjXJndLfcSqbanRP9e" crossorigin="anonymous" defer></script>
