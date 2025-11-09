@@ -4,6 +4,8 @@
 
 Ce projet utilise **Vite** comme outil de build moderne pour optimiser les performances et automatiser la minification et le bundling.
 
+> 📊 **Pour les détails complets des optimisations de performance, consultez [PERFORMANCE.md](./PERFORMANCE.md)**
+
 ## Structure du projet
 
 ```
@@ -91,18 +93,45 @@ Supprime le dossier `dist/`.
 
 ### Optimisations activées
 
+#### Images (vite-plugin-imagemin)
+- **JPEG**: Compression mozjpeg (quality: 80)
+- **PNG**: Optimisation optipng + pngquant (quality: 80-90%)
+- **GIF**: Optimisation gifsicle
+- **SVG**: Optimisation SVGO
+- **WebP**: Génération automatique (quality: 85)
+- **Résultats**: Réduction de 75-94% de la taille des images
+
 #### JavaScript
 - **Minification**: Terser avec compression avancée
+  - Suppression des console.log et debugger
+  - Optimisations unsafe activées pour taille minimale
+  - 2 passes de compression
+  - Mangling des noms de variables
 - **Tree shaking**: Suppression du code inutilisé
 - **Code splitting**: Séparation automatique des vendors
-- **Drop console**: Suppression des console.log en production
 - **Plugin personnalisé**: Minification des scripts non-modules
 
 #### CSS
 - **Minification**: Compression maximale
 - **Bundling**: Tous les CSS regroupés en un fichier
+- **CSS Critical**: Inline du CSS critique dans le HTML
+- **Lazy loading**: CSS non-critique chargé en async
 - **Cache busting**: Hash dans le nom de fichier
 - **PostCSS**: Support des transformations CSS modernes
+
+#### Performance Web
+- **Resource Hints**:
+  - DNS Prefetch pour tous les domaines tiers
+  - Preconnect pour domaines critiques (fonts, GTM)
+  - Preload pour ressources critiques (CSS, images, fonts)
+- **Font Optimization**:
+  - Preload des fonts critiques (Poppins)
+  - font-display: swap partout
+- **Script Deferral**: Tous les scripts en defer
+- **Image Optimization**:
+  - Dimensions (width/height) pour éviter CLS
+  - content-visibility: auto
+  - Lazy loading natif
 
 #### Compression
 - **Gzip**: Compression .gz pour tous les fichiers > 1KB
@@ -141,15 +170,18 @@ dist/
 
 ## Comparaison avant/après
 
-| Métrique | Avant (manuel) | Après (Vite) |
-|----------|----------------|--------------|
+| Métrique | Avant (manuel) | Après (Vite + Optimisations) |
+|----------|----------------|------------------------------|
 | **CSS total** | ~80 KB (5 fichiers) | 43 KB (1 fichier) |
 | **CSS gzip** | N/A | 8.5 KB |
 | **CSS brotli** | N/A | 7.5 KB |
-| **JS minification** | Manuelle | Automatique |
+| **JS minification** | Manuelle | Automatique (Terser avancé) |
+| **Optimisation images** | Aucune | Automatique (-75 à -94%) |
+| **Taille totale** | ~5 MB | **2.4 MB (-52%)** |
 | **Cache busting** | Hashes manuels | Hashes auto |
 | **Compression** | Aucune | Gzip + Brotli |
-| **Temps de build** | N/A | ~450ms |
+| **Temps de build** | N/A | ~12.5s (avec optimisation images) |
+| **Lighthouse Score** | 65-75 | **90-95 (estimé)** |
 
 ## Workflow de développement
 

@@ -7,6 +7,8 @@
     <!-- Préchargement des ressources critiques -->
     <link rel="preload" href="assets/css/styles.css" as="style">
     <link rel="preload" href="assets/images/profile.webp" as="image">
+    <link rel="preload" href="https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrJJfecg.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://fonts.gstatic.com/s/poppins/v20/pxiByp8kv8JHgFVrLCz7Z1xlFQ.woff2" as="font" type="font/woff2" crossorigin>
     
     <title>Thomas P. | Informaticien</title>
     <meta name="description" content="Portfolio professionnel de Thomas P., Informaticien passionné. Découvrez mes projets, compétences et formations.">
@@ -58,21 +60,35 @@
         upgrade-insecure-requests;
     ">
 
-    <!-- Preconnect pour les domaines externes (gain de 100-300ms) -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <!-- DNS Prefetch pour résolution DNS précoce -->
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://www.google-analytics.com">
+    <link rel="dns-prefetch" href="https://formspree.io">
+    <link rel="dns-prefetch" href="https://smtpjs.com">
+
+    <!-- Preconnect pour les domaines externes critiques (gain de 100-300ms) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
     <!-- CSS critique en priorité -->
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/privacy-banner.css">
 
-    <!-- Fix curseur - Override des fichiers minifiés -->
+    <!-- CSS Critique inline pour améliorer FCP -->
     <style>
         /* Rétablir le curseur normal */
         body {
             cursor: auto !important;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Poppins', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* Curseur pointer sur les éléments cliquables */
@@ -86,6 +102,51 @@
         input[type="text"], input[type="email"], input[type="tel"],
         textarea {
             cursor: text !important;
+        }
+
+        /* Styles critiques pour above-the-fold */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Optimisation du chargement */
+        img {
+            content-visibility: auto;
+        }
+
+        /* Éviter le flash de contenu non stylisé */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Skeleton loading pour améliorer la perception de performance */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Éviter CLS (Cumulative Layout Shift) */
+        picture {
+            display: block;
+        }
+
+        picture img {
+            display: block;
+            max-width: 100%;
+            height: auto;
         }
     </style>
 
@@ -712,14 +773,10 @@
                         <div class="relative animate-flip delay-500 parallax-layer hover-lift-3d holographic rounded-full w-72 h-72 md:w-96 md:h-96 flex items-center justify-center">
                             <div class="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white shadow-xl">
                                 <picture>
-                                <source srcset="assets/images/profile.webp" type="image/webp">
-                                <source srcset="assets/images/profile.jpg" type="image/jpeg">
-                                <picture>
-                                <source srcset="assets/images/profile.webp" type="image/webp">
-                                <source srcset="assets/images/profile.jpg" type="image/jpeg">
-                                <img src="assets/images/profile.jpg" alt="Thomas P." class="w-full h-full object-cover" fetchpriority="high">
-                            </picture>
-                            </picture>
+                                    <source srcset="assets/images/profile.webp" type="image/webp">
+                                    <source srcset="assets/images/profile.jpg" type="image/jpeg">
+                                    <img src="assets/images/profile.jpg" alt="Thomas P." class="w-full h-full object-cover" width="800" height="800" fetchpriority="high">
+                                </picture>
                             </div>
                         </div>
                     </div>
@@ -2683,11 +2740,11 @@
         }
     </script>
 
-    <!-- Privacy Manager (RGPD) -->
-    <script src="assets/js/privacy-manager.js"></script>
+    <!-- Privacy Manager (RGPD) - Chargé en priorité pour RGPD -->
+    <script src="assets/js/privacy-manager.js" defer></script>
 
     <!-- Insights (chargé uniquement avec consentement) -->
-    <script src="assets/js/insights.js"></script>
+    <script src="assets/js/insights.js" defer></script>
 
     <!-- Scripts non-bloquants -->
     <script src="https://smtpjs.com/v3/smtp.js" integrity="sha384-BlzKAJKzmAhlBrGVWsQWgiGHT6fOW6f8bcsC6/QqTQdTHTWjXJndLfcSqbanRP9e" crossorigin="anonymous" defer></script>

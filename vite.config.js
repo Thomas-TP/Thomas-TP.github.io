@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import viteCompression from 'vite-plugin-compression';
+import viteImagemin from 'vite-plugin-imagemin';
 
 export default defineConfig({
   // Configuration de base
@@ -22,6 +23,13 @@ export default defineConfig({
     sourcemap: false,
     minify: 'terser',
 
+    // Optimisations de performance
+    reportCompressedSize: true,
+    cssCodeSplit: true,
+    modulePreload: {
+      polyfill: true,
+    },
+
     // Options de minification avancées
     terserOptions: {
       compress: {
@@ -29,9 +37,22 @@ export default defineConfig({
         drop_debugger: true,
         pure_funcs: ['console.log', 'console.info'],
         passes: 2,
+        ecma: 2020,
+        arrows: true,
+        booleans_as_integers: true,
+        keep_fargs: false,
+        unsafe: true,
+        unsafe_arrows: true,
+        unsafe_comps: true,
+        unsafe_math: true,
+        unsafe_methods: true,
       },
       format: {
         comments: false,
+        ecma: 2020,
+      },
+      mangle: {
+        safari10: true,
       },
     },
 
@@ -87,6 +108,39 @@ export default defineConfig({
 
   // Plugins
   plugins: [
+    // Plugin d'optimisation des images
+    viteImagemin({
+      gifsicle: {
+        optimizationLevel: 7,
+        interlaced: false,
+      },
+      optipng: {
+        optimizationLevel: 7,
+      },
+      mozjpeg: {
+        quality: 80,
+      },
+      pngquant: {
+        quality: [0.8, 0.9],
+        speed: 4,
+      },
+      svgo: {
+        plugins: [
+          {
+            name: 'removeViewBox',
+            active: false,
+          },
+          {
+            name: 'removeEmptyAttrs',
+            active: true,
+          },
+        ],
+      },
+      webp: {
+        quality: 85,
+      },
+    }),
+
     // Plugin de compression (gzip et brotli)
     viteCompression({
       algorithm: 'gzip',
