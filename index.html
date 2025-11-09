@@ -70,8 +70,22 @@
 
     <!-- Fix curseur - Override des fichiers minifiés -->
     <style>
-        body, a, button, input, textarea, select, .card {
+        /* Rétablir le curseur normal */
+        body {
             cursor: auto !important;
+        }
+
+        /* Curseur pointer sur les éléments cliquables */
+        a, button, select, .btn, .card, .skill-badge,
+        input[type="submit"], input[type="button"],
+        [role="button"], .cookie-consent-btn {
+            cursor: pointer !important;
+        }
+
+        /* Curseur text sur les champs de texte */
+        input[type="text"], input[type="email"], input[type="tel"],
+        textarea {
+            cursor: text !important;
         }
     </style>
 

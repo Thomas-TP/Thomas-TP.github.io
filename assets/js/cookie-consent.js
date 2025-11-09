@@ -172,13 +172,35 @@ class CookieConsent {
 }
 
 // Initialiser le gestionnaire de consentement
-document.addEventListener('DOMContentLoaded', () => {
+// S'exécute immédiatement si le DOM est déjà chargé, sinon attend
+function initCookieConsent() {
     window.cookieConsent = new CookieConsent();
-});
+    console.log('✅ Cookie Consent Manager initialisé');
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCookieConsent);
+} else {
+    // DOM déjà chargé, initialiser immédiatement
+    initCookieConsent();
+}
 
 // Exposer globalement pour permettre la réinitialisation
 window.resetCookieConsent = function() {
     if (window.cookieConsent) {
         window.cookieConsent.reset();
+        console.log('🔄 Consentement réinitialisé, rechargez la page pour voir le banner');
+    } else {
+        console.warn('Cookie Consent Manager pas encore initialisé');
+    }
+};
+
+// Pour tester - force l'affichage du banner
+window.showCookieBanner = function() {
+    if (window.cookieConsent) {
+        window.cookieConsent.showBanner();
+        console.log('🍪 Banner de cookies affiché manuellement');
+    } else {
+        console.warn('Cookie Consent Manager pas encore initialisé');
     }
 };

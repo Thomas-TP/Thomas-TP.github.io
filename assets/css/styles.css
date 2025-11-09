@@ -278,14 +278,21 @@ body.dark-theme #mobileMenu a:hover {
    ============================================ */
 
 /* Force le curseur normal - override des fichiers minifiés */
-body,
-a,
-button,
-input,
-textarea,
-select,
-.card {
+body {
   cursor: auto !important;
+}
+
+/* Curseur pointer sur les éléments cliquables */
+a, button, select, .btn, .card, .skill-badge,
+input[type="submit"], input[type="button"],
+[role="button"], .cookie-consent-btn {
+  cursor: pointer !important;
+}
+
+/* Curseur text sur les champs de texte */
+input[type="text"], input[type="email"], input[type="tel"],
+textarea {
+  cursor: text !important;
 }
 
 .glass-card {
