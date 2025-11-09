@@ -2602,8 +2602,9 @@
         // BOUTON BACK TO TOP
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
-            // backToTopBtn déjà défini plus haut
-            
+            const backToTopBtn = document.getElementById('backToTop');
+            const logoLink = document.getElementById('logoLink');
+
             // Fonction pour remonter en haut
             function scrollToTop() {
                 window.scrollTo({
@@ -2620,18 +2621,18 @@
                 });
             }
             
-            // Afficher/masquer le bouton selon le scroll (maintenant dans handleCombinedScroll)
-            
             // Action au clic : retour en haut avec animation smooth
-            backToTopBtn.addEventListener('click', function() {
-                scrollToTop();
-                
-                // Animation de feedback
-                backToTopBtn.style.transform = 'translateY(0) scale(0.9)';
-                setTimeout(() => {
-                    backToTopBtn.style.transform = '';
-                }, 150);
-            });
+            if (backToTopBtn) {
+                backToTopBtn.addEventListener('click', function() {
+                    scrollToTop();
+
+                    // Animation de feedback
+                    backToTopBtn.style.transform = 'translateY(0) scale(0.9)';
+                    setTimeout(() => {
+                        backToTopBtn.style.transform = '';
+                    }, 150);
+                });
+            }
         });
     </script>
 
