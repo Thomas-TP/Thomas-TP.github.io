@@ -1,16 +1,19 @@
 /**
- * Analytics Manager
+ * Analytics Manager - Google Tag Manager
  * Gestion respectueuse de la vie privée avec consentement RGPD
  */
 
 class AnalyticsManager {
     constructor() {
-        this.gaId = 'G-XXXXXXXXXX'; // Remplacer par votre ID Google Analytics
+        this.gtmId = 'GTM-K8RZ9NFL'; // Votre ID Google Tag Manager
         this.initialized = false;
         this.init();
     }
 
     init() {
+        // Initialiser dataLayer
+        window.dataLayer = window.dataLayer || [];
+
         // Vérifier si le consentement a été donné
         window.addEventListener('consentChanged', (event) => {
             if (event.detail.consent) {
@@ -32,10 +35,10 @@ class AnalyticsManager {
             return;
         }
 
-        console.log('🔍 Activation des analytics');
+        console.log('🔍 Activation de Google Tag Manager');
 
-        // Charger Google Analytics 4
-        this.loadGoogleAnalytics();
+        // Charger Google Tag Manager
+        this.loadGoogleTagManager();
 
         this.initialized = true;
     }
@@ -43,57 +46,60 @@ class AnalyticsManager {
     disable() {
         console.log('🚫 Désactivation des analytics');
 
-        // Désactiver le tracking Google Analytics
-        if (window.gtag) {
-            window[`ga-disable-${this.gaId}`] = true;
-        }
+        // Bloquer GTM de charger de nouveaux tags
+        window['ga-disable-GTM'] = true;
 
         this.initialized = false;
     }
 
-    loadGoogleAnalytics() {
-        // Créer le script gtag.js
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = `https://www.googletagmanager.com/gtag/js?id=${this.gaId}`;
-        document.head.appendChild(script);
+    loadGoogleTagManager() {
+        // Injection GTM dans le <head>
+        (function(w,d,s,l,i){
+            w[l]=w[l]||[];
+            w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
+            var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+            j.async=true;
+            j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+            f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer',this.gtmId);
 
-        // Initialiser gtag
-        window.dataLayer = window.dataLayer || [];
-        window.gtag = function() {
-            window.dataLayer.push(arguments);
-        };
-        window.gtag('js', new Date());
+        // Injection GTM noscript dans le <body>
+        const noscript = document.createElement('noscript');
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.googletagmanager.com/ns.html?id=${this.gtmId}`;
+        iframe.height = '0';
+        iframe.width = '0';
+        iframe.style.display = 'none';
+        iframe.style.visibility = 'hidden';
+        noscript.appendChild(iframe);
+        document.body.insertBefore(noscript, document.body.firstChild);
 
-        // Configuration avec respect de la vie privée
-        window.gtag('config', this.gaId, {
-            'anonymize_ip': true,           // Anonymisation de l'IP
-            'cookie_flags': 'SameSite=None;Secure', // Cookies sécurisés
-            'cookie_expires': 60 * 60 * 24 * 30,    // 30 jours
-            'send_page_view': true
-        });
-
-        console.log('✅ Google Analytics chargé');
+        console.log('✅ Google Tag Manager chargé');
     }
 
-    // Méthodes pour tracker des événements personnalisés
+    // Méthodes pour tracker des événements personnalisés via dataLayer
     trackEvent(eventName, eventParams = {}) {
-        if (!this.initialized || !window.gtag) {
+        if (!this.initialized || !window.dataLayer) {
             console.warn('Analytics non initialisé ou désactivé');
             return;
         }
 
-        window.gtag('event', eventName, eventParams);
+        window.dataLayer.push({
+            'event': eventName,
+            ...eventParams
+        });
         console.log('📊 Événement tracké:', eventName, eventParams);
     }
 
     trackPageView(pagePath) {
-        if (!this.initialized || !window.gtag) {
+        if (!this.initialized || !window.dataLayer) {
             return;
         }
 
-        window.gtag('event', 'page_view', {
-            page_path: pagePath
+        window.dataLayer.push({
+            'event': 'page_view',
+            'page_path': pagePath
         });
     }
 
