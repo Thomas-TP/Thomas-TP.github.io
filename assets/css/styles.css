@@ -1,0 +1,485 @@
+/* Styles supplémentaires pour améliorer la responsivité et les performances */
+
+/* Assurer que le body a un padding pour le header fixe */
+body {
+  padding-top: 0 !important;
+}
+
+/* Animations pour le header */
+@keyframes headerShow {
+  from { transform: translateY(-110%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes headerHide {
+  from { transform: translateY(0); }
+  to { transform: translateY(-110%); }
+}
+
+/* Header fixe et toujours visible EN HAUT DE L'ÉCRAN - Priorité maximale */
+header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 9999 !important;
+  background-color: white !important;
+  backdrop-filter: blur(10px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
+  display: block !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  padding: 0.75rem 0 !important;
+  will-change: transform !important;
+}
+
+/* Masquer le header pendant le chargement */
+body.loading header {
+  transform: translateY(-100%) !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  animation: none !important;
+}
+
+/* Afficher le header après le chargement */
+body.loaded header {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  animation: headerShow 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+}
+
+/* CACHER le header quand on scroll vers le bas - AVEC ANIMATION */
+body.loaded header.hide-on-scroll {
+  pointer-events: none !important;
+  animation: headerHide 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+}
+
+/* Effet d'ombre au défilement - Premium */
+header.scrolled {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 
+              0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Header en thème sombre */
+.dark-theme header {
+  background-color: #1f2937 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dark-theme header.scrolled {
+  background-color: rgba(31, 41, 55, 0.95) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 
+              0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Barre de progression de défilement */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+  z-index: 9999;
+  transition: width 0.1s ease-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Optimisations pour les appareils mobiles */
+@media (max-width: 640px) {
+  .hero-content {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  .section-padding {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  .profile-image {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+/* Optimisations pour les tablettes */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .profile-image {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+/* Amélioration des animations et transitions */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Optimisations de performance */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Amélioration de l'accessibilité */
+:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Optimisation du chargement des polices */
+body {
+  font-display: swap;
+}
+
+/* Amélioration des contrastes pour l'accessibilité */
+.text-gray-400 {
+  color: #9ca3af;
+}
+
+.text-gray-600 {
+  color: #4b5563;
+}
+
+/* Optimisation pour l'impression */
+@media print {
+  .no-print {
+    display: none;
+  }
+  
+  body {
+    font-size: 12pt;
+    color: #000;
+    background-color: #fff;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #000;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+/* Menu mobile en mode sombre - FORCE LE STYLE */
+body.dark-theme #mobileMenu a {
+  color: #e5e7eb !important;
+}
+
+body.dark-theme #mobileMenu a:hover {
+  color: #7c9dff !important;
+}
+
+/* ============================================
+   EFFET PARALLAXE
+   ============================================ */
+
+/* Section hero avec parallaxe */
+#hero {
+  position: relative;
+  overflow: hidden;
+}
+
+#hero .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Calque de fond avec parallaxe */
+#hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: inherit;
+  transform-origin: center;
+  will-change: transform;
+  z-index: 0;
+}
+
+/* ============================================
+   ANIMATIONS AU SCROLL
+   ============================================ */
+
+/* État initial - éléments cachés */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* État visible */
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Variantes d'animations */
+.scroll-reveal-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-reveal-left.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-reveal-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-reveal-right.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-reveal-scale {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-reveal-scale.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Délais pour effet cascade */
+.scroll-reveal.delay-100 { transition-delay: 0.1s; }
+.scroll-reveal.delay-200 { transition-delay: 0.2s; }
+.scroll-reveal.delay-300 { transition-delay: 0.3s; }
+.scroll-reveal.delay-400 { transition-delay: 0.4s; }
+.scroll-reveal.delay-500 { transition-delay: 0.5s; }
+
+/* ============================================
+   EFFET GLASSMORPHISM
+   ============================================ */
+
+/* Force le curseur normal - override des fichiers minifiés */
+body {
+  cursor: auto !important;
+}
+
+/* Curseur pointer sur les éléments cliquables */
+a, button, select, .btn, .card, .skill-badge,
+input[type="submit"], input[type="button"],
+[role="button"], .cookie-consent-btn {
+  cursor: pointer !important;
+}
+
+/* Curseur text sur les champs de texte */
+input[type="text"], input[type="email"], input[type="tel"],
+textarea {
+  cursor: text !important;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15) !important;
+}
+
+.dark-theme .glass-card {
+  background: rgba(31, 41, 55, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4) !important;
+}
+/* Amélioration du contraste des badges (labels de technologies) en mode sombre */
+.dark-theme .card .bg-blue-100,
+.dark-theme .card .bg-green-100,
+.dark-theme .card .bg-purple-100,
+.dark-theme .card .bg-yellow-100,
+.dark-theme .card .bg-gray-100,
+.dark-theme .skill-badge {
+  background-color: rgba(255,255,255,0.06) !important; /* slightly darker background */
+  color: #e6eefc !important; /* light text for contrast */
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  box-shadow: none !important;
+}
+
+/* Forcer contraste encore plus élevé pour petites tailles */
+.dark-theme .card .bg-blue-100 { background-color: rgba(79,118,247,0.12) !important; color: white !important; }
+.dark-theme .card .bg-green-100 { background-color: rgba(34,197,94,0.12) !important; color: white !important; }
+.dark-theme .card .bg-purple-100 { background-color: rgba(139,92,246,0.12) !important; color: white !important; }
+.dark-theme .card .bg-yellow-100 { background-color: rgba(245,158,11,0.10) !important; color: #111827 !important; }
+
+/* Forcer le texte en blanc pour tous les badges dans les cartes en mode sombre */
+.dark-theme .card .bg-blue-100,
+.dark-theme .card .bg-green-100,
+.dark-theme .card .bg-purple-100,
+.dark-theme .card .bg-yellow-100,
+.dark-theme .card .bg-gray-100,
+.dark-theme .card span,
+.dark-theme .card .skill-badge {
+  color: #ffffff !important;
+}
+
+/* Contraste spécifique pour le badge Security (rouge) en mode sombre */
+.dark-theme .card .bg-red-100 {
+  background-color: rgba(220,38,38,0.18) !important; /* red with higher opacity */
+  color: #ffffff !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+
+/* Header avec glassmorphism */
+header.glass {
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.dark-theme header.glass {
+  background: rgba(26, 32, 44, 0.8) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ============================================
+   MICRO-INTERACTIONS
+   ============================================ */
+
+/* Effet de rebond sur les boutons */
+button, .btn-primary, .btn-premium, a.btn-primary {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease,
+              background-color 0.3s ease;
+}
+
+button:active, .btn-primary:active, .btn-premium:active {
+  transform: scale(0.95);
+}
+
+/* Effet ripple sur clic */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  transform: scale(0);
+  animation: ripple-animation 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Micro-animation sur les liens */
+a {
+  position: relative;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+a:not(.btn-primary):not(.btn-premium):hover {
+  transform: translateY(-2px);
+}
+
+/* Soulignement animé pour les liens texte */
+section a:not(.btn-primary):not(.btn-premium):not([class*="bg-"]) {
+  position: relative;
+}
+
+section a:not(.btn-primary):not(.btn-premium):not([class*="bg-"])::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #4f76f7, #7c9dff);
+  transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+section a:not(.btn-primary):not(.btn-premium):not([class*="bg-"]):hover::after {
+  width: 100%;
+}
+
+/* Effet de pulsation sur les icônes sociales */
+.social-icon {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: scale(1.15) rotate(5deg);
+  box-shadow: 0 10px 25px rgba(79, 118, 247, 0.3);
+}
+
+/* Effet de balancement sur les cartes */
+.card-hover:hover {
+  animation: card-float 3s ease-in-out infinite;
+}
+
+@keyframes card-float {
+  0%, 100% {
+    transform: translateY(-10px) scale(1.02);
+  }
+  50% {
+    transform: translateY(-15px) scale(1.02);
+  }
+}
+
+/* Effet de brillance sur les boutons au hover */
+.btn-primary::before, .btn-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-primary:hover::before, .btn-premium:hover::before {
+  left: 100%;
+}
+
+/* Effet de shake sur erreur de formulaire */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* Effet de rotation sur les icônes au hover */
+i, svg {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+a:hover i, a:hover svg, button:hover i, button:hover svg {
+  transform: rotate(15deg) scale(1.1);
+}

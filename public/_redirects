@@ -1,0 +1,17 @@
+# Redirections pour thomastp.me
+# Conforme aux standards de GitHub Pages et Netlify
+
+# Redirection des URLs sans extension vers les fichiers HTML
+# (Utile si le serveur ne supporte pas les réécritures)
+
+# Exemple : /botpress -> /botpress.html
+/botpress /botpress.html 200
+/cv /CV/ThomasPrudhommeCV.pdf 301
+/knowledge-base /kb/thomas-knowledge-base.json 301
+
+# Redirection des anciennes URLs (si applicable)
+# /old-page /index.html 301
+
+# Catch-all pour les pages non trouvées
+/* /404.html 404
+
