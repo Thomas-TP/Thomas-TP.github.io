@@ -1,0 +1,38 @@
+{
+  "name": "Thomas P. | Portfolio Informaticien",
+  "short_name": "Thomas P.",
+  "description": "Portfolio professionnel de Thomas P., Informaticien passionné. Découvrez mes projets, compétences et formations.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f76f7",
+  "orientation": "portrait-primary",
+  "lang": "fr",
+  "dir": "ltr",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/assets/images/favicon/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/images/favicon/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["portfolio", "technology", "education"],
+  "screenshots": [
+    {
+      "src": "/assets/images/apercu.webp",
+      "sizes": "1920x1080",
+      "type": "image/webp",
+      "form_factor": "wide"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
