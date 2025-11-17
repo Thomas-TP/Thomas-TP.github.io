@@ -6,38 +6,71 @@ class SupabaseClient {
     constructor() {
         this.url = SUPABASE_URL;
         this.anonKey = SUPABASE_ANON_KEY;
-        this.adminKey = null; // Sera défini après connexion admin
+        this.session = null;
+        this.loadSession();
     }
 
-    // Définir la clé admin après connexion
-    setAdminKey(key) {
-        this.adminKey = key;
-        sessionStorage.setItem('supabase_admin_key', key);
+    // Charger la session depuis sessionStorage
+    loadSession() {
+        const stored = sessionStorage.getItem('supabase_session');
+        if (stored) {
+            this.session = JSON.parse(stored);
+        }
     }
 
-    // Récupérer la clé admin depuis la session
-    getAdminKey() {
-        if (this.adminKey) return this.adminKey;
-        return sessionStorage.getItem('supabase_admin_key');
+    // Définir la session après connexion
+    setSession(session) {
+        this.session = session;
+        sessionStorage.setItem('supabase_session', JSON.stringify(session));
     }
 
-    // Supprimer la clé admin (déconnexion)
-    clearAdminKey() {
-        this.adminKey = null;
-        sessionStorage.removeItem('supabase_admin_key');
+    // Récupérer le token d'accès
+    getAccessToken() {
+        return this.session?.access_token;
     }
 
     // Vérifier si l'utilisateur est admin
     isAdmin() {
-        return !!this.getAdminKey();
+        return !!this.session && !!this.session.access_token;
+    }
+
+    // Connexion avec email/password
+    async signIn(email, password) {
+        try {
+            const response = await fetch(`${this.url}/auth/v1/token?grant_type=password`, {
+                method: 'POST',
+                headers: {
+                    'apikey': this.anonKey,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || 'Erreur de connexion');
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Erreur lors de la connexion:', error);
+            throw error;
+        }
+    }
+
+    // Déconnexion
+    async signOut() {
+        this.session = null;
+        sessionStorage.removeItem('supabase_session');
     }
 
     // Récupérer les en-têtes appropriés
-    getHeaders(useAdmin = false) {
-        const key = useAdmin && this.getAdminKey() ? this.getAdminKey() : this.anonKey;
+    getHeaders(useAuth = false) {
+        const token = useAuth && this.getAccessToken() ? this.getAccessToken() : this.anonKey;
         return {
-            'apikey': key,
-            'Authorization': `Bearer ${key}`,
+            'apikey': this.anonKey,
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
             'Prefer': 'return=representation'
         };

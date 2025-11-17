@@ -1,7 +1,7 @@
 // Système d'authentification admin
 class AdminAuth {
     constructor() {
-        this.SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVteGFkenRleGhyeHVycmJ0aWtsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzI3NjMxMywiZXhwIjoyMDc4ODUyMzEzfQ.TJ4mUqPZ4ha-gJctNhJzpgdKwYUKMpi_ygk5RSVG47o';
+        this.session = null;
         this.init();
     }
 
@@ -42,13 +42,26 @@ class AdminAuth {
                 <form id="adminLoginForm" class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-key mr-2"></i>Clé d'administration
+                            <i class="fas fa-envelope mr-2"></i>Email
+                        </label>
+                        <input 
+                            type="email" 
+                            id="adminEmail" 
+                            required 
+                            placeholder="admin@example.com"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                        >
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-lock mr-2"></i>Mot de passe
                         </label>
                         <input 
                             type="password" 
-                            id="adminKey" 
+                            id="adminPassword" 
                             required 
-                            placeholder="Entrez la clé service_role"
+                            placeholder="Votre mot de passe"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                         >
                     </div>
@@ -83,12 +96,13 @@ class AdminAuth {
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const key = document.getElementById('adminKey').value.trim();
+            const email = document.getElementById('adminEmail').value.trim();
+            const password = document.getElementById('adminPassword').value;
             
             errorDiv.classList.add('hidden');
             
             try {
-                await this.login(key);
+                await this.login(email, password);
                 document.body.removeChild(modal);
                 
                 // Afficher un message de succès
@@ -121,43 +135,23 @@ class AdminAuth {
     }
 
     // Connexion admin
-    async login(key) {
-        // Vérifier que la clé ressemble à un JWT
-        if (!key || !key.startsWith('eyJ')) {
-            throw new Error('Clé invalide');
-        }
-
-        // Vérifier la clé en tentant une opération de lecture
+    async login(email, password) {
         try {
-            const testHeaders = {
-                'apikey': key,
-                'Authorization': `Bearer ${key}`,
-                'Content-Type': 'application/json'
-            };
-
-            const response = await fetch(`${supabase.url}/rest/v1/certifications?limit=1`, {
-                method: 'GET',
-                headers: testHeaders
-            });
-
-            if (!response.ok) {
-                throw new Error('Clé d\'administration invalide');
-            }
-
-            // La clé est valide, la sauvegarder
-            supabase.setAdminKey(key);
+            const session = await supabase.signIn(email, password);
+            this.session = session;
+            supabase.setSession(session);
             this.updateUIState();
-            
             return true;
         } catch (error) {
-            throw new Error('Clé d\'administration invalide');
+            throw new Error('Email ou mot de passe incorrect');
         }
     }
 
     // Déconnexion admin
-    logout() {
+    async logout() {
         if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
-            supabase.clearAdminKey();
+            await supabase.signOut();
+            this.session = null;
             this.updateUIState();
             this.showNotification('Déconnexion réussie', 'info');
             

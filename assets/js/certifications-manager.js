@@ -81,7 +81,7 @@ class CertificationsManager {
         // Image ou gradient
         let headerContent = '';
         if (cert.image_url) {
-            headerContent = `<img src="${cert.image_url}" alt="${cert.name}" class="w-full h-full object-cover" width="128" height="128" loading="lazy">`;
+            headerContent = `<img src="${cert.image_url}" alt="${cert.name}" class="w-full h-full object-cover object-center" width="128" height="128" loading="lazy" style="max-width: 100%; max-height: 100%;">`;
         } else {
             headerContent = `
                 <div class="text-center p-4">
@@ -91,9 +91,9 @@ class CertificationsManager {
         }
 
         card.innerHTML = `
-            <div class="h-32 bg-gradient-to-br ${gradient} flex items-center justify-center text-white">
+            <div class="h-32 bg-gradient-to-br ${gradient} flex items-center justify-center text-white overflow-hidden">
                 ${headerContent}
-            </div>
+            </div>`
             <div class="p-4">
                 <h3 class="text-lg font-semibold text-gray-800 mb-2">${this.escapeHtml(cert.name)}</h3>
                 <p class="text-gray-600 text-sm mb-2">Délivré par ${this.escapeHtml(cert.issuer)}</p>
