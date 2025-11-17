@@ -1893,7 +1893,7 @@
                     languageArrow.style.transform = 'rotate(0deg)';
                     
                     // Déclencher le changement de langue
-                    updateLanguage(lang);
+                    updateLanguage(lang, true);
                 });
             });
             
@@ -2197,7 +2197,7 @@
             window.currentLanguage = 'fr'; // Langue par défaut
             
             // Function to update text based on selected language
-            function updateLanguage(lang) {
+            function updateLanguage(lang, reload = false) {
                 window.currentLanguage = lang; // Mettre à jour la langue globale
                 localStorage.setItem('language', lang); // Sauvegarder la langue dans localStorage
                 document.documentElement.lang = lang; // Mettre à jour l'attribut lang du HTML
@@ -2218,6 +2218,11 @@
                 
                 // Déclencher un événement personnalisé pour notifier les autres composants
                 window.dispatchEvent(new CustomEvent('languageChanged', { detail: { language: lang } }));
+                
+                // Recharger la page si demandé (changement utilisateur)
+                if (reload) {
+                    window.location.reload();
+                }
             }
             
             // Function to update the language button display
@@ -2236,7 +2241,7 @@
             // Language selector event listener
             if (languageSelect) {
                 languageSelect.addEventListener('change', function() {
-                    updateLanguage(this.value);
+                    updateLanguage(this.value, true);
                 });
             }
 
