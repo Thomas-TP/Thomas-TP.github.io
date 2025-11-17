@@ -23,8 +23,8 @@ class CertificationsManager {
     }
 
     refreshDisplay() {
-        // Recharger les certifications pour mettre à jour les textes
-        this.displayCertifications();
+        // Forcer le rechargement des certifications pour mettre à jour les textes
+        this.loadCertifications();
     }
 
     async loadCertifications() {
@@ -126,7 +126,8 @@ class CertificationsManager {
     formatDate(dateString) {
         if (!dateString) return '';
         const date = new Date(dateString);
-        return date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long' });
+        const locale = languageManager.getCurrentLanguage() === 'en' ? 'en-US' : 'fr-FR';
+        return date.toLocaleDateString(locale, { year: 'numeric', month: 'long' });
     }
 
     escapeHtml(text) {
