@@ -29,6 +29,16 @@ class CertificationsManager {
 
     async loadCertifications() {
         try {
+            // Afficher un indicateur de chargement
+            if (this.container) {
+                this.container.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fas fa-spinner fa-spin text-4xl text-primary mb-4"></i>
+                        <p class="text-gray-600">${languageManager.getText('certifications.loading')}</p>
+                    </div>
+                `;
+            }
+            
             console.log('🔍 Début chargement des certifications...');
             this.certifications = await supabase.getCertifications();
             console.log('✅ Certifications reçues:', this.certifications);

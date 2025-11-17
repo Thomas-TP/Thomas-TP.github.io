@@ -2199,6 +2199,7 @@
             // Function to update text based on selected language
             function updateLanguage(lang) {
                 window.currentLanguage = lang; // Mettre à jour la langue globale
+                localStorage.setItem('language', lang); // Sauvegarder la langue dans localStorage
                 const elements = document.querySelectorAll('[data-key]');
                 elements.forEach(el => {
                     const key = el.getAttribute('data-key');

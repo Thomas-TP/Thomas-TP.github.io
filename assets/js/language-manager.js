@@ -35,7 +35,8 @@ class LanguageManager {
                 'certifications.deleteSuccess': 'Certification supprimée avec succès',
                 'certifications.saveError': 'Erreur lors de l\'enregistrement',
                 'certifications.saving': 'Enregistrement...',
-                'certifications.deleteError': 'Erreur lors de la suppression'
+                'certifications.deleteError': 'Erreur lors de la suppression',
+                'certifications.loading': 'Chargement des certifications...'
             },
             en: {
                 // Certifications
@@ -69,7 +70,8 @@ class LanguageManager {
                 'certifications.deleteSuccess': 'Certification deleted successfully',
                 'certifications.saveError': 'Error during saving',
                 'certifications.saving': 'Saving...',
-                'certifications.deleteError': 'Error during deletion'
+                'certifications.deleteError': 'Error during deletion',
+                'certifications.loading': 'Loading certifications...'
             }
         };
         this.init();
