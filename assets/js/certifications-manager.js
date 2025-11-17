@@ -81,7 +81,7 @@ class CertificationsManager {
         // Image ou gradient
         let headerContent = '';
         if (cert.image_url) {
-            headerContent = `<img src="${cert.image_url}" alt="${cert.name}" class="w-full h-full object-cover object-center" width="128" height="128" loading="lazy" style="max-width: 100%; max-height: 100%;">`;
+            headerContent = `<img src="${cert.image_url}" alt="${cert.name}" class="w-full h-full object-contain object-center" width="128" height="128" loading="lazy" style="max-width: 100%; max-height: 100%;">`;
         } else {
             headerContent = `
                 <div class="text-center p-4">

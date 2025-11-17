@@ -8,15 +8,35 @@
 
 -- 2. Mettre à jour les politiques RLS pour utiliser l'authentification
 DROP POLICY IF EXISTS "Service role full access" ON certifications;
+DROP POLICY IF EXISTS "Public read access" ON certifications;
+
+-- IMPORTANT: Politique pour la lecture publique (tout le monde peut voir les certifications)
+CREATE POLICY "Public read access" ON certifications
+    FOR SELECT
+    USING (true);
 
 -- Politique pour permettre les opérations d'écriture uniquement aux utilisateurs authentifiés
-CREATE POLICY "Authenticated users full access" ON certifications
-    FOR ALL
+CREATE POLICY "Authenticated users write access" ON certifications
+    FOR INSERT
+    WITH CHECK (auth.uid() IS NOT NULL);
+
+CREATE POLICY "Authenticated users update access" ON certifications
+    FOR UPDATE
+    USING (auth.uid() IS NOT NULL);
+
+CREATE POLICY "Authenticated users delete access" ON certifications
+    FOR DELETE
     USING (auth.uid() IS NOT NULL);
 
 -- 3. Pour le storage, mettre à jour les politiques
 DROP POLICY IF EXISTS "Service role upload access on certifications bucket" ON storage.objects;
 DROP POLICY IF EXISTS "Service role delete access on certifications bucket" ON storage.objects;
+DROP POLICY IF EXISTS "Public read access on certifications bucket" ON storage.objects;
+
+-- IMPORTANT: Lecture publique pour le storage (voir les images)
+CREATE POLICY "Public read access on certifications bucket"
+ON storage.objects FOR SELECT
+USING (bucket_id = 'certifications');
 
 -- Upload pour les utilisateurs authentifiés
 CREATE POLICY "Authenticated upload access on certifications bucket"
@@ -28,7 +48,7 @@ CREATE POLICY "Authenticated delete access on certifications bucket"
 ON storage.objects FOR DELETE
 USING (bucket_id = 'certifications' AND auth.uid() IS NOT NULL);
 
--- 4. Mise à jour pour les utilisateurs authentifiés
+-- Mise à jour pour les utilisateurs authentifiés
 CREATE POLICY "Authenticated update access on certifications bucket"
 ON storage.objects FOR UPDATE
 USING (bucket_id = 'certifications' AND auth.uid() IS NOT NULL);

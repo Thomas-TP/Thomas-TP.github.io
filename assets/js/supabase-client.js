@@ -182,8 +182,8 @@ class SupabaseClient {
             const response = await fetch(`${this.url}/storage/v1/object/certifications/${path}`, {
                 method: 'POST',
                 headers: {
-                    'apikey': this.getAdminKey(),
-                    'Authorization': `Bearer ${this.getAdminKey()}`
+                    'apikey': this.anonKey,
+                    'Authorization': `Bearer ${this.getAccessToken()}`
                 },
                 body: file
             });
@@ -212,8 +212,8 @@ class SupabaseClient {
             const response = await fetch(`${this.url}/storage/v1/object/certifications/${path}`, {
                 method: 'DELETE',
                 headers: {
-                    'apikey': this.getAdminKey(),
-                    'Authorization': `Bearer ${this.getAdminKey()}`
+                    'apikey': this.anonKey,
+                    'Authorization': `Bearer ${this.getAccessToken()}`
                 }
             });
 
