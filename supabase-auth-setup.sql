@@ -6,9 +6,13 @@
 -- Cette commande doit être exécutée via le dashboard Supabase > Authentication > Users > Invite user
 -- OU en créant un compte via l'interface Auth de Supabase
 
--- 2. Mettre à jour les politiques RLS pour utiliser l'authentification
+-- 2. Mettre à jour les politiques RLS pour la table certifications
 DROP POLICY IF EXISTS "Service role full access" ON certifications;
 DROP POLICY IF EXISTS "Public read access" ON certifications;
+DROP POLICY IF EXISTS "Authenticated users write access" ON certifications;
+DROP POLICY IF EXISTS "Authenticated users update access" ON certifications;
+DROP POLICY IF EXISTS "Authenticated users delete access" ON certifications;
+DROP POLICY IF EXISTS "Authenticated users full access" ON certifications;
 
 -- IMPORTANT: Politique pour la lecture publique (tout le monde peut voir les certifications)
 CREATE POLICY "Public read access" ON certifications
@@ -28,10 +32,13 @@ CREATE POLICY "Authenticated users delete access" ON certifications
     FOR DELETE
     USING (auth.uid() IS NOT NULL);
 
--- 3. Pour le storage, mettre à jour les politiques
+-- 3. Pour le storage, supprimer TOUTES les anciennes politiques
 DROP POLICY IF EXISTS "Service role upload access on certifications bucket" ON storage.objects;
 DROP POLICY IF EXISTS "Service role delete access on certifications bucket" ON storage.objects;
 DROP POLICY IF EXISTS "Public read access on certifications bucket" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated upload access on certifications bucket" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated delete access on certifications bucket" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated update access on certifications bucket" ON storage.objects;
 
 -- IMPORTANT: Lecture publique pour le storage (voir les images)
 CREATE POLICY "Public read access on certifications bucket"
