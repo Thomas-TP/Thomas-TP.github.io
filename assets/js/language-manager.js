@@ -85,7 +85,7 @@ class LanguageManager {
     }
 
     setLanguage(lang) {
-        if (this.translations[lang]) {
+        if (this.translations[lang] && this.currentLang !== lang) {
             this.currentLang = lang;
             localStorage.setItem('language', lang);
             // Notifier les autres composants
