@@ -23,7 +23,7 @@ class CertificationsManager {
     }
 
     refreshDisplay() {
-        // Forcer le rechargement des certifications pour mettre à jour les textes
+        // Recharger les certifications pour mettre à jour les textes avec la nouvelle langue
         this.loadCertifications();
     }
 
@@ -325,7 +325,7 @@ class CertificationsManager {
                             ${isEdit && cert.pdf_url ? `
                                 <div class="mb-2">
                                     <a href="${cert.pdf_url}" target="_blank" class="text-primary hover:underline flex items-center">
-                                        <i class="fas fa-file-pdf mr-2"></i>PDF actuel
+                                        <i class="fas fa-file-pdf mr-2"></i>${languageManager.getText('certifications.currentPdf')}
                                     </a>
                                 </div>
                             ` : ''}
@@ -389,7 +389,7 @@ class CertificationsManager {
             const submitBtn = form.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enregistrement...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>' + languageManager.getText('certifications.saving');
             
             try {
                 const formData = new FormData(form);

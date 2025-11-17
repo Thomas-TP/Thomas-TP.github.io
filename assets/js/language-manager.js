@@ -23,6 +23,7 @@ class LanguageManager {
                 'certifications.credentialUrl': 'URL du diplôme',
                 'certifications.image': 'Image d\'illustration',
                 'certifications.pdfFile': 'PDF du diplôme',
+                'certifications.currentPdf': 'PDF actuel',
                 'certifications.update': 'Mettre à jour',
                 'certifications.add': 'Ajouter',
                 'certifications.cancel': 'Annuler',
@@ -33,6 +34,7 @@ class LanguageManager {
                 'certifications.addSuccess': 'Certification ajoutée avec succès',
                 'certifications.deleteSuccess': 'Certification supprimée avec succès',
                 'certifications.saveError': 'Erreur lors de l\'enregistrement',
+                'certifications.saving': 'Enregistrement...',
                 'certifications.deleteError': 'Erreur lors de la suppression'
             },
             en: {
@@ -55,6 +57,7 @@ class LanguageManager {
                 'certifications.credentialUrl': 'Credential URL',
                 'certifications.image': 'Illustration image',
                 'certifications.pdfFile': 'Diploma PDF',
+                'certifications.currentPdf': 'Current PDF',
                 'certifications.update': 'Update',
                 'certifications.add': 'Add',
                 'certifications.cancel': 'Cancel',
@@ -65,6 +68,7 @@ class LanguageManager {
                 'certifications.addSuccess': 'Certification added successfully',
                 'certifications.deleteSuccess': 'Certification deleted successfully',
                 'certifications.saveError': 'Error during saving',
+                'certifications.saving': 'Saving...',
                 'certifications.deleteError': 'Error during deletion'
             }
         };
