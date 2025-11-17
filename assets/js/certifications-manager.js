@@ -15,6 +15,16 @@ class CertificationsManager {
         if (adminAuth) {
             adminAuth.updateUIState();
         }
+
+        // Écouter les changements de langue
+        window.addEventListener('languageChanged', () => {
+            this.refreshDisplay();
+        });
+    }
+
+    refreshDisplay() {
+        // Recharger les certifications pour mettre à jour les textes
+        this.displayCertifications();
     }
 
     async loadCertifications() {
@@ -50,8 +60,8 @@ class CertificationsManager {
             this.container.innerHTML = `
                 <div class="col-span-full text-center py-12">
                     <i class="fas fa-certificate text-6xl text-gray-300 mb-4"></i>
-                    <p class="text-gray-500 text-lg">Aucune certification pour le moment.</p>
-                    <p class="text-gray-400 text-sm mt-2">Cliquez sur "Gérer les certifications" pour en ajouter.</p>
+                    <p class="text-gray-500 text-lg">${languageManager.getText('certifications.noCertifications')}</p>
+                    <p class="text-gray-400 text-sm mt-2">${languageManager.getText('certifications.addFirst')}</p>
                 </div>
             `;
             return;
@@ -89,12 +99,12 @@ class CertificationsManager {
             </div>
             <div class="p-4">
                 <h3 class="text-lg font-semibold text-gray-800 mb-2">${this.escapeHtml(cert.name)}</h3>
-                <p class="text-gray-600 text-sm mb-2">Délivré par ${this.escapeHtml(cert.issuer)}</p>
+                <p class="text-gray-600 text-sm mb-2">${languageManager.getText('certifications.issuedBy')} ${this.escapeHtml(cert.issuer)}</p>
                 ${cert.issue_date ? `<p class="text-gray-500 text-sm">${this.formatDate(cert.issue_date)}${cert.expiry_date ? ' - ' + this.formatDate(cert.expiry_date) : ''}</p>` : ''}
                 ${cert.credential_id ? `<p class="text-gray-500 text-sm mt-2">ID: ${this.escapeHtml(cert.credential_id)}</p>` : ''}
                 ${cert.credential_url ? `
                     <a href="${cert.credential_url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-primary hover:text-primary-dark mt-3 text-sm">
-                        <span>Voir le diplôme</span>
+                        <span>${languageManager.getText('certifications.viewDiploma')}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
                             <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
@@ -104,7 +114,7 @@ class CertificationsManager {
                 ${cert.pdf_url ? `
                     <a href="${cert.pdf_url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-red-600 hover:text-red-700 mt-2 text-sm ml-4">
                         <i class="fas fa-file-pdf mr-1"></i>
-                        <span>PDF</span>
+                        <span>${languageManager.getText('certifications.pdf')}</span>
                     </a>
                 ` : ''}
             </div>
@@ -145,7 +155,7 @@ class CertificationsManager {
         modal.innerHTML = `
             <div class="bg-white rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
                 <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-                    <h3 class="text-2xl font-bold text-gray-800">Gérer les certifications</h3>
+                    <h3 class="text-2xl font-bold text-gray-800">${languageManager.getText('certifications.manage')}</h3>
                     <button id="closeAdminModal" class="text-gray-500 hover:text-gray-700 text-2xl">
                         <i class="fas fa-times"></i>
                     </button>
@@ -153,7 +163,7 @@ class CertificationsManager {
                 
                 <div class="p-6">
                     <button id="addNewCert" class="w-full md:w-auto px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors mb-6">
-                        <i class="fas fa-plus mr-2"></i>Ajouter une certification
+                        <i class="fas fa-plus mr-2"></i>${languageManager.getText('certifications.addNew')}
                     </button>
                     
                     <div id="certificationsList" class="space-y-4">
@@ -203,7 +213,7 @@ class CertificationsManager {
             return `
                 <div class="text-center py-12 text-gray-500">
                     <i class="fas fa-certificate text-6xl text-gray-300 mb-4"></i>
-                    <p>Aucune certification enregistrée.</p>
+                    <p>${languageManager.getText('certifications.noCertifications')}</p>
                 </div>
             `;
         }
@@ -228,10 +238,10 @@ class CertificationsManager {
                     </div>
                     <div class="flex gap-2 flex-shrink-0">
                         <button class="editCertBtn px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors" data-cert-id="${cert.id}">
-                            <i class="fas fa-edit mr-1"></i>Modifier
+                            <i class="fas fa-edit mr-1"></i>${languageManager.getText('certifications.edit')}
                         </button>
                         <button class="deleteCertBtn px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors" data-cert-id="${cert.id}">
-                            <i class="fas fa-trash mr-1"></i>Supprimer
+                            <i class="fas fa-trash mr-1"></i>${languageManager.getText('certifications.delete')}
                         </button>
                     </div>
                 </div>
@@ -248,7 +258,7 @@ class CertificationsManager {
         formModal.innerHTML = `
             <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                 <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-                    <h3 class="text-xl font-bold text-gray-800">${isEdit ? 'Modifier la certification' : 'Ajouter une certification'}</h3>
+                    <h3 class="text-xl font-bold text-gray-800">${isEdit ? languageManager.getText('certifications.edit') + ' ' + languageManager.getText('certifications.name').toLowerCase() : languageManager.getText('certifications.addNew')}</h3>
                     <button id="closeFormModal" class="text-gray-500 hover:text-gray-700 text-2xl">
                         <i class="fas fa-times"></i>
                     </button>
@@ -256,46 +266,46 @@ class CertificationsManager {
                 
                 <form id="certificationForm" class="p-6 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nom de la certification *</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">${languageManager.getText('certifications.name')} *</label>
                         <input type="text" name="name" required value="${isEdit ? this.escapeHtml(cert.name) : ''}" 
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Organisme de délivrance *</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">${languageManager.getText('certifications.issuer')} *</label>
                         <input type="text" name="issuer" required value="${isEdit ? this.escapeHtml(cert.issuer) : ''}"
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Date d'émission</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">${languageManager.getText('certifications.issueDate')}</label>
                             <input type="date" name="issue_date" value="${isEdit && cert.issue_date ? cert.issue_date : ''}"
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
                         </div>
                         
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Date d'expiration</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">${languageManager.getText('certifications.expiryDate')}</label>
                             <input type="date" name="expiry_date" value="${isEdit && cert.expiry_date ? cert.expiry_date : ''}"
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
                         </div>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">ID du diplôme</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">${languageManager.getText('certifications.credentialId')}</label>
                         <input type="text" name="credential_id" value="${isEdit && cert.credential_id ? this.escapeHtml(cert.credential_id) : ''}"
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">URL du diplôme</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">${languageManager.getText('certifications.credentialUrl')}</label>
                         <input type="url" name="credential_url" value="${isEdit && cert.credential_url ? cert.credential_url : ''}"
                                placeholder="https://..."
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Image d'illustration</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">${languageManager.getText('certifications.image')}</label>
                         <div class="space-y-2">
                             ${isEdit && cert.image_url ? `
                                 <div class="mb-2">
@@ -309,7 +319,7 @@ class CertificationsManager {
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">PDF du diplôme</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">${languageManager.getText('certifications.pdfFile')}</label>
                         <div class="space-y-2">
                             ${isEdit && cert.pdf_url ? `
                                 <div class="mb-2">
@@ -326,10 +336,10 @@ class CertificationsManager {
                     
                     <div class="flex gap-3 pt-4 border-t border-gray-200">
                         <button type="submit" class="flex-1 px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium">
-                            <i class="fas fa-save mr-2"></i>${isEdit ? 'Mettre à jour' : 'Ajouter'}
+                            <i class="fas fa-save mr-2"></i>${isEdit ? languageManager.getText('certifications.update') : languageManager.getText('certifications.add')}
                         </button>
                         <button type="button" id="cancelForm" class="px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors font-medium">
-                            Annuler
+                            ${languageManager.getText('certifications.cancel')}
                         </button>
                     </div>
                 </form>
@@ -414,10 +424,10 @@ class CertificationsManager {
                 // Créer ou mettre à jour la certification
                 if (isEdit) {
                     await supabase.updateCertification(cert.id, certification);
-                    adminAuth.showNotification('Certification mise à jour avec succès', 'success');
+                    adminAuth.showNotification(languageManager.getText('certifications.updateSuccess'), 'success');
                 } else {
                     await supabase.createCertification(certification);
-                    adminAuth.showNotification('Certification ajoutée avec succès', 'success');
+                    adminAuth.showNotification(languageManager.getText('certifications.addSuccess'), 'success');
                 }
 
                 // Recharger les certifications
@@ -451,7 +461,7 @@ class CertificationsManager {
                 }
             } catch (error) {
                 console.error('Erreur lors de l\'enregistrement:', error);
-                adminAuth.showNotification(error.message || 'Erreur lors de l\'enregistrement', 'error');
+                adminAuth.showNotification(error.message || languageManager.getText('certifications.saveError'), 'error');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalText;
             }
@@ -474,10 +484,10 @@ class CertificationsManager {
     }
 
     async deleteCertification(certId) {
-        if (confirm('Êtes-vous sûr de vouloir supprimer cette certification ?')) {
+        if (confirm(languageManager.getText('certifications.confirmDelete'))) {
             try {
                 await supabase.deleteCertification(certId);
-                adminAuth.showNotification('Certification supprimée avec succès', 'success');
+                adminAuth.showNotification(languageManager.getText('certifications.deleteSuccess'), 'success');
                 
                 // Recharger les certifications
                 await this.loadCertifications();
@@ -505,7 +515,7 @@ class CertificationsManager {
                 }
             } catch (error) {
                 console.error('Erreur lors de la suppression:', error);
-                adminAuth.showNotification(error.message || 'Erreur lors de la suppression', 'error');
+                adminAuth.showNotification(error.message || languageManager.getText('certifications.deleteError'), 'error');
             }
         }
     }
