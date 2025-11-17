@@ -96,7 +96,7 @@ class CertificationsManager {
         card.innerHTML = `
             <div class="h-32 bg-gradient-to-br ${gradient} flex items-center justify-center text-white overflow-hidden">
                 ${headerContent}
-            </div>`
+            </div>
             <div class="p-4">
                 <h3 class="text-lg font-semibold text-gray-800 mb-2">${this.escapeHtml(cert.name)}</h3>
                 <p class="text-gray-600 text-sm mb-2">Délivré par ${this.escapeHtml(cert.issuer)}</p>
