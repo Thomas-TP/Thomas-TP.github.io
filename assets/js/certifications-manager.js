@@ -68,18 +68,8 @@ class CertificationsManager {
         card.className = 'card bg-white rounded-xl overflow-hidden shadow-md card-hover section-reveal';
         card.dataset.certId = cert.id;
         
-        // Générer un fond sobre basé sur l'index
-        const backgrounds = [
-            'bg-gray-50',
-            'bg-slate-50',
-            'bg-stone-50',
-            'bg-neutral-50',
-            'bg-zinc-50',
-            'bg-amber-50',
-            'bg-orange-50',
-            'bg-lime-50'
-        ];
-        const background = backgrounds[index % backgrounds.length];
+        // Fond sobre selon le thème
+        const background = 'bg-white dark:bg-gray-800';
 
         // Image ou gradient
         let headerContent = '';
@@ -88,7 +78,7 @@ class CertificationsManager {
         } else {
             headerContent = `
                 <div class="text-center p-4">
-                    <i class="fas fa-certificate text-4xl text-gray-600"></i>
+                    <i class="fas fa-certificate text-4xl text-gray-600 dark:text-gray-300"></i>
                 </div>
             `;
         }
