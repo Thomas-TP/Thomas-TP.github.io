@@ -68,18 +68,18 @@ class CertificationsManager {
         card.className = 'card bg-white rounded-xl overflow-hidden shadow-md card-hover section-reveal';
         card.dataset.certId = cert.id;
         
-        // Générer un gradient aléatoire basé sur l'index
-        const gradients = [
-            'from-gray-800 to-purple-800',
-            'from-green-500 to-cyan-500',
-            'from-blue-500 to-red-500',
-            'from-yellow-500 to-orange-500',
-            'from-purple-600 to-pink-600',
-            'from-indigo-600 to-blue-600',
-            'from-red-500 to-pink-500',
-            'from-teal-500 to-green-500'
+        // Générer un fond sobre basé sur l'index
+        const backgrounds = [
+            'bg-gray-50',
+            'bg-slate-50',
+            'bg-stone-50',
+            'bg-neutral-50',
+            'bg-zinc-50',
+            'bg-amber-50',
+            'bg-orange-50',
+            'bg-lime-50'
         ];
-        const gradient = gradients[index % gradients.length];
+        const background = backgrounds[index % backgrounds.length];
 
         // Image ou gradient
         let headerContent = '';
@@ -88,13 +88,13 @@ class CertificationsManager {
         } else {
             headerContent = `
                 <div class="text-center p-4">
-                    <i class="fas fa-certificate text-4xl"></i>
+                    <i class="fas fa-certificate text-4xl text-gray-600"></i>
                 </div>
             `;
         }
 
         card.innerHTML = `
-            <div class="h-32 bg-gradient-to-br ${gradient} flex items-center justify-center text-white overflow-hidden">
+            <div class="h-32 ${background} flex items-center justify-center overflow-hidden">
                 ${headerContent}
             </div>
             <div class="p-4">
