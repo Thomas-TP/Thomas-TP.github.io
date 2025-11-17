@@ -2213,8 +2213,24 @@
                     }
                 });
                 
+                // Mettre à jour le bouton de langue
+                updateLanguageButton(lang);
+                
                 // Déclencher un événement personnalisé pour notifier les autres composants
                 window.dispatchEvent(new CustomEvent('languageChanged', { detail: { language: lang } }));
+            }
+            
+            // Function to update the language button display
+            function updateLanguageButton(lang) {
+                const option = document.querySelector(`.language-option[data-lang="${lang}"]`);
+                if (option) {
+                    const text = option.textContent.trim();
+                    const flagSvg = option.querySelector('svg').cloneNode(true);
+                    
+                    currentLanguage.textContent = text;
+                    currentLanguageFlag.innerHTML = '';
+                    currentLanguageFlag.appendChild(flagSvg);
+                }
             }
             
             // Language selector event listener
