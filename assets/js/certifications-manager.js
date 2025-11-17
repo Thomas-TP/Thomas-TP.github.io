@@ -19,11 +19,14 @@ class CertificationsManager {
 
     async loadCertifications() {
         try {
+            console.log('🔍 Début chargement des certifications...');
             this.certifications = await supabase.getCertifications();
+            console.log('✅ Certifications reçues:', this.certifications);
+            console.log('📊 Nombre:', this.certifications ? this.certifications.length : 0);
             this.displayCertifications();
         } catch (error) {
-            console.error('Erreur lors du chargement des certifications:', error);
-            this.displayError('Impossible de charger les certifications');
+            console.error('❌ Erreur chargement certifications:', error);
+            this.displayError('Impossible de charger les certifications: ' + error.message);
         }
     }
 

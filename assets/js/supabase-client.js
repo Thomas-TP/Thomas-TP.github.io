@@ -79,18 +79,27 @@ class SupabaseClient {
     // GET - Récupérer toutes les certifications
     async getCertifications() {
         try {
+            console.log('🌐 API getCertifications - URL:', this.url);
+            console.log('🔑 Headers:', this.getHeaders(false));
+            
             const response = await fetch(`${this.url}/rest/v1/certifications?order=created_at.desc`, {
                 method: 'GET',
                 headers: this.getHeaders(false)
             });
 
+            console.log('📡 HTTP Response:', response.status, response.statusText);
+
             if (!response.ok) {
-                throw new Error(`Erreur HTTP: ${response.status}`);
+                const errorText = await response.text();
+                console.error('❌ Erreur API:', errorText);
+                throw new Error(`Erreur HTTP: ${response.status} - ${errorText}`);
             }
 
-            return await response.json();
+            const data = await response.json();
+            console.log('📦 Données reçues:', data);
+            return data;
         } catch (error) {
-            console.error('Erreur lors de la récupération des certifications:', error);
+            console.error('❌ Exception getCertifications:', error);
             throw error;
         }
     }
