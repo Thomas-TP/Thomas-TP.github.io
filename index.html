@@ -2200,6 +2200,7 @@
             function updateLanguage(lang) {
                 window.currentLanguage = lang; // Mettre à jour la langue globale
                 localStorage.setItem('language', lang); // Sauvegarder la langue dans localStorage
+                document.documentElement.lang = lang; // Mettre à jour l'attribut lang du HTML
                 const elements = document.querySelectorAll('[data-key]');
                 elements.forEach(el => {
                     const key = el.getAttribute('data-key');
@@ -2221,6 +2222,13 @@
                 languageSelect.addEventListener('change', function() {
                     updateLanguage(this.value);
                 });
+            }
+
+            // Load saved language on page load
+            const savedLang = localStorage.getItem('language') || 'fr';
+            updateLanguage(savedLang);
+            if (languageSelect) {
+                languageSelect.value = savedLang;
             }
 
             // ===== EFFET PARALLAXE =====
