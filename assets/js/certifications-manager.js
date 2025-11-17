@@ -23,8 +23,13 @@ class CertificationsManager {
     }
 
     refreshDisplay() {
-        // Recharger les certifications pour mettre à jour les textes avec la nouvelle langue
-        this.loadCertifications();
+        // Si les certifications sont déjà chargées, juste mettre à jour l'affichage avec la nouvelle langue
+        // Sinon, charger depuis Supabase
+        if (this.certifications) {
+            this.displayCertifications();
+        } else {
+            this.loadCertifications();
+        }
     }
 
     async loadCertifications() {
