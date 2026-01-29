@@ -1,0 +1,119 @@
+{
+    "navbar": {
+        "home": "Home",
+        "about": "About",
+        "projects": "Projects",
+        "contact": "Contact",
+        "github": "GitHub",
+        "linkedin": "LinkedIn"
+    },
+    "skip_content": "Skip to content",
+    "hero": {
+        "available": "Available for new opportunities",
+        "name": "Thomas P.",
+        "role_prefix": "Future Computer Scientist at ",
+        "school": "Geneva Institute of Technology",
+        "description": "Crafting digital experiences with precision and passion.",
+        "view_projects": "View Projects",
+        "contact_me": "Contact Me",
+        "scroll": "Scroll"
+    },
+    "bento": {
+        "header_about": "About Me",
+        "header_desc": "I'm a passionate developer focused on building clean, efficient, and user-centric digital experiences.",
+        "web_dev": {
+            "title": "Web Development",
+            "desc": "Building responsive, modern web applications.",
+            "searching": "Searching..."
+        },
+        "backend": {
+            "title": "Backend & Systems",
+            "desc": "Experience with PowerShell scripting and system automation."
+        },
+        "iot": {
+            "title": "IoT & Smart Home",
+            "desc": "Creating seamless connected experiences.",
+            "lamp": "Lamp",
+            "tv": "TV",
+            "oven": "Oven"
+        },
+        "student": {
+            "title": "Student at Geneva IT",
+            "desc": "Pursuing my CFC in Computer Science.",
+            "start": "START",
+            "diploma": "DIPLOMA",
+            "school_entry": "School Entry",
+            "development": "Development",
+            "specialization": "Specialization",
+            "internship": "Internship",
+            "graduation": "Graduation"
+        },
+        "certifications": {
+            "title": "Professional Certifications",
+            "desc": "View my verified achievement badges and professional certifications on Credly. Validating expertise in cloud computing, cybersecurity, and software development.",
+            "verified": "Verified by Credly",
+            "view_profile": "View Profile"
+        }
+    },
+    "tech_stack": {
+        "title": "My Tech Stack"
+    },
+    "projects": {
+        "title": "Projects",
+        "subtitle": "A collection of projects exploring web development, game design, and cybersecurity.",
+        "view_all": "View all repositories",
+        "view_project": "View Project",
+        "items": {
+            "x_clone": {
+                "description": "A full-featured Twitter/X clone with AI chat capabilities (Grok integration). Built with vanilla web technologies to master the fundamentals."
+            },
+            "tank_io": {
+                "description": "A fast-paced multiplayer tank battle game built with React and HTML5 Canvas. Features real-time gameplay optimizations and responsive controls."
+            },
+            "empire": {
+                "description": "A modern modification of the Empire post-exploitation framework. Enhanced for automated security testing and educational red-teaming scenarios."
+            }
+        }
+    },
+    "contact": {
+        "title": "Let's work together",
+        "desc": "Have a project in mind or just want to chat? Feel free to reach out.",
+        "say_hello": "Say Hello"
+    },
+    "footer": {
+        "rights": "All rights reserved.",
+        "privacy": "Privacy Policy",
+        "terms": "Terms"
+    },
+    "privacy_modal": {
+        "title": "Privacy Policy",
+        "last_updated": "Last updated: January 2026",
+        "section1_title": "1. Information Collection",
+        "section1_text": "This portfolio is a static website and does not collect, store, or process any personal data from visitors. No cookies are used for tracking purposes, and no user accounts are required to view the content.",
+        "section2_title": "2. External Links",
+        "section2_text": "This website contains links to external platforms (GitHub, LinkedIn, Credly). Please note that these external sites have their own privacy policies, and I am not responsible for the content or privacy practices of these third-party services.",
+        "section3_title": "3. Contact Information",
+        "section3_text": "If you choose to contact me via the provided email or social media links, the information you provide (such as your name and email address) will differ from this policy and is governed by the platform you use. Any direct communication will be kept confidential and used solely for the purpose of replying to your inquiry.",
+        "github_note": "This website is hosted on GitHub Pages. GitHub may collect technical logs (IP addresses) for security and maintenance purposes.",
+        "close": "Close"
+    },
+    "terms_modal": {
+        "title": "Terms of Service",
+        "last_updated": "Last updated: January 2026",
+        "section1_title": "1. Introduction",
+        "section1_text": "Welcome to my portfolio. By accessing this website, you agree to be bound by these Terms of Service. If you disagree with any part of these terms, please do not use this website.",
+        "section2_title": "2. Intellectual Property",
+        "section2_text": "The content, design, and specific code implementations displayed on this portfolio are the intellectual property of Thomas P., unless otherwise stated (e.g., open-source libraries used).",
+        "section2_sub": "You may view, download, and copy materials for personal, non-commercial use, provided you acknowledge the source.",
+        "section3_title": "3. Disclaimer",
+        "section3_text": "The projects and code examples provided here are for educational and demonstration purposes. They are provided \"as is\" without warranty of any kind, express or implied. I am not liable for any damages arising from the use of the code or information on this site.",
+        "section4_title": "4. Governing Law",
+        "section4_text": "These terms shall be governed by and construed in accordance with the laws of Switzerland. Any disputes relating to these terms will be subject to the exclusive jurisdiction of the courts of Geneva.",
+        "close": "Accept & Close"
+    },
+    "notfound": {
+        "title": "Page Not Found",
+        "desc": "The page you are looking for does not exist or has been moved to another sector.",
+        "home": "Return to Base"
+    }
+}
