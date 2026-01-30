@@ -150,96 +150,71 @@ export function Navbar() {
         return () => observer.disconnect();
     }, []);
 
-    const NavGroup = () => (
-        <div className="flex gap-1">
-            {navItems.map((item) => (
-                <NavLink key={item.id} item={item} isActive={activeSection === item.id} />
-            ))}
-        </div>
-    );
 
-    const ActionsGroup = ({ showSocials = true }) => (
-        <div className="flex items-center gap-2">
-            {showSocials && (
-                <>
+
+    return (
+        <>
+            {/* TOP NAVBAR */}
+            <motion.header
+                className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 glass border-b border-border/10 backdrop-blur-md will-change-transform ${isScrolled ? 'pointer-events-none' : 'pointer-events-auto'}`}
+                initial={{ y: 0, opacity: 1 }}
+                animate={{
+                    y: isScrolled ? -100 : 0,
+                    opacity: isScrolled ? 0 : 1
+                }}
+                transition={{ duration: 0.4, ease: "circOut" }}
+            >
+                <div className="flex gap-1">
+                    {navItems.map((item) => (
+                        <NavLink key={item.id} item={item} isActive={activeSection === item.id} />
+                    ))}
+                </div>
+
+                <div className="flex items-center gap-2">
                     <div className="flex gap-1 hidden md:flex">
                         {socialItems.map((item) => (
                             <NavLink key={item.id} item={item} />
                         ))}
                     </div>
                     <div className="hidden md:block w-px h-8 bg-border/50 mx-2" />
-                </>
-            )}
-            <LanguageToggle />
-            <ModeToggle />
-        </div>
-    );
+                    <LanguageToggle />
+                    <ModeToggle />
+                </div>
+            </motion.header>
 
-    return (
-        <AnimatePresence mode="wait">
-            {!isScrolled ? (
-                // TOP NAVBAR
-                <motion.header
-                    key="top-nav"
-                    className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 glass border-b border-border/10 backdrop-blur-md will-change-transform"
-                    initial={{ y: -100, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ opacity: 0, transition: { duration: 0.2 } }}
-                    transition={{ duration: 0.4, ease: "circOut" }}
-                >
-                    {/* Left Side - Nav Items flying to left on exit */}
-                    <motion.div
-                        exit={{ x: -200, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        <NavGroup />
-                    </motion.div>
+            {/* BOTTOM NAVBAR */}
+            <motion.header
+                className={`fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-8 px-4 will-change-transform ${!isScrolled || isFooterVisible ? 'pointer-events-none' : 'pointer-events-auto'}`}
+                initial={{ y: 100, opacity: 0 }}
+                animate={{
+                    y: (!isScrolled || isFooterVisible) ? 150 : 0,
+                    opacity: (!isScrolled || isFooterVisible) ? 0 : 1
+                }}
+                transition={{ duration: 0.4, ease: "circOut" }}
+            >
+                <nav className="glass rounded-full px-2 py-2 md:px-4 md:py-3 flex items-center gap-1 md:gap-2 shadow-2xl shadow-black/5 dark:shadow-black/20 border border-border/50 ring-1 ring-border/50 overflow-hidden">
+                    <div className="flex items-center gap-2">
+                        <div className="flex gap-1">
+                            {navItems.map((item) => (
+                                <NavLink key={item.id} item={item} isActive={activeSection === item.id} />
+                            ))}
+                        </div>
+                        <div className="hidden md:block w-px h-8 bg-border/50 mx-2" />
+                    </div>
 
-                    {/* Right Side - Actions flying to right on exit */}
-                    <motion.div
-                        exit={{ x: 200, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        <ActionsGroup showSocials={true} />
-                    </motion.div>
-                </motion.header>
-            ) : (
-                // BOTTOM NAVBAR
-                <motion.header
-                    key="bottom-nav"
-                    className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-8 px-4 pointer-events-none will-change-transform"
-                    initial={{ y: 100, opacity: 0 }}
-                    animate={{
-                        y: isFooterVisible ? 150 : 0,
-                        opacity: isFooterVisible ? 0 : 1
-                    }}
-                    exit={{ y: 100, opacity: 0 }}
-                    transition={{ duration: 0.4, ease: "circOut" }}
-                >
-                    <nav className="pointer-events-auto glass rounded-full px-2 py-2 md:px-4 md:py-3 flex items-center gap-1 md:gap-2 shadow-2xl shadow-black/5 dark:shadow-black/20 border border-border/50 ring-1 ring-border/50 overflow-hidden">
-                        {/* Left Side - Coming in from Left */}
-                        <motion.div
-                            initial={{ x: -100, opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            transition={{ duration: 0.5, delay: 0.1 }}
-                            className="flex items-center gap-2"
-                        >
-                            <NavGroup />
-                            <div className="hidden md:block w-px h-8 bg-border/50 mx-2" />
-                        </motion.div>
-
-                        {/* Right Side - Coming in from Right */}
-                        <motion.div
-                            initial={{ x: 100, opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            transition={{ duration: 0.5, delay: 0.1 }}
-                        >
-                            <ActionsGroup showSocials={true} />
-                        </motion.div>
-                    </nav>
-                </motion.header>
-            )}
-        </AnimatePresence>
+                    <div className="flex items-center gap-2">
+                        <div className="flex gap-1 hidden md:flex">
+                            {socialItems.map((item) => (
+                                <NavLink key={item.id} item={item} />
+                            ))}
+                        </div>
+                        <div className="hidden md:block w-px h-8 bg-border/50 mx-2" />
+                        <LanguageToggle />
+                        <ModeToggle />
+                    </div>
+                </nav>
+            </motion.header>
+        </>
     );
 }
 
