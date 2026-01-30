@@ -154,15 +154,9 @@ export function Navbar() {
 
     return (
         <>
-            {/* TOP NAVBAR */}
-            <motion.header
-                className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 glass border-b border-border/10 backdrop-blur-md will-change-transform ${isScrolled ? 'pointer-events-none' : 'pointer-events-auto'}`}
-                initial={{ y: 0, opacity: 1 }}
-                animate={{
-                    y: isScrolled ? -100 : 0,
-                    opacity: isScrolled ? 0 : 1
-                }}
-                transition={{ duration: 0.4, ease: "circOut" }}
+            {/* TOP NAVBAR - CSS Transition for Performance */}
+            <header
+                className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 glass border-b border-border/10 backdrop-blur-md transition-all duration-500 ease-in-out transform will-change-transform ${isScrolled ? '-translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100 pointer-events-auto'}`}
             >
                 <div className="flex gap-1">
                     {navItems.map((item) => (
@@ -180,17 +174,11 @@ export function Navbar() {
                     <LanguageToggle />
                     <ModeToggle />
                 </div>
-            </motion.header>
+            </header>
 
-            {/* BOTTOM NAVBAR */}
-            <motion.header
-                className={`fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-8 px-4 will-change-transform ${!isScrolled || isFooterVisible ? 'pointer-events-none' : 'pointer-events-auto'}`}
-                initial={{ y: 100, opacity: 0 }}
-                animate={{
-                    y: (!isScrolled || isFooterVisible) ? 150 : 0,
-                    opacity: (!isScrolled || isFooterVisible) ? 0 : 1
-                }}
-                transition={{ duration: 0.4, ease: "circOut" }}
+            {/* BOTTOM NAVBAR - CSS Transition for Performance */}
+            <div
+                className={`fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-8 px-4 transition-all duration-500 ease-in-out transform will-change-transform ${(!isScrolled || isFooterVisible) ? 'translate-y-[150%] opacity-0 pointer-events-none' : 'translate-y-0 opacity-100 pointer-events-auto'}`}
             >
                 <nav className="glass rounded-full px-2 py-2 md:px-4 md:py-3 flex items-center gap-1 md:gap-2 shadow-2xl shadow-black/5 dark:shadow-black/20 border border-border/50 ring-1 ring-border/50 overflow-hidden">
                     <div className="flex items-center gap-2">
@@ -213,7 +201,7 @@ export function Navbar() {
                         <ModeToggle />
                     </div>
                 </nav>
-            </motion.header>
+            </div>
         </>
     );
 }
