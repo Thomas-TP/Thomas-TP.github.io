@@ -656,71 +656,79 @@ function CertificationsBlock() {
 
     return (
         <div
-            className="flex-1 w-full h-full min-h-[6rem] rounded-xl bg-card flex items-center justify-between relative overflow-hidden group/cert p-8 transition-all hover:bg-muted/30 border border-border hover:border-primary/20"
+            className="flex-1 w-full h-full min-h-[6rem] rounded-xl bg-card flex items-center justify-between relative overflow-hidden group/cert p-8 border border-border transition-all hover:bg-muted/40 hover:border-foreground/20"
         >
-            <div className="absolute inset-0 bg-grid-white/[0.05]" />
-            <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent z-0" />
+            {/* Minimal Background Grid */}
+            <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
 
-            <div className="flex flex-col gap-4 relative z-10 max-w-lg">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary border border-border text-foreground/90 text-xs font-medium w-fit backdrop-blur-sm shadow-lg">
+            <div className="flex flex-col gap-6 relative z-10 max-w-lg">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-foreground/5 border border-foreground/10 text-foreground/80 text-xs font-medium w-fit backdrop-blur-sm">
                     <ShieldCheck size={12} className="text-foreground" />
                     {t('bento.certifications.verified')}
                 </div>
+
                 <div>
-                    <h3 className="text-2xl font-bold text-foreground mb-2 group-hover/cert:text-foreground/80 transition-colors">{t('bento.certifications.title')}</h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
+                    {/* Typographic "Credly" Logo approximation - Monochrome */}
+                    <div className="text-4xl font-bold text-foreground mb-3 tracking-tight" style={{ fontFamily: '"Calistoga", "Times New Roman", serif' }}>
+                        Credly
+                    </div>
+                    <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4 opacity-80">
+                        {t('bento.certifications.title')}
+                    </h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed border-l-2 border-foreground/20 pl-4">
                         {t('bento.certifications.desc')}
                     </p>
                 </div>
+
                 <a
                     href="https://www.credly.com/users/thomas-prudhomme"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm font-medium text-foreground group-hover/cert:translate-x-2 transition-transform cursor-pointer w-fit"
+                    className="flex items-center gap-2 text-sm font-medium text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/10 px-4 py-2 rounded-lg transition-all cursor-pointer w-fit group/btn"
                 >
-                    {t('bento.certifications.view_profile')} <ExternalLink size={14} />
+                    {t('bento.certifications.view_profile')}
+                    <ExternalLink size={14} className="group-hover/btn:translate-x-1 transition-transform opacity-70" />
                 </a>
             </div>
 
-            {/* Animated Badge Container */}
-            <div className="hidden md:flex relative w-40 h-40 items-center justify-center shrink-0">
-                {/* Glow behind */}
+            {/* Visual Element - Minimalist Badge */}
+            <div className="hidden md:flex relative items-center justify-center shrink-0 w-40 h-40">
+                {/* Subtle glow */}
                 <motion.div
-                    className="absolute inset-0 bg-primary/5 blur-[50px] rounded-full"
-                    animate={shouldReduceMotion ? {} : { scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-                    transition={{ duration: 4, repeat: Infinity }}
+                    className="absolute inset-0 bg-foreground/5 blur-[40px] rounded-full"
+                    animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                 />
 
-                {/* Rotating Card */}
+                {/* The "Badge" - Glassmorphism & Monochrome */}
                 <motion.div
-                    className="relative z-10 w-24 h-24 bg-card/40 backdrop-blur-md rounded-3xl rotate-45 flex items-center justify-center shadow-2xl border border-border"
-                    whileHover={shouldReduceMotion ? {} : { scale: 1.05, rotate: 90 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                    className="relative z-10 w-28 h-28 rounded-3xl bg-gradient-to-br from-background to-muted border border-border/50 shadow-xl flex items-center justify-center overflow-hidden"
+                    whileHover={shouldReduceMotion ? {} : { scale: 1.05, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
-                    <div className="w-20 h-20 bg-muted/50 rounded-2xl flex items-center justify-center border border-border -rotate-45 p-4 shadow-inner">
-                        {/* Embedded Credly SVG Logo */}
-                        <ShieldCheck className="w-full h-full text-foreground" strokeWidth={1} />
+                    <div className="absolute inset-0 bg-gradient-to-tr from-foreground/5 to-transparent opacity-50" />
+
+                    {/* Central Icon */}
+                    <div className="relative z-10 flex flex-col items-center gap-2">
+                        <ShieldCheck className="w-12 h-12 text-foreground/80" strokeWidth={1} />
                     </div>
                 </motion.div>
 
-                {/* Floating monochrome particles */}
-                {!shouldReduceMotion && [...Array(3)].map((_, i) => (
-                    <motion.div
-                        key={i}
-                        className="absolute w-1 h-1 bg-foreground/30 rounded-full"
-                        animate={{
-                            y: [-25, -45, -25],
-                            x: Math.sin(i) * 25,
-                            opacity: [0, 0.6, 0]
-                        }}
-                        transition={{
-                            duration: 3,
-                            repeat: Infinity,
-                            delay: i * 0.8,
-                            ease: "easeInOut"
-                        }}
-                    />
-                ))}
+                {/* Floating monochrome dots */}
+                {!shouldReduceMotion && (
+                    <>
+                        <motion.div
+                            className="absolute -top-2 right-4 w-2 h-2 bg-foreground/20 rounded-full"
+                            animate={{ y: [0, -10, 0] }}
+                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                        />
+                        <motion.div
+                            className="absolute bottom-4 -left-2 w-1.5 h-1.5 bg-foreground/10 rounded-full"
+                            animate={{ y: [0, 8, 0] }}
+                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                        />
+                    </>
+                )}
             </div>
         </div>
     );
