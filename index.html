@@ -13,6 +13,8 @@
   <meta name="description"
     content="Portfolio of Thomas P. - Future Computer Scientist at Geneva IT. Exploring Web Development, Cybersecurity, and IoT." />
   <meta name="author" content="Thomas P." />
+  <meta name="keywords"
+    content="Thomas P., Portfolio, Geneva IT, Web Development, Cybersecurity, IoT, React, TypeScript, Ethical Hacking, Software Engineer" />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
@@ -30,28 +32,68 @@
     content="Portfolio of Thomas P. - Future Computer Scientist at Geneva IT. Exploring Web Development, Cybersecurity, and IoT." />
   <meta property="twitter:image" content="https://thomas-tp.github.io/og-image.png" />
 
-  <!-- JSON-LD Structured Data (Person) -->
+  <!-- JSON-LD Structured Data (Person & Portfolio) -->
   <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Thomas P.",
-      "url": "https://thomas-tp.github.io/",
-      "jobTitle": "Future Computer Scientist",
-      "worksFor": {
-        "@type": "Organization",
-        "name": "Geneva IT"
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Thomas P.",
+        "url": "https://thomas-tp.github.io/",
+        "jobTitle": "Future Computer Scientist",
+        "description": "Information Technology student at Geneva IT School specializing in Web Development, Cybersecurity, and IoT solutions.",
+        "image": "https://thomas-tp.github.io/og-image.png",
+        "sameAs": [
+          "https://github.com/Thomas-TP",
+          "https://www.linkedin.com/in/thomas-tp/"
+        ],
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Geneva IT School"
+        },
+        "knowsAbout": [
+          "Web Development",
+          "Cybersecurity",
+          "Internet of Things (IoT)",
+          "React",
+          "TypeScript",
+          ".NET",
+          "Cisco Packet Tracer",
+          "Ethical Hacking"
+        ]
       },
-      "alumniOf": {
-        "@type": "EducationalOrganization",
-        "name": "Geneva IT School"
-      },
-      "sameAs": [
-        "https://github.com/Thomas-TP",
-        "https://www.linkedin.com/in/thomas-tp/"
-      ],
-      "knowsAbout": ["Web Development", "Cybersecurity", "IoT", "React", "TypeScript", ".NET", "Packet Tracer"]
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "SoftwareSourceCode",
+            "name": "X-clone",
+            "description": "A responsive clone of the X (formerly Twitter) platform built with HTML/CSS/JS and AI integration.",
+            "url": "https://x-clone-teal-phi.vercel.app/",
+            "codeRepository": "https://github.com/Thomas-TP/X-clone",
+            "programmingLanguage": ["HTML", "CSS", "JavaScript"]
+          },
+          {
+            "@type": "SoftwareApplication",
+            "name": "Tank.io",
+            "description": "A multiplayer tank battle game using React, Canvas API, and WebSocket technology.",
+            "url": "https://tank-io-wr49.onrender.com/",
+            "codeRepository": "https://github.com/Thomas-TP/Tank.io",
+            "applicationCategory": "Game",
+            "operatingSystem": "Web Browser"
+          },
+          {
+            "@type": "SoftwareSourceCode",
+            "name": "PowerShell Empire Automation",
+            "description": "Cybersecurity automation scripts utilizing the PowerShell Empire framework for pen-testing simulations.",
+            "url": "https://github.com/Thomas-TP/Powershell-Empire-test",
+            "codeRepository": "https://github.com/Thomas-TP/Powershell-Empire-test",
+            "programmingLanguage": "PowerShell"
+          }
+        ]
+      }
+    ]
   </script>
 </head>
 
