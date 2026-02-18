@@ -3,7 +3,8 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" type="image/svg+xml" href="/favicon-light.svg" media="(prefers-color-scheme: light)" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Primary Meta Tags -->
@@ -28,6 +29,30 @@
   <meta property="twitter:description"
     content="Portfolio of Thomas P. - Future Computer Scientist at Geneva IT. Exploring Web Development, Cybersecurity, and IoT." />
   <meta property="twitter:image" content="https://thomas-tp.github.io/og-image.png" />
+
+  <!-- JSON-LD Structured Data (Person) -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Thomas P.",
+      "url": "https://thomas-tp.github.io/",
+      "jobTitle": "Future Computer Scientist",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Geneva IT"
+      },
+      "alumniOf": {
+        "@type": "EducationalOrganization",
+        "name": "Geneva IT School"
+      },
+      "sameAs": [
+        "https://github.com/Thomas-TP",
+        "https://www.linkedin.com/in/thomas-tp/"
+      ],
+      "knowsAbout": ["Web Development", "Cybersecurity", "IoT", "React", "TypeScript", ".NET", "Packet Tracer"]
+    }
+  </script>
 </head>
 
 <body>
