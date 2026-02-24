@@ -19,7 +19,7 @@
   <br />
   <br />
 
-  <a href="https://thomastp.me/">
+  <a href="https://thomastp.ch/">
     <img src="https://img.shields.io/badge/LIVE_DEMO-000000?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Live Demo" />
   </a>
 
