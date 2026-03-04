@@ -145,7 +145,9 @@ export function Hero() {
                                     fill
                                     className="object-cover object-center scale-110"
                                     priority
+                                    fetchPriority="high"
                                     placeholder="blur"
+                                    sizes="(max-width: 768px) 176px, (max-width: 1024px) 224px, 256px"
                                 />
                             </div>
                         </div>
