@@ -34,7 +34,14 @@ export function ThemeProvider({
     useEffect(() => {
         const root = window.document.documentElement
 
+        // Enable smooth transition for the switch, then remove it so it
+        // doesn't interfere with Framer Motion / marquee animations
+        root.classList.add("theme-transitioning")
+
         root.classList.remove("light", "dark")
+
+        // Remove the transitioning class after the CSS transition completes
+        const tid = setTimeout(() => root.classList.remove("theme-transitioning"), 400)
 
         if (theme === "system") {
             const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
@@ -64,7 +71,10 @@ export function ThemeProvider({
             };
 
             mediaQuery.addEventListener("change", handleChange);
-            return () => mediaQuery.removeEventListener("change", handleChange);
+            return () => {
+                clearTimeout(tid);
+                mediaQuery.removeEventListener("change", handleChange);
+            };
         } else {
             root.classList.add(theme)
 
@@ -74,6 +84,8 @@ export function ThemeProvider({
                 favicon.href = theme === "dark" ? "/icons/favicon.svg" : "/icons/favicon-light.svg";
             }
         }
+
+        return () => clearTimeout(tid);
     }, [theme])
 
     const value = {
