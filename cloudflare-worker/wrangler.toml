@@ -1,0 +1,11 @@
+name = "portfolio-contact"
+main = "worker.ts"
+compatibility_date = "2024-01-01"
+
+# After deploying, set your secrets:
+#   wrangler secret put RESEND_API_KEY
+#   wrangler secret put TURNSTILE_SECRET_KEY
+
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "898ccbfd2a1c4018b1bf4880ff7b2dfa"
