@@ -77,6 +77,9 @@
             },
             "empire": {
                 "description": "A modern modification of the Empire post-exploitation framework. Enhanced for automated security testing and educational red-teaming scenarios."
+            },
+            "meals_planner": {
+                "description": "A mobile app that generates 5 balanced weekly meals, designed for grab-and-go lunches you can reheat at work. Built with Flutter."
             }
         }
     },

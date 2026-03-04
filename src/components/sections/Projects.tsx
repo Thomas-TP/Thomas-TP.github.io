@@ -9,7 +9,7 @@ interface Project {
     title: string;
     description: string;
     tags: string[];
-    link: string;
+    link?: string;
     github?: string;
     year: string;
 }
@@ -174,6 +174,76 @@ const EmpireTerminal = () => {
     );
 };
 
+const mealColors = ['bg-orange-400/80', 'bg-emerald-400/80', 'bg-amber-400/80', 'bg-rose-400/80', 'bg-sky-400/80'];
+const mealDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+
+const MealsPhoneMockup = () => (
+    <div className="relative w-full h-full bg-black flex items-center justify-center overflow-hidden">
+        {/* Phone frame */}
+        <div className="relative w-[140px] h-[260px] sm:w-[160px] sm:h-[300px] rounded-[24px] border-2 border-white/15 bg-neutral-950 overflow-hidden shadow-[0_0_40px_rgba(255,255,255,0.05)]">
+            {/* Status bar */}
+            <div className="flex items-center justify-between px-3 pt-2 pb-1">
+                <span className="text-[7px] text-white/40 font-medium">12:30</span>
+                <div className="w-12 h-3 bg-white/10 rounded-full" />
+                <div className="flex gap-0.5">
+                    <div className="w-2.5 h-1.5 border border-white/30 rounded-[2px]"><div className="w-1.5 h-full bg-emerald-400/60 rounded-[1px]" /></div>
+                </div>
+            </div>
+
+            {/* App header */}
+            <div className="px-3 pt-1 pb-2">
+                <div className="text-[8px] font-bold text-white/80 tracking-wide">This Week</div>
+                <div className="text-[6px] text-white/30">5 meals ready</div>
+            </div>
+
+            {/* Meal cards — stagger-animate in */}
+            <div className="px-2 flex flex-col gap-1.5">
+                {mealDays.map((day, i) => (
+                    <motion.div
+                        key={day}
+                        className="flex items-center gap-2 bg-white/[0.04] rounded-lg px-2 py-1.5 border border-white/[0.06]"
+                        initial={{ opacity: 0, x: 30 }}
+                        animate={{ opacity: [0, 1, 1, 0], x: [30, 0, 0, -30] }}
+                        transition={{
+                            duration: 5,
+                            delay: i * 0.3,
+                            repeat: Infinity,
+                            repeatDelay: 1,
+                            ease: 'easeInOut',
+                            times: [0, 0.15, 0.8, 1],
+                        }}
+                    >
+                        <div className={`w-5 h-5 rounded-md ${mealColors[i]} shrink-0 flex items-center justify-center`}>
+                            <svg className="w-3 h-3 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10" />
+                                <path d="M12 6v6l4 2" />
+                            </svg>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <div className="text-[7px] font-semibold text-white/70">{day}</div>
+                            <div className="h-1 w-10 bg-white/10 rounded-full mt-0.5" />
+                        </div>
+                        <motion.div
+                            className="w-3 h-3 rounded-full border border-white/15 flex items-center justify-center"
+                            animate={{ scale: [1, 1.2, 1] }}
+                            transition={{ duration: 2, delay: i * 0.3 + 1, repeat: Infinity }}
+                        >
+                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/60" />
+                        </motion.div>
+                    </motion.div>
+                ))}
+            </div>
+        </div>
+
+        {/* Ambient glow */}
+        <motion.div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-orange-500/5 rounded-full blur-[50px] pointer-events-none"
+            animate={{ opacity: [0.4, 0.7, 0.4], scale: [1, 1.1, 1] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        />
+    </div>
+);
+
 export function Projects() {
     const { t } = useTranslation();
 
@@ -201,6 +271,13 @@ export function Projects() {
             link: "https://vimeo.com/1085791100/a588dbfdf3?fl=pl&fe=sh",
             github: "https://github.com/Thomas-TP/Powershell-Empire-test",
             year: "2024"
+        },
+        {
+            title: "Meals Planner",
+            description: t('projects.items.meals_planner.description'),
+            tags: ["Flutter", "Dart", "C++", "CMake", "Swift"],
+            github: "https://github.com/Thomas-TP/meals-app",
+            year: "2025"
         },
     ];
 
@@ -271,14 +348,16 @@ export function Projects() {
                                             <Github size={20} />
                                         </a>
                                     )}
-                                    <a
-                                        href={project.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center gap-2 px-6 py-3 bg-secondary rounded-full hover:bg-foreground hover:text-background transition-all font-medium"
-                                    >
-                                        {t('projects.view_project')} <ExternalLink size={16} />
-                                    </a>
+                                    {project.link && (
+                                        <a
+                                            href={project.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-2 px-6 py-3 bg-secondary rounded-full hover:bg-foreground hover:text-background transition-all font-medium"
+                                        >
+                                            {t('projects.view_project')} <ExternalLink size={16} />
+                                        </a>
+                                    )}
                                 </div>
                             </div>
 
@@ -446,6 +525,8 @@ export function Projects() {
                                             style={{ right: "45%" }}
                                         />
                                     </div>
+                                ) : project.title === "Meals Planner" ? (
+                                    <MealsPhoneMockup />
                                 ) : (
                                     <EmpireTerminal />
                                 )}
