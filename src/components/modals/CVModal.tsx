@@ -8,12 +8,6 @@ import { useTranslation } from 'react-i18next';
 import { Document, Page, pdfjs } from 'react-pdf';
 // TextLayer & AnnotationLayer CSS intentionally omitted — layers are disabled for performance
 
-// Use local bundled worker instead of CDN to avoid network latency
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.min.mjs',
-    import.meta.url,
-).toString();
-
 interface CVModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -31,7 +25,11 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
     const contentRef = useRef<HTMLDivElement>(null);
 
     // Mount guard — portal requires document
-    useEffect(() => { setMounted(true); }, []);
+    // Also set the PDF.js worker URL here (string — avoids webpack bundling pdfjs into initial chunk)
+    useEffect(() => {
+        pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+        setMounted(true);
+    }, []);
 
     // Reset to first page when modal opens
     useEffect(() => {

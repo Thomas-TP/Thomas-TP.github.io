@@ -1,11 +1,15 @@
 'use client';
 
-import ReactLenis from 'lenis/react';
+import dynamic from 'next/dynamic';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { ScrollProgress } from '@/components/ui/scroll-progress';
 import { useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+
+// Lazy-load Lenis so it doesn't end up in the initial JS bundle — avoids
+// forced layout reflow on page load and reduces initial evaluation time.
+const ReactLenis = dynamic(() => import('lenis/react'), { ssr: false });
 
 export function ClientLayout({ children }: { children: React.ReactNode }) {
   const shouldReduceMotion = useReducedMotion();
