@@ -816,12 +816,18 @@ export function AboutBento() {
 
     return (
         <section id="about" className="py-20 container mx-auto px-4 cv-auto">
-            <div className="mb-12">
+            <motion.div
+                className="mb-12"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+            >
                 <h2 className="text-3xl md:text-5xl font-bold mb-6">{t('bento.header_about')}</h2>
                 <p className="text-muted-foreground max-w-2xl text-lg">
                     {t('bento.header_desc')}
                 </p>
-            </div>
+            </motion.div>
             <BentoGrid className="max-w-4xl mx-auto">
                 {items.map((item, i) => (
                     item.noDefaultStyles ? (

@@ -1,20 +1,63 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Github, Star } from 'lucide-react';
 import { PrivacyPolicyModal } from '@/components/modals/PrivacyPolicyModal';
 import { TermsModal } from '@/components/modals/TermsModal';
+
+interface GitHubStats {
+    repos: number;
+    stars: number;
+}
 
 export function Footer() {
     const { t } = useTranslation();
     const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
     const [isTermsOpen, setIsTermsOpen] = useState(false);
+    const [stats, setStats] = useState<GitHubStats | null>(null);
+
+    useEffect(() => {
+        const controller = new AbortController();
+        (async () => {
+            try {
+                const res = await fetch(
+                    'https://api.github.com/users/Thomas-TP/repos?per_page=100&sort=updated',
+                    { signal: controller.signal }
+                );
+                if (!res.ok) return;
+                const repos: { stargazers_count: number; fork: boolean }[] = await res.json();
+                const stars = repos.reduce((sum, r) => sum + r.stargazers_count, 0);
+                setStats({ repos: repos.length, stars });
+            } catch { /* network error or aborted */ }
+        })();
+        return () => controller.abort();
+    }, []);
 
     return (
         <footer className="py-8 border-t border-border">
-            <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
+            <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
                 <p>&copy; {new Date().getFullYear()} Thomas P. {t('footer.rights')}</p>
-                <div className="flex gap-6 mt-4 md:mt-0">
+
+                {stats && (
+                    <a
+                        href="https://github.com/Thomas-TP"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-4 text-xs hover:text-foreground transition-colors"
+                    >
+                        <span className="flex items-center gap-1.5">
+                            <Github size={14} />
+                            {stats.repos} repos
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                            <Star size={14} />
+                            {stats.stars} stars
+                        </span>
+                    </a>
+                )}
+
+                <div className="flex gap-6">
                     <button
                         onClick={() => setIsPrivacyOpen(true)}
                         className="hover:text-foreground transition-colors cursor-pointer"

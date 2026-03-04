@@ -75,6 +75,8 @@ export default function RootLayout({
             `,
           }}
         />
+        <link rel="preconnect" href="https://static.cloudflareinsights.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://api.github.com" />
         <link
           rel="icon"
           type="image/svg+xml"
@@ -157,6 +159,16 @@ export default function RootLayout({
                     codeRepository:
                       'https://github.com/Thomas-TP/Powershell-Empire-test',
                     programmingLanguage: 'PowerShell',
+                  },
+                  {
+                    '@type': 'SoftwareApplication',
+                    name: 'Meals Planner',
+                    description:
+                      'A mobile app that generates 5 balanced weekly meals, designed for grab-and-go lunches you can reheat at work. Built with Flutter.',
+                    codeRepository: 'https://github.com/Thomas-TP/meals-app',
+                    applicationCategory: 'Lifestyle',
+                    operatingSystem: 'Android, iOS',
+                    programmingLanguage: ['Dart', 'C++', 'Swift'],
                   },
                 ],
               },
