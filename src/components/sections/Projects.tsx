@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Github, ExternalLink, ArrowUpRight } from 'lucide-react';
@@ -174,75 +174,99 @@ const EmpireTerminal = () => {
     );
 };
 
-const mealColors = ['bg-orange-400/80', 'bg-emerald-400/80', 'bg-amber-400/80', 'bg-rose-400/80', 'bg-sky-400/80'];
 const mealDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+const mealNames = ['Pasta Bolognese', 'Chicken Wrap', 'Rice & Salmon', 'Veggie Bowl', 'Beef Stir-fry'];
 
-const MealsPhoneMockup = () => (
-    <div className="relative w-full h-full bg-black flex items-center justify-center overflow-hidden">
-        {/* Phone frame */}
-        <div className="relative w-[140px] h-[260px] sm:w-[160px] sm:h-[300px] rounded-[24px] border-2 border-white/15 bg-neutral-950 overflow-hidden shadow-[0_0_40px_rgba(255,255,255,0.05)]">
-            {/* Status bar */}
-            <div className="flex items-center justify-between px-3 pt-2 pb-1">
-                <span className="text-[7px] text-white/40 font-medium">12:30</span>
-                <div className="w-12 h-3 bg-white/10 rounded-full" />
-                <div className="flex gap-0.5">
-                    <div className="w-2.5 h-1.5 border border-white/30 rounded-[2px]"><div className="w-1.5 h-full bg-emerald-400/60 rounded-[1px]" /></div>
+const MealsPhoneMockup = () => {
+    const [phase, setPhase] = useState<'idle' | 'loading' | 'done'>('idle');
+
+    const restart = useCallback(() => {
+        setPhase('idle');
+        const t1 = setTimeout(() => setPhase('loading'), 1500);
+        const t2 = setTimeout(() => setPhase('done'), 2800);
+        const t3 = setTimeout(() => setPhase('idle'), 8000);
+        return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+    }, []);
+
+    useEffect(() => {
+        const cleanup = restart();
+        const loop = setInterval(() => restart(), 8000);
+        return () => { cleanup(); clearInterval(loop); };
+    }, [restart]);
+
+    return (
+        <div className="relative w-full h-full bg-black flex items-center justify-center">
+            {/* Phone frame — overflows parent via negative margin + absolute positioning */}
+            <div className="absolute -bottom-8 sm:-bottom-12 right-4 sm:right-8 w-[150px] h-[290px] sm:w-[170px] sm:h-[330px] rounded-[24px] border-2 border-white/20 bg-neutral-950 overflow-hidden shadow-[0_0_60px_rgba(255,255,255,0.08)]">
+                {/* Status bar */}
+                <div className="flex items-center justify-between px-3 pt-2 pb-1">
+                    <span className="text-[7px] text-white/40 font-medium">12:30</span>
+                    <div className="w-12 h-3 bg-white/10 rounded-full" />
+                    <div className="w-2.5 h-1.5 border border-white/30 rounded-[2px]"><div className="w-1.5 h-full bg-white/40 rounded-[1px]" /></div>
+                </div>
+
+                {/* App header */}
+                <div className="px-3 pt-1 pb-2">
+                    <div className="text-[8px] font-bold text-white/80 tracking-wide">Meals Planner</div>
+                    <div className="text-[6px] text-white/30">Weekly meal prep</div>
+                </div>
+
+                {/* Generate button / Loading / Meal list */}
+                <div className="px-2 flex flex-col gap-1.5">
+                    {phase === 'idle' && (
+                        <motion.div
+                            className="flex items-center justify-center py-2.5 bg-white/10 rounded-xl border border-white/10 cursor-pointer"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: [1, 1.03, 1] }}
+                            transition={{ scale: { duration: 1.5, repeat: Infinity, ease: 'easeInOut' } }}
+                        >
+                            <span className="text-[8px] font-bold text-white/70 tracking-wide">Generate</span>
+                        </motion.div>
+                    )}
+
+                    {phase === 'loading' && (
+                        <div className="flex flex-col items-center gap-2 py-4">
+                            <motion.div
+                                className="w-5 h-5 rounded-full border-2 border-white/20 border-t-white/70"
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
+                            />
+                            <span className="text-[7px] text-white/40">Generating...</span>
+                        </div>
+                    )}
+
+                    {phase === 'done' && mealDays.map((day, i) => (
+                        <motion.div
+                            key={day}
+                            className="flex items-center gap-2 bg-white/[0.04] rounded-lg px-2 py-1.5 border border-white/[0.06]"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.12, duration: 0.3, ease: 'easeOut' }}
+                        >
+                            <div className="w-5 h-5 rounded-md bg-white/15 shrink-0 flex items-center justify-center">
+                                <svg className="w-3 h-3 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" /><path d="M7 2v20" /><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
+                                </svg>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <div className="text-[7px] font-semibold text-white/60">{day}</div>
+                                <div className="text-[6px] text-white/30 truncate">{mealNames[i]}</div>
+                            </div>
+                            <div className="w-1.5 h-1.5 rounded-full bg-white/30" />
+                        </motion.div>
+                    ))}
                 </div>
             </div>
 
-            {/* App header */}
-            <div className="px-3 pt-1 pb-2">
-                <div className="text-[8px] font-bold text-white/80 tracking-wide">This Week</div>
-                <div className="text-[6px] text-white/30">5 meals ready</div>
-            </div>
-
-            {/* Meal cards — stagger-animate in */}
-            <div className="px-2 flex flex-col gap-1.5">
-                {mealDays.map((day, i) => (
-                    <motion.div
-                        key={day}
-                        className="flex items-center gap-2 bg-white/[0.04] rounded-lg px-2 py-1.5 border border-white/[0.06]"
-                        initial={{ opacity: 0, x: 30 }}
-                        animate={{ opacity: [0, 1, 1, 0], x: [30, 0, 0, -30] }}
-                        transition={{
-                            duration: 5,
-                            delay: i * 0.3,
-                            repeat: Infinity,
-                            repeatDelay: 1,
-                            ease: 'easeInOut',
-                            times: [0, 0.15, 0.8, 1],
-                        }}
-                    >
-                        <div className={`w-5 h-5 rounded-md ${mealColors[i]} shrink-0 flex items-center justify-center`}>
-                            <svg className="w-3 h-3 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10" />
-                                <path d="M12 6v6l4 2" />
-                            </svg>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                            <div className="text-[7px] font-semibold text-white/70">{day}</div>
-                            <div className="h-1 w-10 bg-white/10 rounded-full mt-0.5" />
-                        </div>
-                        <motion.div
-                            className="w-3 h-3 rounded-full border border-white/15 flex items-center justify-center"
-                            animate={{ scale: [1, 1.2, 1] }}
-                            transition={{ duration: 2, delay: i * 0.3 + 1, repeat: Infinity }}
-                        >
-                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/60" />
-                        </motion.div>
-                    </motion.div>
-                ))}
-            </div>
+            {/* Ambient glow */}
+            <motion.div
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-white/5 rounded-full blur-[50px] pointer-events-none"
+                animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.1, 1] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            />
         </div>
-
-        {/* Ambient glow */}
-        <motion.div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-orange-500/5 rounded-full blur-[50px] pointer-events-none"
-            animate={{ opacity: [0.4, 0.7, 0.4], scale: [1, 1.1, 1] }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        />
-    </div>
-);
+    );
+};
 
 export function Projects() {
     const { t } = useTranslation();
@@ -277,7 +301,7 @@ export function Projects() {
             description: t('projects.items.meals_planner.description'),
             tags: ["Flutter", "Dart", "C++", "CMake", "Swift"],
             github: "https://github.com/Thomas-TP/meals-app",
-            year: "2025"
+            year: "2026"
         },
     ];
 
@@ -314,7 +338,7 @@ export function Projects() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
                         transition={{ delay: index * 0.1 }}
-                        className="group relative bg-card border border-border rounded-3xl p-8 md:p-12 hover:bg-muted/50 transition-colors"
+                        className={`group relative bg-card border border-border rounded-3xl p-8 md:p-12 hover:bg-muted/50 transition-colors ${project.title === 'Meals Planner' ? 'overflow-visible' : ''}`}
                     >
                         <div className="flex flex-col md:flex-row gap-8 justify-between">
                             <div className="flex flex-col justify-between flex-1">
@@ -363,7 +387,7 @@ export function Projects() {
 
                             {/* Optional: Placeholder for image or visual element */}
                             {/* Project Visualization Block */}
-                            <div className="w-full md:w-1/3 aspect-video bg-black rounded-2xl border border-border flex items-center justify-center overflow-hidden relative group-hover:border-primary/20 transition-all shadow-2xl">
+                            <div className={`w-full md:w-1/3 aspect-video bg-black rounded-2xl border border-border flex items-center justify-center relative group-hover:border-primary/20 transition-all shadow-2xl ${project.title === 'Meals Planner' ? 'overflow-visible' : 'overflow-hidden'}`}>
                                 <div className="absolute inset-0 bg-grid-white/[0.05]" />
 
                                 {project.title === "X-clone" ? (
