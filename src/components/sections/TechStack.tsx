@@ -9,7 +9,7 @@ import {
     siLinux, siCisco, siKubernetes, siMongodb, siCplusplus,
     siGo, siRust, siDotnet, siJavascript, siKalilinux, siRaspberrypi, siAndroid,
 } from 'simple-icons';
-import { TbBrandAws, TbBrandAzure, TbBrandCSharp } from 'react-icons/tb';
+import { TbBrandAws, TbBrandAzure, TbBrandCSharp, TbBrandVscode, TbBrandOffice, TbBrain } from 'react-icons/tb';
 
 interface Tech {
     label: string;
@@ -19,7 +19,8 @@ interface Tech {
     IconComponent?: ElementType;
 }
 
-const technologies: Tech[] = [
+// Row 1 — scrolls left →
+const row1: Tech[] = [
     { label: "React",          iconPath: siReact.path },
     { label: "TypeScript",     iconPath: siTypescript.path },
     { label: "Next.js",        iconPath: siNextdotjs.path },
@@ -31,6 +32,13 @@ const technologies: Tech[] = [
     { label: "Rust",           iconPath: siRust.path },
     { label: "C++",            iconPath: siCplusplus.path },
     { label: ".NET",           iconPath: siDotnet.path },
+    { label: "C#",             IconComponent: TbBrandCSharp },
+    { label: "VS Code",        IconComponent: TbBrandVscode },
+    { label: "LM Studio",      IconComponent: TbBrain },
+];
+
+// Row 2 — scrolls right ←
+const row2: Tech[] = [
     { label: "Docker",         iconPath: siDocker.path },
     { label: "Kubernetes",     iconPath: siKubernetes.path },
     { label: "Git",            iconPath: siGit.path },
@@ -38,10 +46,10 @@ const technologies: Tech[] = [
     { label: "MongoDB",        iconPath: siMongodb.path },
     { label: "Figma",          iconPath: siFigma.path },
     { label: "Cisco",          iconPath: siCisco.path },
-    { label: "C#",             IconComponent: TbBrandCSharp },
     { label: "Android",        iconPath: siAndroid.path },
     { label: "AWS",            IconComponent: TbBrandAws },
     { label: "Azure",          IconComponent: TbBrandAzure },
+    { label: "Microsoft 365",  IconComponent: TbBrandOffice },
     { label: "Cybersecurity",  iconPath: siKalilinux.path },
     { label: "IoT",            iconPath: siRaspberrypi.path },
 ];
@@ -72,9 +80,30 @@ function TechItem({ label, iconPath, IconComponent }: Tech) {
     );
 }
 
+function MarqueeRow({ items, reverse = false }: { items: Tech[]; reverse?: boolean }) {
+    const doubled = [...items, ...items];
+    return (
+        <div className="flex relative w-full overflow-hidden">
+            <motion.div
+                className="flex gap-14 whitespace-nowrap pr-14"
+                animate={{ x: reverse ? ["0%", "50%"] : ["0%", "-50%"] }}
+                transition={{
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    duration: 60,
+                    ease: "linear",
+                }}
+            >
+                {doubled.map((tech, index) => (
+                    <TechItem key={index} {...tech} />
+                ))}
+            </motion.div>
+        </div>
+    );
+}
+
 export function TechStack() {
     const { t } = useTranslation();
-    const doubled = [...technologies, ...technologies];
 
     return (
         <section className="py-20 overflow-hidden relative cv-auto">
@@ -91,21 +120,9 @@ export function TechStack() {
                 <span className="text-sm text-muted-foreground uppercase tracking-widest">{t('tech_stack.title')}</span>
             </motion.div>
 
-            <div className="flex relative w-full overflow-hidden">
-                <motion.div
-                    className="flex gap-14 whitespace-nowrap pr-14"
-                    animate={{ x: "-50%" }}
-                    transition={{
-                        repeat: Infinity,
-                        repeatType: "loop",
-                        duration: 70,
-                        ease: "linear",
-                    }}
-                >
-                    {doubled.map((tech, index) => (
-                        <TechItem key={index} {...tech} />
-                    ))}
-                </motion.div>
+            <div className="flex flex-col gap-10">
+                <MarqueeRow items={row1} reverse={false} />
+                <MarqueeRow items={row2} reverse={true} />
             </div>
         </section>
     );
