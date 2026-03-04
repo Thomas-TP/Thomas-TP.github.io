@@ -3,7 +3,7 @@
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "@/components/ui/theme-provider"
 import { motion } from "framer-motion"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 
 export function ModeToggle() {
     const { theme, setTheme } = useTheme()
@@ -16,9 +16,31 @@ export function ModeToggle() {
         ? theme === "dark" || (theme === "system" && document.documentElement.classList.contains("dark"))
         : false
 
+    const handleToggle = useCallback(() => {
+        // Single overlay fade — masks the instant theme swap with zero perf cost
+        const overlay = document.createElement("div")
+        overlay.style.cssText = `
+            position:fixed;inset:0;z-index:99999;pointer-events:none;
+            background:${resolvedDark ? "#fff" : "#000"};
+            opacity:0.35;transition:opacity 0.3s ease;
+        `
+        document.body.appendChild(overlay)
+
+        // Force reflow then fade out
+        overlay.offsetHeight // eslint-disable-line @typescript-eslint/no-unused-expressions
+        requestAnimationFrame(() => {
+            overlay.style.opacity = "0"
+        })
+        overlay.addEventListener("transitionend", () => overlay.remove())
+        // Safety: remove after 400ms even if transitionend doesn't fire
+        setTimeout(() => overlay.remove(), 400)
+
+        setTheme(resolvedDark ? "light" : "dark")
+    }, [resolvedDark, setTheme])
+
     return (
         <button
-            onClick={() => setTheme(resolvedDark ? "light" : "dark")}
+            onClick={handleToggle}
             className="relative flex items-center justify-center p-2 md:p-3 rounded-full text-muted-foreground hover:text-foreground hover:bg-foreground/10 transition-all duration-300 overflow-hidden cursor-pointer"
             aria-label="Toggle theme"
         >

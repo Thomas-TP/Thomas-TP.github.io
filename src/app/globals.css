@@ -92,15 +92,6 @@
     @apply border-border;
   }
 
-  /* Smooth theme transition — only active during toggle, removed after 0.4s
-     so it never interferes with Framer Motion or marquee animations */
-  .theme-transitioning,
-  .theme-transitioning *,
-  .theme-transitioning *::before,
-  .theme-transitioning *::after {
-    transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease, fill 0.3s ease !important;
-  }
-
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
