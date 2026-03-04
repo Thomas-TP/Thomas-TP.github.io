@@ -195,73 +195,80 @@ const MealsPhoneMockup = () => {
     }, [restart]);
 
     return (
-        <div className="relative w-full h-full bg-black flex items-center justify-center">
-            {/* Phone frame — overflows parent via negative margin + absolute positioning */}
-            <div className="absolute -bottom-8 sm:-bottom-12 right-4 sm:right-8 w-[150px] h-[290px] sm:w-[170px] sm:h-[330px] rounded-[24px] border-2 border-white/20 bg-neutral-950 overflow-hidden shadow-[0_0_60px_rgba(255,255,255,0.08)]">
+        <div className="relative w-full h-full bg-black flex items-end justify-center overflow-hidden">
+            {/* Phone frame — centered, bottom-anchored, peeks out of the box */}
+            <div className="relative mb-[-40px] w-[180px] h-[360px] sm:w-[200px] sm:h-[400px] rounded-[28px] border-2 border-white/20 bg-neutral-950 overflow-hidden shadow-[0_0_60px_rgba(255,255,255,0.06)] z-10">
+                {/* Notch */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 bg-black rounded-b-2xl z-20" />
+
                 {/* Status bar */}
-                <div className="flex items-center justify-between px-3 pt-2 pb-1">
-                    <span className="text-[7px] text-white/40 font-medium">12:30</span>
-                    <div className="w-12 h-3 bg-white/10 rounded-full" />
-                    <div className="w-2.5 h-1.5 border border-white/30 rounded-[2px]"><div className="w-1.5 h-full bg-white/40 rounded-[1px]" /></div>
+                <div className="flex items-center justify-between px-4 pt-6 pb-1">
+                    <span className="text-[8px] text-white/40 font-medium">12:30</span>
+                    <div className="flex gap-1 items-center">
+                        <div className="w-3 h-1.5 border border-white/30 rounded-[2px]"><div className="w-2 h-full bg-white/40 rounded-[1px]" /></div>
+                    </div>
                 </div>
 
                 {/* App header */}
-                <div className="px-3 pt-1 pb-2">
-                    <div className="text-[8px] font-bold text-white/80 tracking-wide">Meals Planner</div>
-                    <div className="text-[6px] text-white/30">Weekly meal prep</div>
+                <div className="px-4 pt-2 pb-3">
+                    <div className="text-[11px] font-bold text-white/90 tracking-wide">Meals Planner</div>
+                    <div className="text-[8px] text-white/30 mt-0.5">Weekly meal prep</div>
                 </div>
 
+                {/* Divider */}
+                <div className="mx-4 h-px bg-white/[0.06] mb-3" />
+
                 {/* Generate button / Loading / Meal list */}
-                <div className="px-2 flex flex-col gap-1.5">
+                <div className="px-3 flex flex-col gap-2">
                     {phase === 'idle' && (
                         <motion.div
-                            className="flex items-center justify-center py-2.5 bg-white/10 rounded-xl border border-white/10 cursor-pointer"
+                            className="flex items-center justify-center py-3 bg-white/10 rounded-xl border border-white/10"
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: [1, 1.03, 1] }}
                             transition={{ scale: { duration: 1.5, repeat: Infinity, ease: 'easeInOut' } }}
                         >
-                            <span className="text-[8px] font-bold text-white/70 tracking-wide">Generate</span>
+                            <span className="text-[10px] font-bold text-white/70 tracking-wide">Generate</span>
                         </motion.div>
                     )}
 
                     {phase === 'loading' && (
-                        <div className="flex flex-col items-center gap-2 py-4">
+                        <div className="flex flex-col items-center gap-3 py-8">
                             <motion.div
-                                className="w-5 h-5 rounded-full border-2 border-white/20 border-t-white/70"
+                                className="w-6 h-6 rounded-full border-2 border-white/20 border-t-white/70"
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
                             />
-                            <span className="text-[7px] text-white/40">Generating...</span>
+                            <span className="text-[8px] text-white/40">Generating...</span>
                         </div>
                     )}
 
                     {phase === 'done' && mealDays.map((day, i) => (
                         <motion.div
                             key={day}
-                            className="flex items-center gap-2 bg-white/[0.04] rounded-lg px-2 py-1.5 border border-white/[0.06]"
-                            initial={{ opacity: 0, y: 10 }}
+                            className="flex items-center gap-2.5 bg-white/[0.04] rounded-xl px-3 py-2 border border-white/[0.06]"
+                            initial={{ opacity: 0, y: 12 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.12, duration: 0.3, ease: 'easeOut' }}
                         >
-                            <div className="w-5 h-5 rounded-md bg-white/15 shrink-0 flex items-center justify-center">
-                                <svg className="w-3 h-3 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <div className="w-7 h-7 rounded-lg bg-white/10 shrink-0 flex items-center justify-center">
+                                <svg className="w-3.5 h-3.5 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" /><path d="M7 2v20" /><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
                                 </svg>
                             </div>
                             <div className="flex-1 min-w-0">
-                                <div className="text-[7px] font-semibold text-white/60">{day}</div>
-                                <div className="text-[6px] text-white/30 truncate">{mealNames[i]}</div>
+                                <div className="text-[8px] font-semibold text-white/60">{day}</div>
+                                <div className="text-[7px] text-white/30 truncate">{mealNames[i]}</div>
                             </div>
-                            <div className="w-1.5 h-1.5 rounded-full bg-white/30" />
+                            <div className="w-2 h-2 rounded-full bg-white/20" />
                         </motion.div>
                     ))}
                 </div>
             </div>
 
-            {/* Ambient glow */}
+            {/* Ambient glow behind phone */}
             <motion.div
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-white/5 rounded-full blur-[50px] pointer-events-none"
-                animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.1, 1] }}
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-white/[0.03] rounded-full blur-[60px] pointer-events-none"
+                animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.15, 1] }}
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
             />
         </div>
@@ -338,7 +345,7 @@ export function Projects() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
                         transition={{ delay: index * 0.1 }}
-                        className={`group relative bg-card border border-border rounded-3xl p-8 md:p-12 hover:bg-muted/50 transition-colors ${project.title === 'Meals Planner' ? 'overflow-visible' : ''}`}
+                        className={`group relative bg-card border border-border rounded-3xl p-8 md:p-12 hover:bg-muted/50 transition-colors`}
                     >
                         <div className="flex flex-col md:flex-row gap-8 justify-between">
                             <div className="flex flex-col justify-between flex-1">
@@ -387,7 +394,7 @@ export function Projects() {
 
                             {/* Optional: Placeholder for image or visual element */}
                             {/* Project Visualization Block */}
-                            <div className={`w-full md:w-1/3 aspect-video bg-black rounded-2xl border border-border flex items-center justify-center relative group-hover:border-primary/20 transition-all shadow-2xl ${project.title === 'Meals Planner' ? 'overflow-visible' : 'overflow-hidden'}`}>
+                            <div className="w-full md:w-1/3 aspect-video bg-black rounded-2xl border border-border flex items-center justify-center overflow-hidden relative group-hover:border-primary/20 transition-all shadow-2xl">
                                 <div className="absolute inset-0 bg-grid-white/[0.05]" />
 
                                 {project.title === "X-clone" ? (
