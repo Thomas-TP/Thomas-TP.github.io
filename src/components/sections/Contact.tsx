@@ -1,10 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Mail, Linkedin, Github, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { Mail, Linkedin, Github, Send, CheckCircle, AlertCircle, Copy, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/components/ui/theme-provider';
-import { useState, useRef, FormEvent } from 'react';
+import { useState, useRef, useCallback, FormEvent } from 'react';
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
 
 // ← Replace with your Worker URL after deploying (wrangler deploy)
@@ -27,6 +27,14 @@ export function Contact() {
     const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
     const turnstileRef = useRef<TurnstileInstance>(null);
     const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; message?: string }>({});
+    const [copied, setCopied] = useState(false);
+
+    const copyEmail = useCallback(() => {
+        navigator.clipboard.writeText('thomas@prudhomme.li').then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        });
+    }, []);
 
     const resolvedTheme = (): 'dark' | 'light' => {
         if (theme === 'system') {
@@ -213,18 +221,30 @@ export function Contact() {
                             {/* Right — contact info */}
                             <div className="flex flex-col gap-6">
 
-                                {/* Email — always prominent */}
+                                {/* Email */}
                                 <div className="flex flex-col gap-2">
                                     <p className="text-xs font-medium text-muted-foreground uppercase tracking-widest">{t('contact.say_hello')}</p>
-                                    <a
-                                        href="mailto:thomas@prudhomme.li"
-                                        className="flex items-center gap-3 p-3 rounded-xl border border-border hover:border-primary/50 hover:bg-primary/5 transition-all group"
-                                    >
-                                        <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                                            <Mail size={16} className="text-primary" />
-                                        </div>
-                                        <span className="text-sm font-semibold text-foreground">thomas@prudhomme.li</span>
-                                    </a>
+                                    <div className="flex items-center gap-2">
+                                        <a
+                                            href="mailto:thomas@prudhomme.li"
+                                            className="flex-1 flex items-center gap-3 p-3 rounded-xl hover:bg-muted/50 transition-colors group"
+                                        >
+                                            <div className="w-11 h-11 rounded-lg border border-border flex items-center justify-center shrink-0 group-hover:border-primary/40 transition-colors">
+                                                <Mail size={18} />
+                                            </div>
+                                            <span className="text-base text-muted-foreground group-hover:text-foreground transition-colors">thomas@prudhomme.li</span>
+                                        </a>
+                                        <button
+                                            onClick={copyEmail}
+                                            className="p-2.5 rounded-lg border border-border hover:bg-muted/50 hover:border-primary/40 transition-colors cursor-pointer"
+                                            aria-label="Copy email"
+                                        >
+                                            {copied
+                                                ? <Check size={16} className="text-green-500" />
+                                                : <Copy size={16} className="text-muted-foreground" />
+                                            }
+                                        </button>
+                                    </div>
                                 </div>
 
                                 {/* Divider */}
