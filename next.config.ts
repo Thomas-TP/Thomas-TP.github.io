@@ -3,11 +3,11 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   output: 'export',
   trailingSlash: true,
+  transpilePackages: ['next-image-export-optimizer'],
   images: {
-    // unoptimized fallback for plain next/image usages
-    // ExportedImage from next-image-export-optimizer generates optimized
-    // WebP variants at build time, independently of this setting
-    unoptimized: true,
+    loader: 'custom',
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
   },
   env: {
     nextImageExportOptimizer_imageFolderPath: 'public',

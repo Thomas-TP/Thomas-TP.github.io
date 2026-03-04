@@ -142,8 +142,9 @@ export function Hero() {
                                 <ExportedImage
                                     src="/images/memoji-nobg.webp"
                                     alt="Thomas P."
-                                    fill
-                                    className="object-cover object-center scale-110"
+                                    width={256}
+                                    height={256}
+                                    className="w-full h-full object-cover object-center scale-110"
                                     priority
                                     fetchPriority="high"
                                     placeholder="blur"
