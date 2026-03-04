@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { FileText } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GlitchText } from '@/components/ui/glitch-text';
 import ExportedImage from 'next-image-export-optimizer';
@@ -63,6 +63,27 @@ function useTypingAnimation(roles: string[]) {
     return text;
 }
 
+function useMagneticHover(strength = 0.3) {
+    const ref = useRef<HTMLElement>(null);
+    const [offset, setOffset] = useState({ x: 0, y: 0 });
+
+    const handleMouseMove = useCallback((e: MouseEvent) => {
+        const el = ref.current;
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        setOffset({
+            x: (e.clientX - cx) * strength,
+            y: (e.clientY - cy) * strength,
+        });
+    }, [strength]);
+
+    const reset = useCallback(() => setOffset({ x: 0, y: 0 }), []);
+
+    return { ref, offset, onMouseMove: handleMouseMove, onMouseLeave: reset };
+}
+
 export function Hero() {
     const { t } = useTranslation();
     const { scrollY } = useScroll();
@@ -72,6 +93,9 @@ export function Hero() {
 
     const roles = t('hero.roles', { returnObjects: true }) as string[];
     const typedRole = useTypingAnimation(Array.isArray(roles) ? roles : []);
+
+    const cvBtn = useMagneticHover(0.3);
+    const contactBtn = useMagneticHover(0.3);
 
     return (
         <>
@@ -105,9 +129,14 @@ export function Hero() {
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start items-center">
                             <motion.button
+                                ref={cvBtn.ref as React.Ref<HTMLButtonElement>}
+                                onMouseMove={(e) => cvBtn.onMouseMove(e.nativeEvent)}
+                                onMouseLeave={cvBtn.onMouseLeave}
                                 onClick={() => setCvOpen(true)}
+                                animate={{ x: cvBtn.offset.x, y: cvBtn.offset.y }}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
+                                transition={{ type: 'spring', stiffness: 250, damping: 15, mass: 0.5 }}
                                 className="group bg-primary text-primary-foreground px-8 py-4 rounded-full font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer"
                             >
                                 <FileText size={18} />
@@ -115,9 +144,14 @@ export function Hero() {
                             </motion.button>
 
                             <motion.a
+                                ref={contactBtn.ref as React.Ref<HTMLAnchorElement>}
+                                onMouseMove={(e) => contactBtn.onMouseMove(e.nativeEvent)}
+                                onMouseLeave={contactBtn.onMouseLeave}
                                 href="#contact"
+                                animate={{ x: contactBtn.offset.x, y: contactBtn.offset.y }}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
+                                transition={{ type: 'spring', stiffness: 250, damping: 15, mass: 0.5 }}
                                 className="px-8 py-4 rounded-full border border-border hover:bg-muted/50 transition-colors text-foreground"
                             >
                                 {t('hero.contact_me')}
