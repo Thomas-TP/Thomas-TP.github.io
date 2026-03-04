@@ -19,12 +19,11 @@ interface Tech {
     IconComponent?: ElementType;
 }
 
-// Row 1 — scrolls left →
+// Row 1 — scrolls left (→)
 const row1: Tech[] = [
     { label: "React",          iconPath: siReact.path },
     { label: "TypeScript",     iconPath: siTypescript.path },
     { label: "Next.js",        iconPath: siNextdotjs.path },
-    { label: "Tailwind CSS",   iconPath: siTailwindcss.path },
     { label: "Node.js",        iconPath: siNodedotjs.path },
     { label: "JavaScript",     iconPath: siJavascript.path },
     { label: "Python",         iconPath: siPython.path },
@@ -35,16 +34,17 @@ const row1: Tech[] = [
     { label: "C#",             IconComponent: TbBrandCSharp },
     { label: "VS Code",        IconComponent: TbBrandVscode },
     { label: "LM Studio",      IconComponent: TbBrain },
+    { label: "Figma",          iconPath: siFigma.path },
 ];
 
-// Row 2 — scrolls right ←
+// Row 2 — scrolls right (←)
 const row2: Tech[] = [
+    { label: "Tailwind CSS",   iconPath: siTailwindcss.path },
     { label: "Docker",         iconPath: siDocker.path },
     { label: "Kubernetes",     iconPath: siKubernetes.path },
     { label: "Git",            iconPath: siGit.path },
     { label: "Linux",          iconPath: siLinux.path },
     { label: "MongoDB",        iconPath: siMongodb.path },
-    { label: "Figma",          iconPath: siFigma.path },
     { label: "Cisco",          iconPath: siCisco.path },
     { label: "Android",        iconPath: siAndroid.path },
     { label: "AWS",            IconComponent: TbBrandAws },
@@ -86,7 +86,7 @@ function MarqueeRow({ items, reverse = false }: { items: Tech[]; reverse?: boole
         <div className="flex relative w-full overflow-hidden">
             <motion.div
                 className="flex gap-14 whitespace-nowrap pr-14"
-                animate={{ x: reverse ? ["0%", "50%"] : ["0%", "-50%"] }}
+                animate={{ x: reverse ? ["-50%", "0%"] : ["0%", "-50%"] }}
                 transition={{
                     repeat: Infinity,
                     repeatType: "loop",
