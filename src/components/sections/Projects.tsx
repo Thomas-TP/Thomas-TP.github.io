@@ -195,79 +195,86 @@ const MealsPhoneMockup = () => {
     }, [restart]);
 
     return (
-        <div className="relative w-full h-full bg-black flex items-end justify-center overflow-hidden">
-            {/* Phone frame — centered, bottom-anchored, peeks out of the box */}
-            <div className="relative mb-[-40px] w-[180px] h-[360px] sm:w-[200px] sm:h-[400px] rounded-[28px] border-2 border-white/20 bg-neutral-950 overflow-hidden shadow-[0_0_60px_rgba(255,255,255,0.06)] z-10">
+        <div className="relative w-full h-full bg-black flex items-center justify-center overflow-hidden">
+            {/* Phone frame — fits within the box */}
+            <div className="relative w-[130px] h-[250px] sm:w-[150px] sm:h-[290px] rounded-[22px] border-2 border-white/20 bg-neutral-950 overflow-hidden shadow-[0_0_60px_rgba(255,255,255,0.06)] z-10">
                 {/* Notch */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 bg-black rounded-b-2xl z-20" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-14 h-3.5 bg-black rounded-b-xl z-20" />
 
                 {/* Status bar */}
-                <div className="flex items-center justify-between px-4 pt-6 pb-1">
-                    <span className="text-[8px] text-white/40 font-medium">12:30</span>
-                    <div className="flex gap-1 items-center">
-                        <div className="w-3 h-1.5 border border-white/30 rounded-[2px]"><div className="w-2 h-full bg-white/40 rounded-[1px]" /></div>
-                    </div>
+                <div className="flex items-center justify-between px-3 pt-4 pb-0.5">
+                    <span className="text-[6px] text-white/40 font-medium">12:30</span>
+                    <div className="w-2.5 h-1.5 border border-white/30 rounded-[2px]"><div className="w-1.5 h-full bg-white/40 rounded-[1px]" /></div>
                 </div>
 
-                {/* App header */}
-                <div className="px-4 pt-2 pb-3">
-                    <div className="text-[11px] font-bold text-white/90 tracking-wide">Meals Planner</div>
-                    <div className="text-[8px] text-white/30 mt-0.5">Weekly meal prep</div>
-                </div>
-
-                {/* Divider */}
-                <div className="mx-4 h-px bg-white/[0.06] mb-3" />
-
-                {/* Generate button / Loading / Meal list */}
-                <div className="px-3 flex flex-col gap-2">
+                {/* Content */}
+                <div className="px-2.5 flex flex-col gap-1.5 mt-1">
                     {phase === 'idle' && (
-                        <motion.div
-                            className="flex items-center justify-center py-3 bg-white/10 rounded-xl border border-white/10"
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: [1, 1.03, 1] }}
-                            transition={{ scale: { duration: 1.5, repeat: Infinity, ease: 'easeInOut' } }}
-                        >
-                            <span className="text-[10px] font-bold text-white/70 tracking-wide">Generate</span>
-                        </motion.div>
+                        <>
+                            {/* App logo + description */}
+                            <div className="flex flex-col items-center gap-1.5 pt-2 pb-2">
+                                <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center">
+                                    <svg className="w-4 h-4 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" /><path d="M7 2v20" /><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
+                                    </svg>
+                                </div>
+                                <div className="text-[8px] font-bold text-white/80 text-center">Meals Planner</div>
+                                <div className="text-[6px] text-white/30 text-center leading-relaxed px-1">Generate 5 grab-and-go meals for your work week</div>
+                            </div>
+                            {/* Generate button */}
+                            <motion.div
+                                className="flex items-center justify-center py-2 bg-white/10 rounded-lg border border-white/10"
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: [1, 1.03, 1] }}
+                                transition={{ scale: { duration: 1.5, repeat: Infinity, ease: 'easeInOut' } }}
+                            >
+                                <span className="text-[7px] font-bold text-white/70 tracking-wide">Generate</span>
+                            </motion.div>
+                        </>
                     )}
 
                     {phase === 'loading' && (
-                        <div className="flex flex-col items-center gap-3 py-8">
+                        <div className="flex flex-col items-center gap-2 py-6">
                             <motion.div
-                                className="w-6 h-6 rounded-full border-2 border-white/20 border-t-white/70"
+                                className="w-5 h-5 rounded-full border-2 border-white/20 border-t-white/70"
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
                             />
-                            <span className="text-[8px] text-white/40">Generating...</span>
+                            <span className="text-[6px] text-white/40">Generating...</span>
                         </div>
                     )}
 
-                    {phase === 'done' && mealDays.map((day, i) => (
-                        <motion.div
-                            key={day}
-                            className="flex items-center gap-2.5 bg-white/[0.04] rounded-xl px-3 py-2 border border-white/[0.06]"
-                            initial={{ opacity: 0, y: 12 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: i * 0.12, duration: 0.3, ease: 'easeOut' }}
-                        >
-                            <div className="w-7 h-7 rounded-lg bg-white/10 shrink-0 flex items-center justify-center">
-                                <svg className="w-3.5 h-3.5 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" /><path d="M7 2v20" /><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
-                                </svg>
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <div className="text-[8px] font-semibold text-white/60">{day}</div>
-                                <div className="text-[7px] text-white/30 truncate">{mealNames[i]}</div>
-                            </div>
-                            <div className="w-2 h-2 rounded-full bg-white/20" />
-                        </motion.div>
-                    ))}
+                    {phase === 'done' && (
+                        <>
+                            <div className="text-[7px] font-bold text-white/60 px-0.5 mb-0.5">This Week</div>
+                            {mealDays.map((day, i) => (
+                                <motion.div
+                                    key={day}
+                                    className="flex items-center gap-1.5 bg-white/[0.04] rounded-lg px-2 py-1.5 border border-white/[0.06]"
+                                    initial={{ opacity: 0, y: 8 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: i * 0.1, duration: 0.25, ease: 'easeOut' }}
+                                >
+                                    <div className="w-5 h-5 rounded bg-white/10 shrink-0 flex items-center justify-center">
+                                        <svg className="w-2.5 h-2.5 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" /><path d="M7 2v20" /><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
+                                        </svg>
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="text-[6px] font-semibold text-white/60">{day}</div>
+                                        <div className="text-[5px] text-white/30 truncate">{mealNames[i]}</div>
+                                    </div>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
+                                </motion.div>
+                            ))}
+                        </>
+                    )}
                 </div>
             </div>
 
-            {/* Ambient glow behind phone */}
+            {/* Ambient glow */}
             <motion.div
-                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-white/[0.03] rounded-full blur-[60px] pointer-events-none"
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/[0.03] rounded-full blur-[50px] pointer-events-none"
                 animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.15, 1] }}
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
             />
@@ -288,20 +295,20 @@ export function Projects() {
             year: "2024"
         },
         {
-            title: "Tank.io",
-            description: t('projects.items.tank_io.description'),
-            tags: ["React", "Canvas API", "Multiplayer", "Game Dev"],
-            link: "https://tank-io-wr49.onrender.com/",
-            github: "https://github.com/Thomas-TP/Tank.io",
-            year: "2025"
-        },
-        {
             title: "PowerShell Empire",
             description: t('projects.items.empire.description'),
             tags: ["PowerShell", "Cybersecurity", "Automation", "Scripting"],
             link: "https://vimeo.com/1085791100/a588dbfdf3?fl=pl&fe=sh",
             github: "https://github.com/Thomas-TP/Powershell-Empire-test",
             year: "2024"
+        },
+        {
+            title: "Tank.io",
+            description: t('projects.items.tank_io.description'),
+            tags: ["React", "Canvas API", "Multiplayer", "Game Dev"],
+            link: "https://tank-io-wr49.onrender.com/",
+            github: "https://github.com/Thomas-TP/Tank.io",
+            year: "2025"
         },
         {
             title: "Meals Planner",
