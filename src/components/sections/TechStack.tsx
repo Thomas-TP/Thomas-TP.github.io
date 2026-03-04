@@ -8,6 +8,7 @@ import {
     siDocker, siGit, siFigma, siPython,
     siLinux, siCisco, siKubernetes, siMongodb, siCplusplus,
     siGo, siRust, siDotnet, siJavascript, siKalilinux, siRaspberrypi, siAndroid,
+    siVmware, siGrafana, siWireshark,
 } from 'simple-icons';
 import { TbBrandAws, TbBrandAzure, TbBrandCSharp, TbBrandVscode, TbBrandOffice, TbBrain } from 'react-icons/tb';
 
@@ -35,6 +36,7 @@ const row1: Tech[] = [
     { label: "VS Code",        IconComponent: TbBrandVscode },
     { label: "LM Studio",      IconComponent: TbBrain },
     { label: "Figma",          iconPath: siFigma.path },
+    { label: "Grafana",        iconPath: siGrafana.path },
 ];
 
 // Row 2 — scrolls right (←)
@@ -50,6 +52,8 @@ const row2: Tech[] = [
     { label: "AWS",            IconComponent: TbBrandAws },
     { label: "Azure",          IconComponent: TbBrandAzure },
     { label: "Microsoft 365",  IconComponent: TbBrandOffice },
+    { label: "VMware",         iconPath: siVmware.path },
+    { label: "Wireshark",      iconPath: siWireshark.path },
     { label: "Cybersecurity",  iconPath: siKalilinux.path },
     { label: "IoT",            iconPath: siRaspberrypi.path },
 ];
