@@ -63,12 +63,14 @@ const i18n: Record<Lang, {
 // ── PNG assets (no SVGs for better email support) ─────────────────────────────
 
 function getIconImg(icon: string, theme: Theme, size = 20): string {
-  const color = theme === 'dark' ? 'ffffff' : '000000';
+  // Use a neutral color (a1a1aa - Zinc 400) that has good contrast on both light and dark backgrounds
+  const color = 'a1a1aa';
   const src = `https://img.icons8.com/ios-filled/100/${color}/${icon}.png`;
   return `<img src="${src}" width="${size}" height="${size}" alt="${icon}" style="display:block;border:0;outline:none;text-decoration:none;" />`;
 }
 
 function getReversedIconImg(icon: string, theme: Theme, size = 20): string {
+  // The CTA button is always white in Dark mode and Black in Light mode
   const color = theme === 'dark' ? '000000' : 'ffffff';
   const src = `https://img.icons8.com/ios-filled/100/${color}/${icon}.png`;
   return `<img src="${src}" width="${size}" height="${size}" alt="${icon}" style="display:block;border:0;outline:none;text-decoration:none;" />`;
@@ -153,7 +155,9 @@ function notificationHtml(name: string, email: string, message: string, date: st
 <tr><td align="center"><table width="580" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;width:100%;">
 <tr><td style="background:${p.card};border:1px solid ${p.border};border-radius:24px 24px 0 0;padding:40px 44px 36px;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-<td style="vertical-align:middle;width:48px;">${getIconImg('new-post', 'dark', 32)}</td>
+<td style="vertical-align:middle;width:48px;">
+<div style="width:36px;height:36px;background:linear-gradient(135deg,#a78bfa,#818cf8);border-radius:12px;margin:0;font-size:18px;line-height:36px;text-align:center;color:#ffffff;">&#x1F4EC;</div>
+</td>
 <td style="vertical-align:middle;padding-left:16px;">
 <p style="margin:0 0 6px;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${p.subtle};font-weight:700;">Portfolio · thomastp.ch</p>
 <h1 style="margin:0;font-size:24px;font-weight:800;color:${p.text};letter-spacing:-0.4px;line-height:1.2;">New contact message</h1>
@@ -185,19 +189,16 @@ function notificationHtml(name: string, email: string, message: string, date: st
 function autoReplyHtml(name: string, message: string, lang: Lang, theme: Theme): string {
   const p = theme === 'dark' ? darkPalette : lightPalette;
   const t = i18n[lang];
-  const ghTheme = theme === 'dark' ? 'dark' : 'default';
-  const ghBg = theme === 'dark' ? '0a0a0a' : 'fafafa';
-  const githubStatsUrl = `https://github-readme-stats.vercel.app/api?username=Thomas-TP&show_icons=true&theme=${ghTheme}&hide_border=true&bg_color=${ghBg}`;
+  // GitHub Readme Stats outputs SVG which is blocked by Gmail/Outlook.
+  // Using GitHub's native OpenGraph PNG which works flawlessly in emails.
+  const githubStatsUrl = `https://opengraph.githubassets.com/1/Thomas-TP/Thomas-TP.github.io`;
 
   return `<!DOCTYPE html><html lang="${lang}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="margin:0;padding:0;background:${p.bg};font-family:'Inter',system-ui,-apple-system,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${p.bg};padding:60px 20px;">
 <tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;">
 <tr><td style="background:${p.card};border:1px solid ${p.border};border-radius:24px 24px 0 0;padding:60px 48px 40px;text-align:center;">
-<table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 28px;"><tr>
-<td style="background:${p.blockBg};border:1px solid ${p.blockBorder};border-radius:20px;padding:16px;">
-${getIconImg('checkmark--v1', theme, 36)}
-</td></tr></table>
+<div style="width:56px;height:56px;background:linear-gradient(135deg,#a78bfa,#818cf8);border-radius:50%;margin:0 auto 28px;font-size:28px;line-height:56px;text-align:center;color:#ffffff;">&#x2713;</div>
 <h1 style="margin:0 0 12px;font-size:32px;font-weight:800;color:${p.text};letter-spacing:-0.03em;">${t.title}</h1>
 <p style="margin:0;font-size:18px;color:${p.muted};line-height:1.6;font-weight:500;">${t.subtitle(escapeHtml(name))}</p>
 </td></tr>
@@ -261,12 +262,12 @@ export default {
       return jsonResp({ error: 'Invalid JSON' }, 400, origin);
     }
 
-    const name         = body.name?.trim()           ?? '';
-    const email        = body.email?.trim()          ?? '';
-    const message      = body.message?.trim()        ?? '';
-    const lang: Lang   = body.lang?.startsWith('fr') ? 'fr' : 'en';
-    const theme: Theme = body.theme === 'light'      ? 'light' : 'dark';
-    const cfToken      = body.turnstileToken?.trim() ?? '';
+    const name = body.name?.trim() ?? '';
+    const email = body.email?.trim() ?? '';
+    const message = body.message?.trim() ?? '';
+    const lang: Lang = body.lang?.startsWith('fr') ? 'fr' : 'en';
+    const theme: Theme = body.theme === 'light' ? 'light' : 'dark';
+    const cfToken = body.turnstileToken?.trim() ?? '';
 
     if (!name || !email || !message) {
       return jsonResp({ error: 'Missing required fields' }, 400, origin);
@@ -308,7 +309,7 @@ export default {
         method: 'POST',
         headers: resendHeaders,
         body: JSON.stringify({
-          from: 'Portfolio Contact <noreply@thomastp.ch>',
+          from: 'Portfolio Contact <contact@thomastp.ch>',
           to: ['thomas@prudhomme.li'],
           reply_to: email,
           subject: `New message from ${name}`,
@@ -319,7 +320,7 @@ export default {
         method: 'POST',
         headers: resendHeaders,
         body: JSON.stringify({
-          from: 'Thomas Prudhomme <noreply@thomastp.ch>',
+          from: 'Thomas Prudhomme <contact@thomastp.ch>',
           to: [email],
           subject: i18n[lang].subject,
           html: autoReplyHtml(name, message, lang, theme),
