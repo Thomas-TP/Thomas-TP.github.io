@@ -60,46 +60,19 @@ const i18n: Record<Lang, {
   },
 };
 
-// ── SVG assets ───────────────────────────────────────────────────────────────
+// ── PNG assets (no SVGs for better email support) ─────────────────────────────
 
-function svgColors(theme: Theme) {
-  return theme === 'dark'
-    ? { stroke: '#ffffff', fill: '#ffffff', arrowStroke: '#000000' }
-    : { stroke: '#000000', fill: '#000000', arrowStroke: '#ffffff' };
+function getIconImg(icon: string, theme: Theme, size = 20): string {
+  const color = theme === 'dark' ? 'ffffff' : '000000';
+  const src = `https://img.icons8.com/ios-filled/100/${color}/${icon}.png`;
+  return `<img src="${src}" width="${size}" height="${size}" alt="${icon}" style="display:block;border:0;outline:none;text-decoration:none;" />`;
 }
 
-function svgEnvelope(theme: Theme): string {
-  const c = svgColors(theme);
-  return `<svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="12" width="44" height="30" rx="3" stroke="${c.stroke}" stroke-width="2"/><path d="M4 17L26 31L48 17" stroke="${c.stroke}" stroke-width="2" stroke-linejoin="round"/><path d="M4 42L18 28" stroke="${c.stroke}" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/><path d="M48 42L34 28" stroke="${c.stroke}" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/></svg>`;
+function getReversedIconImg(icon: string, theme: Theme, size = 20): string {
+  const color = theme === 'dark' ? '000000' : 'ffffff';
+  const src = `https://img.icons8.com/ios-filled/100/${color}/${icon}.png`;
+  return `<img src="${src}" width="${size}" height="${size}" alt="${icon}" style="display:block;border:0;outline:none;text-decoration:none;" />`;
 }
-
-function svgCheck(theme: Theme): string {
-  const c = svgColors(theme);
-  return `<svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="26" cy="26" r="22" stroke="${c.stroke}" stroke-width="2"/><path d="M15 26L22 33L37 18" stroke="${c.stroke}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-}
-
-function svgLinkedin(theme: Theme) {
-  const c = svgColors(theme);
-  return `<svg width="13" height="13" viewBox="0 0 24 24" fill="${c.fill}" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.065 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>`;
-}
-
-function svgGithub(theme: Theme) {
-  const c = svgColors(theme);
-  return `<svg width="13" height="13" viewBox="0 0 24 24" fill="${c.fill}" xmlns="http://www.w3.org/2000/svg"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>`;
-}
-
-function svgGlobe(theme: Theme) {
-  const c = svgColors(theme);
-  return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${c.stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`;
-}
-
-function svgMail(theme: Theme) {
-  const c = svgColors(theme);
-  return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${c.stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`;
-}
-
-const SVG_ARROW_DARK = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`;
-const SVG_ARROW_LIGHT = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`;
 
 // ── Theme palettes ────────────────────────────────────────────────────────────
 
@@ -173,77 +146,97 @@ function jsonResp(data: unknown, status = 200, origin: string): Response {
 
 function notificationHtml(name: string, email: string, message: string, date: string): string {
   const p = darkPalette;
-  const arrow = SVG_ARROW_DARK;
+  const arrow = getReversedIconImg('forward', 'dark', 14);
   return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="margin:0;padding:0;background:${p.bg};font-family:'Inter',system-ui,-apple-system,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${p.bg};padding:48px 20px;">
 <tr><td align="center"><table width="580" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;width:100%;">
-<tr><td style="background:${p.card};border:1px solid ${p.border};border-radius:16px 16px 0 0;padding:40px 44px 36px;">
+<tr><td style="background:${p.card};border:1px solid ${p.border};border-radius:24px 24px 0 0;padding:40px 44px 36px;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-<td style="vertical-align:middle;">${svgEnvelope('dark')}</td>
-<td style="vertical-align:middle;padding-left:20px;">
-<p style="margin:0 0 6px;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${p.subtle};font-weight:600;">Portfolio · thomastp.ch</p>
-<h1 style="margin:0;font-size:24px;font-weight:700;color:${p.text};letter-spacing:-0.3px;line-height:1.2;">New contact message</h1>
+<td style="vertical-align:middle;width:48px;">${getIconImg('new-post', 'dark', 32)}</td>
+<td style="vertical-align:middle;padding-left:16px;">
+<p style="margin:0 0 6px;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${p.subtle};font-weight:700;">Portfolio · thomastp.ch</p>
+<h1 style="margin:0;font-size:24px;font-weight:800;color:${p.text};letter-spacing:-0.4px;line-height:1.2;">New contact message</h1>
 </td>
 <td align="right" style="vertical-align:top;white-space:nowrap;">
-<span style="display:inline-block;background:${p.blockBg};border:1px solid ${p.borderInner};border-radius:6px;padding:6px 12px;font-size:11px;color:${p.subtle};">${escapeHtml(date)}</span>
+<span style="display:inline-block;background:${p.blockBg};border:1px solid ${p.borderInner};border-radius:6px;padding:6px 12px;font-size:11px;color:${p.subtle};font-weight:600;">${escapeHtml(date)}</span>
 </td></tr></table></td></tr>
 <tr><td style="background:${p.card};border-left:1px solid ${p.border};border-right:1px solid ${p.border};padding:0 44px;"><div style="height:1px;background:${p.divider};"></div></td></tr>
 <tr><td style="background:${p.card};border-left:1px solid ${p.border};border-right:1px solid ${p.border};padding:32px 44px 0;">
-<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${p.blockBg};border:1px solid ${p.blockBorder};border-radius:10px;">
-<tr><td style="padding:18px 22px;border-bottom:1px solid ${p.borderInner};">
-<p style="margin:0 0 3px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:${p.subtle};font-weight:600;">From</p>
-<p style="margin:0 0 2px;font-size:16px;font-weight:600;color:${p.text};">${escapeHtml(name)}</p>
-<a href="mailto:${escapeHtml(email)}" style="font-size:13px;color:${p.muted};text-decoration:none;">${escapeHtml(email)}</a>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${p.blockBg};border:1px solid ${p.blockBorder};border-radius:16px;">
+<tr><td style="padding:24px;border-bottom:1px solid ${p.borderInner};">
+<p style="margin:0 0 6px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:${p.subtle};font-weight:700;">From</p>
+<p style="margin:0 0 2px;font-size:16px;font-weight:700;color:${p.text};">${escapeHtml(name)}</p>
+<a href="mailto:${escapeHtml(email)}" style="font-size:14px;color:${p.muted};text-decoration:none;font-weight:500;">${escapeHtml(email)}</a>
 </td></tr>
-<tr><td style="padding:18px 22px;">
-<p style="margin:0 0 10px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:${p.subtle};font-weight:600;">Message</p>
-<p style="margin:0;font-size:15px;color:#cccccc;line-height:1.75;white-space:pre-wrap;">${escapeHtml(message)}</p>
+<tr><td style="padding:24px;">
+<p style="margin:0 0 12px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:${p.subtle};font-weight:700;">Message</p>
+<p style="margin:0;font-size:15px;color:#dddddd;line-height:1.8;white-space:pre-wrap;">${escapeHtml(message)}</p>
 </td></tr></table></td></tr>
-<tr><td style="background:${p.card};border-left:1px solid ${p.border};border-right:1px solid ${p.border};padding:28px 44px 36px;">
-<table cellpadding="0" cellspacing="0" border="0"><tr><td style="background:${p.ctaBg};border-radius:50px;">
-<a href="mailto:${escapeHtml(email)}?subject=Re:%20Your%20message%20on%20thomastp.ch" style="display:inline-flex;align-items:center;gap:8px;padding:11px 24px;font-size:13px;font-weight:600;color:${p.ctaText};text-decoration:none;">Reply to ${escapeHtml(name)}&nbsp;&nbsp;${arrow}</a>
+<tr><td style="background:${p.card};border-left:1px solid ${p.border};border-right:1px solid ${p.border};padding:32px 44px 40px;">
+<table cellpadding="0" cellspacing="0" border="0"><tr><td style="background:${p.ctaBg};border-radius:12px;">
+<a href="mailto:${escapeHtml(email)}?subject=Re:%20Your%20message%20on%20thomastp.ch" style="display:inline-flex;align-items:center;gap:10px;padding:14px 28px;font-size:14px;font-weight:700;color:${p.ctaText};text-decoration:none;">Reply to ${escapeHtml(name)}&nbsp;&nbsp;${arrow}</a>
 </td></tr></table></td></tr>
-<tr><td style="background:${p.blockBg};border:1px solid ${p.borderInner};border-top:1px solid ${p.divider};border-radius:0 0 16px 16px;padding:18px 44px;text-align:center;">
-<p style="margin:0;font-size:11px;color:#333333;">Sent automatically from <a href="https://thomastp.ch" style="color:#555555;text-decoration:none;">thomastp.ch</a></p>
+<tr><td style="background:${p.blockBg};border:1px solid ${p.borderInner};border-top:1px solid ${p.divider};border-radius:0 0 24px 24px;padding:24px 44px;text-align:center;">
+<p style="margin:0;font-size:12px;color:#555555;font-weight:500;">Sent automatically from <a href="https://thomastp.ch" style="color:#777777;text-decoration:none;">thomastp.ch</a></p>
 </td></tr></table></td></tr></table></body></html>`;
 }
 
 function autoReplyHtml(name: string, message: string, lang: Lang, theme: Theme): string {
   const p = theme === 'dark' ? darkPalette : lightPalette;
   const t = i18n[lang];
-  const arrow = theme === 'dark' ? SVG_ARROW_DARK : SVG_ARROW_LIGHT;
+  const ghTheme = theme === 'dark' ? 'dark' : 'default';
+  const ghBg = theme === 'dark' ? '0a0a0a' : 'fafafa';
+  const githubStatsUrl = `https://github-readme-stats.vercel.app/api?username=Thomas-TP&show_icons=true&theme=${ghTheme}&hide_border=true&bg_color=${ghBg}`;
+
   return `<!DOCTYPE html><html lang="${lang}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="margin:0;padding:0;background:${p.bg};font-family:'Inter',system-ui,-apple-system,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${p.bg};padding:48px 20px;">
-<tr><td align="center"><table width="580" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;width:100%;">
-<tr><td style="background:${p.header};border:1px solid ${p.border};border-radius:16px 16px 0 0;padding:48px 44px 40px;text-align:center;">
-<div style="margin:0 auto 24px;">${svgCheck(theme)}</div>
-<h1 style="margin:0 0 10px;font-size:26px;font-weight:700;color:${p.text};letter-spacing:-0.4px;">${t.title}</h1>
-<p style="margin:0;font-size:15px;color:${p.muted};line-height:1.6;">${t.subtitle(escapeHtml(name))}</p>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${p.bg};padding:60px 20px;">
+<tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;">
+<tr><td style="background:${p.card};border:1px solid ${p.border};border-radius:24px 24px 0 0;padding:60px 48px 40px;text-align:center;">
+<table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 28px;"><tr>
+<td style="background:${p.blockBg};border:1px solid ${p.blockBorder};border-radius:20px;padding:16px;">
+${getIconImg('checkmark--v1', theme, 36)}
+</td></tr></table>
+<h1 style="margin:0 0 12px;font-size:32px;font-weight:800;color:${p.text};letter-spacing:-0.03em;">${t.title}</h1>
+<p style="margin:0;font-size:18px;color:${p.muted};line-height:1.6;font-weight:500;">${t.subtitle(escapeHtml(name))}</p>
 </td></tr>
-<tr><td style="background:${p.card};border-left:1px solid ${p.border};border-right:1px solid ${p.border};padding:0 44px;"><div style="height:1px;background:${p.divider};"></div></td></tr>
-<tr><td style="background:${p.card};border-left:1px solid ${p.border};border-right:1px solid ${p.border};padding:32px 44px 0;">
-<p style="margin:0 0 14px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:${p.subtle};font-weight:600;">${t.yourMessage}</p>
-<div style="border-left:2px solid ${p.accentBorder};padding-left:18px;margin-bottom:28px;">
-<p style="margin:0;font-size:15px;color:${p.muted};line-height:1.75;white-space:pre-wrap;">${escapeHtml(message)}</p>
-</div>
-<table width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr><td style="background:${p.blockBg};border:1px solid ${p.blockBorder};border-radius:10px;padding:18px 22px;">
-<p style="margin:0 0 3px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:${p.subtle};font-weight:600;">${t.responseTime}</p>
-<p style="margin:0;font-size:15px;color:${p.text};font-weight:600;">${t.responseValue}</p>
+
+<tr><td style="background:${p.card};border-left:1px solid ${p.border};border-right:1px solid ${p.border};padding:0 48px 32px;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${p.blockBg};border:1px solid ${p.blockBorder};border-radius:16px;">
+<tr><td style="padding:28px;">
+<p style="margin:0 0 10px;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${p.subtle};font-weight:700;">${t.yourMessage}</p>
+<p style="margin:0;font-size:16px;color:${p.text};line-height:1.7;white-space:pre-wrap;">${escapeHtml(message)}</p>
+</td></tr>
+<tr><td style="padding:16px 28px;border-top:1px solid ${p.borderInner};background:${p.bg};border-radius:0 0 16px 16px;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+<td><p style="margin:0;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:${p.subtle};font-weight:700;">${t.responseTime}</p></td>
+<td align="right"><p style="margin:0;font-size:14px;color:${p.text};font-weight:600;">${t.responseValue}</p></td>
+</tr></table>
 </td></tr></table></td></tr>
-<tr><td style="background:${p.card};border-left:1px solid ${p.border};border-right:1px solid ${p.border};padding:28px 44px 36px;">
-<p style="margin:0 0 14px;font-size:11px;color:${p.subtle};text-align:center;">${t.connect}</p>
+
+<tr><td style="background:${p.card};border-left:1px solid ${p.border};border-right:1px solid ${p.border};padding:0 48px 40px;text-align:center;">
+<p style="margin:0 0 16px;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${p.subtle};font-weight:700;">GitHub Activity</p>
+<a href="https://github.com/Thomas-TP" style="display:inline-block;border-radius:16px;overflow:hidden;border:1px solid ${p.blockBorder};width:100%;">
+  <img src="${githubStatsUrl}" width="100%" style="display:block;max-width:100%;object-fit:cover;" alt="Thomas-TP GitHub Stats" />
+</a>
+</td></tr>
+
+<tr><td style="background:${p.card};border-left:1px solid ${p.border};border-right:1px solid ${p.border};padding:0 48px 60px;text-align:center;">
+<p style="margin:0 0 24px;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${p.subtle};font-weight:700;">${t.connect}</p>
+<table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 32px;"><tr>
+<td style="padding:0 8px;"><a href="https://thomastp.ch" style="display:inline-block;background:${p.ctaBg};color:${p.ctaText};padding:14px 32px;border-radius:12px;text-decoration:none;font-size:15px;font-weight:700;letter-spacing:0.02em;">Visit thomastp.ch</a></td>
+</tr></table>
 <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;"><tr>
-<td style="padding:0 4px;"><a href="https://www.linkedin.com/in/thomas-tp" style="display:inline-flex;align-items:center;gap:6px;background:${p.btnBg};border:1px solid ${p.btnBorder};border-radius:8px;padding:9px 14px;font-size:12px;font-weight:500;color:${p.btnText};text-decoration:none;">${svgLinkedin(theme)}&nbsp;LinkedIn</a></td>
-<td style="padding:0 4px;"><a href="https://github.com/Thomas-TP" style="display:inline-flex;align-items:center;gap:6px;background:${p.btnBg};border:1px solid ${p.btnBorder};border-radius:8px;padding:9px 14px;font-size:12px;font-weight:500;color:${p.btnText};text-decoration:none;">${svgGithub(theme)}&nbsp;GitHub</a></td>
-<td style="padding:0 4px;"><a href="https://thomastp.ch" style="display:inline-flex;align-items:center;gap:6px;background:${p.btnBg};border:1px solid ${p.btnBorder};border-radius:8px;padding:9px 14px;font-size:12px;font-weight:500;color:${p.btnText};text-decoration:none;">${svgGlobe(theme)}&nbsp;Portfolio</a></td>
-<td style="padding:0 4px;"><a href="mailto:thomas@prudhomme.ch" style="display:inline-flex;align-items:center;gap:6px;background:${p.btnBg};border:1px solid ${p.btnBorder};border-radius:8px;padding:9px 14px;font-size:12px;font-weight:500;color:${p.btnText};text-decoration:none;">${svgMail(theme)}&nbsp;Email</a></td>
-</tr></table></td></tr>
-<tr><td style="background:${p.blockBg};border:1px solid ${p.borderInner};border-top:1px solid ${p.divider};border-radius:0 0 16px 16px;padding:18px 44px;text-align:center;">
-<p style="margin:0 0 3px;font-size:13px;font-weight:600;color:${p.text};">Thomas Prudhomme</p>
-<p style="margin:0;font-size:11px;color:${p.subtle};">${t.footer} &nbsp;&middot;&nbsp; <a href="https://thomastp.ch" style="color:${p.muted};text-decoration:none;">thomastp.ch</a></p>
+<td style="padding:0 12px;"><a href="https://www.linkedin.com/in/thomas-tp" style="display:inline-block;">${getIconImg('linkedin', theme, 24)}</a></td>
+<td style="padding:0 12px;"><a href="https://github.com/Thomas-TP" style="display:inline-block;">${getIconImg('github', theme, 24)}</a></td>
+<td style="padding:0 12px;"><a href="mailto:thomas@prudhomme.ch" style="display:inline-block;">${getIconImg('new-post', theme, 24)}</a></td>
+</tr></table>
+</td></tr>
+
+<tr><td style="background:${p.blockBg};border:1px solid ${p.borderInner};border-top:1px solid ${p.divider};border-radius:0 0 24px 24px;padding:32px 48px;text-align:center;">
+<p style="margin:0 0 6px;font-size:15px;font-weight:700;color:${p.text};letter-spacing:-0.01em;">Thomas Prudhomme</p>
+<p style="margin:0;font-size:13px;color:${p.subtle};font-weight:500;">${t.footer} &nbsp;&middot;&nbsp; <a href="https://thomastp.ch" style="color:${p.muted};text-decoration:none;">thomastp.ch</a></p>
 </td></tr></table></td></tr></table></body></html>`;
 }
 
