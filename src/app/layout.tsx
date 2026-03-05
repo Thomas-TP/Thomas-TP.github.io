@@ -27,6 +27,17 @@ export const metadata: Metadata = {
     'Ethical Hacking',
     'Software Engineer',
   ],
+  icons: {
+    icon: [
+      { url: '/icons/favicon.svg', type: 'image/svg+xml', media: '(prefers-color-scheme: dark)' },
+      { url: '/icons/favicon-light.svg', type: 'image/svg+xml', media: '(prefers-color-scheme: light)' },
+      { url: '/icons/favicon.svg', type: 'image/svg+xml' },
+    ],
+    shortcut: '/icons/favicon.svg',
+  },
+  other: {
+    'og:logo': 'https://thomastp.ch/icons/favicon.svg',
+  },
   openGraph: {
     type: 'website',
     url: 'https://thomastp.ch',
@@ -77,18 +88,6 @@ export default function RootLayout({
         />
         <link rel="preconnect" href="https://static.cloudflareinsights.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://api.github.com" />
-        <link
-          rel="icon"
-          type="image/svg+xml"
-          href="/icons/favicon.svg"
-          media="(prefers-color-scheme: dark)"
-        />
-        <link
-          rel="icon"
-          type="image/svg+xml"
-          href="/icons/favicon-light.svg"
-          media="(prefers-color-scheme: light)"
-        />
         {/* Cloudflare Web Analytics — privacy-first, no cookies, free */}
         <script
           defer
