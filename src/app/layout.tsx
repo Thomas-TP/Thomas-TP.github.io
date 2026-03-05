@@ -86,14 +86,7 @@ export default function RootLayout({
             `,
           }}
         />
-        <link rel="preconnect" href="https://static.cloudflareinsights.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://api.github.com" />
-        {/* Cloudflare Web Analytics — privacy-first, no cookies, free */}
-        <script
-          defer
-          src="https://static.cloudflareinsights.com/beacon.min.js"
-          data-cf-beacon='{"token": "7a07bb90847743718a2a4d69ecc2e723"}'
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
