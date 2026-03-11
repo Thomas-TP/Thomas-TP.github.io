@@ -1,6 +1,6 @@
 'use client';
 
-import { m } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Mail, Linkedin, Github, Send, CheckCircle, AlertCircle, Copy, Check, Link as LinkIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/components/ui/theme-provider';
@@ -26,6 +26,11 @@ export function Contact() {
     const recaptchaRef = useRef<ReCAPTCHA>(null);
     const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; message?: string }>({});
     const [copied, setCopied] = useState(false);
+    
+    // Anti-bot manual verifications
+    const [honeypot, setHoneypot] = useState('');
+    const [startTime] = useState<number>(typeof Date !== 'undefined' ? Date.now() : 0);
+    const [showCaptcha, setShowCaptcha] = useState(false);
 
     const copyEmail = useCallback(() => {
         navigator.clipboard.writeText('thomas@prudhomme.li').then(() => {
@@ -54,13 +59,33 @@ export function Contact() {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+        
+        // 1. Validate fields manually
         if (!validate()) return;
-        setStatus('sending');
+        
+        const timeElapsed = Date.now() - startTime;
 
+        // 2. Honeypot and Time validation
+        if (honeypot || timeElapsed < 3000) {
+            // Fake success to fool bots
+            setStatus('success');
+            setName(''); setEmail(''); setMessage('');
+            return;
+        }
+
+        // 3. Reveal Captcha if not revealed yet
+        if (!showCaptcha) {
+            setShowCaptcha(true);
+            return;
+        }
+
+        // 4. Require Captcha completion
         if (!recaptchaToken) {
             setStatus('error');
             return;
         }
+
+        setStatus('sending');
 
         try {
             const res = await fetch(WORKER_URL, {
@@ -73,6 +98,8 @@ export function Contact() {
                     lang: i18n.language?.startsWith('fr') ? 'fr' : 'en',
                     theme: resolvedTheme(),
                     recaptchaToken,
+                    honeypot,
+                    timeElapsed: Date.now() - startTime,
                 }),
             });
 
@@ -80,6 +107,7 @@ export function Contact() {
             setStatus('success');
             setName(''); setEmail(''); setMessage('');
             setRecaptchaToken(null);
+            setShowCaptcha(false);
             recaptchaRef.current?.reset();
             // Success feedback: soft chime + vibration
             try {
@@ -99,6 +127,7 @@ export function Contact() {
             setStatus('error');
             recaptchaRef.current?.reset();
             setRecaptchaToken(null);
+            setShowCaptcha(false);
         }
     };
 
@@ -125,6 +154,17 @@ export function Contact() {
 
                             {/* Left — form */}
                             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                                {/* Honeypot field (hidden from real users) */}
+                                <input
+                                    type="text"
+                                    name="_honey"
+                                    value={honeypot}
+                                    onChange={e => setHoneypot(e.target.value)}
+                                    style={{ display: 'none' }}
+                                    tabIndex={-1}
+                                    autoComplete="off"
+                                />
+
                                 <div>
                                     <label className="block text-xs font-medium text-muted-foreground mb-1.5 uppercase tracking-wide">
                                         {t('contact.form.name')}
@@ -193,20 +233,29 @@ export function Contact() {
                                 )}
 
                                 {/* reCAPTCHA v2 Checkbox */}
-                                <div className="overflow-hidden rounded-xl">
-                                    <ReCAPTCHA
-                                        ref={recaptchaRef}
-                                        sitekey={RECAPTCHA_SITE_KEY}
-                                        onChange={(token) => setRecaptchaToken(token)}
-                                        onExpired={() => setRecaptchaToken(null)}
-                                        onErrored={() => setRecaptchaToken(null)}
-                                        theme={resolvedTheme() === 'dark' ? 'dark' : 'light'}
-                                    />
-                                </div>
+                                <AnimatePresence>
+                                    {showCaptcha && (
+                                        <m.div 
+                                            initial={{ opacity: 0, height: 0 }} 
+                                            animate={{ opacity: 1, height: 'auto' }} 
+                                            exit={{ opacity: 0, height: 0 }}
+                                            className="overflow-hidden rounded-xl"
+                                        >
+                                            <ReCAPTCHA
+                                                ref={recaptchaRef}
+                                                sitekey={RECAPTCHA_SITE_KEY}
+                                                onChange={(token) => setRecaptchaToken(token)}
+                                                onExpired={() => setRecaptchaToken(null)}
+                                                onErrored={() => setRecaptchaToken(null)}
+                                                theme={resolvedTheme() === 'dark' ? 'dark' : 'light'}
+                                            />
+                                        </m.div>
+                                    )}
+                                </AnimatePresence>
 
                                 <m.button
                                     type="submit"
-                                    disabled={status === 'sending' || status === 'success' || !recaptchaToken}
+                                    disabled={status === 'sending' || status === 'success' || (showCaptcha && !recaptchaToken)}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     className="flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-3.5 rounded-full font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
