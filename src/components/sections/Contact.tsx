@@ -4,7 +4,7 @@ import { m } from 'framer-motion';
 import { Mail, Linkedin, Github, Send, CheckCircle, AlertCircle, Copy, Check, Link as LinkIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/components/ui/theme-provider';
-import { useState, useRef, useCallback, FormEvent } from 'react';
+import { useState, useRef, useCallback, FormEvent, useEffect } from 'react';
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
 
 // ← Replace with your Worker URL after deploying (wrangler deploy)
@@ -23,7 +23,14 @@ export function Contact() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
+    const [honey, setHoney] = useState(''); // Honeypot state
     const [status, setStatus] = useState<Status>('idle');
+    const startTimeRef = useRef<number>(0);
+
+    useEffect(() => {
+        // Record the time when the form component mounts
+        startTimeRef.current = Date.now();
+    }, []);
     const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
     const turnstileRef = useRef<TurnstileInstance>(null);
     const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; message?: string }>({});
@@ -63,6 +70,7 @@ export function Contact() {
             setStatus('error');
             return;
         }
+        const duration = Date.now() - startTimeRef.current;
 
         try {
             const res = await fetch(WORKER_URL, {
@@ -72,6 +80,8 @@ export function Contact() {
                     name,
                     email,
                     message,
+                    companyWebsite: honey, // Send honeypot
+                    duration,              // Send time taken
                     lang: i18n.language?.startsWith('fr') ? 'fr' : 'en',
                     theme: resolvedTheme(),
                     turnstileToken,
@@ -80,7 +90,7 @@ export function Contact() {
 
             if (!res.ok) throw new Error('Failed');
             setStatus('success');
-            setName(''); setEmail(''); setMessage('');
+            setName(''); setEmail(''); setMessage(''); setHoney('');
             setTurnstileToken(null);
             turnstileRef.current?.reset();
             // Success feedback: soft chime + vibration
@@ -127,6 +137,21 @@ export function Contact() {
 
                             {/* Left — form */}
                             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                                {/* Honeypot field (hidden from real users, attractive to bots) */}
+                                <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }} aria-hidden="true">
+                                    <label htmlFor="companyWebsite">Company Website</label>
+                                    <input
+                                        type="text"
+                                        id="companyWebsite"
+                                        name="companyWebsite"
+                                        tabIndex={-1}
+                                        autoComplete="off"
+                                        value={honey}
+                                        onChange={e => setHoney(e.target.value)}
+                                        placeholder="Leave this field empty"
+                                    />
+                                </div>
+
                                 <div>
                                     <label className="block text-xs font-medium text-muted-foreground mb-1.5 uppercase tracking-wide">
                                         {t('contact.form.name')}
