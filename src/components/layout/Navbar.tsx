@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 import { LanguageToggle } from '@/components/ui/language-toggle';
 import { usePathname } from 'next/navigation';
 import { useTransitionRouter } from 'next-view-transitions';
-import { WhatsAppLink } from '@/components/ui/whatsapp-link';
 
 interface NavItem {
     id: string;
@@ -60,10 +59,8 @@ function NavLink({ item, isActive, forceShowLabel }: { item: NavItem; isActive?:
         }
     };
 
-    const AnchorComp = item.id === 'whatsapp' ? WhatsAppLink : 'a';
-
     return (
-        <AnchorComp
+        <a
             href={item.href}
             target={item.external ? "_blank" : undefined}
             rel={item.external ? "noopener noreferrer" : undefined}
@@ -93,7 +90,7 @@ function NavLink({ item, isActive, forceShowLabel }: { item: NavItem; isActive?:
                 )}
             </AnimatePresence>
             <item.icon size={20} className="md:w-6 md:h-6" strokeWidth={1.5} />
-        </AnchorComp>
+        </a>
     );
 }
 
