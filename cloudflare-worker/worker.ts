@@ -21,6 +21,8 @@ interface ContactBody {
   lang?: string;
   theme?: string;
   turnstileToken?: string;
+  companyWebsite?: string; // Honeypot field
+  duration?: number;       // Time taken to fill form in ms
 }
 
 type Lang = 'en' | 'fr';
@@ -277,8 +279,26 @@ export default {
       return jsonResp({ error: 'Invalid email address' }, 400, origin);
     }
 
+    const companyWebsite = body.companyWebsite ?? '';
+    const duration = body.duration ?? 0;
+    const clientIp = request.headers.get('CF-Connecting-IP') ?? 'unknown';
+
+    // 1. Honeypot check
+    // If the hidden 'companyWebsite' field is filled, it's a bot.
+    // Return a fake 200 success to trick it.
+    if (companyWebsite !== '') {
+      console.warn(`Honeypot triggered by IP: ${clientIp}, Value: ${companyWebsite}`);
+      return jsonResp({ success: true }, 200, origin);
+    }
+
+    // 2. Velocity check (Time-Based Submission)
+    // If the form was submitted in less than 3 seconds (3000ms), it's likely an automated script.
+    if (duration < 3000) {
+      console.warn(`Velocity check triggered by IP: ${clientIp}, Duration: ${duration}ms`);
+      return jsonResp({ success: true }, 200, origin);
+    }
+
     // Verify Turnstile CAPTCHA token
-    const clientIp = request.headers.get('CF-Connecting-IP') ?? '';
     const turnstileOk = await verifyTurnstile(cfToken, env.TURNSTILE_SECRET_KEY, clientIp);
     if (!turnstileOk) {
       return jsonResp({ error: 'CAPTCHA verification failed' }, 403, origin);
