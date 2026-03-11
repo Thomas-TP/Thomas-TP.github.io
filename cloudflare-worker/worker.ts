@@ -21,6 +21,8 @@ interface ContactBody {
   lang?: string;
   theme?: string;
   recaptchaToken?: string;
+  honeypot?: string;
+  timeElapsed?: number;
 }
 
 type Lang = 'en' | 'fr';
@@ -268,6 +270,15 @@ export default {
     const lang: Lang = body.lang?.startsWith('fr') ? 'fr' : 'en';
     const theme: Theme = body.theme === 'light' ? 'light' : 'dark';
     const cfToken = body.recaptchaToken?.trim() ?? '';
+    const honeypot = body.honeypot?.trim() ?? '';
+    const timeElapsed = body.timeElapsed ?? 0;
+
+    // Bot mitigation (Honeypot + Time check)
+    // If honeypot is filled or form submitted too fast (< 3s), silently discard to trick bots
+    if (honeypot !== '' || timeElapsed < 3000) {
+      console.log(`Bot blocked. Honeypot: "${honeypot}", Time: ${timeElapsed}ms, IP: ${request.headers.get('CF-Connecting-IP')}`);
+      return jsonResp({ success: true }, 200, origin);
+    }
 
     if (!name || !email || !message) {
       return jsonResp({ error: 'Missing required fields' }, 400, origin);
