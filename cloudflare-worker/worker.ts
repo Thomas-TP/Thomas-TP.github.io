@@ -5,12 +5,12 @@
  * Deploy:
  *   wrangler deploy
  *   wrangler secret put RESEND_API_KEY
- *   wrangler secret put RECAPTCHA_SECRET_KEY
+ *   wrangler secret put TURNSTILE_SECRET_KEY
  */
 
 interface Env {
   RESEND_API_KEY: string;
-  RECAPTCHA_SECRET_KEY: string;
+  TURNSTILE_SECRET_KEY: string;
   RATE_LIMIT: KVNamespace;
 }
 
@@ -20,9 +20,7 @@ interface ContactBody {
   message?: string;
   lang?: string;
   theme?: string;
-  recaptchaToken?: string;
-  honeypot?: string;
-  timeElapsed?: number;
+  turnstileToken?: string;
 }
 
 type Lang = 'en' | 'fr';
@@ -112,8 +110,8 @@ const lightPalette: Palette = {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-async function verifyRecaptcha(token: string, secret: string, ip: string): Promise<boolean> {
-  const res = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+async function verifyTurnstile(token: string, secret: string, ip: string): Promise<boolean> {
+  const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({ secret, response: token, remoteip: ip }),
@@ -269,16 +267,7 @@ export default {
     const message = body.message?.trim() ?? '';
     const lang: Lang = body.lang?.startsWith('fr') ? 'fr' : 'en';
     const theme: Theme = body.theme === 'light' ? 'light' : 'dark';
-    const cfToken = body.recaptchaToken?.trim() ?? '';
-    const honeypot = body.honeypot?.trim() ?? '';
-    const timeElapsed = body.timeElapsed ?? 0;
-
-    // Bot mitigation (Honeypot + Time check)
-    // If honeypot is filled or form submitted too fast (< 3s), silently discard to trick bots
-    if (honeypot !== '' || timeElapsed < 3000) {
-      console.log(`Bot blocked. Honeypot: "${honeypot}", Time: ${timeElapsed}ms, IP: ${request.headers.get('CF-Connecting-IP')}`);
-      return jsonResp({ success: true }, 200, origin);
-    }
+    const cfToken = body.turnstileToken?.trim() ?? '';
 
     if (!name || !email || !message) {
       return jsonResp({ error: 'Missing required fields' }, 400, origin);
@@ -288,10 +277,10 @@ export default {
       return jsonResp({ error: 'Invalid email address' }, 400, origin);
     }
 
-    // Verify reCAPTCHA token
+    // Verify Turnstile CAPTCHA token
     const clientIp = request.headers.get('CF-Connecting-IP') ?? '';
-    const recaptchaOk = await verifyRecaptcha(cfToken, env.RECAPTCHA_SECRET_KEY, clientIp);
-    if (!recaptchaOk) {
+    const turnstileOk = await verifyTurnstile(cfToken, env.TURNSTILE_SECRET_KEY, clientIp);
+    if (!turnstileOk) {
       return jsonResp({ error: 'CAPTCHA verification failed' }, 403, origin);
     }
 

@@ -127,7 +127,7 @@ export function Navbar() {
     const socialItems: NavItem[] = [
         { id: 'linkedin', label: t('navbar.linkedin'), icon: Linkedin, href: 'https://www.linkedin.com/in/thomas-tp', external: true },
         { id: 'github', label: t('navbar.github'), icon: Github, href: 'https://github.com/Thomas-TP', external: true },
-        { id: 'whatsapp', label: 'WhatsApp', icon: WhatsAppIcon, href: 'https://wa.me/41763764551', external: true },
+        { id: 'whatsapp', label: 'WhatsApp', icon: WhatsAppIcon, href: 'https://wa-redirect.thomastp.workers.dev', external: true },
         { id: 'links', label: 'Links', icon: LinkIcon, href: 'https://links.thomastp.ch', external: true },
     ];
 

@@ -1,17 +1,19 @@
 'use client';
 
-import { m, AnimatePresence } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Mail, Linkedin, Github, Send, CheckCircle, AlertCircle, Copy, Check, Link as LinkIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/components/ui/theme-provider';
 import { useState, useRef, useCallback, FormEvent } from 'react';
-import ReCAPTCHA from 'react-google-recaptcha';
+import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
 
 // ← Replace with your Worker URL after deploying (wrangler deploy)
 const WORKER_URL = 'https://portfolio-contact.thomastp.workers.dev';
 
-// Google reCAPTCHA v2 site key
-const RECAPTCHA_SITE_KEY = '6LcK2YYsAAAAAPrOEWr5VVTLzsdsLV73pIQO0YkP';
+// Cloudflare Turnstile site key
+// Test key (always passes): '1x00000000000000000000AA'
+// Real key: create at dash.cloudflare.com → Turnstile → Add site
+const TURNSTILE_SITE_KEY = '0x4AAAAAAClx2gXi6bWmEyc7';
 
 type Status = 'idle' | 'sending' | 'success' | 'error';
 
@@ -22,15 +24,10 @@ export function Contact() {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [status, setStatus] = useState<Status>('idle');
-    const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-    const recaptchaRef = useRef<ReCAPTCHA>(null);
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+    const turnstileRef = useRef<TurnstileInstance>(null);
     const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; message?: string }>({});
     const [copied, setCopied] = useState(false);
-    
-    // Anti-bot manual verifications
-    const [honeypot, setHoneypot] = useState('');
-    const [startTime] = useState<number>(typeof Date !== 'undefined' ? Date.now() : 0);
-    const [showCaptcha, setShowCaptcha] = useState(false);
 
     const copyEmail = useCallback(() => {
         navigator.clipboard.writeText('thomas@prudhomme.li').then(() => {
@@ -59,33 +56,13 @@ export function Contact() {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        
-        // 1. Validate fields manually
         if (!validate()) return;
-        
-        const timeElapsed = Date.now() - startTime;
+        setStatus('sending');
 
-        // 2. Honeypot and Time validation
-        if (honeypot || timeElapsed < 3000) {
-            // Fake success to fool bots
-            setStatus('success');
-            setName(''); setEmail(''); setMessage('');
-            return;
-        }
-
-        // 3. Reveal Captcha if not revealed yet
-        if (!showCaptcha) {
-            setShowCaptcha(true);
-            return;
-        }
-
-        // 4. Require Captcha completion
-        if (!recaptchaToken) {
+        if (!turnstileToken) {
             setStatus('error');
             return;
         }
-
-        setStatus('sending');
 
         try {
             const res = await fetch(WORKER_URL, {
@@ -97,18 +74,15 @@ export function Contact() {
                     message,
                     lang: i18n.language?.startsWith('fr') ? 'fr' : 'en',
                     theme: resolvedTheme(),
-                    recaptchaToken,
-                    honeypot,
-                    timeElapsed: Date.now() - startTime,
+                    turnstileToken,
                 }),
             });
 
             if (!res.ok) throw new Error('Failed');
             setStatus('success');
             setName(''); setEmail(''); setMessage('');
-            setRecaptchaToken(null);
-            setShowCaptcha(false);
-            recaptchaRef.current?.reset();
+            setTurnstileToken(null);
+            turnstileRef.current?.reset();
             // Success feedback: soft chime + vibration
             try {
                 const ctx = new AudioContext();
@@ -125,9 +99,8 @@ export function Contact() {
             if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([80, 40, 80]);
         } catch {
             setStatus('error');
-            recaptchaRef.current?.reset();
-            setRecaptchaToken(null);
-            setShowCaptcha(false);
+            turnstileRef.current?.reset();
+            setTurnstileToken(null);
         }
     };
 
@@ -154,17 +127,6 @@ export function Contact() {
 
                             {/* Left — form */}
                             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                                {/* Honeypot field (hidden from real users) */}
-                                <input
-                                    type="text"
-                                    name="_honey"
-                                    value={honeypot}
-                                    onChange={e => setHoneypot(e.target.value)}
-                                    style={{ display: 'none' }}
-                                    tabIndex={-1}
-                                    autoComplete="off"
-                                />
-
                                 <div>
                                     <label className="block text-xs font-medium text-muted-foreground mb-1.5 uppercase tracking-wide">
                                         {t('contact.form.name')}
@@ -232,30 +194,21 @@ export function Contact() {
                                     </m.div>
                                 )}
 
-                                {/* reCAPTCHA v2 Checkbox */}
-                                <AnimatePresence>
-                                    {showCaptcha && (
-                                        <m.div 
-                                            initial={{ opacity: 0, height: 0 }} 
-                                            animate={{ opacity: 1, height: 'auto' }} 
-                                            exit={{ opacity: 0, height: 0 }}
-                                            className="overflow-hidden rounded-xl"
-                                        >
-                                            <ReCAPTCHA
-                                                ref={recaptchaRef}
-                                                sitekey={RECAPTCHA_SITE_KEY}
-                                                onChange={(token) => setRecaptchaToken(token)}
-                                                onExpired={() => setRecaptchaToken(null)}
-                                                onErrored={() => setRecaptchaToken(null)}
-                                                theme={resolvedTheme() === 'dark' ? 'dark' : 'light'}
-                                            />
-                                        </m.div>
-                                    )}
-                                </AnimatePresence>
+                                {/* Turnstile — seamless, only shows if bot suspected */}
+                                <div style={{ filter: 'grayscale(1)' }}>
+                                    <Turnstile
+                                        ref={turnstileRef}
+                                        siteKey={TURNSTILE_SITE_KEY}
+                                        onSuccess={setTurnstileToken}
+                                        onError={() => setTurnstileToken(null)}
+                                        onExpire={() => setTurnstileToken(null)}
+                                        options={{ appearance: 'interaction-only', theme: resolvedTheme() }}
+                                    />
+                                </div>
 
                                 <m.button
                                     type="submit"
-                                    disabled={status === 'sending' || status === 'success' || (showCaptcha && !recaptchaToken)}
+                                    disabled={status === 'sending' || status === 'success' || !turnstileToken}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     className="flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-3.5 rounded-full font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
@@ -313,7 +266,7 @@ export function Contact() {
                                         </div>
                                         <span className="text-base text-muted-foreground group-hover:text-foreground transition-colors">GitHub</span>
                                     </a>
-                                    <a href="https://wa.me/41763764551" target="_blank" rel="noopener noreferrer"
+                                    <a href="https://wa-redirect.thomastp.workers.dev" target="_blank" rel="noopener noreferrer"
                                         className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted/50 transition-colors group">
                                         <div className="w-11 h-11 rounded-lg border border-border flex items-center justify-center shrink-0 group-hover:border-primary/40 transition-colors">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
