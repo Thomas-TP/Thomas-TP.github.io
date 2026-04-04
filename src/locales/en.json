@@ -134,6 +134,14 @@
         "section4_text": "These terms shall be governed by and construed in accordance with the laws of Switzerland. Any disputes relating to these terms will be subject to the exclusive jurisdiction of the courts of Geneva.",
         "close": "Accept & Close"
     },
+    "service_area": {
+        "label": "Service Area",
+        "badge": "Service Area",
+        "title": "Lake Geneva Arc",
+        "subtitle": "Available across the Lake Geneva region, from Geneva to Lausanne.",
+        "lake": "Lake Geneva",
+        "map_alt": "Schematic map of service area: Geneva, Nyon, Lausanne"
+    },
     "notfound": {
         "title": "Page Not Found",
         "desc": "The page you are looking for does not exist or has been moved to another sector.",

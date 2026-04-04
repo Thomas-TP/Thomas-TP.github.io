@@ -1,7 +1,8 @@
 'use client';
 
 import { m, AnimatePresence } from 'framer-motion';
-import { Home, User, Code, Mail, Github, Linkedin, Link as LinkIcon } from 'lucide-react';
+import { Home, User, Code, Mail, Link as LinkIcon } from 'lucide-react';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import { ModeToggle } from '@/components/ui/mode-toggle';
 import { useTranslation } from 'react-i18next';
@@ -125,8 +126,8 @@ export function Navbar() {
     ];
 
     const socialItems: NavItem[] = [
-        { id: 'linkedin', label: t('navbar.linkedin'), icon: Linkedin, href: 'https://www.linkedin.com/in/thomas-tp', external: true },
-        { id: 'github', label: t('navbar.github'), icon: Github, href: 'https://github.com/Thomas-TP', external: true },
+        { id: 'linkedin', label: t('navbar.linkedin'), icon: FaLinkedin, href: 'https://www.linkedin.com/in/thomas-tp', external: true },
+        { id: 'github', label: t('navbar.github'), icon: FaGithub, href: 'https://github.com/Thomas-TP', external: true },
         { id: 'whatsapp', label: 'WhatsApp', icon: WhatsAppIcon, href: 'https://wa-redirect.thomastp.workers.dev', external: true },
         { id: 'links', label: 'Links', icon: LinkIcon, href: 'https://links.thomastp.ch', external: true },
     ];

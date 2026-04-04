@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Github, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa';
 import { PrivacyPolicyModal } from '@/components/modals/PrivacyPolicyModal';
 import { TermsModal } from '@/components/modals/TermsModal';
 
@@ -54,7 +55,7 @@ export function Footer() {
                         className="flex items-center gap-4 text-xs hover:text-foreground transition-colors"
                     >
                         <span className="flex items-center gap-1.5">
-                            <Github size={14} />
+                            <FaGithub size={14} />
                             {stats.repos} repos
                         </span>
                         <span className="flex items-center gap-1.5">

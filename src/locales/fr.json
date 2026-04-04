@@ -134,6 +134,14 @@
         "section4_text": "Ces conditions sont régies et interprétées conformément aux lois de la Suisse. Tout litige relatif à ces conditions sera soumis à la compétence exclusive des tribunaux de Genève.",
         "close": "Accepter & Fermer"
     },
+    "service_area": {
+        "label": "Zone d'activité",
+        "badge": "Zone d'activité",
+        "title": "Arc Lémanique",
+        "subtitle": "Disponible sur l'ensemble de l'arc lémanique, de Genève à Lausanne.",
+        "lake": "Lac Léman",
+        "map_alt": "Carte schématique de la zone d'activité : Genève, Nyon, Lausanne"
+    },
     "notfound": {
         "title": "Page Non Trouvée",
         "desc": "La page que vous recherchez n'existe pas ou a été déplacée vers un autre secteur.",
