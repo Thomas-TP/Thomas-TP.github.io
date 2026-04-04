@@ -26,6 +26,9 @@
 }
 
 :root {
+  /* Lac Léman label — SVG fontSize adapts to viewport so rendered px stays consistent */
+  --lake-label-size: 28;
+
   /* Light Mode (High Contrast Monochrome) */
   --background: #ffffff;
   --foreground: #000000;
@@ -90,6 +93,13 @@
 @layer base {
   * {
     @apply border-border;
+  }
+
+  /* Lac Léman label: smaller on larger screens where SVG viewBox scales up */
+  @media (min-width: 768px) {
+    :root {
+      --lake-label-size: 16;
+    }
   }
 
   body {
