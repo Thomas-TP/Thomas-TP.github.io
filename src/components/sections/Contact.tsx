@@ -143,6 +143,10 @@ export function Contact() {
     const lakeBody =
         'M 0 120 C 4.6 114.5 8.6 96.8 29 85.7 C 49.4 74.6 106.1 56.4 127.2 50.6 C 148.3 44.8 152.1 51.6 161.1 49.4 C 170.1 47.2 168.5 41 183.2 36.6 C 197.9 32.2 230.2 24.2 252.9 22 C 275.6 19.8 303.8 23.7 324.8 22.9 C 345.8 22.1 362.4 20.7 383.9 17.2 C 405.4 13.7 437.2 3.1 459.2 1 C 481.2 -1.1 504.3 4.4 521.3 4.2 C 538.3 4 540.7 -0.2 565.4 0 C 590.1 0.2 648.7 3.4 675.5 5.4 C 702.3 7.4 712.4 10.5 733.2 12.4 C 754 14.3 782.8 16 805.2 17.1 C 827.6 18.2 856.2 17.7 872.9 19.4 C 889.6 21.1 894.5 25.7 909.5 27.5 C 924.5 29.3 954.1 29.5 966.9 30.8 C 979.7 32.1 984.2 34 989.5 35.7 C 994.8 37.4 998.2 40.7 999.9 41.6 L 999.9 41.6 C 997.3 42.6 992.6 47.1 983.5 47.8 C 974.4 48.5 955.7 45.1 943 45.7 C 930.3 46.3 923.8 50.9 904.2 51.3 C 884.6 51.7 847.2 49.7 820.3 48.3 C 793.4 46.9 761.4 43.2 735.8 42.5 C 710.2 41.8 678.3 43.7 660.3 43.8 C 642.3 43.9 647.8 42.7 623.5 43.3 C 599.2 43.9 533.5 47.5 508.4 47.6 C 483.3 47.7 479.4 43.6 466.7 43.7 C 454 43.8 436.4 46.5 429 48.3 C 421.6 50.1 435.2 53.2 420.7 55.2 C 406.2 57.2 356.2 58.9 338.3 61 C 320.4 63.1 315.2 67.4 308.9 68.6 C 302.6 69.8 305 69.1 298.8 68.5 C 292.6 67.9 276.8 66.6 270.4 65 C 264 63.4 266.3 59.6 258.9 58.2 C 251.5 56.8 239.4 55.4 224.3 56.5 C 209.2 57.6 182.5 59.8 164.5 64.9 C 146.5 70 127.8 83 111.8 88.3 C 95.8 93.6 77.1 93.3 64.3 98 C 51.5 102.7 42.3 114.4 32 117.9 C 21.7 121.4 5.1 119.7 0 120 Z';
 
+    // Text guide path: north shore shifted up by 8 units for "floating" text
+    const shoreNorthTextGuide =
+        'M 0 112 C 4.6 106.5 8.6 88.8 29 77.7 C 49.4 66.6 106.1 48.4 127.2 42.6 C 148.3 36.8 152.1 43.6 161.1 41.4 C 170.1 39.2 168.5 33 183.2 28.6 C 197.9 24.2 230.2 16.2 252.9 14 C 275.6 11.8 303.8 15.7 324.8 14.9 C 345.8 14.1 362.4 12.7 383.9 9.2 C 405.4 5.7 437.2 -4.9 459.2 -7 C 481.2 -9.1 504.3 -3.6 521.3 -3.8 C 538.3 -4 540.7 -8.2 565.4 -8 C 590.1 -7.8 648.7 -4.6 675.5 -2.6 C 702.3 -0.6 712.4 2.5 733.2 4.4 C 754 6.3 782.8 8 805.2 9.1 C 827.6 10.2 856.2 9.7 872.9 11.4 C 889.6 13.1 894.5 17.7 909.5 19.5 C 924.5 21.3 954.1 21.5 966.9 22.8 C 979.7 24.1 984.2 26 989.5 27.7 C 994.8 29.4 998.2 32.7 999.9 33.6';
+
     return (
         <section id="contact" className="py-32 container mx-auto px-4 cv-auto">
             <div className="max-w-4xl mx-auto">
@@ -398,6 +402,23 @@ export function Contact() {
                             transition={{ duration: 1.2, ease: 'easeInOut', delay: 0.1 }}
                         />
 
+                        {/* "Zone d'activité" text following the north shore curve */}
+                        <defs>
+                            <path id="shoreTextGuide" d={shoreNorthTextGuide} />
+                        </defs>
+                        <m.text
+                            className="fill-muted-foreground/40 font-bold uppercase"
+                            style={{ fontFamily: 'var(--font-inter), Inter, sans-serif', fontSize: 12, letterSpacing: '0.15em' }}
+                            initial={prefersReduced ? {} : { opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: 1.2 }}
+                        >
+                            <textPath href="#shoreTextGuide" startOffset="28%" textAnchor="middle">
+                                {t('service_area.label')}
+                            </textPath>
+                        </m.text>
+
                         {/* City dot markers (SVG only — labels are HTML below) */}
                         {cities.map((city, i) => (
                             <g key={city.name}>
@@ -432,18 +453,7 @@ export function Contact() {
                         ))}
                     </m.svg>
 
-                    {/* HTML labels — use real CSS sizes so they stay readable on mobile */}
-                    <m.span
-                        className="absolute text-xs font-bold text-muted-foreground/40 uppercase tracking-widest pointer-events-none"
-                        style={{ left: '50%', top: 0, transform: 'translate(-50%, -100%)' }}
-                        initial={prefersReduced ? {} : { opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 1.2 }}
-                    >
-                        {t('service_area.label')}
-                    </m.span>
-
+                    {/* HTML labels for city names — CSS sizes for mobile readability */}
                     {cities.map((city, i) => (
                         <m.span
                             key={city.name}
