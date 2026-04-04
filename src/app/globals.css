@@ -26,9 +26,6 @@
 }
 
 :root {
-  /* Lac Léman label — SVG fontSize adapts to viewport so rendered px stays consistent */
-  --lake-label-size: 70;
-
   /* Light Mode (High Contrast Monochrome) */
   --background: #ffffff;
   --foreground: #000000;
@@ -95,20 +92,25 @@
     @apply border-border;
   }
 
-  /* Lac Léman label: smaller on larger screens where SVG viewBox scales up */
+  /* Lac Léman label: responsive SVG text size */
+  .lake-label {
+    font-family: var(--font-inter), 'Inter', sans-serif;
+    font-size: 70px;
+    letter-spacing: 0.2em;
+  }
   @media (min-width: 640px) {
-    :root {
-      --lake-label-size: 30;
+    .lake-label {
+      font-size: 30px;
     }
   }
   @media (min-width: 768px) {
-    :root {
-      --lake-label-size: 22;
+    .lake-label {
+      font-size: 22px;
     }
   }
   @media (min-width: 1024px) {
-    :root {
-      --lake-label-size: 16;
+    .lake-label {
+      font-size: 16px;
     }
   }
 
