@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { m } from 'framer-motion';
-import { Github, ExternalLink, ArrowUpRight } from 'lucide-react';
+import { ExternalLink, ArrowUpRight } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa';
 
 interface Project {
     title: string;
@@ -383,7 +384,7 @@ export function Projects() {
                                             className="p-3 bg-secondary rounded-full hover:bg-foreground hover:text-background transition-all"
                                             aria-label="View on GitHub"
                                         >
-                                            <Github size={20} />
+                                            <FaGithub size={20} />
                                         </a>
                                     )}
                                     {project.link && (
