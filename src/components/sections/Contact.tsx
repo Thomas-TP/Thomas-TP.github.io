@@ -407,8 +407,7 @@ export function Contact() {
                             <path id="shoreTextGuide" d={shoreNorthTextGuide} />
                         </defs>
                         <m.text
-                            className="fill-muted-foreground/40 font-bold uppercase"
-                            style={{ fontFamily: 'var(--font-inter), Inter, sans-serif', fontSize: 'var(--lake-label-size)', letterSpacing: '0.2em' }}
+                            className="lake-label fill-muted-foreground/40 font-bold uppercase"
                             initial={prefersReduced ? {} : { opacity: 0 }}
                             whileInView={{ opacity: 1 }}
                             viewport={{ once: true }}
