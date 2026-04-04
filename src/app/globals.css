@@ -92,28 +92,6 @@
     @apply border-border;
   }
 
-  /* Lac Léman label: responsive SVG text size */
-  .lake-label {
-    font-family: var(--font-inter), 'Inter', sans-serif;
-    font-size: 30px;
-    letter-spacing: 0.2em;
-  }
-  @media (min-width: 640px) {
-    .lake-label {
-      font-size: 24px;
-    }
-  }
-  @media (min-width: 768px) {
-    .lake-label {
-      font-size: 20px;
-    }
-  }
-  @media (min-width: 1024px) {
-    .lake-label {
-      font-size: 16px;
-    }
-  }
-
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
@@ -222,5 +200,27 @@
 
   .animate-spin-slow {
     animation: spin-slow 8s linear infinite;
+  }
+}
+
+/* Lac Léman label – outside @layer for proper specificity */
+.lake-label {
+  font-family: var(--font-inter), 'Inter', sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.2em;
+}
+@media (min-width: 640px) {
+  .lake-label {
+    font-size: 16px;
+  }
+}
+@media (min-width: 768px) {
+  .lake-label {
+    font-size: 14px;
+  }
+}
+@media (min-width: 1024px) {
+  .lake-label {
+    font-size: 12px;
   }
 }
