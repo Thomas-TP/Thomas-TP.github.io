@@ -95,7 +95,7 @@
   /* Lac Léman label: responsive SVG text size */
   .lake-label {
     font-family: var(--font-inter), 'Inter', sans-serif;
-    font-size: 42px;
+    font-size: 30px;
     letter-spacing: 0.2em;
   }
   @media (min-width: 640px) {
