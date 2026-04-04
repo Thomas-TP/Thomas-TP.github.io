@@ -413,7 +413,7 @@ export function Contact() {
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: 1.2 }}
                         >
-                            <textPath href="#shoreTextGuide" startOffset="43%" textAnchor="middle">
+                            <textPath href="#shoreTextGuide" startOffset="50%" textAnchor="middle">
                                 {t('service_area.label')}
                             </textPath>
                         </m.text>
