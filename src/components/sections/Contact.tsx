@@ -122,9 +122,9 @@ export function Contact() {
     /* ── Lac Léman – real OpenStreetMap geographic outline ── */
 
     const cities = [
-        { name: 'Genève', cx: 2.7, cy: 120, labelAnchor: 'start' as const, labelDx: 8, labelDy: -6 },
-        { name: 'Nyon', cx: 249, cy: 23, labelAnchor: 'middle' as const, labelDx: 0, labelDy: -10 },
-        { name: 'Lausanne', cx: 618.7, cy: 0.5, labelAnchor: 'middle' as const, labelDx: 0, labelDy: 14 },
+        { name: 'Genève', cx: 2.7, cy: 120, labelAnchor: 'start' as const, labelDx: 12, labelDy: -10 },
+        { name: 'Nyon', cx: 249, cy: 23, labelAnchor: 'middle' as const, labelDx: 0, labelDy: -14 },
+        { name: 'Lausanne', cx: 618.7, cy: 0.5, labelAnchor: 'middle' as const, labelDx: 0, labelDy: 22 },
     ];
 
     // Card background fill: y=0 → north shore → y=0
@@ -401,10 +401,10 @@ export function Contact() {
                         {/* "Lac Léman" label inside lake body */}
                         <m.text
                             x={450}
-                            y={38}
+                            y={40}
                             textAnchor="middle"
                             className="fill-muted-foreground/20 italic"
-                            style={{ fontFamily: 'var(--font-inter), Inter, sans-serif', fontSize: 10 }}
+                            style={{ fontFamily: 'var(--font-inter), Inter, sans-serif', fontSize: 18 }}
                             initial={prefersReduced ? {} : { opacity: 0 }}
                             whileInView={{ opacity: 1 }}
                             viewport={{ once: true }}
@@ -416,10 +416,10 @@ export function Contact() {
                         {/* "Zone d'activité" label */}
                         <m.text
                             x={500}
-                            y={-8}
+                            y={-12}
                             textAnchor="middle"
                             className="fill-muted-foreground/40 uppercase tracking-[0.25em] font-medium"
-                            style={{ fontFamily: 'var(--font-inter), Inter, sans-serif', fontSize: 8 }}
+                            style={{ fontFamily: 'var(--font-inter), Inter, sans-serif', fontSize: 14 }}
                             initial={prefersReduced ? {} : { opacity: 0 }}
                             whileInView={{ opacity: 1 }}
                             viewport={{ once: true }}
@@ -434,11 +434,11 @@ export function Contact() {
                                 {/* Pulse ring */}
                                 {!prefersReduced && (
                                     <m.circle
-                                        cx={city.cx} cy={city.cy} r={4}
+                                        cx={city.cx} cy={city.cy} r={6}
                                         className="fill-none stroke-foreground/15"
-                                        strokeWidth={0.8}
-                                        initial={{ r: 4, opacity: 0 }}
-                                        whileInView={{ r: [4, 14, 14], opacity: [0.4, 0.08, 0] }}
+                                        strokeWidth={1}
+                                        initial={{ r: 6, opacity: 0 }}
+                                        whileInView={{ r: [6, 18, 18], opacity: [0.4, 0.08, 0] }}
                                         viewport={{ once: true }}
                                         transition={{ duration: 2.8, delay: 1 + i * 0.3, repeat: Infinity, repeatDelay: 2.2, ease: 'easeOut' }}
                                     />
@@ -446,7 +446,7 @@ export function Contact() {
 
                                 {/* Dot */}
                                 <m.circle
-                                    cx={city.cx} cy={city.cy} r={4}
+                                    cx={city.cx} cy={city.cy} r={6}
                                     className="fill-foreground"
                                     initial={prefersReduced ? {} : { scale: 0 }}
                                     whileInView={{ scale: 1 }}
@@ -454,7 +454,7 @@ export function Contact() {
                                     transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.6 + i * 0.25 }}
                                 />
                                 <m.circle
-                                    cx={city.cx} cy={city.cy} r={1.5}
+                                    cx={city.cx} cy={city.cy} r={2.5}
                                     className="fill-background"
                                     initial={prefersReduced ? {} : { scale: 0 }}
                                     whileInView={{ scale: 1 }}
@@ -468,7 +468,7 @@ export function Contact() {
                                     y={city.cy + city.labelDy}
                                     textAnchor={city.labelAnchor}
                                     className="fill-foreground font-semibold"
-                                    style={{ fontFamily: 'var(--font-inter), Inter, sans-serif', fontSize: 11 }}
+                                    style={{ fontFamily: 'var(--font-inter), Inter, sans-serif', fontSize: 18 }}
                                     initial={prefersReduced ? {} : { opacity: 0 }}
                                     whileInView={{ opacity: 1 }}
                                     viewport={{ once: true }}
