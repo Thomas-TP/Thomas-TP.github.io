@@ -122,9 +122,9 @@ export function Contact() {
     /* ── Lac Léman – real OpenStreetMap geographic outline ── */
 
     const cities = [
-        { name: 'Genève', cx: 2.7, cy: 120, labelAnchor: 'start' as const, labelDx: 12, labelDy: -10 },
-        { name: 'Nyon', cx: 249, cy: 23, labelAnchor: 'middle' as const, labelDx: 0, labelDy: -14 },
-        { name: 'Lausanne', cx: 618.7, cy: 0.5, labelAnchor: 'middle' as const, labelDx: 0, labelDy: 22 },
+        { name: 'Genève', cx: 2.7, cy: 120, htmlTransform: 'translate(4px, -150%)' },
+        { name: 'Nyon', cx: 249, cy: 23, htmlTransform: 'translate(-50%, -150%)' },
+        { name: 'Lausanne', cx: 618.7, cy: 0.5, htmlTransform: 'translate(-50%, 50%)' },
     ];
 
     // Card background fill: y=0 → north shore → y=0
@@ -341,7 +341,7 @@ export function Contact() {
                 </m.div>
 
                 {/* ── Lac Léman bottom edge ── */}
-                <div className="px-px">
+                <div className="px-px relative">
                     <m.svg
                         viewBox="0 0 1000 130"
                         fill="none"
@@ -398,40 +398,9 @@ export function Contact() {
                             transition={{ duration: 1.2, ease: 'easeInOut', delay: 0.1 }}
                         />
 
-                        {/* "Lac Léman" label inside lake body */}
-                        <m.text
-                            x={450}
-                            y={40}
-                            textAnchor="middle"
-                            className="fill-muted-foreground/20 italic"
-                            style={{ fontFamily: 'var(--font-inter), Inter, sans-serif', fontSize: 18 }}
-                            initial={prefersReduced ? {} : { opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: 1.4 }}
-                        >
-                            {t('service_area.lake')}
-                        </m.text>
-
-                        {/* "Zone d'activité" label */}
-                        <m.text
-                            x={500}
-                            y={-12}
-                            textAnchor="middle"
-                            className="fill-muted-foreground/40 uppercase tracking-[0.25em] font-medium"
-                            style={{ fontFamily: 'var(--font-inter), Inter, sans-serif', fontSize: 14 }}
-                            initial={prefersReduced ? {} : { opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: 1.2 }}
-                        >
-                            {t('service_area.label')}
-                        </m.text>
-
-                        {/* City markers on the northern shore */}
+                        {/* City dot markers (SVG only — labels are HTML below) */}
                         {cities.map((city, i) => (
                             <g key={city.name}>
-                                {/* Pulse ring */}
                                 {!prefersReduced && (
                                     <m.circle
                                         cx={city.cx} cy={city.cy} r={6}
@@ -443,8 +412,6 @@ export function Contact() {
                                         transition={{ duration: 2.8, delay: 1 + i * 0.3, repeat: Infinity, repeatDelay: 2.2, ease: 'easeOut' }}
                                     />
                                 )}
-
-                                {/* Dot */}
                                 <m.circle
                                     cx={city.cx} cy={city.cy} r={6}
                                     className="fill-foreground"
@@ -461,24 +428,39 @@ export function Contact() {
                                     viewport={{ once: true }}
                                     transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.7 + i * 0.25 }}
                                 />
-
-                                {/* Label */}
-                                <m.text
-                                    x={city.cx + city.labelDx}
-                                    y={city.cy + city.labelDy}
-                                    textAnchor={city.labelAnchor}
-                                    className="fill-foreground font-semibold"
-                                    style={{ fontFamily: 'var(--font-inter), Inter, sans-serif', fontSize: 18 }}
-                                    initial={prefersReduced ? {} : { opacity: 0 }}
-                                    whileInView={{ opacity: 1 }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 0.3, delay: 0.9 + i * 0.25 }}
-                                >
-                                    {city.name}
-                                </m.text>
                             </g>
                         ))}
                     </m.svg>
+
+                    {/* HTML labels — use real CSS sizes so they stay readable on mobile */}
+                    <m.span
+                        className="absolute text-xs font-bold text-muted-foreground/40 uppercase tracking-widest pointer-events-none"
+                        style={{ left: '50%', top: 0, transform: 'translate(-50%, -100%)' }}
+                        initial={prefersReduced ? {} : { opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 1.2 }}
+                    >
+                        {t('service_area.label')}
+                    </m.span>
+
+                    {cities.map((city, i) => (
+                        <m.span
+                            key={city.name}
+                            className="absolute text-xs text-foreground pointer-events-none whitespace-nowrap"
+                            style={{
+                                left: `${city.cx / 10}%`,
+                                top: `${city.cy / 1.3}%`,
+                                transform: city.htmlTransform,
+                            }}
+                            initial={prefersReduced ? {} : { opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.3, delay: 0.9 + i * 0.25 }}
+                        >
+                            {city.name}
+                        </m.span>
+                    ))}
                 </div>
             </div>
         </section>
