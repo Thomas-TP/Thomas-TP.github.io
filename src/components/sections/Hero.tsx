@@ -1,5 +1,3 @@
-import { m, useScroll, useTransform } from 'framer-motion';
-import { FileText } from 'lucide-react';
 import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GlitchText } from '@/components/ui/glitch-text';
@@ -11,22 +9,6 @@ const CVModal = lazy(() =>
 const Hero3D = lazy(() =>
     import('@/components/ui/hero-3d').then(m => ({ default: m.Hero3D }))
 );
-
-// Stagger variants for smooth sequential reveal
-// NOTE: opacity is intentionally NOT set in `hidden` so that elements are visible
-// on first paint — Lighthouse excludes opacity-0 elements from LCP measurement.
-const stagger = {
-    hidden: {},
-    show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
-};
-const fadeUp = {
-    hidden: { y: 20 },
-    show: { y: 0, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } },
-};
-const fadeIn = {
-    hidden: { scale: 0.97 },
-    show: { scale: 1, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } },
-};
 
 function useTypingAnimation(roles: string[]) {
     const [text, setText] = useState('');
@@ -101,9 +83,6 @@ function useMagneticHover(strength = 0.3) {
 
 export function Hero() {
     const { t } = useTranslation();
-    const { scrollY } = useScroll();
-    const opacity = useTransform(scrollY, [0, 400], [1, 0]);
-    const y = useTransform(scrollY, [0, 400], [0, 100]);
     const [cvOpen, setCvOpen] = useState(false);
     // Defer Three.js background until browser is idle — keeps it out of the TBT window
     const [mountBg, setMountBg] = useState(false);
@@ -133,17 +112,14 @@ export function Hero() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
             <div className="container px-4 mx-auto z-10 flex-1 flex items-center">
-                <m.div
+                <div
                     className="w-full flex flex-col-reverse md:flex-row items-center justify-center gap-10 md:gap-10 lg:gap-12"
-                    variants={stagger}
-                    initial="hidden"
-                    animate="show"
                 >
 
                     {/* Text — left */}
-                    <m.div
-                        className="max-w-xl text-center md:text-left"
-                        variants={fadeUp}
+                    <div
+                        className="max-w-xl text-center md:text-left hero-fade-up"
+                        style={{ animationDelay: '0.1s' }}
                     >
                         <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-6 text-foreground pb-2">
                             <GlitchText text={t('hero.name')} />
@@ -159,35 +135,27 @@ export function Hero() {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start items-center">
-                            <m.button
+                            <button
                                 ref={cvBtn.ref as React.Ref<HTMLButtonElement>}
                                 onMouseMove={(e) => cvBtn.onMouseMove(e.nativeEvent)}
                                 onMouseLeave={cvBtn.onMouseLeave}
                                 onClick={() => setCvOpen(true)}
-                                animate={{ x: cvBtn.offset.x, y: cvBtn.offset.y }}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                transition={{ type: 'spring', stiffness: 250, damping: 15, mass: 0.5 }}
-                                className="group bg-primary text-primary-foreground px-8 py-4 rounded-full font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer"
+                                style={{ transform: `translate(${cvBtn.offset.x}px,${cvBtn.offset.y}px)` }}
+                                className="group bg-primary text-primary-foreground px-8 py-4 rounded-full font-medium hover:opacity-90 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
                             >
-                                <FileText size={18} />
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
                                 {t('hero.view_cv', 'Voir le CV')}
-                            </m.button>
+                            </button>
 
-                            <m.a
+                            <a
                                 ref={contactBtn.ref as React.Ref<HTMLAnchorElement>}
                                 onMouseMove={(e) => contactBtn.onMouseMove(e.nativeEvent)}
                                 onMouseLeave={contactBtn.onMouseLeave}
                                 href="#contact"
-                                animate={{ x: contactBtn.offset.x, y: contactBtn.offset.y }}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                transition={{ type: 'spring', stiffness: 250, damping: 15, mass: 0.5 }}
-                                className="px-8 py-4 rounded-full border border-border hover:bg-muted/50 transition-colors text-foreground"
+                                style={{ transform: `translate(${contactBtn.offset.x}px,${contactBtn.offset.y}px)` }}
+                                className="px-8 py-4 rounded-full border border-border hover:bg-muted/50 hover:scale-105 active:scale-95 transition-all text-foreground"
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    // Contact is the last section. Scrolling to the absolute bottom prevents
-                                    // layout-shift bugs caused by lazy-loaded height expansions mid-scroll.
                                     window.scrollTo({
                                         top: document.body.scrollHeight,
                                         behavior: 'smooth'
@@ -196,14 +164,14 @@ export function Hero() {
                                 }}
                             >
                                 {t('hero.contact_me')}
-                            </m.a>
+                            </a>
                         </div>
-                    </m.div>
+                    </div>
 
                     {/* Photo — right */}
-                    <m.div
-                        className="shrink-0"
-                        variants={fadeIn}
+                    <div
+                        className="shrink-0 hero-fade-in"
+                        style={{ animationDelay: '0.22s' }}
                     >
                         <div className="relative w-44 h-44 md:w-56 md:h-56 lg:w-64 lg:h-64">
                             {/* Glow */}
@@ -223,22 +191,19 @@ export function Hero() {
                                 />
                             </div>
                         </div>
-                    </m.div>
+                    </div>
 
-                </m.div>
+                </div>
             </div>
 
-            {/* Scroll Indicator */}
-            <m.div
-                className="pb-12 flex flex-col items-center gap-2 text-muted-foreground z-20"
-                style={{ opacity, y }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8, duration: 0.6 }}
+            {/* Scroll Indicator — CSS only, no framer-motion */}
+            <div
+                className="pb-12 flex flex-col items-center gap-2 text-muted-foreground z-20 hero-fade-up"
+                style={{ animationDelay: '0.8s' }}
             >
                 <span className="text-xs uppercase tracking-widest">{t('hero.scroll')}</span>
                 <div className="w-px h-12 bg-gradient-to-b from-border to-transparent" />
-            </m.div>
+            </div>
         </section>
         </>
     );
