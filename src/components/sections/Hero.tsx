@@ -187,6 +187,7 @@ export function Hero() {
                                     height={256}
                                     className="w-full h-full object-cover object-center scale-110"
                                     loading="eager"
+                                    decoding="sync"
                                     fetchPriority="high"
                                 />
                             </div>
