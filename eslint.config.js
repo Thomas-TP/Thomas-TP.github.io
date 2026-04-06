@@ -10,7 +10,24 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  ...compat.extends('eslint:recommended'),
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: { jsx: true },
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+    },
+    rules: {
+      'no-unused-vars': 'off', // Handled by TypeScript
+      'no-undef': 'off',       // Handled by TypeScript
+    },
+  },
+  {
+    ignores: ['dist/**', 'node_modules/**', 'cloudflare-worker/**'],
+  },
 ];
 
 export default eslintConfig;

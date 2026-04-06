@@ -1,5 +1,3 @@
-'use client';
-
 import { m, useReducedMotion } from 'framer-motion';
 import { Mail, Send, CheckCircle, AlertCircle, Copy, Check, Link as LinkIcon } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
@@ -38,10 +36,35 @@ export function Contact() {
     const [copied, setCopied] = useState(false);
 
     const copyEmail = useCallback(() => {
-        navigator.clipboard.writeText('thomas@prudhomme.li').then(() => {
+        const email = 'thomas@prudhomme.li';
+        const onSuccess = () => {
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
-        });
+        };
+        if (navigator.clipboard?.writeText) {
+            navigator.clipboard.writeText(email).then(onSuccess).catch(() => {
+                // Fallback for non-secure contexts
+                const ta = document.createElement('textarea');
+                ta.value = email;
+                ta.style.position = 'fixed';
+                ta.style.left = '-9999px';
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                onSuccess();
+            });
+        } else {
+            const ta = document.createElement('textarea');
+            ta.value = email;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            onSuccess();
+        }
     }, []);
 
     const resolvedTheme = (): 'dark' | 'light' => {
@@ -195,7 +218,7 @@ export function Contact() {
                                         className={`${inputClass}${fieldErrors.name ? ' border-destructive focus:ring-destructive/40' : ''}`}
                                         disabled={status === 'sending' || status === 'success'}
                                     />
-                                    {fieldErrors.name && <p className="mt-1.5 text-xs text-destructive">{fieldErrors.name}</p>}
+                                    {fieldErrors.name && <p role="alert" className="mt-1.5 text-xs text-destructive">{fieldErrors.name}</p>}
                                 </div>
 
                                 <div>
@@ -210,7 +233,7 @@ export function Contact() {
                                         className={`${inputClass}${fieldErrors.email ? ' border-destructive focus:ring-destructive/40' : ''}`}
                                         disabled={status === 'sending' || status === 'success'}
                                     />
-                                    {fieldErrors.email && <p className="mt-1.5 text-xs text-destructive">{fieldErrors.email}</p>}
+                                    {fieldErrors.email && <p role="alert" className="mt-1.5 text-xs text-destructive">{fieldErrors.email}</p>}
                                 </div>
 
                                 <div>
@@ -225,7 +248,7 @@ export function Contact() {
                                         className={`${inputClass} resize-none${fieldErrors.message ? ' border-destructive focus:ring-destructive/40' : ''}`}
                                         disabled={status === 'sending' || status === 'success'}
                                     />
-                                    {fieldErrors.message && <p className="mt-1.5 text-xs text-destructive">{fieldErrors.message}</p>}
+                                    {fieldErrors.message && <p role="alert" className="mt-1.5 text-xs text-destructive">{fieldErrors.message}</p>}
                                 </div>
 
                                 {/* Feedback */}
@@ -234,6 +257,7 @@ export function Contact() {
                                         initial={{ opacity: 0, y: 6 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         className="flex items-center gap-2 text-sm text-emerald-500"
+                                        role="status"
                                     >
                                         <CheckCircle size={16} />
                                         {t('contact.form.success')}
@@ -244,6 +268,7 @@ export function Contact() {
                                         initial={{ opacity: 0, y: 6 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         className="flex items-center gap-2 text-sm text-destructive"
+                                        role="alert"
                                     >
                                         <AlertCircle size={16} />
                                         {t('contact.form.error')}

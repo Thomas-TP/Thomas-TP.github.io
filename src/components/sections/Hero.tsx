@@ -1,22 +1,30 @@
-'use client';
-
 import { m, useScroll, useTransform } from 'framer-motion';
 import { FileText } from 'lucide-react';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GlitchText } from '@/components/ui/glitch-text';
-import ExportedImage from 'next-image-export-optimizer';
-import dynamic from 'next/dynamic';
 
-const CVModal = dynamic(
-    () => import('@/components/modals/CVModal').then(m => m.CVModal),
-    { ssr: false }
+const CVModal = lazy(() =>
+    import('@/components/modals/CVModal').then(m => ({ default: m.CVModal }))
 );
 
-const Hero3D = dynamic(
-    () => import('@/components/ui/hero-3d').then(m => m.Hero3D),
-    { ssr: false }
+const Hero3D = lazy(() =>
+    import('@/components/ui/hero-3d').then(m => ({ default: m.Hero3D }))
 );
+
+// Stagger variants for smooth sequential reveal
+const stagger = {
+    hidden: {},
+    show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+};
+const fadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } },
+};
+const fadeIn = {
+    hidden: { opacity: 0, scale: 0.95 },
+    show: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } },
+};
 
 function useTypingAnimation(roles: string[]) {
     const [text, setText] = useState('');
@@ -104,21 +112,24 @@ export function Hero() {
 
     return (
         <>
-        {cvOpen && <CVModal isOpen={cvOpen} onClose={() => setCvOpen(false)} />}
+        {cvOpen && <Suspense><CVModal isOpen={cvOpen} onClose={() => setCvOpen(false)} /></Suspense>}
         <section id="home" className="min-h-screen flex flex-col justify-center items-center relative pt-20">
             {/* Background 3D & Effects */}
-            <Hero3D />
+            <Suspense><Hero3D /></Suspense>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
             <div className="container px-4 mx-auto z-10 flex-1 flex items-center">
-                <div className="w-full flex flex-col-reverse md:flex-row items-center justify-center gap-10 md:gap-10 lg:gap-12">
+                <m.div
+                    className="w-full flex flex-col-reverse md:flex-row items-center justify-center gap-10 md:gap-10 lg:gap-12"
+                    variants={stagger}
+                    initial="hidden"
+                    animate="show"
+                >
 
                     {/* Text — left */}
                     <m.div
                         className="max-w-xl text-center md:text-left"
-                        initial={{ x: -30 }}
-                        animate={{ x: 0 }}
-                        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+                        variants={fadeUp}
                     >
                         <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-6 text-foreground pb-2">
                             <GlitchText text={t('hero.name')} />
@@ -178,9 +189,7 @@ export function Hero() {
                     {/* Photo — right */}
                     <m.div
                         className="shrink-0"
-                        initial={{ x: 30 }}
-                        animate={{ x: 0 }}
-                        transition={{ duration: 0.8, ease: "easeOut", delay: 0.35 }}
+                        variants={fadeIn}
                     >
                         <div className="relative w-44 h-44 md:w-56 md:h-56 lg:w-64 lg:h-64">
                             {/* Glow */}
@@ -189,22 +198,20 @@ export function Hero() {
                             <div className="absolute inset-[-6px] rounded-full border border-dashed border-border/40 animate-spin-slow" />
                             {/* Photo */}
                             <div className="relative w-full h-full rounded-full ring-1 ring-border overflow-hidden bg-secondary/30">
-                                <ExportedImage
+                                <img
                                     src="/images/memoji-nobg.webp"
                                     alt="Thomas P."
                                     width={256}
                                     height={256}
                                     className="w-full h-full object-cover object-center scale-110"
-                                    priority
+                                    loading="eager"
                                     fetchPriority="high"
-                                    placeholder="blur"
-                                    sizes="(max-width: 768px) 176px, (max-width: 1024px) 224px, 256px"
                                 />
                             </div>
                         </div>
                     </m.div>
 
-                </div>
+                </m.div>
             </div>
 
             {/* Scroll Indicator */}
@@ -213,7 +220,7 @@ export function Hero() {
                 style={{ opacity, y }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 1, duration: 1 }}
+                transition={{ delay: 0.8, duration: 0.6 }}
             >
                 <span className="text-xs uppercase tracking-widest">{t('hero.scroll')}</span>
                 <div className="w-px h-12 bg-gradient-to-b from-border to-transparent" />

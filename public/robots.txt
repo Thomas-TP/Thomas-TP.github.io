@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /_next/
 
 Sitemap: https://thomastp.ch/sitemap.xml

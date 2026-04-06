@@ -1,28 +1,21 @@
-'use client';
-
-import { useRef, useMemo, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { useRef, useMemo, useState, useEffect } from 'react';
+import { Canvas, useFrame, invalidate } from '@react-three/fiber';
 import { Points, PointMaterial } from '@react-three/drei';
-import * as THREE from 'three';
 import { useTheme } from '@/components/ui/theme-provider';
 
-function ParticleNetwork(props: any) {
-  const ref = useRef<any>(null);
+function ParticleNetwork({ paused, ...props }: { paused?: boolean } & Record<string, unknown>) {
+  const ref = useRef<import('three').Points>(null);
   const { theme } = useTheme();
-  const [isDark, setIsDark] = useState(false);
 
   // Safely resolve the actual displayed theme
-  useMemo(() => {
-    if (typeof document !== 'undefined') {
-      const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setIsDark(theme === 'dark' || (theme === 'system' && isSystemDark));
-    }
+  const isDark = useMemo(() => {
+    if (typeof document === 'undefined') return false;
+    const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return theme === 'dark' || (theme === 'system' && isSystemDark);
   }, [theme]);
   
-  // Create thousands of random points
-  const [positions, setPositions] = useState<Float32Array | null>(null);
-  
-  useMemo(() => {
+  // Create random points once
+  const positions = useMemo(() => {
     const count = 3000;
     const p = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
@@ -30,37 +23,33 @@ function ParticleNetwork(props: any) {
         p[i * 3 + 1] = (Math.random() - 0.5) * 10;
         p[i * 3 + 2] = (Math.random() - 0.5) * 10;
     }
-    setPositions(p);
+    return p;
   }, []);
 
   // Manual mouse tracking since Canvas has pointer-events: none
   const mouse = useRef({ x: 0, y: 0 });
   const smoothedMouse = useRef({ x: 0, y: 0 });
   
-  useMemo(() => {
-    if (typeof window !== 'undefined') {
-      const handleMouseMove = (e: MouseEvent) => {
-        mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
-        mouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
-      };
-      window.addEventListener('mousemove', handleMouseMove);
-      return () => window.removeEventListener('mousemove', handleMouseMove);
-    }
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    };
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   useFrame((state, delta) => {
-    if (ref.current) {
-      // Lerp mouse position for smooth transitions
-      smoothedMouse.current.x += (mouse.current.x - smoothedMouse.current.x) * delta * 2;
-      smoothedMouse.current.y += (mouse.current.y - smoothedMouse.current.y) * delta * 2;
+    if (paused || !ref.current) return;
+    // Lerp mouse position for smooth transitions
+    smoothedMouse.current.x += (mouse.current.x - smoothedMouse.current.x) * delta * 2;
+    smoothedMouse.current.y += (mouse.current.y - smoothedMouse.current.y) * delta * 2;
 
-      // Base rotation (slower) + smoothed mouse influence (less reactive)
-      ref.current.rotation.x -= (delta / 30) + (smoothedMouse.current.y * delta * 0.15);
-      ref.current.rotation.y -= (delta / 40) - (smoothedMouse.current.x * delta * 0.15);
-    }
+    // Base rotation (slower) + smoothed mouse influence (less reactive)
+    ref.current.rotation.x -= (delta / 30) + (smoothedMouse.current.y * delta * 0.15);
+    ref.current.rotation.y -= (delta / 40) - (smoothedMouse.current.x * delta * 0.15);
+    invalidate(); // request next frame
   });
-
-  if (!positions) return null;
 
   return (
     <group rotation={[0, 0, Math.PI / 4]}>
@@ -79,16 +68,39 @@ function ParticleNetwork(props: any) {
 }
 
 export function Hero3D() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { threshold: 0 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <div 
-      className="absolute inset-x-0 top-0 h-[150vh] z-[-1] pointer-events-none opacity-50 dark:opacity-40 flex items-center justify-center overflow-hidden"
+    <div
+      ref={containerRef}
+      className="absolute inset-x-0 top-0 h-[150vh] z-[-1] pointer-events-none flex items-center justify-center overflow-hidden hero3d-fade"
       style={{
         maskImage: 'linear-gradient(to bottom, black 0%, black 50%, transparent 100%)',
-        WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 50%, transparent 100%)'
+        WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 50%, transparent 100%)',
       }}
     >
-      <Canvas camera={{ position: [0, 0, 1] }} className="!h-full !w-full">
-        <ParticleNetwork />
+      <Canvas
+        camera={{ position: [0, 0, 1] }}
+        frameloop="demand"
+        className="!h-full !w-full"
+        onCreated={() => {
+          // Fade in only after Three.js canvas is ready
+          containerRef.current?.classList.add('hero3d-ready');
+        }}
+      >
+        <ParticleNetwork paused={!visible} />
       </Canvas>
     </div>
   );

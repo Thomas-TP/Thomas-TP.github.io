@@ -1,9 +1,8 @@
-'use client';
-
 import { m, AnimatePresence } from 'framer-motion';
 import { X, Shield, Lock, Eye } from 'lucide-react';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { createPortal } from 'react-dom';
+import { useScrollLock } from '@/hooks/useScrollLock';
 
 interface PrivacyPolicyModalProps {
     isOpen: boolean;
@@ -12,27 +11,9 @@ interface PrivacyPolicyModalProps {
 
 export function PrivacyPolicyModal({ isOpen, onClose }: PrivacyPolicyModalProps) {
     const { t } = useTranslation();
+    useScrollLock(isOpen);
 
-    // Lock body scroll when modal is open
-    useEffect(() => {
-        if (isOpen) {
-            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-            document.body.style.overflow = 'hidden';
-            document.body.style.paddingRight = `${scrollbarWidth}px`;
-            document.documentElement.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
-            document.documentElement.style.overflow = '';
-        }
-        return () => {
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
-            document.documentElement.style.overflow = '';
-        };
-    }, [isOpen]);
-
-    return (
+    return createPortal(
         <AnimatePresence>
             {isOpen && (
                 <>
@@ -45,14 +26,15 @@ export function PrivacyPolicyModal({ isOpen, onClose }: PrivacyPolicyModalProps)
                         className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[500]"
                     />
 
-                    {/* Modal */}
+                    {/* Modal — centered via flexbox (avoids transform conflict with Framer Motion) */}
+                    <div className="fixed inset-0 z-[501] flex items-center justify-center p-4 sm:p-0 pointer-events-none">
                     <m.div
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="fixed left-[50%] top-[50%] z-[501] w-full max-w-lg translate-x-[-50%] translate-y-[-50%] p-4 sm:p-0"
+                        className="w-full max-w-lg pointer-events-auto"
                     >
-                        <div className="bg-card border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+                        <div data-scroll-lock-ignore className="bg-card border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
 
                             {/* Header */}
                             <div className="p-6 border-b border-border flex items-center justify-between bg-muted/30">
@@ -73,7 +55,7 @@ export function PrivacyPolicyModal({ isOpen, onClose }: PrivacyPolicyModalProps)
                             </div>
 
                             {/* Content */}
-                            <div className="p-6 overflow-y-auto custom-scrollbar space-y-6 text-sm text-foreground/80 leading-relaxed">
+                            <div className="p-6 overflow-y-auto custom-scrollbar space-y-6 text-sm text-foreground/80 leading-relaxed" style={{ overscrollBehavior: 'contain' }}>
                                 <section>
                                     <h3 className="text-base font-semibold text-foreground mb-2 flex items-center gap-2">
                                         <Eye size={16} />
@@ -132,9 +114,11 @@ export function PrivacyPolicyModal({ isOpen, onClose }: PrivacyPolicyModalProps)
                             </div>
                         </div>
                     </m.div>
+                    </div>
                 </>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 }
 

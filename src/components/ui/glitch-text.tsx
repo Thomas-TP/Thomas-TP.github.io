@@ -1,5 +1,3 @@
-'use client';
-
 import { m, useAnimationControls } from "framer-motion";
 
 interface GlitchTextProps {

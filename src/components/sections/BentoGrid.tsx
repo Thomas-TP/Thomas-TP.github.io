@@ -1,5 +1,3 @@
-'use client';
-
 import { type ReactNode, useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { m, useReducedMotion, useScroll, useMotionValueEvent } from 'framer-motion';
@@ -472,7 +470,7 @@ function IoTBlock() {
                     <div className="relative z-10">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
                             style={{
-                                color: lightOn ? '#fbbf24' : 'var(--muted-foreground)',
+                                color: lightOn ? '#fbbf24' : 'rgb(var(--muted-foreground))',
                                 filter: lightOn ? `drop-shadow(0 0 ${brightness / 10}px #fbbf24)` : 'none',
                                 transition: 'color 0.5s ease, filter 0.5s ease'
                             }}>
@@ -533,7 +531,7 @@ function IoTBlock() {
                             <div className="w-0.5 h-0.5 rounded-full bg-foreground/30" />
                         </div>
                     </div>
-                    <div className="mt-1 text-[8px] font-mono" style={{ color: ovenOn ? '#f87171' : 'var(--muted-foreground)' }}>
+                    <div className="mt-1 text-[8px] font-mono" style={{ color: ovenOn ? '#f87171' : 'rgb(var(--muted-foreground))' }}>
                         {ovenOn ? '200°C' : 'OFF'}
                     </div>
                 </div>
@@ -820,7 +818,7 @@ export function AboutBento() {
     return (
         <section id="about" className="py-20 container mx-auto px-4 cv-auto">
             <m.div
-                className="mb-12"
+                className="mb-12 max-w-4xl mx-auto"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
