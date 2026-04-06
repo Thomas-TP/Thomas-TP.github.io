@@ -13,17 +13,19 @@ const Hero3D = lazy(() =>
 );
 
 // Stagger variants for smooth sequential reveal
+// NOTE: opacity is intentionally NOT set in `hidden` so that elements are visible
+// on first paint — Lighthouse excludes opacity-0 elements from LCP measurement.
 const stagger = {
     hidden: {},
     show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
 };
 const fadeUp = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } },
+    hidden: { y: 20 },
+    show: { y: 0, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } },
 };
 const fadeIn = {
-    hidden: { opacity: 0, scale: 0.95 },
-    show: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } },
+    hidden: { scale: 0.97 },
+    show: { scale: 1, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } },
 };
 
 function useTypingAnimation(roles: string[]) {
@@ -103,6 +105,18 @@ export function Hero() {
     const opacity = useTransform(scrollY, [0, 400], [1, 0]);
     const y = useTransform(scrollY, [0, 400], [0, 100]);
     const [cvOpen, setCvOpen] = useState(false);
+    // Defer Three.js background until browser is idle — keeps it out of the TBT window
+    const [mountBg, setMountBg] = useState(false);
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        if ('requestIdleCallback' in window) {
+            const id = (window as unknown as { requestIdleCallback: (cb: () => void, opts: { timeout: number }) => number })
+                .requestIdleCallback(() => setMountBg(true), { timeout: 3000 });
+            return () => (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(id);
+        }
+        const id = setTimeout(() => setMountBg(true), 800);
+        return () => clearTimeout(id);
+    }, []);
 
     const roles = t('hero.roles', { returnObjects: true }) as string[];
     const typedRole = useTypingAnimation(Array.isArray(roles) ? roles : []);
@@ -114,8 +128,8 @@ export function Hero() {
         <>
         {cvOpen && <Suspense><CVModal isOpen={cvOpen} onClose={() => setCvOpen(false)} /></Suspense>}
         <section id="home" className="min-h-screen flex flex-col justify-center items-center relative pt-20">
-            {/* Background 3D & Effects */}
-            <Suspense><Hero3D /></Suspense>
+            {/* Background 3D & Effects — deferred to idle to avoid blocking TBT */}
+            {mountBg && <Suspense><Hero3D /></Suspense>}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
             <div className="container px-4 mx-auto z-10 flex-1 flex items-center">
