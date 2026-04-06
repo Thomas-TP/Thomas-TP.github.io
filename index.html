@@ -49,11 +49,10 @@
       .dark body{background:#09090b}
     </style>
 
-    <!-- Google Fonts: Inter (only weights actually used: 300-800) — non-render-blocking via media swap -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <!-- Google Fonts: Inter — load async, never block rendering -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" rel="stylesheet" /></noscript>
 
     <!-- Anti-FOUC: apply theme class before render + force scroll to top on every load -->
     <script>
