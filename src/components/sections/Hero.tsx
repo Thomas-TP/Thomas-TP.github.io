@@ -1,3 +1,5 @@
+import { m } from 'framer-motion';
+import { FileText } from 'lucide-react';
 import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GlitchText } from '@/components/ui/glitch-text';
@@ -112,15 +114,10 @@ export function Hero() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
             <div className="container px-4 mx-auto z-10 flex-1 flex items-center">
-                <div
-                    className="w-full flex flex-col-reverse md:flex-row items-center justify-center gap-10 md:gap-10 lg:gap-12"
-                >
+                <div className="w-full flex flex-col-reverse md:flex-row items-center justify-center gap-10 md:gap-10 lg:gap-12">
 
-                    {/* Text — left */}
-                    <div
-                        className="max-w-xl text-center md:text-left hero-fade-up"
-                        style={{ animationDelay: '0.1s' }}
-                    >
+                    {/* Text — left (no entrance animation — content visible on first paint for LCP) */}
+                    <div className="max-w-xl text-center md:text-left">
                         <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-6 text-foreground pb-2">
                             <GlitchText text={t('hero.name')} />
                         </h1>
@@ -135,25 +132,31 @@ export function Hero() {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start items-center">
-                            <button
+                            <m.button
                                 ref={cvBtn.ref as React.Ref<HTMLButtonElement>}
                                 onMouseMove={(e) => cvBtn.onMouseMove(e.nativeEvent)}
                                 onMouseLeave={cvBtn.onMouseLeave}
                                 onClick={() => setCvOpen(true)}
-                                style={{ transform: `translate(${cvBtn.offset.x}px,${cvBtn.offset.y}px)` }}
-                                className="group bg-primary text-primary-foreground px-8 py-4 rounded-full font-medium hover:opacity-90 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
+                                animate={{ x: cvBtn.offset.x, y: cvBtn.offset.y }}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                transition={{ type: 'spring', stiffness: 250, damping: 15, mass: 0.5 }}
+                                className="group bg-primary text-primary-foreground px-8 py-4 rounded-full font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+                                <FileText size={18} />
                                 {t('hero.view_cv', 'Voir le CV')}
-                            </button>
+                            </m.button>
 
-                            <a
+                            <m.a
                                 ref={contactBtn.ref as React.Ref<HTMLAnchorElement>}
                                 onMouseMove={(e) => contactBtn.onMouseMove(e.nativeEvent)}
                                 onMouseLeave={contactBtn.onMouseLeave}
                                 href="#contact"
-                                style={{ transform: `translate(${contactBtn.offset.x}px,${contactBtn.offset.y}px)` }}
-                                className="px-8 py-4 rounded-full border border-border hover:bg-muted/50 hover:scale-105 active:scale-95 transition-all text-foreground"
+                                animate={{ x: contactBtn.offset.x, y: contactBtn.offset.y }}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                transition={{ type: 'spring', stiffness: 250, damping: 15, mass: 0.5 }}
+                                className="px-8 py-4 rounded-full border border-border hover:bg-muted/50 transition-colors text-foreground"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     window.scrollTo({
@@ -164,15 +167,12 @@ export function Hero() {
                                 }}
                             >
                                 {t('hero.contact_me')}
-                            </a>
+                            </m.a>
                         </div>
                     </div>
 
-                    {/* Photo — right */}
-                    <div
-                        className="shrink-0 hero-fade-in"
-                        style={{ animationDelay: '0.22s' }}
-                    >
+                    {/* Photo — right (no entrance animation) */}
+                    <div className="shrink-0">
                         <div className="relative w-44 h-44 md:w-56 md:h-56 lg:w-64 lg:h-64">
                             {/* Glow */}
                             <div className="absolute inset-0 rounded-full bg-primary/10 blur-2xl scale-110" />
@@ -196,11 +196,8 @@ export function Hero() {
                 </div>
             </div>
 
-            {/* Scroll Indicator — CSS only, no framer-motion */}
-            <div
-                className="pb-12 flex flex-col items-center gap-2 text-muted-foreground z-20 hero-fade-up"
-                style={{ animationDelay: '0.8s' }}
-            >
+            {/* Scroll Indicator */}
+            <div className="pb-12 flex flex-col items-center gap-2 text-muted-foreground z-20">
                 <span className="text-xs uppercase tracking-widest">{t('hero.scroll')}</span>
                 <div className="w-px h-12 bg-gradient-to-b from-border to-transparent" />
             </div>
