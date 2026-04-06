@@ -46,7 +46,7 @@ export default defineConfig({
           framerMotion: {
             test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
             name: 'vendor-framer',
-            chunks: 'all',
+            chunks: 'async',
             priority: 20,
           },
           pdfjs: {

@@ -1,9 +1,9 @@
-import { LazyMotion, domAnimation } from 'framer-motion';
+import { LazyMotion } from 'framer-motion';
 
-// Use synchronous domAnimation: framer-motion is already in the sync bundle
-// (imported statically in Hero.tsx), so there is zero cost — and it eliminates
-// the async Promise round-trip that would keep elements in their `initial`
-// (invisible) state for an extra render cycle, hurting LCP.
+// Async feature loading: framer-motion is NOT in the sync critical path (Hero uses
+// pure CSS animations). Features load in the background for below-the-fold sections.
+const loadFeatures = () => import('framer-motion').then(m => m.domAnimation);
+
 export function LazyMotionProvider({ children }: { children: React.ReactNode }) {
-    return <LazyMotion features={domAnimation} strict>{children}</LazyMotion>;
+    return <LazyMotion features={loadFeatures} strict>{children}</LazyMotion>;
 }

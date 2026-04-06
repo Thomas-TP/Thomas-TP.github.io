@@ -1,27 +1,51 @@
-import { Navbar } from '@/components/layout/Navbar';
-import { Footer } from '@/components/layout/Footer';
-import { ScrollProgress } from '@/components/ui/scroll-progress';
-import { useReducedMotion } from 'framer-motion';
+import { lazy, Suspense, useState, useEffect, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ReactLenis } from 'lenis/react';
 
-export function ClientLayout({ children }: { children: React.ReactNode }) {
-  const shouldReduceMotion = useReducedMotion();
+// Lazy-load non-LCP shell components to reduce sync JS on the main thread
+const Navbar = lazy(() => import('@/components/layout/Navbar').then(m => ({ default: m.Navbar })));
+const Footer = lazy(() => import('@/components/layout/Footer').then(m => ({ default: m.Footer })));
+const ScrollProgress = lazy(() => import('@/components/ui/scroll-progress').then(m => ({ default: m.ScrollProgress })));
+const LazyLenis = lazy(() => import('lenis/react').then(m => ({ default: m.ReactLenis })));
+
+function usePrefersReducedMotion() {
+  const [prefers, setPrefers] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefers(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefers(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+  return prefers;
+}
+
+export function ClientLayout({ children }: { children: ReactNode }) {
+  const shouldReduceMotion = usePrefersReducedMotion();
   const { t } = useTranslation();
+
+  // Defer Lenis so it doesn't add to TBT during initial load
+  const [lenisReady, setLenisReady] = useState(false);
+  useEffect(() => {
+    if (shouldReduceMotion) return;
+    const id = requestAnimationFrame(() => setLenisReady(true));
+    return () => cancelAnimationFrame(id);
+  }, [shouldReduceMotion]);
 
   const Content = (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-indigo-500/30">
-      {/* Background Gradient Spotlights — will-change:transform promotes to GPU layer,
-           avoiding repaint on every scroll tick */}
       <div className="fixed inset-0 z-[-1]">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[80px] pointer-events-none opacity-50" />
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[80px] pointer-events-none opacity-50" />
         <div className="absolute inset-0 bg-[url('/images/noise.svg')] opacity-20 brightness-100 pointer-events-none mix-blend-overlay" />
       </div>
 
-      <Navbar />
+      <Suspense>
+        <Navbar />
+      </Suspense>
       {children}
-      <Footer />
+      <Suspense>
+        <Footer />
+      </Suspense>
     </div>
   );
 
@@ -34,13 +58,15 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
       >
         {t('skip_content')}
       </a>
-      <ScrollProgress />
+      <Suspense>
+        <ScrollProgress />
+      </Suspense>
 
-      {!shouldReduceMotion ? (
-        <ReactLenis root>{Content}</ReactLenis>
-      ) : (
-        Content
-      )}
+      {lenisReady ? (
+        <Suspense fallback={Content}>
+          <LazyLenis root>{Content}</LazyLenis>
+        </Suspense>
+      ) : Content}
     </>
   );
 }
