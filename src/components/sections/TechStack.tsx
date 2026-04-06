@@ -1,6 +1,4 @@
-'use client';
-
-import { type ElementType } from 'react';
+import type { ComponentType } from 'react';
 import { m } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
@@ -17,7 +15,7 @@ interface Tech {
     /** SVG path data from simple-icons (fill-based) */
     iconPath?: string;
     /** React component from react-icons */
-    IconComponent?: any;
+    IconComponent?: ComponentType<{ className?: string; 'aria-label'?: string }>;
 }
 
 // Row 1 — scrolls left (→)

@@ -1,5 +1,3 @@
-'use client';
-
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "@/components/ui/theme-provider"
 import { m } from "framer-motion"
@@ -23,7 +21,7 @@ export function ModeToggle() {
         
         // Use native View Transitions API if supported
         if (typeof document !== 'undefined' && 'startViewTransition' in document) {
-            (document as any).startViewTransition(() => {
+            (document as unknown as { startViewTransition: (cb: () => void) => void }).startViewTransition(() => {
                 setTheme(newTheme);
             });
         } else {

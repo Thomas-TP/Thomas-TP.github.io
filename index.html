@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Thomas P. | Portfolio</title>
+    <meta name="description" content="Portfolio of Thomas P. - Future Computer Scientist at Geneva IT. Exploring Web Development, Cybersecurity, and IoT." />
+    <meta name="author" content="Thomas P." />
+    <meta name="keywords" content="Thomas P., Portfolio, Geneva IT, Web Development, Cybersecurity, IoT, React, TypeScript, Ethical Hacking, Software Engineer" />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon-light.svg" media="(prefers-color-scheme: light)" />
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
+    <link rel="shortcut icon" href="/icons/favicon.svg" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://thomastp.ch" />
+    <meta property="og:site_name" content="Thomas P. | Portfolio" />
+    <meta property="og:title" content="Thomas P. | Portfolio" />
+    <meta property="og:description" content="Portfolio of Thomas P. - Future Computer Scientist at Geneva IT. Exploring Web Development, Cybersecurity, and IoT." />
+    <meta property="og:image" content="https://thomastp.ch/images/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Thomas P. Portfolio" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:logo" content="https://thomastp.ch/icons/favicon.svg" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@ThomasTP_dev" />
+    <meta name="twitter:creator" content="@ThomasTP_dev" />
+    <meta name="twitter:title" content="Thomas P. | Portfolio" />
+    <meta name="twitter:description" content="Portfolio of Thomas P. - Future Computer Scientist at Geneva IT. Exploring Web Development, Cybersecurity, and IoT." />
+    <meta name="twitter:image" content="https://thomastp.ch/images/og-image.png" />
+
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="https://api.github.com" />
+
+    <!-- Preload LCP hero image -->
+    <link rel="preload" as="image" href="/images/memoji-nobg.webp" type="image/webp" fetchpriority="high" />
+
+    <!-- Critical inline CSS for skeleton (renders before external CSS loads) -->
+    <style>
+      /* Prevent background flash while JS loads */
+      body{background:#ffffff;margin:0}
+      .dark body{background:#09090b}
+    </style>
+
+    <!-- Google Fonts: Inter (only weights actually used: 300-800) — non-render-blocking via media swap -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+
+    <!-- Anti-FOUC: apply theme class before render + force scroll to top on every load -->
+    <script>
+      (function(){try{var s=localStorage.getItem('vite-ui-theme');var t=s==='dark'||s==='light'?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.classList.add(t);}catch(e){}})()
+      if('scrollRestoration' in history) history.scrollRestoration='manual';
+      window.scrollTo(0,0);
+    </script>
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Thomas P.",
+        "url": "https://thomastp.ch",
+        "jobTitle": "Future Computer Scientist",
+        "description": "Information Technology student at Geneva IT School specializing in Web Development, Cybersecurity, and IoT solutions.",
+        "image": "https://thomastp.ch/images/og-image.png",
+        "sameAs": [
+          "https://github.com/Thomas-TP",
+          "https://www.linkedin.com/in/thomas-tp/"
+        ],
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Geneva IT School"
+        },
+        "knowsAbout": [
+          "Web Development", "Cybersecurity", "Internet of Things (IoT)",
+          "React", "TypeScript", ".NET", "Cisco Packet Tracer", "Ethical Hacking"
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "SoftwareSourceCode",
+            "name": "X-clone",
+            "description": "A responsive clone of the X (formerly Twitter) platform built with HTML/CSS/JS and AI integration.",
+            "url": "https://x-clone-teal-phi.vercel.app/",
+            "codeRepository": "https://github.com/Thomas-TP/X-clone",
+            "programmingLanguage": ["HTML", "CSS", "JavaScript"]
+          },
+          {
+            "@type": "SoftwareApplication",
+            "name": "Tank.io",
+            "description": "A multiplayer tank battle game using React, Canvas API, and WebSocket technology.",
+            "url": "https://tank-io-wr49.onrender.com/",
+            "codeRepository": "https://github.com/Thomas-TP/Tank.io",
+            "applicationCategory": "Game",
+            "operatingSystem": "Web Browser"
+          },
+          {
+            "@type": "SoftwareSourceCode",
+            "name": "PowerShell Empire Automation",
+            "description": "Cybersecurity automation scripts utilizing the PowerShell Empire framework for pen-testing simulations.",
+            "url": "https://github.com/Thomas-TP/Powershell-Empire-test",
+            "codeRepository": "https://github.com/Thomas-TP/Powershell-Empire-test",
+            "programmingLanguage": "PowerShell"
+          },
+          {
+            "@type": "SoftwareApplication",
+            "name": "Meals Planner",
+            "description": "A mobile app that generates 5 balanced weekly meals, designed for grab-and-go lunches you can reheat at work. Built with Flutter.",
+            "codeRepository": "https://github.com/Thomas-TP/meals-app",
+            "applicationCategory": "Lifestyle",
+            "operatingSystem": "Android, iOS",
+            "programmingLanguage": ["Dart", "C++", "Swift"]
+          }
+        ]
+      }
+    ]
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

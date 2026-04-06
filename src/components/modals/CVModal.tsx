@@ -1,12 +1,14 @@
-'use client';
-
 import { m, AnimatePresence } from 'framer-motion';
 import { X, Download, Printer, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
+import { useScrollLock } from '@/hooks/useScrollLock';
 import { Document, Page, pdfjs } from 'react-pdf';
 // TextLayer & AnnotationLayer CSS intentionally omitted — layers are disabled for performance
+
+// Set PDF.js worker at module level (client-only, no SSR guard needed)
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 interface CVModalProps {
     isOpen: boolean;
@@ -25,9 +27,7 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
     const contentRef = useRef<HTMLDivElement>(null);
 
     // Mount guard — portal requires document
-    // Also set the PDF.js worker URL here (string — avoids webpack bundling pdfjs into initial chunk)
     useEffect(() => {
-        pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
         setMounted(true);
     }, []);
 
@@ -50,24 +50,7 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
         return () => observer.disconnect();
     }, [isOpen]);
 
-    // Scroll lock + scrollbar width compensation
-    useEffect(() => {
-        if (isOpen) {
-            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-            document.body.style.overflow = 'hidden';
-            document.body.style.paddingRight = `${scrollbarWidth}px`;
-            document.documentElement.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
-            document.documentElement.style.overflow = '';
-        }
-        return () => {
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
-            document.documentElement.style.overflow = '';
-        };
-    }, [isOpen]);
+    useScrollLock(isOpen);
 
     // ESC to close
     useEffect(() => {
@@ -100,13 +83,14 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
                         className="fixed inset-0 bg-background/85 z-[900]"
                     />
 
-                    {/* Panel */}
+                    {/* Panel — centered via flexbox (avoids transform conflict with Framer Motion) */}
+                    <div className="fixed inset-0 z-[901] flex items-center justify-center pointer-events-none">
                     <m.div
                         initial={{ opacity: 0, scale: 0.96, y: 24 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.96, y: 24 }}
                         transition={{ duration: 0.25, ease: 'easeOut' }}
-                        className="fixed left-1/2 top-1/2 z-[901] w-[95vw] max-w-4xl -translate-x-1/2 -translate-y-1/2"
+                        className="w-[95vw] max-w-4xl pointer-events-auto"
                         style={{ height: '90vh' }}
                     >
                         <div className="bg-card border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col h-full">
@@ -220,6 +204,7 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
                             )}
                         </div>
                     </m.div>
+                    </div>
                 </>
             )}
         </AnimatePresence>

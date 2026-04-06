@@ -1,19 +1,15 @@
-'use client';
-
 import { m, AnimatePresence } from 'framer-motion';
 import { Home, User, Code, Mail, Link as LinkIcon } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type ComponentType } from 'react';
 import { ModeToggle } from '@/components/ui/mode-toggle';
 import { useTranslation } from 'react-i18next';
 import { LanguageToggle } from '@/components/ui/language-toggle';
-import { usePathname } from 'next/navigation';
-import { useTransitionRouter } from 'next-view-transitions';
 
 interface NavItem {
     id: string;
     label: string;
-    icon: any;
+    icon: ComponentType<{ size?: number; className?: string; strokeWidth?: number }>;
     href: string;
     external?: boolean;
 }
@@ -21,42 +17,32 @@ interface NavItem {
 function NavLink({ item, isActive, forceShowLabel }: { item: NavItem; isActive?: boolean; forceShowLabel?: boolean }) {
     const [isHovered, setIsHovered] = useState(false);
     const showLabel = isHovered || isActive || forceShowLabel;
-    const pathname = usePathname();
-    const router = useTransitionRouter();
 
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
         if (item.external) return;
 
         e.preventDefault();
 
-        // Standard standard next.js routing behaviour handles `#id` scroll automatically if we just push to the full path
-        const targetPath = item.href.startsWith('#') ? `/${item.href}` : item.href;
-
-        if (pathname !== '/') {
-            router.push(targetPath);
-        } else {
-            // Already on home, smooth scroll
-            const targetId = item.href.replace('#', '');
-            if (targetId && targetId !== 'home') {
-                if (targetId === 'contact') {
-                    // Contact is the last section. Scrolling to the absolute bottom prevents
-                    // layout-shift bugs caused by lazy-loaded height expansions mid-scroll.
-                    window.scrollTo({
-                        top: document.body.scrollHeight,
-                        behavior: 'smooth'
-                    });
-                } else {
-                    const element = document.getElementById(targetId);
-                    if (element) {
-                        element.scrollIntoView({ behavior: 'smooth' });
-                    }
-                }
-                // Update URL without jump
-                setTimeout(() => window.history.pushState(null, '', item.href), 10);
+        const targetId = item.href.replace('#', '');
+        if (targetId && targetId !== 'home') {
+            if (targetId === 'contact') {
+                // Contact is the last section. Scrolling to the absolute bottom prevents
+                // layout-shift bugs caused by lazy-loaded height expansions mid-scroll.
+                window.scrollTo({
+                    top: document.body.scrollHeight,
+                    behavior: 'smooth'
+                });
             } else {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                window.history.pushState(null, '', '#');
+                const element = document.getElementById(targetId);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
             }
+            // Update URL without jump
+            setTimeout(() => window.history.pushState(null, '', item.href), 10);
+        } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.history.pushState(null, '', '#');
         }
     };
 
@@ -109,7 +95,6 @@ export function Navbar() {
     const [isFooterVisible, setIsFooterVisible] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [isDesktop, setIsDesktop] = useState(false);
-    const pathname = usePathname();
 
     useEffect(() => {
         const checkDesktop = () => setIsDesktop(window.innerWidth >= 768);
@@ -141,12 +126,7 @@ export function Navbar() {
     }, []);
 
     useEffect(() => {
-        // Only run on home page
-        if (pathname !== '/') {
-            setActiveSection('');
-            return;
-        }
-
+        let ticking = false;
         const getActiveSection = () => {
             const sections = Array.from(document.querySelectorAll('section[id]'));
             const scrollY = window.scrollY;
@@ -163,12 +143,20 @@ export function Navbar() {
                 }
             }
             setActiveSection(active);
+            ticking = false;
+        };
+
+        const onScroll = () => {
+            if (!ticking) {
+                ticking = true;
+                requestAnimationFrame(getActiveSection);
+            }
         };
 
         getActiveSection();
-        window.addEventListener('scroll', getActiveSection, { passive: true });
-        return () => window.removeEventListener('scroll', getActiveSection);
-    }, [pathname]);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
 
     useEffect(() => {
         const footerInfo = document.querySelector('footer');
@@ -195,7 +183,7 @@ export function Navbar() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <div className="flex gap-1 hidden md:flex">
+                    <div className="hidden md:flex gap-1">
                         {socialItems.map((item) => (
                             <NavLink key={item.id} item={item} forceShowLabel={isDesktop} />
                         ))}
@@ -208,9 +196,9 @@ export function Navbar() {
 
             {/* BOTTOM NAVBAR - CSS Transition for Performance */}
             <div
-                className={`fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-8 px-4 transition-all duration-500 ease-in-out transform will-change-transform ${(!isScrolled || isFooterVisible) ? 'translate-y-[150%] opacity-0 pointer-events-none' : 'translate-y-0 opacity-100 pointer-events-auto'}`}
+                className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-8 px-4 pointer-events-none"
             >
-                <nav className="glass rounded-full px-2 py-2 md:px-4 md:py-3 flex items-center gap-1 md:gap-2 shadow-2xl shadow-black/5 dark:shadow-black/20 border border-border/50 ring-1 ring-border/50 overflow-hidden pointer-events-auto">
+                <nav className={`glass rounded-full px-2 py-2 md:px-4 md:py-3 flex items-center gap-1 md:gap-2 shadow-2xl shadow-black/5 dark:shadow-black/20 border border-border/50 ring-1 ring-border/50 pointer-events-auto transition-all duration-500 ease-in-out transform will-change-transform ${(!isScrolled || isFooterVisible) ? 'translate-y-[200%] opacity-0' : 'translate-y-0 opacity-100'}`}>
                     <div className="flex items-center gap-2">
                         <div className="flex gap-1">
                             {navItems.map((item) => (
@@ -221,7 +209,7 @@ export function Navbar() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <div className="flex gap-1 hidden md:flex">
+                        <div className="hidden md:flex gap-1">
                             {socialItems.map((item) => (
                                 <NavLink key={item.id} item={item} />
                             ))}
