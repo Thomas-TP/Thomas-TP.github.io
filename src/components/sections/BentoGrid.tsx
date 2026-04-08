@@ -731,7 +731,6 @@ function CertificationsBlock() {
     const shouldReduceMotion = usePrefersReducedMotion();
     const cardRef = useRef<HTMLDivElement>(null);
     const svgRef = useRef<SVGSVGElement>(null);
-    const revealRef = useRef<HTMLDivElement>(null);
     const glowOrbRef = useRef<HTMLDivElement>(null);
     const ctaRef = useRef<HTMLAnchorElement>(null);
     const titleRef = useRef<HTMLDivElement>(null);
@@ -841,24 +840,21 @@ function CertificationsBlock() {
         loadGsap().then(({ gsap }) => {
             if (!card.isConnected) return;
             const svg = svgRef.current;
-            const reveal = revealRef.current;
 
             const enter = () => {
                 gsap.to(card, { y: -6, scale: 1.01, duration: 0.12, ease: 'power2.out' });
-                if (!shouldReduceMotion && svg && reveal) {
+                if (!shouldReduceMotion && svg) {
                     gsap.to(svg.querySelectorAll('.hex-label'), { opacity: 1, y: 0, duration: 0.15, stagger: 0.02, ease: 'power2.out' });
                     gsap.to(svg.querySelectorAll('.hex-shape'), { strokeWidth: 1.5, opacity: 0.85, duration: 0.12, ease: 'power2.out' });
                     gsap.to(svg.querySelectorAll('.conn-line'), { opacity: 0.3, duration: 0.12, ease: 'power2.out' });
-                    gsap.to(reveal, { opacity: 1, y: 0, duration: 0.15, ease: 'power2.out' });
                 }
             };
             const leave = () => {
                 gsap.to(card, { y: 0, scale: 1, duration: 0.15, ease: 'power3.out' });
-                if (!shouldReduceMotion && svg && reveal) {
+                if (!shouldReduceMotion && svg) {
                     gsap.to(svg.querySelectorAll('.hex-label'), { opacity: 0, y: 4, duration: 0.12, ease: 'power2.in' });
                     gsap.to(svg.querySelectorAll('.hex-shape'), { strokeWidth: 0.8, opacity: 0.6, duration: 0.12, ease: 'power2.in' });
                     gsap.to(svg.querySelectorAll('.conn-line'), { opacity: 0.08, duration: 0.12, ease: 'power2.in' });
-                    gsap.to(reveal, { opacity: 0, y: 8, duration: 0.12, ease: 'power2.in' });
                 }
             };
             card.addEventListener('mouseenter', enter);
