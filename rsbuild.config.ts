@@ -16,6 +16,7 @@ export default defineConfig({
       root: 'dist',
     },
     assetPrefix: '/',
+    inlineStyles: true,
   },
   tools: {
     cssLoader: {
@@ -28,6 +29,9 @@ export default defineConfig({
       },
     },
   },
+  dev: {
+    lazyCompilation: false,
+  },
   server: {
     port: 3000,
   },
@@ -35,7 +39,6 @@ export default defineConfig({
     chunkSplit: {
       strategy: 'split-by-experience',
       override: {
-        chunks: 'all',
         cacheGroups: {
           three: {
             test: /[\\/]node_modules[\\/](three|@react-three)[\\/]/,
@@ -43,10 +46,10 @@ export default defineConfig({
             chunks: 'async',
             priority: 20,
           },
-          framerMotion: {
-            test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
-            name: 'vendor-framer',
-            chunks: 'all',
+          gsap: {
+            test: /[\\/]node_modules[\\/](gsap|@gsap)[\\/]/,
+            name: 'vendor-gsap',
+            chunks: 'async',
             priority: 20,
           },
           pdfjs: {

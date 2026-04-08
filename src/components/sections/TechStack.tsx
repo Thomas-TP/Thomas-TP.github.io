@@ -1,5 +1,7 @@
+import { useRef, useEffect } from 'react';
 import type { ComponentType } from 'react';
-import { m } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useTranslation } from 'react-i18next';
 import {
     siReact, siTypescript, siTailwindcss, siNodedotjs, siNextdotjs,
@@ -9,6 +11,8 @@ import {
     siVmware, siGrafana, siWireshark,
 } from 'simple-icons';
 import { TbBrandAws, TbBrandAzure, TbBrandCSharp, TbBrandVscode, TbBrandOffice, TbBrain } from 'react-icons/tb';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface Tech {
     label: string;
@@ -84,43 +88,70 @@ function TechItem({ label, iconPath, IconComponent }: Tech) {
 
 function MarqueeRow({ items, reverse = false }: { items: Tech[]; reverse?: boolean }) {
     const doubled = [...items, ...items];
+    const trackRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const el = trackRef.current;
+        if (!el) return;
+
+        // Measure half width (one set of items)
+        const half = el.scrollWidth / 2;
+
+        gsap.set(el, { x: reverse ? -half : 0 });
+
+        const tween = gsap.to(el, {
+            x: reverse ? 0 : -half,
+            duration: 60,
+            ease: 'none',
+            repeat: -1,
+            modifiers: {
+                x: gsap.utils.unitize((x: number) => {
+                    // Seamless loop
+                    return reverse
+                        ? ((parseFloat(String(x)) % half) + half) % half - half
+                        : parseFloat(String(x)) % half;
+                }),
+            },
+        });
+
+        return () => { tween.kill(); };
+    }, [reverse]);
+
     return (
         <div className="flex relative w-full overflow-hidden">
-            <m.div
-                className="flex gap-14 whitespace-nowrap pr-14"
-                animate={{ x: reverse ? ["-50%", "0%"] : ["0%", "-50%"] }}
-                transition={{
-                    repeat: Infinity,
-                    repeatType: "loop",
-                    duration: 60,
-                    ease: "linear",
-                }}
-            >
+            <div ref={trackRef} className="flex gap-14 whitespace-nowrap pr-14">
                 {doubled.map((tech, index) => (
                     <TechItem key={`${tech.label}-${index}`} {...tech} />
                 ))}
-            </m.div>
+            </div>
         </div>
     );
 }
 
 export function TechStack() {
     const { t } = useTranslation();
+    const headerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const el = headerRef.current;
+        if (!el) return;
+        const ctx = gsap.context(() => {
+            gsap.fromTo(el, { opacity: 0, y: 20 }, {
+                opacity: 1, y: 0, duration: 0.5, ease: 'power3.out',
+                scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none' },
+            });
+        }, el);
+        return () => ctx.revert();
+    }, []);
 
     return (
         <section className="py-20 overflow-hidden relative cv-auto">
             {/* fade edges */}
             <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background z-10 pointer-events-none" />
 
-            <m.div
-                className="mb-12 text-center"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-            >
+            <div ref={headerRef} className="mb-12 text-center" style={{ opacity: 0 }}>
                 <span className="text-sm text-muted-foreground uppercase tracking-widest">{t('tech_stack.title')}</span>
-            </m.div>
+            </div>
 
             <div className="flex flex-col gap-10">
                 <MarqueeRow items={row1} reverse={false} />

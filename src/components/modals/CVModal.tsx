@@ -1,4 +1,4 @@
-import { m, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
 import { X, Download, Printer, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
@@ -20,16 +20,41 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
     const cvPath = '/documents/ThomasPrudhommeCV.pdf';
 
     const [mounted, setMounted] = useState(false);
+    const [shouldRender, setShouldRender] = useState(false);
     const [numPages, setNumPages] = useState<number>(0);
     const [pageWidth, setPageWidth] = useState(760);
-    // Single-page navigator: renders only one page at a time for maximum perf
     const [currentPage, setCurrentPage] = useState(1);
     const contentRef = useRef<HTMLDivElement>(null);
+    const backdropRef = useRef<HTMLDivElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
 
-    // Mount guard — portal requires document
+    // Mount guard
+    useEffect(() => { setMounted(true); }, []);
+
+    // Enter/exit animations
     useEffect(() => {
-        setMounted(true);
-    }, []);
+        if (isOpen) {
+            setShouldRender(true);
+        } else if (shouldRender) {
+            // Exit animation
+            const tl = gsap.timeline({
+                onComplete: () => setShouldRender(false),
+            });
+            if (backdropRef.current) tl.to(backdropRef.current, { opacity: 0, duration: 0.2 }, 0);
+            if (panelRef.current) tl.to(panelRef.current, { opacity: 0, scale: 0.96, y: 24, duration: 0.2 }, 0);
+        }
+    }, [isOpen]);
+
+    // Enter animation when shouldRender becomes true
+    useEffect(() => {
+        if (!shouldRender || !isOpen) return;
+        // Wait one frame for DOM to render
+        const raf = requestAnimationFrame(() => {
+            if (backdropRef.current) gsap.fromTo(backdropRef.current, { opacity: 0 }, { opacity: 1, duration: 0.25 });
+            if (panelRef.current) gsap.fromTo(panelRef.current, { opacity: 0, scale: 0.96, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 0.25, ease: 'power2.out' });
+        });
+        return () => cancelAnimationFrame(raf);
+    }, [shouldRender, isOpen]);
 
     // Reset to first page when modal opens
     useEffect(() => {
@@ -69,30 +94,21 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
     // Don't render server-side — portal requires document.body
     if (!mounted) return null;
 
-    const modal = (
-        <AnimatePresence>
-            {isOpen && (
-                <>
-                    {/* Backdrop — portaled to body, above everything */}
-                    {/* No backdrop-blur — too expensive on GPU, replaced with solid overlay */}
-                    <m.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={onClose}
-                        className="fixed inset-0 bg-background/85 z-[900]"
-                    />
+    const modal = shouldRender ? (
+        <>
+            <div
+                ref={backdropRef}
+                onClick={onClose}
+                className="fixed inset-0 bg-background/85 z-[900]"
+                style={{ opacity: 0 }}
+            />
 
-                    {/* Panel — centered via flexbox (avoids transform conflict with Framer Motion) */}
-                    <div className="fixed inset-0 z-[901] flex items-center justify-center pointer-events-none">
-                    <m.div
-                        initial={{ opacity: 0, scale: 0.96, y: 24 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.96, y: 24 }}
-                        transition={{ duration: 0.25, ease: 'easeOut' }}
-                        className="w-[95vw] max-w-4xl pointer-events-auto"
-                        style={{ height: '90vh' }}
-                    >
+            <div className="fixed inset-0 z-[901] flex items-center justify-center pointer-events-none">
+            <div
+                ref={panelRef}
+                className="w-[95vw] max-w-4xl pointer-events-auto"
+                style={{ height: '90vh', opacity: 0 }}
+            >
                         <div className="bg-card border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col h-full">
 
                             {/* Header */}
@@ -108,38 +124,32 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
                                 </div>
 
                                 <div className="flex items-center gap-2">
-                                    <m.button
+                                    <button
                                         onClick={() => window.open(cvPath)}
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
                                         aria-label={t('cv.print', 'Imprimer le CV')}
-                                        className="flex items-center gap-2 px-4 py-2 rounded-full border border-border text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors cursor-pointer"
+                                        className="flex items-center gap-2 px-4 py-2 rounded-full border border-border text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all hover:scale-105 active:scale-95 cursor-pointer"
                                     >
                                         <Printer size={15} />
                                         <span className="hidden sm:inline">{t('cv.print', 'Imprimer')}</span>
-                                    </m.button>
+                                    </button>
 
-                                    <m.a
+                                    <a
                                         href={cvPath}
                                         download="ThomasPrudhommeCV.pdf"
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
                                         aria-label={t('cv.download', 'Télécharger le CV')}
-                                        className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity"
+                                        className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-all hover:scale-105 active:scale-95"
                                     >
                                         <Download size={15} />
                                         <span className="hidden sm:inline">{t('cv.download', 'Télécharger')}</span>
-                                    </m.a>
+                                    </a>
 
-                                    <m.button
+                                    <button
                                         onClick={onClose}
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        className="w-8 h-8 flex items-center justify-center rounded-full border border-border text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors ml-1 cursor-pointer"
+                                        className="w-8 h-8 flex items-center justify-center rounded-full border border-border text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all hover:scale-105 active:scale-95 ml-1 cursor-pointer"
                                         aria-label="Fermer"
                                     >
                                         <X size={16} />
-                                    </m.button>
+                                    </button>
                                 </div>
                             </div>
 
@@ -203,12 +213,10 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
                                 </div>
                             )}
                         </div>
-                    </m.div>
+                    </div>
                     </div>
                 </>
-            )}
-        </AnimatePresence>
-    );
+            ) : null;
 
     return createPortal(modal, document.body);
 }

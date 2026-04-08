@@ -1,7 +1,6 @@
-import { m, AnimatePresence } from 'framer-motion';
 import { Home, User, Code, Mail, Link as LinkIcon } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
-import { useState, useEffect, type ComponentType } from 'react';
+import { useState, useEffect, useRef, type ComponentType } from 'react';
 import { ModeToggle } from '@/components/ui/mode-toggle';
 import { useTranslation } from 'react-i18next';
 import { LanguageToggle } from '@/components/ui/language-toggle';
@@ -16,7 +15,30 @@ interface NavItem {
 
 function NavLink({ item, isActive, forceShowLabel }: { item: NavItem; isActive?: boolean; forceShowLabel?: boolean }) {
     const [isHovered, setIsHovered] = useState(false);
-    const showLabel = isHovered || isActive || forceShowLabel;
+    // When forceShowLabel is explicitly false, only show on hover (social items in bottom bar)
+    const showLabel = forceShowLabel === false ? isHovered : (isHovered || isActive || forceShowLabel);
+    const labelRef = useRef<HTMLSpanElement>(null);
+    const hasMeasured = useRef(false);
+
+    // Measure natural width for smooth CSS transition (width can't transition to 'auto')
+    const [naturalWidth, setNaturalWidth] = useState(0);
+    useEffect(() => {
+        const el = labelRef.current;
+        if (!el) return;
+        // Measure off-flow so the expanded label is never visible during measurement
+        el.style.position = 'absolute';
+        el.style.visibility = 'hidden';
+        el.style.width = 'auto';
+        const w = el.scrollWidth;
+        // Restore position/visibility — only reset width, never touch opacity
+        // (React manages opacity via style prop; touching it here desynchronizes React's diff)
+        el.style.position = '';
+        el.style.visibility = '';
+        el.style.width = '0px';
+        setNaturalWidth(w);
+        // Enable transitions only after the first measurement to prevent flash on mount
+        requestAnimationFrame(() => { hasMeasured.current = true; });
+    }, [item.label]);
 
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
         if (item.external) return;
@@ -26,8 +48,6 @@ function NavLink({ item, isActive, forceShowLabel }: { item: NavItem; isActive?:
         const targetId = item.href.replace('#', '');
         if (targetId && targetId !== 'home') {
             if (targetId === 'contact') {
-                // Contact is the last section. Scrolling to the absolute bottom prevents
-                // layout-shift bugs caused by lazy-loaded height expansions mid-scroll.
                 window.scrollTo({
                     top: document.body.scrollHeight,
                     behavior: 'smooth'
@@ -38,7 +58,6 @@ function NavLink({ item, isActive, forceShowLabel }: { item: NavItem; isActive?:
                     element.scrollIntoView({ behavior: 'smooth' });
                 }
             }
-            // Update URL without jump
             setTimeout(() => window.history.pushState(null, '', item.href), 10);
         } else {
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -57,25 +76,17 @@ function NavLink({ item, isActive, forceShowLabel }: { item: NavItem; isActive?:
             className={`relative flex items-center justify-center p-2 md:p-3 rounded-full transition-all duration-300 ${isActive ? 'bg-foreground/10 text-foreground shadow-[0_0_20px_rgba(255,255,255,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.1)] shadow-black/5' : 'text-muted-foreground hover:text-foreground hover:bg-foreground/10'}`}
             aria-label={item.label}
         >
-            <AnimatePresence>
-                {showLabel && (
-                    <m.span
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: 'auto' }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ duration: 0.2, ease: "easeInOut" }}
-                        className="overflow-hidden whitespace-nowrap font-medium text-sm mr-2 hidden md:block"
-                    >
-                        <m.span
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.1 }}
-                        >
-                            {item.label}
-                        </m.span>
-                    </m.span>
-                )}
-            </AnimatePresence>
+            <span
+                ref={labelRef}
+                className="overflow-hidden whitespace-nowrap font-medium text-sm mr-2 hidden md:block"
+                style={{
+                    width: showLabel ? `${naturalWidth}px` : '0px',
+                    opacity: showLabel ? 1 : 0,
+                    transition: hasMeasured.current ? 'width 0.25s cubic-bezier(0.4,0,0.2,1), opacity 0.2s ease' : 'none',
+                }}
+            >
+                {item.label}
+            </span>
             <item.icon size={20} className="md:w-6 md:h-6" strokeWidth={1.5} />
         </a>
     );
@@ -211,7 +222,7 @@ export function Navbar() {
                     <div className="flex items-center gap-2">
                         <div className="hidden md:flex gap-1">
                             {socialItems.map((item) => (
-                                <NavLink key={item.id} item={item} />
+                                <NavLink key={item.id} item={item} forceShowLabel={false} />
                             ))}
                         </div>
                         <div className="hidden md:block w-px h-8 bg-border/50 mx-2" />

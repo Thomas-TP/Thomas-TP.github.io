@@ -56,7 +56,7 @@
 ✦  React 19 — Concurrent mode, lazy sections, Suspense streaming
 ✦  Rsbuild + Rspack — Rust-powered compilation, ~10× faster than webpack
 ✦  UnoCSS — On-demand atomic CSS, zero dead styles in production
-✦  Framer Motion 12 — Page animations, magnetic hover, scroll parallax
+✦  GSAP 3 — Scroll-driven animations, magnetic hover, parallax reveals
 ✦  Lenis smooth scroll — Native-feeling inertia scroll (side-effect init, no remount)
 ✦  Three.js particle network — Interactive 3D hero background
 ✦  i18n (EN / FR) — i18next + browser language detection
@@ -91,7 +91,7 @@ Browser Request
        │                React 19 App                  │
        │                                              │
        │  ThemeProvider  ──── localStorage            │
-       │  LazyMotionProvider  ── framer-motion        │
+       │  GsapProvider  ──────── gsap + ScrollTrigger │
        │  ClientLayout                                │
        │    ├── Navbar  (floating pill + top bar)     │
        │    ├── ScrollProgress                        │
@@ -119,7 +119,7 @@ Browser Request
 | Chunk | Contents | Load mode |
 |---|---|---|
 | `vendor-three` | `three` + `@react-three/*` | async — Hero only |
-| `vendor-framer` | `framer-motion` | all pages |
+| `vendor-gsap` | `gsap` + `ScrollTrigger` | all pages |
 | `vendor-pdf` | `pdfjs-dist` + `react-pdf` | async — CV modal only |
 | `main` | App + components | eager |
 
@@ -153,7 +153,12 @@ Browser Request
 │   ├── i18n.ts                 # i18next init (EN / FR)
 │   │
 │   ├── 📁 lib/
-│   │   └── utils.ts            # cn() — clsx + tailwind-merge
+│   │   ├── utils.ts            # cn() — clsx + tailwind-merge
+│   │   └── gsap-init.ts        # Async GSAP + ScrollTrigger loader
+│   │
+│   ├── 📁 hooks/
+│   │   ├── useScrollLock.ts    # Body scroll lock for modals
+│   │   └── useGsap.ts          # GSAP animation hooks (magnetic, reveal…)
 │   │
 │   ├── 📁 locales/
 │   │   ├── en.json             # English strings
@@ -185,7 +190,7 @@ Browser Request
 │           ├── hero-3d.tsx         # Three.js particle canvas
 │           ├── language-toggle.tsx # EN / FR switcher
 │           ├── mode-toggle.tsx     # Dark / light toggle
-│           ├── motion-provider.tsx # LazyMotion wrapper
+│           ├── motion-provider.tsx # GsapProvider wrapper
 │           ├── scroll-progress.tsx # Fixed top progress bar
 │           └── theme-provider.tsx  # Theme context + favicon swap
 │
@@ -257,7 +262,8 @@ wrangler tail                              # Stream live worker logs
 
 | Package | Version | Purpose |
 |---|---|---|
-| `framer-motion` | `12.38.0` | Animations — page, scroll parallax, hover |
+| `gsap` | `3.14.x` | Animations — scroll reveals, parallax, magnetic hover |
+| `@gsap/react` | `2.1.x` | React integration for GSAP |
 | `lenis` | `1.3.21` | Smooth inertia scroll (side-effect init) |
 | `three` | `0.183.x` | 3D WebGL rendering |
 | `@react-three/fiber` | `9.5.x` | React renderer for Three.js |

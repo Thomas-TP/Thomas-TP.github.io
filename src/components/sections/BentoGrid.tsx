@@ -1,19 +1,29 @@
-import { type ReactNode, useState, useRef, useEffect } from 'react';
+import { type ReactNode, useState, useRef, useEffect, forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { m, useReducedMotion, useScroll, useMotionValueEvent } from 'framer-motion';
+import { loadGsap } from '@/lib/gsap-init';
 import { cn } from '@/lib/utils';
 import { Brain, Code2, Database, Coffee, GraduationCap, Zap, Tv, Lightbulb, Wifi, Briefcase, Search, Loader, ShieldCheck, ExternalLink } from 'lucide-react';
 
+function usePrefersReducedMotion() {
+    const [prefers, setPrefers] = useState(false);
+    useEffect(() => {
+        const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+        setPrefers(mq.matches);
+        const handler = (e: MediaQueryListEvent) => setPrefers(e.matches);
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
+    }, []);
+    return prefers;
+}
+
 // Bento Grid Utilities
-const BentoGrid = ({
+const BentoGrid = forwardRef<HTMLDivElement, { className?: string; children?: ReactNode }>(({
     className,
     children,
-}: {
-    className?: string;
-    children?: ReactNode;
-}) => {
+}, ref) => {
     return (
         <div
+            ref={ref}
             className={cn(
                 "grid auto-rows-[18rem] grid-cols-1 md:grid-cols-3 gap-4 max-w-7xl mx-auto ",
                 className
@@ -22,7 +32,7 @@ const BentoGrid = ({
             {children}
         </div>
     );
-};
+});
 
 const BentoGridItem = ({
     className,
@@ -37,9 +47,26 @@ const BentoGridItem = ({
     header?: ReactNode;
     icon?: ReactNode;
 }) => {
+    const itemRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const el = itemRef.current;
+        if (!el) return;
+        let cleanup: (() => void) | undefined;
+        loadGsap().then(({ gsap }) => {
+            if (!el.isConnected) return;
+            const enter = () => gsap.to(el, { y: -6, scale: 1.01, duration: 0.12, ease: 'power2.out' });
+            const leave = () => gsap.to(el, { y: 0, scale: 1, duration: 0.15, ease: 'power3.out' });
+            el.addEventListener('mouseenter', enter);
+            el.addEventListener('mouseleave', leave);
+            cleanup = () => { el.removeEventListener('mouseenter', enter); el.removeEventListener('mouseleave', leave); };
+        });
+        return () => cleanup?.();
+    }, []);
+
     return (
-        <m.div
-            whileHover={{ y: -5 }}
+        <div
+            ref={itemRef}
             className={cn(
                 "row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4 dark:bg-black/40 dark:border-white/10 bg-white border border-border justify-between flex flex-col space-y-4",
                 className
@@ -55,7 +82,7 @@ const BentoGridItem = ({
                     {description}
                 </div>
             </div>
-        </m.div>
+        </div>
     );
 };
 
@@ -88,6 +115,18 @@ function WebDevBlock() {
         }, 1500);
     };
 
+    // Stagger-reveal search results once they render
+    useEffect(() => {
+        if (results.length === 0) return;
+        const el = containerRef.current;
+        if (!el) return;
+        loadGsap().then(({ gsap }) => {
+            const items = el.querySelectorAll('.bento-search-result');
+            if (!items.length) return;
+            gsap.fromTo(items, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.08, ease: 'power3.out' });
+        });
+    }, [results]);
+
     return (
         <div
             ref={containerRef}
@@ -95,8 +134,7 @@ function WebDevBlock() {
         >
             <div className="absolute inset-0 bg-grid-white/[0.05]" />
 
-            <m.div
-                initial={{}}
+            <div
                 className="relative z-10 w-[90%] h-[85%] bg-card border border-border rounded-xl shadow-2xl flex flex-col overflow-hidden"
             >
                 {/* Browser Toolbar */}
@@ -160,22 +198,20 @@ function WebDevBlock() {
                             ) : (
                                 // Actual Results
                                 results.map((result) => (
-                                    <m.div
+                                    <div
                                         key={result.id}
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: result.id * 0.1 }}
-                                        className="p-3 rounded-lg border border-border bg-foreground/5 hover:bg-foreground/10 transition-colors cursor-pointer group"
+                                        className="p-3 rounded-lg border border-border bg-foreground/5 hover:bg-foreground/10 transition-colors cursor-pointer group bento-search-result"
+                                        style={{ opacity: 0 }}
                                     >
                                         <h4 className="text-[11px] font-bold text-foreground group-hover:underline mb-1">{result.title}</h4>
                                         <p className="text-[10px] text-muted-foreground leading-relaxed">{result.desc}</p>
-                                    </m.div>
+                                    </div>
                                 ))
                             )}
                         </div>
                     )}
                 </div>
-            </m.div>
+            </div>
         </div>
     );
 }
@@ -344,9 +380,9 @@ function IoTBlock() {
                                 aria-label={t('bento.iot.lamp')}
                                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setLightOn(!lightOn)}
                             >
-                                <m.div
-                                    className="absolute top-0.5 bottom-0.5 w-2 h-2 rounded-full bg-background shadow-sm"
-                                    animate={{ left: lightOn ? "14px" : "2px" }}
+                                <div
+                                    className="absolute top-0.5 bottom-0.5 w-2 h-2 rounded-full bg-background shadow-sm transition-[left] duration-200"
+                                    style={{ left: lightOn ? '14px' : '2px' }}
                                 />
                             </div>
                         </div>
@@ -380,9 +416,9 @@ function IoTBlock() {
                             aria-label={t('bento.iot.tv')}
                             onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setTvOn(!tvOn)}
                         >
-                            <m.div
-                                className="absolute top-0.5 bottom-0.5 w-2 h-2 rounded-full bg-background shadow-sm"
-                                animate={{ left: tvOn ? "14px" : "2px" }}
+                            <div
+                                className="absolute top-0.5 bottom-0.5 w-2 h-2 rounded-full bg-background shadow-sm transition-[left] duration-200"
+                                style={{ left: tvOn ? '14px' : '2px' }}
                             />
                         </div>
                     </div>
@@ -404,9 +440,9 @@ function IoTBlock() {
                             aria-label={t('bento.iot.oven')}
                             onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setOvenOn(!ovenOn)}
                         >
-                            <m.div
-                                className="absolute top-0.5 bottom-0.5 w-2 h-2 rounded-full bg-background shadow-sm"
-                                animate={{ left: ovenOn ? "14px" : "2px" }}
+                            <div
+                                className="absolute top-0.5 bottom-0.5 w-2 h-2 rounded-full bg-background shadow-sm transition-[left] duration-200"
+                                style={{ left: ovenOn ? '14px' : '2px' }}
                             />
                         </div>
                     </div>
@@ -418,7 +454,7 @@ function IoTBlock() {
             <svg className="absolute inset-0 pointer-events-none z-10 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
                 {/* Line to Light */}
                 {/* Line to Light */}
-                <m.path
+                <path
                     className="hidden md:block"
                     d="M 55 35 L 75 25"
                     stroke={lightOn ? "#fbbf24" : "rgba(255,255,255,0.1)"}
@@ -427,7 +463,7 @@ function IoTBlock() {
                     fill="none"
                 />
                 {/* Line to Light (Mobile) */}
-                <m.path
+                <path
                     className="md:hidden"
                     d="M 55 50 L 75 50"
                     stroke={lightOn ? "#fbbf24" : "rgba(255,255,255,0.1)"}
@@ -436,7 +472,7 @@ function IoTBlock() {
                     fill="none"
                 />
                 {/* Line to TV */}
-                <m.path
+                <path
                     className="hidden md:block"
                     d="M 55 50 L 75 50"
                     stroke={tvOn ? "#60a5fa" : "rgba(255,255,255,0.1)"}
@@ -445,7 +481,7 @@ function IoTBlock() {
                     fill="none"
                 />
                 {/* Line to Oven */}
-                <m.path
+                <path
                     className="hidden md:block"
                     d="M 55 65 L 75 75"
                     stroke={ovenOn ? "#f87171" : "rgba(255,255,255,0.1)"}
@@ -547,21 +583,29 @@ function GenevaStudentBlock() {
     const [year, setYear] = useState(2026);
     const [isHovering, setIsHovering] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start end", "end start"]
-    });
 
-    useMotionValueEvent(scrollYProgress, "change", (latest) => {
-        if (!isHovering) {
-            // Map 0-1 scroll progress to year range 2024-2028
-            // Adjust mapping for better feel: start earlier and end later
-            const mappedYear = Math.round(2024 + (latest * 4));
-            if (mappedYear !== year && mappedYear >= 2024 && mappedYear <= 2028) {
-                setYear(mappedYear);
-            }
-        }
-    });
+    useEffect(() => {
+        const el = containerRef.current;
+        if (!el) return;
+        let trigger: { kill: () => void } | undefined;
+        loadGsap().then(({ gsap, ScrollTrigger }) => {
+            if (!el.isConnected) return;
+            trigger = ScrollTrigger.create({
+                trigger: el,
+                start: 'top bottom',
+                end: 'bottom top',
+                onUpdate: (self: { progress: number }) => {
+                    if (!isHovering) {
+                        const mappedYear = Math.round(2024 + (self.progress * 4));
+                        if (mappedYear >= 2024 && mappedYear <= 2028) {
+                            setYear(mappedYear);
+                        }
+                    }
+                },
+            });
+        });
+        return () => trigger?.kill();
+    }, [isHovering]);
 
     const stages = {
         2024: {
@@ -613,22 +657,18 @@ function GenevaStudentBlock() {
                             {stages[year as keyof typeof stages].icon}
                         </div>
                         <div className="flex flex-col">
-                            <m.span
+                            <span
                                 key={year}
-                                initial={{ opacity: 0, y: 5 }}
-                                animate={{ opacity: 1, y: 0 }}
                                 className="text-sm font-bold text-foreground tracking-wide"
                             >
                                 {stages[year as keyof typeof stages].title}
-                            </m.span>
-                            <m.span
+                            </span>
+                            <span
                                 key={`sub-${year}`}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
                                 className="text-[10px] text-muted-foreground font-mono"
                             >
                                 {stages[year as keyof typeof stages].subtitle}
-                            </m.span>
+                            </span>
                         </div>
                     </div>
                     <div className="flex flex-col items-end">
@@ -643,10 +683,9 @@ function GenevaStudentBlock() {
                         {/* Track Background */}
                         <div className="absolute left-0 right-0 h-1 bg-foreground/10 rounded-full overflow-hidden">
                             {/* Progress Fill */}
-                            <m.div
-                                className="h-full bg-foreground"
-                                animate={{ width: `${progress}%` }}
-                                transition={{ type: "spring", bounce: 0, duration: 0.3 }}
+                            <div
+                                className="h-full bg-foreground transition-[width] duration-300"
+                                style={{ width: `${progress}%` }}
                             />
                         </div>
 
@@ -663,14 +702,12 @@ function GenevaStudentBlock() {
                         />
 
                         {/* Custom Thumb (Visual only, follows visible state) */}
-                        <m.div
-                            className="absolute h-4 w-4 bg-background border-2 border-foreground rounded-full shadow-[0_0_10px_rgba(128,128,128,0.5)] z-10 pointer-events-none"
-                            animate={{ left: `${progress}%` }}
-                            transition={{ type: "spring", bounce: 0, duration: 0.3 }}
-                            style={{ x: "-50%" }}
+                        <div
+                            className="absolute h-4 w-4 bg-background border-2 border-foreground rounded-full shadow-[0_0_10px_rgba(128,128,128,0.5)] z-10 pointer-events-none transition-[left] duration-300"
+                            style={{ left: `${progress}%`, transform: 'translateX(-50%)' }}
                         >
                             <div className="absolute inset-1 bg-foreground rounded-full" />
-                        </m.div>
+                        </div>
 
                         {/* Ticks */}
                         <div className="absolute left-0 right-0 flex justify-between px-[2px] pointer-events-none">
@@ -691,13 +728,45 @@ function GenevaStudentBlock() {
 
 function CertificationsBlock() {
     const { t } = useTranslation();
-    const shouldReduceMotion = useReducedMotion();
+    const shouldReduceMotion = usePrefersReducedMotion();
+    const glowRef = useRef<HTMLDivElement>(null);
+    const badgeRef = useRef<HTMLDivElement>(null);
+    const dot1Ref = useRef<HTMLDivElement>(null);
+    const dot2Ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (shouldReduceMotion) return;
+        let ctx: { revert: () => void } | undefined;
+        loadGsap().then(({ gsap }) => {
+            ctx = gsap.context(() => {
+                if (glowRef.current) gsap.to(glowRef.current, { scale: 1.1, opacity: 0.5, duration: 2.5, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+                if (dot1Ref.current) gsap.to(dot1Ref.current, { y: -10, duration: 1.5, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+                if (dot2Ref.current) gsap.to(dot2Ref.current, { y: 8, duration: 2, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 1 });
+            });
+        });
+        return () => ctx?.revert();
+    }, [shouldReduceMotion]);
+
+    useEffect(() => {
+        if (shouldReduceMotion) return;
+        const el = badgeRef.current;
+        if (!el) return;
+        let cleanup: (() => void) | undefined;
+        loadGsap().then(({ gsap }) => {
+            if (!el.isConnected) return;
+            const enter = () => gsap.to(el, { scale: 1.05, rotate: 5, duration: 0.4, ease: 'back.out(1.7)' });
+            const leave = () => gsap.to(el, { scale: 1, rotate: 0, duration: 0.3, ease: 'power2.out' });
+            el.addEventListener('mouseenter', enter);
+            el.addEventListener('mouseleave', leave);
+            cleanup = () => { el.removeEventListener('mouseenter', enter); el.removeEventListener('mouseleave', leave); };
+        });
+        return () => cleanup?.();
+    }, [shouldReduceMotion]);
 
     return (
         <div
             className="flex-1 w-full h-full min-h-[6rem] rounded-xl bg-card flex items-center justify-between relative overflow-hidden group/cert p-8 border border-border transition-all hover:bg-muted/40 hover:border-foreground/20"
         >
-            {/* Minimal Background Grid */}
             <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
 
             <div className="flex flex-col gap-6 relative z-10 max-w-lg">
@@ -707,7 +776,6 @@ function CertificationsBlock() {
                 </div>
 
                 <div>
-                    {/* Typographic "Credly" Logo approximation - Monochrome */}
                     <div className="text-4xl font-bold text-foreground mb-3 tracking-tight" style={{ fontFamily: '"Calistoga", "Times New Roman", serif' }}>
                         Credly
                     </div>
@@ -730,42 +798,20 @@ function CertificationsBlock() {
                 </a>
             </div>
 
-            {/* Visual Element - Minimalist Badge */}
             <div className="hidden md:flex relative items-center justify-center shrink-0 w-40 h-40">
-                {/* Subtle glow */}
-                <m.div
-                    className="absolute inset-0 bg-foreground/5 blur-[40px] rounded-full"
-                    animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
-                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                />
+                <div ref={glowRef} className="absolute inset-0 bg-foreground/5 blur-[40px] rounded-full" />
 
-                {/* The "Badge" - Glassmorphism & Monochrome */}
-                <m.div
-                    className="relative z-10 w-28 h-28 rounded-3xl bg-gradient-to-br from-background to-muted border border-border/50 shadow-xl flex items-center justify-center overflow-hidden"
-                    whileHover={shouldReduceMotion ? {} : { scale: 1.05, rotate: 5 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                >
+                <div ref={badgeRef} className="relative z-10 w-28 h-28 rounded-3xl bg-gradient-to-br from-background to-muted border border-border/50 shadow-xl flex items-center justify-center overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-tr from-foreground/5 to-transparent opacity-50" />
-
-                    {/* Central Icon */}
                     <div className="relative z-10 flex flex-col items-center gap-2">
                         <ShieldCheck className="w-12 h-12 text-foreground/80" strokeWidth={1} />
                     </div>
-                </m.div>
+                </div>
 
-                {/* Floating monochrome dots */}
                 {!shouldReduceMotion && (
                     <>
-                        <m.div
-                            className="absolute -top-2 right-4 w-2 h-2 bg-foreground/20 rounded-full"
-                            animate={{ y: [0, -10, 0] }}
-                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                        />
-                        <m.div
-                            className="absolute bottom-4 -left-2 w-1.5 h-1.5 bg-foreground/10 rounded-full"
-                            animate={{ y: [0, 8, 0] }}
-                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                        />
+                        <div ref={dot1Ref} className="absolute -top-2 right-4 w-2 h-2 bg-foreground/20 rounded-full" />
+                        <div ref={dot2Ref} className="absolute bottom-4 -left-2 w-1.5 h-1.5 bg-foreground/10 rounded-full" />
                     </>
                 )}
             </div>
@@ -815,24 +861,80 @@ export function AboutBento() {
         },
     ];
 
+    const headerRef = useRef<HTMLDivElement>(null);
+    const gridRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        let ctx: { revert: () => void } | undefined;
+        loadGsap().then(({ gsap, ScrollTrigger }) => {
+            ctx = gsap.context(() => {
+                // — Header reveal
+                if (headerRef.current) {
+                    const title = headerRef.current.querySelector('.about-title') as HTMLElement | null;
+                    const desc = headerRef.current.querySelector('.about-desc') as HTMLElement | null;
+
+                    if (title) {
+                        // Split words for staggered reveal
+                        const words = (title.textContent || '').split(' ');
+                        title.innerHTML = words
+                            .map(w => `<span class="about-word inline-block"><span class="about-word-inner inline-block">${w}</span></span>`)
+                            .join(' ');
+                        const inners = title.querySelectorAll('.about-word-inner');
+                        gsap.fromTo(inners,
+                            { y: '110%', rotateX: -40, opacity: 0 },
+                            { y: '0%', rotateX: 0, opacity: 1, duration: 0.75, stagger: 0.07,
+                              ease: 'power3.out', delay: 0.1,
+                              scrollTrigger: { trigger: headerRef.current, start: 'top 88%', once: true } }
+                        );
+                    }
+                    if (desc) {
+                        gsap.fromTo(desc,
+                            { opacity: 0, y: 20 },
+                            { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.4,
+                              scrollTrigger: { trigger: headerRef.current, start: 'top 88%', once: true } }
+                        );
+                    }
+                }
+
+                // — Bento grid: each card reveals with y + opacity (no clip-path to preserve border-radius)
+                if (gridRef.current) {
+                    const cards = gridRef.current.querySelectorAll(':scope > *');
+                    cards.forEach((card, i) => {
+                        const col = i % 3;
+                        const delay = col * 0.06;
+                        gsap.fromTo(card,
+                            { opacity: 0, y: 40, scale: 0.97 },
+                            {
+                                opacity: 1, y: 0, scale: 1,
+                                duration: 0.65, delay,
+                                ease: 'power3.out',
+                                scrollTrigger: { trigger: card as HTMLElement, start: 'top 92%', once: true },
+                            }
+                        );
+                    });
+                }
+
+                // Suppress unused var warning
+                void ScrollTrigger;
+            });
+        });
+        return () => ctx?.revert();
+    }, []);
+
     return (
         <section id="about" className="py-20 container mx-auto px-4 cv-auto">
-            <m.div
+            <div
+                ref={headerRef}
                 className="mb-12 max-w-4xl mx-auto"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
             >
-                <h2 className="text-3xl md:text-5xl font-bold mb-6">{t('bento.header_about')}</h2>
-                <p className="text-muted-foreground max-w-2xl text-lg">
+                <h2 className="about-title text-3xl md:text-5xl font-bold mb-6" style={{ perspective: '800px' }}>{t('bento.header_about')}</h2>
+                <p className="about-desc text-muted-foreground max-w-2xl text-lg">
                     {t('bento.header_desc')}
                 </p>
-            </m.div>
-            <BentoGrid className="max-w-4xl mx-auto">
+            </div>
+            <BentoGrid ref={gridRef} className="max-w-4xl mx-auto">
                 {items.map((item, i) => (
                     item.noDefaultStyles ? (
-                        // Direct render for the custom Certification block to avoid double borders/padding
                         <div key={item.title || `item-${i}`} className={item.className}>
                             {item.header}
                         </div>

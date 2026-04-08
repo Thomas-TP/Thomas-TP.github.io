@@ -1,4 +1,5 @@
-import { m, useAnimationControls } from "framer-motion";
+import { useRef, useCallback, useEffect } from 'react';
+import { loadGsap, getGsap } from '@/lib/gsap-init';
 
 interface GlitchTextProps {
     text: string;
@@ -7,50 +8,50 @@ interface GlitchTextProps {
 }
 
 export function GlitchText({ text, className = "" }: GlitchTextProps) {
-    const controls = useAnimationControls();
+    const containerRef = useRef<HTMLSpanElement>(null);
 
-    const handleHover = async () => {
-        await controls.start({
-            x: [0, -2, 2, -1, 1, 0],
-            y: [0, 1, -1, 0],
-            filter: [
-                "blur(0px)",
-                "blur(1px)",
-                "blur(0px)"
-            ],
-            transition: {
-                duration: 0.2,
-                times: [0, 0.2, 0.4, 0.6, 0.8, 1],
+    // Preload gsap asynchronously (non-blocking)
+    useEffect(() => { loadGsap(); }, []);
+
+    const handleHover = useCallback(() => {
+        const gsap = getGsap();
+        const el = containerRef.current;
+        if (!el || !gsap) return;
+
+        gsap.fromTo(el,
+            { x: 0, y: 0, filter: 'blur(0px)' },
+            {
+                keyframes: [
+                    { x: -2, y: 1, filter: 'blur(1px)', duration: 0.04 },
+                    { x: 2, y: -1, filter: 'blur(0.5px)', duration: 0.04 },
+                    { x: -1, y: 0, filter: 'blur(0px)', duration: 0.04 },
+                    { x: 1, y: 0, duration: 0.04 },
+                    { x: 0, y: 0, duration: 0.04 },
+                ],
+                ease: 'power2.inOut',
             }
-        });
-    };
+        );
+    }, []);
 
     return (
-        <m.span
+        <span
+            ref={containerRef}
             className={`relative inline-block ${className}`}
-            onHoverStart={handleHover}
-            animate={controls}
+            onMouseEnter={handleHover}
         >
             <span className="relative z-10">{text}</span>
-
-            <m.span
-                className="absolute top-0 left-0 -z-10 w-full h-full text-red-500 opacity-0 mix-blend-multiply"
-                animate={controls}
-                variants={{
-                    hover: { opacity: 0.7, x: -2, y: 1 }
-                }}
+            <span
+                className="absolute top-0 left-0 -z-10 w-full h-full text-red-500 opacity-0 mix-blend-multiply pointer-events-none"
+                aria-hidden
             >
                 {text}
-            </m.span>
-            <m.span
-                className="absolute top-0 left-0 -z-10 w-full h-full text-cyan-500 opacity-0 mix-blend-multiply"
-                animate={controls}
-                variants={{
-                    hover: { opacity: 0.7, x: 2, y: -1 }
-                }}
+            </span>
+            <span
+                className="absolute top-0 left-0 -z-10 w-full h-full text-cyan-500 opacity-0 mix-blend-multiply pointer-events-none"
+                aria-hidden
             >
                 {text}
-            </m.span>
-        </m.span>
+            </span>
+        </span>
     );
 }
