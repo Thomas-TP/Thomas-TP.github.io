@@ -2,7 +2,7 @@ import { type ReactNode, useState, useRef, useEffect, forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { loadGsap } from '@/lib/gsap-init';
 import { cn } from '@/lib/utils';
-import { Brain, Code2, Database, Coffee, GraduationCap, Zap, Tv, Lightbulb, Wifi, Briefcase, Search, Loader, ShieldCheck, ExternalLink } from 'lucide-react';
+import { Brain, Code2, Database, Coffee, GraduationCap, Zap, Tv, Lightbulb, Wifi, Briefcase, Search, Loader, ExternalLink } from 'lucide-react';
 
 function usePrefersReducedMotion() {
     const [prefers, setPrefers] = useState(false);
@@ -729,91 +729,282 @@ function GenevaStudentBlock() {
 function CertificationsBlock() {
     const { t } = useTranslation();
     const shouldReduceMotion = usePrefersReducedMotion();
-    const glowRef = useRef<HTMLDivElement>(null);
-    const badgeRef = useRef<HTMLDivElement>(null);
-    const dot1Ref = useRef<HTMLDivElement>(null);
-    const dot2Ref = useRef<HTMLDivElement>(null);
+    const cardRef = useRef<HTMLDivElement>(null);
+    const svgRef = useRef<SVGSVGElement>(null);
+    const revealRef = useRef<HTMLDivElement>(null);
+    const glowOrbRef = useRef<HTMLDivElement>(null);
+    const ctaRef = useRef<HTMLAnchorElement>(null);
+    const titleRef = useRef<HTMLDivElement>(null);
 
+    // Hexagon path helper (pointy-top)
+    const hex = (cx: number, cy: number, r: number) => {
+        const pts = Array.from({ length: 6 }, (_, i) => {
+            const angle = (Math.PI / 3) * i - Math.PI / 2;
+            return `${cx + r * Math.cos(angle)},${cy + r * Math.sin(angle)}`;
+        });
+        return pts.join(' ');
+    };
+
+    // Geometric constellation data
+    const shapes = [
+        { cx: 320, cy: 60, r: 28, delay: 0, label: 'Cloud' },
+        { cx: 390, cy: 120, r: 22, delay: 0.15, label: 'Cyber' },
+        { cx: 340, cy: 155, r: 18, delay: 0.3, label: 'Dev' },
+        { cx: 280, cy: 130, r: 15, delay: 0.45, label: 'IoT' },
+        { cx: 410, cy: 55, r: 12, delay: 0.6, label: '' },
+        { cx: 260, cy: 70, r: 10, delay: 0.75, label: '' },
+    ];
+
+    // Connection lines between hexagons
+    const connections = [
+        [0, 1], [0, 3], [1, 2], [2, 3], [0, 4], [0, 5], [1, 4], [3, 5],
+    ];
+
+    // Floating particles
+    const particles = [
+        { cx: 295, cy: 40, r: 2.5, dur: 3 },
+        { cx: 420, cy: 90, r: 2, dur: 2.5 },
+        { cx: 250, cy: 110, r: 1.5, dur: 3.5 },
+        { cx: 370, cy: 170, r: 2, dur: 2.8 },
+        { cx: 430, cy: 160, r: 1.5, dur: 3.2 },
+        { cx: 310, cy: 180, r: 1.8, dur: 2.6 },
+    ];
+
+    // Ambient GSAP animations
     useEffect(() => {
         if (shouldReduceMotion) return;
         let ctx: { revert: () => void } | undefined;
         loadGsap().then(({ gsap }) => {
+            const svg = svgRef.current;
+            if (!svg) return;
             ctx = gsap.context(() => {
-                if (glowRef.current) gsap.to(glowRef.current, { scale: 1.1, opacity: 0.5, duration: 2.5, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-                if (dot1Ref.current) gsap.to(dot1Ref.current, { y: -10, duration: 1.5, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-                if (dot2Ref.current) gsap.to(dot2Ref.current, { y: 8, duration: 2, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 1 });
-            });
+                // Hexagons breathing
+                svg.querySelectorAll<SVGPolygonElement>('.hex-shape').forEach((el, i) => {
+                    gsap.to(el, {
+                        scale: 1.06,
+                        opacity: 0.9,
+                        duration: 2.2 + i * 0.3,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: 'sine.inOut',
+                        delay: i * 0.2,
+                        transformOrigin: 'center center',
+                    });
+                });
+
+                // Particles floating
+                svg.querySelectorAll<SVGCircleElement>('.float-particle').forEach((el, i) => {
+                    gsap.to(el, {
+                        y: -8 + (i % 2 === 0 ? 4 : 0),
+                        x: (i % 2 === 0 ? 5 : -5),
+                        duration: 2 + i * 0.4,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: 'sine.inOut',
+                        delay: i * 0.3,
+                    });
+                });
+
+                // Connection lines subtle pulse
+                svg.querySelectorAll<SVGLineElement>('.conn-line').forEach((el, i) => {
+                    gsap.to(el, {
+                        opacity: 0.15,
+                        duration: 1.8 + i * 0.2,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: 'sine.inOut',
+                        delay: i * 0.15,
+                    });
+                });
+
+                // Glow orb gentle breathing
+                if (glowOrbRef.current) {
+                    gsap.to(glowOrbRef.current, {
+                        scale: 1.15,
+                        opacity: 0.4,
+                        duration: 3,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: 'sine.inOut',
+                    });
+                }
+            }, svg);
         });
         return () => ctx?.revert();
     }, [shouldReduceMotion]);
 
+    // Hover: card lift (identical to BentoGridItem) + reveal details
     useEffect(() => {
-        if (shouldReduceMotion) return;
-        const el = badgeRef.current;
-        if (!el) return;
+        const card = cardRef.current;
+        if (!card) return;
         let cleanup: (() => void) | undefined;
         loadGsap().then(({ gsap }) => {
-            if (!el.isConnected) return;
-            const enter = () => gsap.to(el, { scale: 1.05, rotate: 5, duration: 0.4, ease: 'back.out(1.7)' });
-            const leave = () => gsap.to(el, { scale: 1, rotate: 0, duration: 0.3, ease: 'power2.out' });
-            el.addEventListener('mouseenter', enter);
-            el.addEventListener('mouseleave', leave);
-            cleanup = () => { el.removeEventListener('mouseenter', enter); el.removeEventListener('mouseleave', leave); };
+            if (!card.isConnected) return;
+            const svg = svgRef.current;
+            const reveal = revealRef.current;
+
+            const enter = () => {
+                gsap.to(card, { y: -6, scale: 1.01, duration: 0.12, ease: 'power2.out' });
+                if (!shouldReduceMotion && svg && reveal) {
+                    gsap.to(svg.querySelectorAll('.hex-label'), { opacity: 1, y: 0, duration: 0.15, stagger: 0.02, ease: 'power2.out' });
+                    gsap.to(svg.querySelectorAll('.hex-shape'), { strokeWidth: 1.5, opacity: 0.85, duration: 0.12, ease: 'power2.out' });
+                    gsap.to(svg.querySelectorAll('.conn-line'), { opacity: 0.3, duration: 0.12, ease: 'power2.out' });
+                    gsap.to(reveal, { opacity: 1, y: 0, duration: 0.15, ease: 'power2.out' });
+                }
+            };
+            const leave = () => {
+                gsap.to(card, { y: 0, scale: 1, duration: 0.15, ease: 'power3.out' });
+                if (!shouldReduceMotion && svg && reveal) {
+                    gsap.to(svg.querySelectorAll('.hex-label'), { opacity: 0, y: 4, duration: 0.12, ease: 'power2.in' });
+                    gsap.to(svg.querySelectorAll('.hex-shape'), { strokeWidth: 0.8, opacity: 0.6, duration: 0.12, ease: 'power2.in' });
+                    gsap.to(svg.querySelectorAll('.conn-line'), { opacity: 0.08, duration: 0.12, ease: 'power2.in' });
+                    gsap.to(reveal, { opacity: 0, y: 8, duration: 0.12, ease: 'power2.in' });
+                }
+            };
+            card.addEventListener('mouseenter', enter);
+            card.addEventListener('mouseleave', leave);
+            cleanup = () => { card.removeEventListener('mouseenter', enter); card.removeEventListener('mouseleave', leave); };
         });
         return () => cleanup?.();
     }, [shouldReduceMotion]);
 
     return (
         <div
-            className="flex-1 w-full h-full min-h-[6rem] rounded-xl bg-card flex items-center justify-between relative overflow-hidden group/cert p-8 border border-border transition-all hover:bg-muted/40 hover:border-foreground/20"
+            ref={cardRef}
+            className="flex-1 w-full h-full min-h-[6rem] rounded-xl flex items-stretch relative overflow-hidden group/cert cursor-default border border-border hover:shadow-xl transition duration-200 shadow-input dark:shadow-none dark:bg-black/40 dark:border-white/10 bg-white will-change-transform"
         >
-            <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
+            {/* ── Subtle dot-grid pattern ── */}
+            <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.03]" />
 
-            <div className="flex flex-col gap-6 relative z-10 max-w-lg">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-foreground/5 border border-foreground/10 text-foreground/80 text-xs font-medium w-fit backdrop-blur-sm">
-                    <ShieldCheck size={12} className="text-foreground" />
-                    {t('bento.certifications.verified')}
-                </div>
+            {/* ── Glass inner reflection ── */}
+            <div className="absolute inset-[1px] rounded-xl border border-foreground/[0.04] pointer-events-none" />
 
+            {/* ── LEFT: Content ── */}
+            <div className="flex flex-col justify-between relative z-10 p-8 pb-10 md:p-10 md:pb-12 flex-1 min-w-0">
+                    {/* Title block */}
                 <div>
-                    <div className="text-4xl font-bold text-foreground mb-3 tracking-tight" style={{ fontFamily: '"Calistoga", "Times New Roman", serif' }}>
-                        Credly
+                    {/* Official Credly logo as title */}
+                    <div ref={titleRef} className="mb-2">
+                            <svg className="h-16 md:h-20 text-foreground" viewBox="45 40 230 126" fill="currentColor" aria-hidden="true">
+                                <path d="M259,110.9c-.3-.1-.6-.2-.9-.2-.7,0-1.2.1-1.8.4-.5.3-.8.7-1.2,1.2-.8,1.2-1.3,2.4-2,3.6-1,1.7-2.2,3.2-3.4,4.6-1.2,1.4-2.6,2.6-3.8,3.9-.2.2-.6.4-.9.3-.3-.2-.3-.5-.3-.8.4-3.4.6-6.8,1.1-10.2.2-1.6.4-3,.6-4.6.3-2.2.5-4.4.8-6.6l2.1-16.4c.2-1.2.3-3.4-1.2-4.7-.6-.6-1.4-1-2.1-1-.8,0-1.6.1-2.3.5-2,1.5-2.7,4.6-3.2,6.8-1.3,5.4-1.6,11.2-4.2,16.2-.5,1-1.1,2-1.8,2.8-.5.6-1,1.2-1.7,1.6-.7.4-1.5.6-2.2.5-1-.2-1.7-1-2.1-1.9s-.5-1.9-.5-2.9c-.2-4.8.7-9.7,2.2-14.3.4-1.2.8-2.3.9-3.4.3-1.4.3-3.4-1-4.7-1.2-1.2-3-1.6-4.5-1.2-1.8.5-2.8,2.2-3.4,3.6-1.8,4.2-2.3,8.5-2.8,13-.4,3-1.2,5.8-2.7,8.3-.8,1.4-1.8,2.8-3.4,4.5-.6.6-1.3,1.3-2.1,1.9-1.1.8-2,1.1-3,1s-1.9-.8-2.5-1.9c-.5-.9-.7-1.9-.8-2.8-.3-1.7-.4-3.5-.3-5.5,0-2,0-3.9.4-5.9.7-3.5,6.1-17.4,7.3-21,1.2-3.7,2.4-7.4,3.2-11.2.7-3.4,1.1-6.9,1-10.3-.1-2.4-.6-5.1-2.6-6.6-1.5-1.1-3.7-1.2-5.4-.5-1.8.7-3.1,2.2-4.1,3.8s-1.5,3.5-2,5.3c-1,3.8-1.8,7.7-2.4,11.6-.6,3.8-1.2,7.6-1.9,11.4-.5,3.2-1.8,14.5-2.4,16.9-.5,2.5-1.6,4.8-2.7,7.1-1.2,2.4-2.3,4.8-3.7,7.1-.4.8-.9,1.5-1.6,2-.7.5-1.6.8-2.4.4-.9-.4-1.3-1.6-1.5-2.6-.7-3.9,0-7.9.6-11.7.8-3.9,3.9-21.6,4.7-25.6.9-4.8,2.2-9.5,2.6-14.3.3-3.5.8-7.9-1.8-10.7-1-1.2-2.8-1.4-4-1.2-1.6.3-2.8,1.6-3.5,2.7-.9,1.2-1.7,2.5-2.3,4.2-1,2.6-1.7,5.5-2.3,8.2l-.3,1.2c-.8,3.4-1.3,6.9-1.7,10.4-.2,1.9-.4,3.8-.5,5.7,0,.9-.2,1.8-.2,2.8,0,.7,0,1.5-.3,2.2-.1.2-.3.4-.5.6-.7.6-1.8.5-2.8.5-5-.2-9.4,2.7-12.2,6.8-1.6,2.3-2.5,4.9-3.5,7.5-.1.5-.3.9-.5,1.4-.4,1.3-1.2,3-2,4.6-.7,1.3-1.6,2.6-2.8,4.1-1.2,1.6-2.3,2.7-3.5,3.7-1.6,1.3-3.1,2.1-4.6,2.3-1.6.3-3.5-.4-4.9-1.8-1.1-1.3-1.7-3.2-1.9-4.8,0-.5,0-1.1.3-1.5.4-.6,1.3-.6,2-.7,5.5-.4,10.4-4,12.4-9.1,1.2-3,1.6-6.3,1.1-9.4-.3-1.6-.8-3.1-1.7-4.3-.9-1.3-2.1-2.3-3.6-2.9-2.6-1.2-5.9-1.2-9.1,0-5.2,2.1-8.5,6.7-10.2,14l-.2.8c-1,4.4-2.1,9-5.2,12.1-1.2,1.1-2.3,1.5-3.3,1.3-.4,0-.7-.3-1-.7-.8-1.4,0-4.8,1.4-9,.4-1.4.8-2.8.9-3.3,0-1.7-.2-3.2-1-4.5-.7-1.2-1.9-2.3-3.4-2.9-1.3-.6-2.8-.5-4.2-.5h-.4c-.4,0-.9,0-1.4-.1-.6-.1-1.1-.6-1.3-1.2-.2-.8,0-1.5.1-2.1,0-.2.1-.4.2-.7.4-1.3-.3-2.9-1.5-3.7-1.2-.8-2.8-.9-4.2-.3-1.3.6-2.5,1.7-3.3,3.1-.8,1.4-1.1,3-.9,4.3.3,1.2.7,2.8.4,4.3-.5,2.5-2,4.6-3.5,6.7-.3.4-.7,1-1,1.4-2.1,3-4.1,5.4-6.3,7.4-3.4,3-7.2,5.2-11.1,6-6.7,1.5-13.6-.5-17.2-6.6-2-3.4-2.9-7.4-3.2-11.4-.6-7.7.8-15.5,3.8-22.6,2.9-6.8,7.3-13.7,15.4-14.5,3.2-.3,6.8.8,8.2,3.6,1,2.1.7,4.6,0,6.8-.7,2.2-1.6,4.4-1.6,6.7,0,2.3,1.1,4.9,3.3,5.5,2.2.7,4.5-.7,5.7-2.6,1.2-1.9,1.7-4.1,2.2-6.3,1.3-5.1,3.3-10.1,6-14.7,1.2-2.1,2.7-4.4,2.3-6.8-.3-1.7-1.6-3.2-3.3-3.8-1.7-.5-3.6,0-4.8,1.3-1.2,1.3-1.8,3.3-3.5,3.9-1.5.5-3.1-.5-4.6-1.2-5.3-2.9-12-2.8-17.6-.5-5.6,2.3-10.2,6.7-13.7,11.7-4.9,7.2-8.2,16-8.8,24.7-.2,3.1-.3,6.2,0,9.3.3,4.1.9,7.7,1.9,10.8,1.2,3.8,2.8,7.1,4.9,9.8,2.4,3.1,5.3,5.4,8.5,6.7,3.4,1.3,7,2,10.7,1.9,3.5-.1,7.1-1,10.6-2.6,3-1.4,6.1-3.4,9.2-6.1,2.8-2.3,5.4-5,7.6-8,1.5-2,2.8-4.1,3.9-6.3.6-1.1,1.1-2.3,1.6-3.4.4-1,.8-1.9,1.8-2.4.5-.4,1.4-.2,1.8.1.6.3,1,.7,1.2,1.2.4,1,.2,2.1,0,3h0c-.3,1-.5,1.9-.8,2.8-1.2,3.8-2.1,7.3-1.4,10.7.4,1.9,1.2,3.5,2.3,4.7,1.2,1.3,2.8,2.1,4.5,2.4,2.2.3,4.6-.2,6.5-1.2,1.3-.6,2.5-1.4,3.6-2.4.6-.5,1.1-1.1,1.5-1.6.4-.5.8-1.3,1.6-1.3.4,0,.7.3.9.6.2.3.4.7.5,1,2,4.7,7,7.6,12,7.6h.6c2.4,0,4.9-.8,7.1-1.9,2.4-1.3,4.3-3.1,6.3-4.9.2-.2.4-.3.6-.4.3,0,.7.1.9.4.2.3.3.6.5.9,1.2,3.1,4.1,5.4,7.4,5.9s6.7-.7,8.9-3.2c.5-.5.9-1.2,1.5-1.6.6-.4,1.4-.7,2-.4.9.4,1.2,1.5,1.6,2.4,1,2.1,3.2,3.4,5.5,3.4,2.6,0,5-1.3,6.9-3.1,1.8-1.6,3.2-3.6,4.7-5.5.3-.3.6-.7.9-.9.4-.2.9-.2,1.2,0,.3.2.4.5.5.8,1.5,3.6,5.3,5.9,9.1,5.8,3.7,0,7.2-2,9.9-4.6.8-.8,1.7-1.8,2.9-1.9,1.2-.1,1.9,1,2.3,2,.6,1.3,1,2.2,2.2,3,1.4,1,3.2,1.4,4.9.9,1.6-.4,3.1-1.4,4.3-2.8.6-.8,1-1.8,1.7-2.6.8-.8,1.1.2,1.2.9.1,1.1.1,2.1,0,3.2-.1,2.1-.5,4.2-.7,6.3,0,.6-.2,1.2-.6,1.7-.6.6-1.5.7-2.3.6-1-.1-1.9-.2-2.9-.3h-1.2c-1.8-.3-3.6-.5-5.5-.5h-1.7c-3.6,0-6.6.4-9.2,1.4-4.3,1.7-7.7,5.1-9,9.2-.6,1.9-.8,3.9-.4,5.8.3,1.8,1.2,3.6,2.5,5.2,2.4,2.8,6.1,4.6,10.3,4.9,3.7.2,7.7-.6,11.6-2.3,7.6-3.3,13.3-9.8,15.2-17.5,0-.2.1-.3.3-.4,2.6-.9,5.1-2.2,7.3-3.8,2.2-1.7,4.2-3.6,5.9-5.8.8-1.1,1.6-2.2,2.3-3.3.7-1.1,1.2-2.3,1.9-3.4.5-.9,1-1.8,1.2-2.8.2-1,.1-2.1-.5-3-.3-.5-.8-.8-1.3-1.1M135.8,96.2c.2-.7.4-1.3.5-1.9.5-1.6,1.3-3.2,2.3-4.5.4-.5.7-.9,1.2-1.2.5-.3,1.1-.5,1.7-.4,1,.2,1.6,1.1,1.8,2.1.3,1.6-.4,3.6-1,5-.6,1.4-1.6,2.8-2.8,3.7-.5.4-1,.8-1.6,1-.3,0-.6.3-1,.3h-.1c-.5,0-1-.3-1.2-.8-.2-1.1,0-2.2.2-3.3M174.6,94.5c0,.7-.2,1.4-.3,2,0,.9-.1,1.7-.1,2.6,0,1.5,0,2.9.1,4.4,0,1.3.4,2.7-.1,4-.6,1.7-1.6,3.3-2.9,4.3-.6.5-1.4,1-2.2,1.4-.6.3-1.4.5-2.2.5s-.3,0-.5,0c-1.1,0-1.9-.8-2.4-1.6-.5-.8-.7-1.7-.9-2.5-.7-3.3-.4-6.8.6-10.1.7-2,1.9-3.9,3.4-5.4,1.4-1.3,3.2-2.1,5.1-2.1.6,0,1.4.1,1.8.6.4.4.5.9.5,1.5s0,.2,0,.3M232.4,136.3c-.1.4-.5.9-.7,1.3-.4.7-.9,1.5-1.5,2.1-.8,1-1.8,1.9-2.8,2.7-2.1,1.6-4.5,2.8-7,3.5-1.6.4-3,.6-4.4.6h-.3c-1.9,0-3.6-.6-4.6-1.6-.5-.5-1.2-1.2-1.4-2.3-.1-.8,0-1.7.4-2.7.6-1.5,1.9-2.7,3.4-3.5,2.9-1.4,6.1-1.6,9.2-1.4,1.2,0,2.4.1,3.6.2,1,0,1.9.1,2.9.2.5,0,1,0,1.6.1.4,0,.8,0,1.2,0,.5.1.6.4.5.7" />
+                            </svg>
                     </div>
-                    <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4 opacity-80">
+                    <h3 className="text-[11px] font-medium text-muted-foreground uppercase tracking-[0.2em] mb-4">
                         {t('bento.certifications.title')}
                     </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed border-l-2 border-foreground/20 pl-4">
+                    <p className="text-muted-foreground text-sm leading-relaxed max-w-sm">
                         {t('bento.certifications.desc')}
                     </p>
                 </div>
 
+                {/* CTA */}
                 <a
+                    ref={ctaRef}
                     href="https://www.credly.com/users/thomas-prudhomme"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm font-medium text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/10 px-4 py-2 rounded-lg transition-all cursor-pointer w-fit group/btn"
+                    className="flex items-center gap-2 text-sm font-medium text-foreground/90 bg-foreground/[0.04] hover:bg-foreground/[0.08] border border-foreground/[0.08] hover:border-foreground/[0.15] px-5 py-2.5 rounded-lg transition-all duration-300 cursor-pointer w-fit group/btn"
                 >
                     {t('bento.certifications.view_profile')}
-                    <ExternalLink size={14} className="group-hover/btn:translate-x-1 transition-transform opacity-70" />
+                    <ExternalLink size={13} className="group-hover/btn:translate-x-1 transition-transform duration-300 opacity-60" />
                 </a>
             </div>
 
-            <div className="hidden md:flex relative items-center justify-center shrink-0 w-40 h-40">
-                <div ref={glowRef} className="absolute inset-0 bg-foreground/5 blur-[40px] rounded-full" />
+            {/* ── RIGHT: Geometric constellation ── */}
+            <div className="hidden md:flex relative items-center justify-center w-[220px] shrink-0">
+                {/* Background glow orb */}
+                <div
+                    ref={glowOrbRef}
+                    className="absolute w-32 h-32 rounded-full pointer-events-none"
+                    style={{
+                        background: 'radial-gradient(circle, rgb(var(--foreground) / 0.06) 0%, transparent 70%)',
+                        filter: 'blur(20px)',
+                    }}
+                />
 
-                <div ref={badgeRef} className="relative z-10 w-28 h-28 rounded-3xl bg-gradient-to-br from-background to-muted border border-border/50 shadow-xl flex items-center justify-center overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-tr from-foreground/5 to-transparent opacity-50" />
-                    <div className="relative z-10 flex flex-col items-center gap-2">
-                        <ShieldCheck className="w-12 h-12 text-foreground/80" strokeWidth={1} />
-                    </div>
-                </div>
+                <svg
+                    ref={svgRef}
+                    viewBox="220 20 240 180"
+                    className="w-full h-full relative z-10"
+                    aria-hidden="true"
+                    fill="none"
+                >
+                    {/* Connection lines */}
+                    {connections.map(([a, b], i) => (
+                        <line
+                            key={`conn-${i}`}
+                            className="conn-line"
+                            x1={shapes[a].cx}
+                            y1={shapes[a].cy}
+                            x2={shapes[b].cx}
+                            y2={shapes[b].cy}
+                            stroke="rgb(var(--foreground))"
+                            strokeWidth="0.5"
+                            opacity="0.08"
+                        />
+                    ))}
 
-                {!shouldReduceMotion && (
-                    <>
-                        <div ref={dot1Ref} className="absolute -top-2 right-4 w-2 h-2 bg-foreground/20 rounded-full" />
-                        <div ref={dot2Ref} className="absolute bottom-4 -left-2 w-1.5 h-1.5 bg-foreground/10 rounded-full" />
-                    </>
-                )}
+                    {/* Hexagons */}
+                    {shapes.map((s, i) => (
+                        <g key={`hex-${i}`}>
+                            <polygon
+                                className="hex-shape"
+                                points={hex(s.cx, s.cy, s.r)}
+                                fill="rgb(var(--foreground) / 0.03)"
+                                stroke="rgb(var(--foreground))"
+                                strokeWidth="0.8"
+                                opacity="0.6"
+                            />
+                            {/* Inner hexagon (smaller, dashed) */}
+                            <polygon
+                                points={hex(s.cx, s.cy, s.r * 0.55)}
+                                fill="none"
+                                stroke="rgb(var(--foreground))"
+                                strokeWidth="0.3"
+                                strokeDasharray="2 3"
+                                opacity="0.15"
+                            />
+                            {/* Center dot */}
+                            <circle
+                                cx={s.cx}
+                                cy={s.cy}
+                                r="1.5"
+                                fill="rgb(var(--foreground))"
+                                opacity="0.25"
+                            />
+                            {/* Label (hidden until hover reveal) */}
+                            {s.label && (
+                                <text
+                                    className="hex-label"
+                                    x={s.cx}
+                                    y={s.cy + s.r + 14}
+                                    textAnchor="middle"
+                                    fill="rgb(var(--foreground))"
+                                    fontSize="8"
+                                    fontWeight="600"
+                                    letterSpacing="0.1em"
+                                    opacity="0"
+                                    style={{ transform: 'translateY(4px)', textTransform: 'uppercase' }}
+                                >
+                                    {s.label}
+                                </text>
+                            )}
+                        </g>
+                    ))}
+
+                    {/* Floating particles */}
+                    {particles.map((p, i) => (
+                        <circle
+                            key={`particle-${i}`}
+                            className="float-particle"
+                            cx={p.cx}
+                            cy={p.cy}
+                            r={p.r}
+                            fill="rgb(var(--foreground))"
+                            opacity="0.12"
+                        />
+                    ))}
+                </svg>
             </div>
         </div>
     );
