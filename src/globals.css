@@ -239,11 +239,11 @@ body {
    ──────────────────────────────────────────────────────────────────────── */
 .textLayer :is(span, br)::selection {
   color: transparent;
-  background: hsl(var(--primary) / 0.35);
+  background: rgb(var(--primary) / 0.2);
 }
 
 .annotationLayer :is(.linkAnnotation, .buttonWidgetAnnotation.pushButton) > a:hover {
-  background: hsl(var(--primary) / 0.15);
+  background: rgb(var(--primary) / 0.12);
   box-shadow: none;
   opacity: 1;
 }
