@@ -1,8 +1,9 @@
-import { m, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
 import { X, Shield, Lock, Eye } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import { useScrollLock } from '@/hooks/useScrollLock';
+import { useEffect, useState, useRef } from 'react';
 
 interface PrivacyPolicyModalProps {
     isOpen: boolean;
@@ -13,27 +14,47 @@ export function PrivacyPolicyModal({ isOpen, onClose }: PrivacyPolicyModalProps)
     const { t } = useTranslation();
     useScrollLock(isOpen);
 
-    return createPortal(
-        <AnimatePresence>
-            {isOpen && (
-                <>
-                    {/* Backdrop */}
-                    <m.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={onClose}
-                        className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[500]"
-                    />
+    const [shouldRender, setShouldRender] = useState(false);
+    const backdropRef = useRef<HTMLDivElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
 
-                    {/* Modal — centered via flexbox (avoids transform conflict with Framer Motion) */}
-                    <div className="fixed inset-0 z-[501] flex items-center justify-center p-4 sm:p-0 pointer-events-none">
-                    <m.div
-                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="w-full max-w-lg pointer-events-auto"
-                    >
+    useEffect(() => {
+        if (isOpen) {
+            setShouldRender(true);
+        } else if (shouldRender) {
+            const tl = gsap.timeline({ onComplete: () => setShouldRender(false) });
+            if (backdropRef.current) tl.to(backdropRef.current, { opacity: 0, duration: 0.2 }, 0);
+            if (panelRef.current) tl.to(panelRef.current, { opacity: 0, scale: 0.95, y: 20, duration: 0.2 }, 0);
+        }
+    }, [isOpen]);
+
+    useEffect(() => {
+        if (!shouldRender || !isOpen) return;
+        const raf = requestAnimationFrame(() => {
+            if (backdropRef.current) gsap.fromTo(backdropRef.current, { opacity: 0 }, { opacity: 1, duration: 0.25 });
+            if (panelRef.current) gsap.fromTo(panelRef.current, { opacity: 0, scale: 0.95, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.25, ease: 'power2.out' });
+        });
+        return () => cancelAnimationFrame(raf);
+    }, [shouldRender, isOpen]);
+
+    return createPortal(
+        shouldRender ? (
+            <>
+                {/* Backdrop */}
+                <div
+                    ref={backdropRef}
+                    onClick={onClose}
+                    className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[500]"
+                    style={{ opacity: 0 }}
+                />
+
+                {/* Modal */}
+                <div className="fixed inset-0 z-[501] flex items-center justify-center p-4 sm:p-0 pointer-events-none">
+                <div
+                    ref={panelRef}
+                    className="w-full max-w-lg pointer-events-auto"
+                    style={{ opacity: 0 }}
+                >
                         <div data-scroll-lock-ignore className="bg-card border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
 
                             {/* Header */}
@@ -113,11 +134,10 @@ export function PrivacyPolicyModal({ isOpen, onClose }: PrivacyPolicyModalProps)
                                 </button>
                             </div>
                         </div>
-                    </m.div>
+                    </div>
                     </div>
                 </>
-            )}
-        </AnimatePresence>,
+        ) : null,
         document.body
     );
 }

@@ -129,6 +129,8 @@
     </script>
   </head>
   <body>
+    <!-- LCP prerender: stays visible until React mounts, avoids re-triggering LCP -->
+    <img id="lcp-prerender" src="/images/memoji-nobg.webp" alt="" width="256" height="256" fetchpriority="high" decoding="sync" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(1.1);width:176px;height:176px;border-radius:9999px;object-fit:cover;z-index:9999;pointer-events:none"/>
     <div id="root"></div>
   </body>
 </html>

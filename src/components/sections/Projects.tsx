@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { m } from 'framer-motion';
+import { loadGsap } from '@/lib/gsap-init';
 import { ExternalLink, ArrowUpRight } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 
@@ -23,6 +23,30 @@ const EmpireTerminal = () => {
     const [step, setStep] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const cursorRef = useRef<HTMLDivElement>(null);
+
+    // Animate new lines as they appear
+    useEffect(() => {
+        const el = containerRef.current;
+        if (!el) return;
+        loadGsap().then(({ gsap }) => {
+            const items = el.querySelectorAll('.empire-line');
+            if (!items.length) return;
+            const last = items[items.length - 1];
+            gsap.to(last, { opacity: 1, duration: 0.15, ease: 'power2.out' });
+        });
+    }, [lines]);
+
+    // Cursor blink
+    useEffect(() => {
+        if (!cursorRef.current) return;
+        let tween: { kill: () => void } | undefined;
+        loadGsap().then(({ gsap }) => {
+            if (!cursorRef.current) return;
+            tween = gsap.to(cursorRef.current, { opacity: 0, duration: 0.8, repeat: -1, yoyo: true, ease: 'steps(1)' });
+        });
+        return () => { tween?.kill(); };
+    }, []);
 
     // Pause animation when terminal is out of viewport — avoids running
     // 60+ setState calls/sec for a component the user can't even see
@@ -132,9 +156,9 @@ const EmpireTerminal = () => {
 
             <div className="flex-1 flex flex-col relative z-10 space-y-1">
                 {lines.map((line, i) => (
-                    <m.div key={`line-${i}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                    <div key={`line-${i}`} className="empire-line" style={{ opacity: 0 }}>
                         {line.content}
-                    </m.div>
+                    </div>
                 ))}
 
                 {/* Active Prompt Line */}
@@ -159,10 +183,9 @@ const EmpireTerminal = () => {
                             </>
                         )}
                         <span className="text-white">{currentCommand}</span>
-                        <m.div
+                        <div
+                            ref={cursorRef}
                             className="w-1.5 h-3 bg-white ml-0.5"
-                            animate={{ opacity: [1, 0] }}
-                            transition={{ duration: 0.8, repeat: Infinity }}
                         />
                     </div>
                 )}
@@ -178,6 +201,10 @@ const mealNames = ['Pasta Bolognese', 'Chicken Wrap', 'Rice & Salmon', 'Veggie B
 
 const MealsPhoneMockup = () => {
     const [phase, setPhase] = useState<'idle' | 'loading' | 'done'>('idle');
+    const genBtnRef = useRef<HTMLDivElement>(null);
+    const spinnerRef = useRef<HTMLDivElement>(null);
+    const glowRef = useRef<HTMLDivElement>(null);
+    const mealsRef = useRef<HTMLDivElement>(null);
 
     const restart = useCallback(() => {
         setPhase('idle');
@@ -192,6 +219,50 @@ const MealsPhoneMockup = () => {
         const loop = setInterval(() => restart(), 8000);
         return () => { cleanup(); clearInterval(loop); };
     }, [restart]);
+
+    // Generate button pulse
+    useEffect(() => {
+        if (phase !== 'idle' || !genBtnRef.current) return;
+        let pulse: { kill: () => void } | undefined;
+        loadGsap().then(({ gsap }) => {
+            if (!genBtnRef.current) return;
+            gsap.fromTo(genBtnRef.current, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.3 });
+            pulse = gsap.to(genBtnRef.current, { scale: 1.03, duration: 1.5, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+        });
+        return () => { pulse?.kill(); };
+    }, [phase]);
+
+    // Spinner rotate
+    useEffect(() => {
+        if (phase !== 'loading' || !spinnerRef.current) return;
+        let spin: { kill: () => void } | undefined;
+        loadGsap().then(({ gsap }) => {
+            if (!spinnerRef.current) return;
+            spin = gsap.to(spinnerRef.current, { rotation: 360, duration: 0.8, repeat: -1, ease: 'none' });
+        });
+        return () => { spin?.kill(); };
+    }, [phase]);
+
+    // Meal items stagger
+    useEffect(() => {
+        if (phase !== 'done' || !mealsRef.current) return;
+        loadGsap().then(({ gsap }) => {
+            if (!mealsRef.current) return;
+            const items = mealsRef.current.querySelectorAll('.meal-item');
+            gsap.fromTo(items, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.25, stagger: 0.1, ease: 'power2.out' });
+        });
+    }, [phase]);
+
+    // Ambient glow
+    useEffect(() => {
+        if (!glowRef.current) return;
+        let glow: { kill: () => void } | undefined;
+        loadGsap().then(({ gsap }) => {
+            if (!glowRef.current) return;
+            glow = gsap.to(glowRef.current, { opacity: 0.6, scale: 1.15, duration: 4, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+        });
+        return () => { glow?.kill(); };
+    }, []);
 
     return (
         <div className="relative w-full h-full bg-black flex items-center justify-center overflow-hidden">
@@ -221,38 +292,34 @@ const MealsPhoneMockup = () => {
                                 <div className="text-[6px] text-white/30 text-center leading-relaxed px-1">Generate 5 grab-and-go meals for your work week</div>
                             </div>
                             {/* Generate button */}
-                            <m.div
+                            <div
+                                ref={genBtnRef}
                                 className="flex items-center justify-center py-2 bg-white/10 rounded-lg border border-white/10"
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: [1, 1.03, 1] }}
-                                transition={{ scale: { duration: 1.5, repeat: Infinity, ease: 'easeInOut' } }}
+                                style={{ opacity: 0 }}
                             >
                                 <span className="text-[7px] font-bold text-white/70 tracking-wide">Generate</span>
-                            </m.div>
+                            </div>
                         </>
                     )}
 
                     {phase === 'loading' && (
                         <div className="flex flex-col items-center gap-2 py-6">
-                            <m.div
+                            <div
+                                ref={spinnerRef}
                                 className="w-5 h-5 rounded-full border-2 border-white/20 border-t-white/70"
-                                animate={{ rotate: 360 }}
-                                transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
                             />
                             <span className="text-[6px] text-white/40">Generating...</span>
                         </div>
                     )}
 
                     {phase === 'done' && (
-                        <>
+                        <div ref={mealsRef}>
                             <div className="text-[7px] font-bold text-white/60 px-0.5 mb-0.5">This Week</div>
                             {mealDays.map((day, i) => (
-                                <m.div
+                                <div
                                     key={day}
-                                    className="flex items-center gap-1.5 bg-white/[0.04] rounded-lg px-2 py-1.5 border border-white/[0.06]"
-                                    initial={{ opacity: 0, y: 8 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: i * 0.1, duration: 0.25, ease: 'easeOut' }}
+                                    className="flex items-center gap-1.5 bg-white/[0.04] rounded-lg px-2 py-1.5 border border-white/[0.06] mb-1.5 meal-item"
+                                    style={{ opacity: 0 }}
                                 >
                                     <div className="w-5 h-5 rounded bg-white/10 shrink-0 flex items-center justify-center">
                                         <svg className="w-2.5 h-2.5 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -264,25 +331,241 @@ const MealsPhoneMockup = () => {
                                         <div className="text-[5px] text-white/30 truncate">{mealNames[i]}</div>
                                     </div>
                                     <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
-                                </m.div>
+                                </div>
                             ))}
-                        </>
+                        </div>
                     )}
                 </div>
             </div>
 
             {/* Ambient glow */}
-            <m.div
+            <div
+                ref={glowRef}
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/[0.03] rounded-full blur-[50px] pointer-events-none"
-                animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.15, 1] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                style={{ opacity: 0.3 }}
             />
+        </div>
+    );
+};
+
+const XCloneVisual = () => {
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const el = containerRef.current;
+        if (!el) return;
+
+        const topLogo = el.querySelector('.x-top-logo') as HTMLElement;
+        const mirror = el.querySelector('.x-mirror') as HTMLElement;
+        const bottomLogo = el.querySelector('.x-bottom-logo') as HTMLElement;
+        const glow = el.querySelector('.x-glow') as HTMLElement;
+
+        let ctx: { revert: () => void } | undefined;
+        loadGsap().then(({ gsap }) => {
+            if (!el.isConnected) return;
+            ctx = gsap.context(() => {
+                const tl = gsap.timeline({ repeat: -1, ease: 'sine.inOut' });
+                tl.fromTo(topLogo, { opacity: 0, y: -40 }, { opacity: 1, y: 0, duration: 1.6 }, 0)
+                  .fromTo(mirror, { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 1.6 }, 0)
+                  .fromTo(bottomLogo, { opacity: 0, y: 40 }, { opacity: 0.4, y: 0, duration: 1.6 }, 0)
+                  .to({}, { duration: 0.8 })
+                  .to(topLogo, { opacity: 0, y: -40, duration: 1.6 })
+                  .to(mirror, { scaleX: 0, opacity: 0, duration: 1.6 }, '<')
+                  .to(bottomLogo, { opacity: 0, y: 40, duration: 1.6 }, '<');
+
+                gsap.to(glow, { opacity: 0.8, scale: 1.1, duration: 4, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+            }, el);
+        });
+
+        return () => ctx?.revert();
+    }, []);
+
+    return (
+        <div ref={containerRef} className="relative w-full h-full bg-black flex flex-col items-center justify-center overflow-hidden">
+            <div className="relative z-10 flex flex-col items-center gap-4">
+                <svg className="x-top-logo drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" width="50" height="50" viewBox="0 0 24 24" fill="white" style={{ opacity: 0 }}>
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                <div className="x-mirror w-40 h-[2px] bg-gradient-to-r from-transparent via-blue-200/50 to-transparent shadow-[0_0_15px_rgba(255,255,255,0.8)]" style={{ opacity: 0 }} />
+                <div className="x-bottom-logo transform scale-y-[-1]" style={{ opacity: 0 }}>
+                    <svg width="50" height="50" viewBox="0 0 24 24" fill="white">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                </div>
+            </div>
+            <div className="x-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-white/5 rounded-full blur-[50px] pointer-events-none" style={{ opacity: 0.5 }} />
+        </div>
+    );
+};
+
+const TankIoVisual = () => {
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const el = containerRef.current;
+        if (!el) return;
+
+        const leftTank = el.querySelector('.tank-left') as HTMLElement;
+        const leftBody = el.querySelector('.tank-left-body') as HTMLElement;
+        const rightTank = el.querySelector('.tank-right') as HTMLElement;
+        const rightBody = el.querySelector('.tank-right-body') as HTMLElement;
+        const leftShot = el.querySelector('.shot-left') as HTMLElement;
+        const rightShot = el.querySelector('.shot-right') as HTMLElement;
+        const impactLeft = el.querySelector('.impact-left') as HTMLElement;
+        const impactRight = el.querySelector('.impact-right') as HTMLElement;
+
+        let ctx: { revert: () => void } | undefined;
+        loadGsap().then(({ gsap }) => {
+            if (!el.isConnected) return;
+            ctx = gsap.context(() => {
+                gsap.to(leftTank, { y: -15, duration: 2, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+                gsap.to(rightTank, { y: 20, duration: 2.5, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+
+                const leftTl = gsap.timeline({ repeat: -1, repeatDelay: 1.6 });
+                leftTl.to(leftBody, { x: -4, duration: 0.1, ease: 'power2.out' })
+                      .to(leftBody, { x: 0, duration: 0.15 })
+                      .fromTo(leftShot, { opacity: 0, left: '80px', scale: 0.5 }, { opacity: 1, left: '200px', scale: 1, duration: 0.3, ease: 'none' }, 0.05)
+                      .to(leftShot, { opacity: 0, scale: 0.8, duration: 0.1 })
+                      .fromTo(impactLeft, { scale: 0.95, opacity: 1 }, { scale: 1.5, opacity: 0, duration: 0.4 }, 0.35);
+
+                const rightTl = gsap.timeline({ repeat: -1, repeatDelay: 1.6, delay: 1 });
+                rightTl.to(rightBody, { x: 4, duration: 0.1, ease: 'power2.out' })
+                       .to(rightBody, { x: 0, duration: 0.15 })
+                       .fromTo(rightShot, { opacity: 0, right: '80px', scale: 0.5 }, { opacity: 1, right: '200px', scale: 1, duration: 0.3, ease: 'none' }, 0.05)
+                       .to(rightShot, { opacity: 0, scale: 0.8, duration: 0.1 })
+                       .fromTo(impactRight, { scale: 0.95, opacity: 1 }, { scale: 1.5, opacity: 0, duration: 0.4 }, 0.35);
+            }, el);
+        });
+
+        return () => ctx?.revert();
+    }, []);
+
+    return (
+        <div ref={containerRef} className="relative w-full h-full flex items-center justify-center overflow-hidden bg-black">
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:20px_20px]" />
+            <div className="tank-left absolute left-10 z-20">
+                <div className="tank-left-body flex flex-col items-center">
+                    <div className="w-10 h-10 bg-black border border-white/20 rounded-lg flex items-center justify-center relative shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                        <div className="w-5 h-5 bg-white/10 rounded-sm" />
+                        <div className="absolute -right-5 top-1/2 -translate-y-1/2 w-5 h-2 bg-neutral-700 rounded-r-full border border-l-0 border-white/10" />
+                    </div>
+                    <div className="absolute -top-1 w-8 h-12 border-x-2 border-dashed border-white/10 -z-10 rounded-sm" />
+                </div>
+            </div>
+            <div className="tank-right absolute right-10 z-20">
+                <div className="tank-right-body flex flex-col items-center">
+                    <div className="w-10 h-10 bg-black border border-white/20 rounded-lg flex items-center justify-center relative shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                        <div className="w-5 h-5 bg-white/10 rounded-sm" />
+                        <div className="absolute -left-5 top-1/2 -translate-y-1/2 w-5 h-2 bg-neutral-700 rounded-l-full border border-r-0 border-white/10" />
+                    </div>
+                    <div className="absolute -top-1 w-8 h-12 border-x-2 border-dashed border-white/10 -z-10 rounded-sm" />
+                </div>
+            </div>
+            <div className="shot-left absolute w-3 h-1 bg-white rounded-full shadow-[0_0_8px_white]" style={{ opacity: 0, top: '50%' }} />
+            <div className="shot-right absolute w-3 h-1 bg-white rounded-full shadow-[0_0_8px_white]" style={{ opacity: 0, top: '50%' }} />
+            <div className="impact-left absolute w-8 h-8 rounded-full border border-white/30" style={{ left: '45%', opacity: 0 }} />
+            <div className="impact-right absolute w-8 h-8 rounded-full border border-white/30" style={{ right: '45%', opacity: 0 }} />
         </div>
     );
 };
 
 export function Projects() {
     const { t } = useTranslation();
+    const sectionRef = useRef<HTMLElement>(null);
+    const headerRef = useRef<HTMLDivElement>(null);
+
+    // Header reveal — word-by-word staggered lift
+    useEffect(() => {
+        const el = headerRef.current;
+        if (!el) return;
+        let ctx: { revert: () => void } | undefined;
+        loadGsap().then(({ gsap, ScrollTrigger }) => {
+            if (!el.isConnected) return;
+            ctx = gsap.context(() => {
+                const title = el.querySelector('.projects-title') as HTMLElement | null;
+                const subtitle = el.querySelector('.projects-subtitle') as HTMLElement | null;
+                const link = el.querySelector('.projects-github-link') as HTMLElement | null;
+
+                if (title) {
+                    const words = (title.textContent || '').split(' ');
+                    title.innerHTML = words
+                        .map(w => `<span class="proj-word inline-block"><span class="proj-word-inner inline-block">${w}</span></span>`)
+                        .join(' ');
+                    const inners = title.querySelectorAll('.proj-word-inner');
+                    gsap.fromTo(inners,
+                        { y: '110%', rotateX: -40, opacity: 0 },
+                        { y: '0%', rotateX: 0, opacity: 1, duration: 0.8, stagger: 0.06,
+                          ease: 'power3.out', delay: 0.1,
+                          scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
+                    );
+                }
+                if (subtitle) {
+                    gsap.fromTo(subtitle,
+                        { opacity: 0, y: 18 },
+                        { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 0.35,
+                          scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
+                    );
+                }
+                if (link) {
+                    gsap.fromTo(link,
+                        { opacity: 0, x: 20 },
+                        { opacity: 1, x: 0, duration: 0.6, ease: 'power3.out', delay: 0.45,
+                          scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
+                    );
+                }
+
+                void ScrollTrigger;
+            }, el);
+        });
+        return () => ctx?.revert();
+    }, []);
+
+    // Project cards — individual ScrollTrigger per card (fix shared trigger bug)
+    useEffect(() => {
+        const el = sectionRef.current;
+        if (!el) return;
+        let triggers: Array<{ kill: () => void }> = [];
+        loadGsap().then(({ gsap, ScrollTrigger }) => {
+            if (!el.isConnected) return;
+            const cards = el.querySelectorAll('.project-card');
+            cards.forEach((card, i) => {
+                const visual = card.querySelector('.project-visual') as HTMLElement | null;
+                const content = card.querySelector('.project-content') as HTMLElement | null;
+
+                // Set initial state imperatively so no flash
+                gsap.set(card, { opacity: 0, y: 50 });
+
+                const st = ScrollTrigger.create({
+                    trigger: card as HTMLElement,
+                    start: 'top 95%',
+                    once: true,
+                    onEnter: () => {
+                        gsap.to(card, {
+                            opacity: 1, y: 0,
+                            duration: 0.55, ease: 'power3.out',
+                        });
+                        if (content) {
+                            const children = Array.from(content.children) as HTMLElement[];
+                            gsap.fromTo(children,
+                                { opacity: 0, y: 18 },
+                                { opacity: 1, y: 0, duration: 0.45, stagger: 0.05,
+                                  ease: 'power3.out', delay: 0.15 }
+                            );
+                        }
+                        if (visual) {
+                            gsap.fromTo(visual,
+                                { opacity: 0, scale: 0.95 },
+                                { opacity: 1, scale: 1, duration: 0.5,
+                                  ease: 'power3.out', delay: 0.1 }
+                            );
+                        }
+                    },
+                });
+                triggers.push(st);
+            });
+        });
+        return () => { triggers.forEach(t => t.kill()); };
+    }, []);
 
     const projects: Project[] = [
         {
@@ -319,17 +602,14 @@ export function Projects() {
     ];
 
     return (
-        <section id="projects" className="py-32 container mx-auto px-4 cv-auto">
-            <m.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
+        <section ref={sectionRef} id="projects" className="py-32 container mx-auto px-4 cv-auto">
+            <div
+                ref={headerRef}
                 className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8"
             >
                 <div>
-                    <h2 className="text-4xl md:text-6xl font-bold mb-4">{t('projects.title')}</h2>
-                    <p className="text-muted-foreground text-lg max-w-md">
+                    <h2 className="projects-title text-4xl md:text-6xl font-bold mb-4" style={{ perspective: '800px' }}>{t('projects.title')}</h2>
+                    <p className="projects-subtitle text-muted-foreground text-lg max-w-md">
                         {t('projects.subtitle')}
                     </p>
                 </div>
@@ -337,24 +617,20 @@ export function Projects() {
                     href="https://github.com/Thomas-TP"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center gap-2 text-foreground border-b border-border pb-1 hover:border-foreground transition-colors"
+                    className="projects-github-link group flex items-center gap-2 text-foreground border-b border-border pb-1 hover:border-foreground transition-colors"
                 >
                     {t('projects.view_all')} <ArrowUpRight className="group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" size={18} />
                 </a>
-            </m.div>
+            </div>
 
             <div className="grid gap-8">
-                {projects.map((project, index) => (
-                    <m.div
+                {projects.map((project) => (
+                    <div
                         key={project.title}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ delay: index * 0.1 }}
-                        className={`group relative bg-card border border-border rounded-3xl p-8 md:p-12 hover:bg-muted/50 transition-colors`}
+                        className="project-card group relative bg-card border border-border rounded-3xl p-8 md:p-12 hover:bg-muted/50 transition-colors"
                     >
                         <div className="flex flex-col md:flex-row gap-8 justify-between">
-                            <div className="flex flex-col justify-between flex-1">
+                            <div className="project-content flex flex-col justify-between flex-1">
                                 <div>
                                     <div className="flex items-center gap-4 mb-4">
                                         <span className="font-mono text-sm text-muted-foreground">{project.year}</span>
@@ -398,170 +674,14 @@ export function Projects() {
                                 </div>
                             </div>
 
-                            {/* Optional: Placeholder for image or visual element */}
                             {/* Project Visualization Block */}
-                            <div className="w-full md:w-1/3 aspect-video bg-black rounded-2xl border border-border flex items-center justify-center overflow-hidden relative group-hover:border-primary/20 transition-all shadow-2xl">
+                            <div className="project-visual w-full md:w-1/3 aspect-video bg-black rounded-2xl border border-border flex items-center justify-center overflow-hidden relative group-hover:border-primary/20 transition-all shadow-2xl">
                                 <div className="absolute inset-0 bg-grid-white/[0.05]" />
 
                                 {project.title === "X-clone" ? (
-                                    <div className="relative w-full h-full bg-black flex flex-col items-center justify-center overflow-hidden">
-                                        <div className="relative z-10 flex flex-col items-center gap-4">
-
-                                            {/* Top Main X Logo - Moves Down to Mirror */}
-                                            <m.svg
-                                                width="50"
-                                                height="50"
-                                                viewBox="0 0 24 24"
-                                                fill="white"
-                                                className="drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]"
-                                                animate={{
-                                                    opacity: [0, 1, 1, 0],
-                                                    y: [-40, 0, 0, -40]
-                                                }}
-                                                transition={{
-                                                    duration: 4,
-                                                    times: [0, 0.4, 0.6, 1],
-                                                    repeat: Infinity,
-                                                    ease: "easeInOut"
-                                                }}
-                                            >
-                                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                                            </m.svg>
-
-                                            {/* Center Mirror Object - Expands when they meet */}
-                                            <m.div
-                                                className="w-40 h-[2px] bg-gradient-to-r from-transparent via-blue-200/50 to-transparent shadow-[0_0_15px_rgba(255,255,255,0.8)]"
-                                                animate={{
-                                                    scaleX: [0, 1, 1, 0],
-                                                    opacity: [0, 1, 1, 0]
-                                                }}
-                                                transition={{
-                                                    duration: 4,
-                                                    times: [0, 0.4, 0.6, 1],
-                                                    repeat: Infinity,
-                                                    ease: "easeInOut"
-                                                }}
-                                            />
-
-                                            {/* Bottom Reflected X Logo - Moves Up to Mirror */}
-                                            <m.div
-                                                className="transform scale-y-[-1] mask-image:linear-gradient(to_bottom,transparent_10%,white_90%) opacity-50"
-                                                animate={{
-                                                    opacity: [0, 0.4, 0.4, 0],
-                                                    y: [40, 0, 0, 40]
-                                                }}
-                                                transition={{
-                                                    duration: 4,
-                                                    times: [0, 0.4, 0.6, 1],
-                                                    repeat: Infinity,
-                                                    ease: "easeInOut"
-                                                }}
-                                            >
-                                                <svg width="50" height="50" viewBox="0 0 24 24" fill="white">
-                                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                                                </svg>
-                                            </m.div>
-                                        </div>
-
-                                        {/* Ambient Glow - Pulsing */}
-                                        <m.div
-                                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-white/5 rounded-full blur-[50px] pointer-events-none"
-                                            animate={{ opacity: [0.5, 0.8, 0.5], scale: [1, 1.1, 1] }}
-                                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                        />
-                                    </div>
+                                    <XCloneVisual />
                                 ) : project.title === "Tank.io" ? (
-                                    <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-black">
-                                        {/* Grid Background */}
-                                        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:20px_20px]" />
-
-                                        {/* Left Tank Container */}
-                                        <m.div
-                                            className="absolute left-10 z-20"
-                                            animate={{ y: [0, -15, 0, 15, 0] }}
-                                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                        >
-                                            {/* Tank Body & Recoil */}
-                                            <m.div
-                                                className="flex flex-col items-center"
-                                                animate={{ x: [0, -4, 0] }}
-                                                transition={{ duration: 0.2, delay: 0.1, ease: "easeOut" }} // Recoil on shoot
-                                            >
-                                                <div className="w-10 h-10 bg-black border border-white/20 rounded-lg flex items-center justify-center relative shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-                                                    <div className="w-5 h-5 bg-white/10 rounded-sm" />
-                                                    {/* Barrel */}
-                                                    <div className="absolute -right-5 top-1/2 -translate-y-1/2 w-5 h-2 bg-neutral-700 rounded-r-full border border-l-0 border-white/10" />
-                                                </div>
-                                                {/* Tracks */}
-                                                <div className="absolute -top-1 w-8 h-12 border-x-2 border-dashed border-white/10 -z-10 rounded-sm" />
-                                            </m.div>
-                                        </m.div>
-
-                                        {/* Right Tank Container */}
-                                        <m.div
-                                            className="absolute right-10 z-20"
-                                            animate={{ y: [0, 20, 0, -10, 0] }}
-                                            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                                        >
-                                            {/* Tank Body & Recoil */}
-                                            <m.div
-                                                className="flex flex-col items-center"
-                                                animate={{ x: [0, 4, 0] }}
-                                                transition={{ duration: 0.2, delay: 1.1, ease: "easeOut" }} // Recoil on shoot
-                                            >
-                                                <div className="w-10 h-10 bg-black border border-white/20 rounded-lg flex items-center justify-center relative shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-                                                    <div className="w-5 h-5 bg-white/10 rounded-sm" />
-                                                    {/* Barrel */}
-                                                    <div className="absolute -left-5 top-1/2 -translate-y-1/2 w-5 h-2 bg-neutral-700 rounded-l-full border border-r-0 border-white/10" />
-                                                </div>
-                                                {/* Tracks */}
-                                                <div className="absolute -top-1 w-8 h-12 border-x-2 border-dashed border-white/10 -z-10 rounded-sm" />
-                                            </m.div>
-                                        </m.div>
-
-                                        {/* Projectiles Wrapper - Needs to follow Y movement loosely or be independent */}
-                                        {/* To keep it simple and performant, we'll simulate shots hitting center */}
-
-                                        {/* Left Shot */}
-                                        <m.div
-                                            className="absolute w-3 h-1 bg-white rounded-full shadow-[0_0_8px_white]"
-                                            initial={{ opacity: 0, left: "80px", top: "50%" }}
-                                            animate={{
-                                                opacity: [0, 1, 1, 0],
-                                                left: ["80px", "200px"],
-                                                scale: [0.5, 1, 0.8]
-                                            }}
-                                            transition={{ duration: 0.4, repeat: Infinity, repeatDelay: 1.6, delay: 0.1, ease: "linear" }}
-                                        />
-
-                                        {/* Right Shot */}
-                                        <m.div
-                                            className="absolute w-3 h-1 bg-white rounded-full shadow-[0_0_8px_white]"
-                                            initial={{ opacity: 0, right: "80px", top: "50%" }}
-                                            animate={{
-                                                opacity: [0, 1, 1, 0],
-                                                right: ["80px", "200px"],
-                                                scale: [0.5, 1, 0.8]
-                                            }}
-                                            transition={{ duration: 0.4, repeat: Infinity, repeatDelay: 1.6, delay: 1.1, ease: "linear" }}
-                                        />
-
-                                        {/* Impact Effects (Center) */}
-                                        <m.div
-                                            className="absolute w-8 h-8 rounded-full border border-white/30"
-                                            initial={{ scale: 0.95, opacity: 0 }}
-                                            animate={{ scale: [0.95, 1.5], opacity: [1, 0] }}
-                                            transition={{ duration: 0.4, repeat: Infinity, repeatDelay: 1.6, delay: 0.45 }}
-                                            style={{ left: "45%" }}
-                                        />
-                                        <m.div
-                                            className="absolute w-8 h-8 rounded-full border border-white/30"
-                                            initial={{ scale: 0.95, opacity: 0 }}
-                                            animate={{ scale: [0.95, 1.5], opacity: [1, 0] }}
-                                            transition={{ duration: 0.4, repeat: Infinity, repeatDelay: 1.6, delay: 1.45 }}
-                                            style={{ right: "45%" }}
-                                        />
-                                    </div>
+                                    <TankIoVisual />
                                 ) : project.title === "Meals Planner" ? (
                                     <MealsPhoneMockup />
                                 ) : (
@@ -569,7 +689,7 @@ export function Projects() {
                                 )}
                             </div>
                         </div>
-                    </m.div>
+                    </div>
                 ))}
             </div>
         </section>
