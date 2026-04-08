@@ -239,11 +239,14 @@ body {
    ──────────────────────────────────────────────────────────────────────── */
 .textLayer :is(span, br)::selection {
   color: transparent;
-  background: rgb(var(--primary) / 0.2);
+  /* CV palette: #FFF7F1 warm-white at 45% — readable on #193441 dark-teal background */
+  background: rgba(255, 247, 241, 0.45);
 }
 
 .annotationLayer :is(.linkAnnotation, .buttonWidgetAnnotation.pushButton) > a:hover {
-  background: rgb(var(--primary) / 0.12);
-  box-shadow: none;
-  opacity: 1;
+  /* Override react-pdf hardcoded yellow — !important required because
+     AnnotationLayer.css is injected after globals.css in the bundle */
+  background: rgba(255, 247, 241, 0.25) !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
 }
