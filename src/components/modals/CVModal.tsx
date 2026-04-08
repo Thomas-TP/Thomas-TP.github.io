@@ -7,8 +7,11 @@ import { useScrollLock } from '@/hooks/useScrollLock';
 import { Document, Page, pdfjs } from 'react-pdf';
 // TextLayer & AnnotationLayer CSS intentionally omitted — layers are disabled for performance
 
-// Set PDF.js worker at module level (client-only, no SSR guard needed)
-pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+// Set PDF.js worker — Rsbuild emits the worker as a hashed asset automatically
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+    'pdfjs-dist/build/pdf.worker.min.mjs',
+    import.meta.url,
+).toString();
 
 interface CVModalProps {
     isOpen: boolean;
