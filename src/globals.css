@@ -239,8 +239,9 @@ body {
    ──────────────────────────────────────────────────────────────────────── */
 .textLayer :is(span, br)::selection {
   color: transparent;
-  /* CV palette: #FFF7F1 warm-white at 45% — readable on #193441 dark-teal background */
-  background: rgba(255, 247, 241, 0.45);
+  /* Use the OS/browser native selection color (usually blue) — works on both
+     the dark #193441 and light #FFF7F1 sections of the CV */
+  background: Highlight;
 }
 
 .annotationLayer :is(.linkAnnotation, .buttonWidgetAnnotation.pushButton) > a:hover {
