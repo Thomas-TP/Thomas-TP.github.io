@@ -5,7 +5,8 @@ import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { Document, Page, pdfjs } from 'react-pdf';
-// TextLayer & AnnotationLayer CSS intentionally omitted — layers are disabled for performance
+import 'react-pdf/dist/Page/TextLayer.css';
+import 'react-pdf/dist/Page/AnnotationLayer.css';
 
 // Set PDF.js worker — Rsbuild emits the worker as a hashed asset automatically
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -167,6 +168,7 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
                                     <Document
                                         file={cvPath}
                                         onLoadSuccess={onDocumentLoadSuccess}
+                                        externalLinkTarget="_blank"
                                         loading={
                                             <div className="flex items-center justify-center h-96 text-muted-foreground">
                                                 <span className="text-sm">Chargement du CV…</span>
@@ -183,8 +185,8 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
                                             <Page
                                                 pageNumber={currentPage}
                                                 width={pageWidth}
-                                                renderTextLayer={false}
-                                                renderAnnotationLayer={false}
+                                                renderTextLayer={true}
+                                                renderAnnotationLayer={true}
                                             />
                                         </div>
                                     </Document>
