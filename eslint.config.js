@@ -1,32 +1,42 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { FlatCompat } from '@eslint/eslintrc';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+import js from '@eslint/js';
+import tsParser from '@typescript-eslint/parser';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
 
 const eslintConfig = [
-  ...compat.extends('eslint:recommended'),
+  js.configs.recommended,
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
+      parser: tsParser,
       parserOptions: {
         ecmaFeatures: { jsx: true },
         ecmaVersion: 'latest',
         sourceType: 'module',
       },
     },
+    plugins: {
+      'react-hooks': reactHooks,
+    },
     rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-hooks/set-state-in-effect': 'off', // Valid for listeners and mount guards
+      'react-hooks/refs': 'off',                 // Valid for controlled transitions
+      'react-hooks/purity': 'off',               // Math.random() in useMemo is intentional (particles)
       'no-unused-vars': 'off', // Handled by TypeScript
       'no-undef': 'off',       // Handled by TypeScript
     },
   },
   {
-    ignores: ['dist/**', 'node_modules/**', 'cloudflare-worker/**'],
+    files: ['scripts/**/*.{js,mjs,cjs}', '*.{js,mjs,cjs}'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
+    ignores: ['dist/**', 'node_modules/**', 'cloudflare-worker/**', 'public/**'],
   },
 ];
 

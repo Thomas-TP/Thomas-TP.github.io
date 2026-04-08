@@ -35,30 +35,25 @@ export default defineConfig({
   server: {
     port: 3000,
   },
-  performance: {
-    chunkSplit: {
-      strategy: 'split-by-experience',
-      override: {
-        cacheGroups: {
-          three: {
-            test: /[\\/]node_modules[\\/](three|@react-three)[\\/]/,
-            name: 'vendor-three',
-            chunks: 'async',
-            priority: 20,
-          },
-          gsap: {
-            test: /[\\/]node_modules[\\/](gsap|@gsap)[\\/]/,
-            name: 'vendor-gsap',
-            chunks: 'async',
-            priority: 20,
-          },
-          pdfjs: {
-            test: /[\\/]node_modules[\\/](pdfjs-dist|react-pdf)[\\/]/,
-            name: 'vendor-pdf',
-            chunks: 'async',
-            priority: 20,
-          },
-        },
+  splitChunks: {
+    cacheGroups: {
+      three: {
+        test: /[\\/]node_modules[\\/](three|@react-three)[\\/]/,
+        name: 'vendor-three',
+        chunks: 'async',
+        priority: 20,
+      },
+      gsap: {
+        test: /[\\/]node_modules[\\/](gsap|@gsap)[\\/]/,
+        name: 'vendor-gsap',
+        chunks: 'async',
+        priority: 20,
+      },
+      pdfjs: {
+        test: /[\\/]node_modules[\\/](pdfjs-dist|react-pdf)[\\/]/,
+        name: 'vendor-pdf',
+        chunks: 'async',
+        priority: 20,
       },
     },
   },
