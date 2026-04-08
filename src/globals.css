@@ -239,15 +239,14 @@ body {
    ──────────────────────────────────────────────────────────────────────── */
 .textLayer :is(span, br)::selection {
   color: transparent;
-  /* Use the OS/browser native selection color (usually blue) — works on both
-     the dark #193441 and light #FFF7F1 sections of the CV */
-  background: Highlight;
+  /* Semi-transparent blue — visible on both #193441 dark and #FFF7F1 light CV sections */
+  background: rgba(59, 130, 246, 0.45);
 }
 
 .annotationLayer :is(.linkAnnotation, .buttonWidgetAnnotation.pushButton) > a:hover {
   /* Override react-pdf hardcoded yellow — !important required because
      AnnotationLayer.css is injected after globals.css in the bundle */
-  background: rgba(255, 247, 241, 0.25) !important;
+  background: rgba(59, 130, 246, 0.25) !important;
   box-shadow: none !important;
   opacity: 1 !important;
 }
