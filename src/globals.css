@@ -229,3 +229,21 @@ body {
     font-size: 12px;
   }
 }
+
+/* ── react-pdf overrides ────────────────────────────────────────────────────
+   TextLayer: text spans are color:transparent — keep them transparent even
+   when selected so the embedded PDF font doesn't visually compete with the
+   canvas rendering. The selection highlight rectangle remains visible.
+   AnnotationLayer: replace the hardcoded yellow link hover with a subtle
+   theme-aware highlight (uses the existing --primary CSS variable).
+   ──────────────────────────────────────────────────────────────────────── */
+.textLayer :is(span, br)::selection {
+  color: transparent;
+  background: hsl(var(--primary) / 0.35);
+}
+
+.annotationLayer :is(.linkAnnotation, .buttonWidgetAnnotation.pushButton) > a:hover {
+  background: hsl(var(--primary) / 0.15);
+  box-shadow: none;
+  opacity: 1;
+}
