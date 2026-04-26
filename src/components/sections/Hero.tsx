@@ -19,8 +19,8 @@ const CVModal = lazy(() =>
     import('@/components/modals/CVModal').then(mod => ({ default: mod.CVModal }))
 );
 
-const Hero3D = lazy(() =>
-    import('@/components/ui/hero-3d').then(mod => ({ default: mod.Hero3D }))
+const HeroShader = lazy(() =>
+    import('@/components/ui/hero-shader').then(mod => ({ default: mod.HeroShader }))
 );
 
 function useTypingAnimation(roles: string[]) {
@@ -142,7 +142,7 @@ export function Hero() {
         <>
         {cvOpen && <Suspense><CVModal isOpen={cvOpen} onClose={() => setCvOpen(false)} /></Suspense>}
         <section ref={sectionRef} id="home" className="min-h-screen flex flex-col justify-center items-center relative pt-20">
-            {mountBg && <Suspense><Hero3D /></Suspense>}
+            {mountBg && <Suspense><HeroShader /></Suspense>}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
             <div ref={contentRef} className="container px-4 mx-auto z-10 flex-1 flex items-center">

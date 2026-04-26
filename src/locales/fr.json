@@ -117,6 +117,8 @@
         "section3_text": "Si vous utilisez le formulaire de contact, votre nom, adresse e-mail et message sont transmis via un Cloudflare Worker et envoyés via l'API Resend. Ces données ne sont pas stockées dans une base de données et sont utilisées uniquement pour répondre à votre message.",
         "section4_title": "4. Analytique",
         "section4_text": "Ce site utilise Cloudflare Web Analytics, un service respectueux de la vie privée, sans cookies. Il collecte des données anonymes : pages visitées, pays d'origine (l'IP n'est pas stockée), type de navigateur, type d'appareil et Core Web Vitals. Aucune donnée personnelle n'est collectée et aucun suivi inter-sites n'est effectué.",
+        "section5_title": "5. Assistant IA (Ask Thomas)",
+        "section5_text": "Ce site intègre un assistant IA propulsé par Cloudflare Workers AI (Meta Llama 3.3 70B). Lorsque vous utilisez le chat, votre message et les derniers échanges sont transmis à l'infrastructure IA de Cloudflare pour générer une réponse. Ces messages ne sont pas stockés dans une base de données. L'historique de conversation est conservé localement dans votre navigateur (localStorage) et n'est jamais transmis à un serveur. Une limite de 12 messages/heure par adresse IP est appliquée via un store Cloudflare KV (IP, compteur, TTL). Aucune donnée personnelle au-delà du contenu du message n'est collectée.",
         "github_note": "Ce site est hébergé sur GitHub Pages. GitHub peut collecter des logs techniques (adresses IP) à des fins de sécurité. Cloudflare traite des données analytiques anonymes conformément à sa politique de confidentialité.",
         "close": "Fermer"
     },
@@ -129,7 +131,7 @@
         "section2_text": "Le contenu, le design et les implémentations de code spécifiques affichés sur ce portfolio sont la propriété intellectuelle de Thomas P.",
         "section2_sub": "Vous pouvez consulter, télécharger et copier des documents pour un usage personnel et non commercial, à condition de citer la source.",
         "section3_title": "3. Avertissement",
-        "section3_text": "Les projets et exemples de code fournis ici le sont à des fins éducatives et de démonstration. Ils sont fournis \"tels quels\" sans garantie d'aucune sorte. Je ne suis pas responsable des dommages résultant de l'utilisation du code.",
+        "section3_text": "Les projets et exemples de code fournis ici le sont à des fins éducatives et de démonstration. Ils sont fournis \"tels quels\" sans garantie d'aucune sorte. Je ne suis pas responsable des dommages résultant de l'utilisation du code. L'assistant IA (Ask Thomas) génère des réponses automatiquement et peut contenir des inexactitudes. Ses réponses ne constituent pas des engagements professionnels, juridiques ou contractuels.",
         "section4_title": "4. Droit Applicable",
         "section4_text": "Ces conditions sont régies et interprétées conformément aux lois de la Suisse. Tout litige relatif à ces conditions sera soumis à la compétence exclusive des tribunaux de Genève.",
         "close": "Accepter & Fermer"
