@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, type ComponentType } from 'react';
 import { ModeToggle } from '@/components/ui/mode-toggle';
 import { useTranslation } from 'react-i18next';
 import { LanguageToggle } from '@/components/ui/language-toggle';
+import { SoundToggle } from '@/components/ui/sound-toggle';
 
 interface NavItem {
     id: string;
@@ -200,6 +201,7 @@ export function Navbar() {
                         ))}
                     </div>
                     <div className="hidden md:block w-px h-8 bg-border/50 mx-2" />
+                    <SoundToggle />
                     <LanguageToggle />
                     <ModeToggle />
                 </div>

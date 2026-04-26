@@ -12,6 +12,21 @@ interface Env {
   RESEND_API_KEY: string;
   TURNSTILE_SECRET_KEY: string;
   RATE_LIMIT: KVNamespace;
+  AI: Ai;
+}
+
+// Workers AI binding type — minimal surface used here
+interface Ai {
+  run(model: string, input: AiTextInput): Promise<AiTextOutput | ReadableStream>;
+}
+interface AiTextInput {
+  messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }>;
+  max_tokens?: number;
+  temperature?: number;
+  stream?: boolean;
+}
+interface AiTextOutput {
+  response: string;
 }
 
 interface ContactBody {
@@ -243,11 +258,138 @@ function autoReplyHtml(name: string, message: string, lang: Lang, theme: Theme):
 </td></tr></table></td></tr></table></body></html>`;
 }
 
+// ── Ask Thomas (Workers AI) ──────────────────────────────────────────────────
+
+const SYSTEM_PROMPT = `You are "Ask Thomas", an AI assistant embedded on Thomas Prudhomme's portfolio website (thomastp.ch).
+
+You answer questions about Thomas in a friendly, concise, professional tone. You speak in the same language as the user (English or French).
+
+Use ONLY the facts below. If something is not covered, say so honestly and suggest the visitor reach out via the contact form.
+
+# Facts about Thomas
+
+## Identity
+- Full name: Thomas Prudhomme
+- Location: Geneva, Switzerland (available across the Lake Geneva region)
+- Email: thomas@prudhomme.li
+- Portfolio: https://thomastp.ch
+- GitHub: https://github.com/Thomas-TP
+- LinkedIn: https://www.linkedin.com/in/thomas-tp/
+- Credly (verified certifications): https://www.credly.com/users/thomas-prudhomme
+
+## Education & Status
+- Currently a Computer Science student at the Geneva Institute of Technology (Geneva IT School)
+- Pursuing a Swiss CFC (Certificat Fédéral de Capacité) in Computer Science
+- Timeline: 2024 (school entry) → 2025 (development phase) → 2026 (specialization, current year) → 2027 (internship) → 2028 (graduation)
+- Open to internships and freelance opportunities, particularly in the Lake Geneva region
+
+## Areas of focus
+- Cloud computing
+- Cybersecurity / Ethical hacking
+- IoT & smart home
+- Web development (modern React stack)
+
+## Tech stack he uses on his own portfolio
+- Runtime/build: Bun, Rsbuild + Rspack
+- Frontend: React 19, TypeScript 6, UnoCSS (atomic CSS), GSAP, Three.js / react-three-fiber
+- i18n: i18next (English + French)
+- Hosting: Cloudflare Pages + Cloudflare Workers (edge functions, KV, Workers AI)
+- Email: Resend API; CAPTCHA: Cloudflare Turnstile
+- PDF: pdfjs-dist + react-pdf
+
+## Other technologies he knows
+- PowerShell scripting and system automation
+- Cisco Packet Tracer (networking)
+- HTML / CSS / vanilla JavaScript
+- Flutter / Dart (mobile)
+- C++, Swift (mobile build chains)
+
+## Featured projects
+1. **X-clone** (2024) — A Twitter/X clone with AI chat (Grok integration). Stack: HTML/CSS/JavaScript. Repo: github.com/Thomas-TP/X-clone
+2. **PowerShell Empire** (2024) — Modern modification of the Empire post-exploitation framework for ethical security testing. Repo: github.com/Thomas-TP/Powershell-Empire-test
+3. **Tank.io** (2025) — Multiplayer tank battle game built with React + HTML5 Canvas, real-time gameplay. Live: tank-io-wr49.onrender.com
+4. **Meals Planner** (2026) — Mobile app generating 5 balanced grab-and-go weekly meals. Stack: Flutter / Dart / C++ / Swift. Repo: github.com/Thomas-TP/meals-app
+
+## CV / Resume
+- Direct download link: https://thomastp.ch/documents/ThomasPrudhommeCV.pdf
+- If someone asks for the CV, resume, or wants to see his credentials, share this link in Markdown format: [Télécharger le CV](https://thomastp.ch/documents/ThomasPrudhommeCV.pdf) or [Download CV](https://thomastp.ch/documents/ThomasPrudhommeCV.pdf) depending on the language.
+
+## Certifications
+Verified achievement badges on Credly across cloud computing, cybersecurity, IoT, and software development.
+
+## Personality / way of working
+- Detail-oriented, focused on craft (Lighthouse 100 portfolio, custom shaders, edge-deployed everything)
+- Bilingual: French (native) and English
+
+# Rules
+- **Always format your responses in Markdown.** Use bold, bullet lists, inline code, headers (##/###), and code blocks where appropriate.
+- For lists of items (stack, projects, skills), always use a Markdown bullet list or numbered list.
+- For code or technology names, use inline \`code\` formatting.
+- Keep answers concise but well-structured. Use short paragraphs or bullet points — never a wall of plain text.
+- For longer answers (e.g. full stack breakdown), use a ## header to organise sections.
+- If asked something not covered (salary, personal life, opinions on people), politely decline and redirect.
+- Never invent projects, jobs, dates, certifications, or numbers.
+- If asked for the email or to schedule a meeting, give the email and the contact form URL.
+- Always answer in the same language the user wrote in.`;
+
+interface AskBody {
+  message?: string;
+  history?: Array<{ role: 'user' | 'assistant'; content: string }>;
+}
+
+async function handleAsk(request: Request, env: Env, origin: string): Promise<Response> {
+  let body: AskBody;
+  try {
+    body = await request.json<AskBody>();
+  } catch {
+    return jsonResp({ error: 'Invalid JSON' }, 400, origin);
+  }
+
+  const message = (body.message ?? '').trim();
+  if (!message) return jsonResp({ error: 'Empty message' }, 400, origin);
+  if (message.length > 500) return jsonResp({ error: 'Message too long (max 500 chars)' }, 400, origin);
+
+  const history = Array.isArray(body.history) ? body.history.slice(-6) : [];
+
+  // Per-IP rate limit: 12 messages per hour
+  const clientIp = request.headers.get('CF-Connecting-IP') ?? 'unknown';
+  const rateKey = `ask:${clientIp}`;
+  const current = parseInt((await env.RATE_LIMIT.get(rateKey)) ?? '0', 10);
+  if (current >= 12) {
+    return jsonResp({ error: 'Rate limit exceeded. Please try again later.' }, 429, origin);
+  }
+  await env.RATE_LIMIT.put(rateKey, String(current + 1), { expirationTtl: 3600 });
+
+  if (!env.AI) {
+    return jsonResp({ error: 'AI binding not configured on this Worker.' }, 500, origin);
+  }
+
+  const messages = [
+    { role: 'system' as const, content: SYSTEM_PROMPT },
+    ...history.map(h => ({ role: h.role, content: h.content })),
+    { role: 'user' as const, content: message },
+  ];
+
+  try {
+    const out = (await env.AI.run('@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
+      messages,
+      max_tokens: 350,
+      temperature: 0.4,
+    })) as AiTextOutput;
+    const reply = (out.response ?? '').trim();
+    return jsonResp({ reply }, 200, origin);
+  } catch (err) {
+    console.error('AI error:', err);
+    return jsonResp({ error: 'AI request failed' }, 500, origin);
+  }
+}
+
 // ── Handler ───────────────────────────────────────────────────────────────────
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const origin = request.headers.get('Origin') ?? '';
+    const url = new URL(request.url);
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: corsHeaders(origin) });
@@ -255,6 +397,11 @@ export default {
 
     if (request.method !== 'POST') {
       return jsonResp({ error: 'Method not allowed' }, 405, origin);
+    }
+
+    // Route: /ask → AI chatbot, default → contact form (legacy unprefixed)
+    if (url.pathname === '/ask') {
+      return handleAsk(request, env, origin);
     }
 
     let body: ContactBody;
