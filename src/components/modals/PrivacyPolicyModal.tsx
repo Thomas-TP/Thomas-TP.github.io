@@ -117,6 +117,17 @@ export function PrivacyPolicyModal({ isOpen, onClose }: PrivacyPolicyModalProps)
                                     </p>
                                 </section>
 
+                                <section>
+                                    <h3 className="text-base font-semibold text-foreground mb-2">
+                                        {t('privacy_modal.section5_title')}
+                                    </h3>
+                                    <p>
+                                        {t('privacy_modal.section5_text')}
+                                        {' '}
+                                        <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Cloudflare Privacy Policy</a>.
+                                    </p>
+                                </section>
+
                                 <div className="p-4 bg-muted/50 rounded-lg border border-border text-xs text-muted-foreground">
                                     {t('privacy_modal.github_note')}
                                     {' '}

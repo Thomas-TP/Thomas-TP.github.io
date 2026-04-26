@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/components/ui/theme-provider';
 import { useState, useRef, useCallback, FormEvent, useEffect } from 'react';
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
+import { sfx } from '@/lib/sound';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -90,11 +91,13 @@ export function Contact() {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        if (!validate()) return;
+        if (!validate()) { sfx.error(); return; }
         setStatus('sending');
+        sfx.whoosh();
 
         if (!turnstileToken) {
             setStatus('error');
+            sfx.error();
             return;
         }
         const duration = Date.now() - startTimeRef.current;
@@ -120,22 +123,12 @@ export function Contact() {
             setName(''); setEmail(''); setMessage(''); setHoney('');
             setTurnstileToken(null);
             turnstileRef.current?.reset();
-            // Success feedback: soft chime + vibration
-            try {
-                const ctx = new AudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.connect(gain); gain.connect(ctx.destination);
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(880, ctx.currentTime);
-                osc.frequency.setValueAtTime(1047, ctx.currentTime + 0.12);
-                gain.gain.setValueAtTime(0.18, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
-                osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.5);
-            } catch { /* AudioContext not available */ }
+            // Success feedback: chime + vibration (chime respects mute toggle)
+            sfx.success();
             if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([80, 40, 80]);
         } catch {
             setStatus('error');
+            sfx.error();
             turnstileRef.current?.reset();
             setTurnstileToken(null);
         }

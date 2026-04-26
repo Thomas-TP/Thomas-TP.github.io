@@ -1,1 +1,4 @@
 /favicon.ico /icons/favicon.svg 200
+# SPA fallback — serve index.html for unknown paths so the React 404 page
+# (with its mini game) renders instead of the default Cloudflare 404.
+/* /index.html 200

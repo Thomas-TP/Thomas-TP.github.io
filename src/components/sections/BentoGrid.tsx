@@ -1,6 +1,7 @@
 import { type ReactNode, useState, useRef, useEffect, forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { loadGsap } from '@/lib/gsap-init';
+import { sfx } from '@/lib/sound';
 import { cn } from '@/lib/utils';
 import { Brain, Code2, Database, Coffee, GraduationCap, Zap, Tv, Lightbulb, Wifi, Briefcase, Search, Loader, ExternalLink } from 'lucide-react';
 
@@ -337,6 +338,12 @@ function IoTBlock() {
         return () => clearInterval(interval);
     }, [isHovering]);
 
+    // Sounds only fire from explicit user clicks (handled in toggles below) so
+    // the auto-rotating ambient lamp doesn't beep every 3s.
+    const toggleLight = () => { setLightOn(v => { v ? sfx.switchOff() : sfx.switchOn(); return !v; }); };
+    const toggleTv = () => { setTvOn(v => { v ? sfx.switchOff() : sfx.switchOn(); return !v; }); };
+    const toggleOven = () => { setOvenOn(v => { v ? sfx.switchOff() : sfx.switchOn(); return !v; }); };
+
     return (
         <div
             className="flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center relative overflow-hidden group/iot"
@@ -374,11 +381,11 @@ function IoTBlock() {
                             </div>
                             <div
                                 className="w-6 h-3 rounded-full bg-foreground/10 relative cursor-pointer scale-125 md:scale-100 origin-right"
-                                onClick={() => setLightOn(!lightOn)}
+                                onClick={toggleLight}
                                 role="button"
                                 tabIndex={0}
                                 aria-label={t('bento.iot.lamp')}
-                                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setLightOn(!lightOn)}
+                                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleLight()}
                             >
                                 <div
                                     className="absolute top-0.5 bottom-0.5 w-2 h-2 rounded-full bg-background shadow-sm transition-[left] duration-200"
@@ -410,11 +417,11 @@ function IoTBlock() {
                         </div>
                         <div
                             className="w-6 h-3 rounded-full bg-foreground/10 relative cursor-pointer flex-shrink-0"
-                            onClick={() => setTvOn(!tvOn)}
+                            onClick={toggleTv}
                             role="button"
                             tabIndex={0}
                             aria-label={t('bento.iot.tv')}
-                            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setTvOn(!tvOn)}
+                            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleTv()}
                         >
                             <div
                                 className="absolute top-0.5 bottom-0.5 w-2 h-2 rounded-full bg-background shadow-sm transition-[left] duration-200"
@@ -434,11 +441,11 @@ function IoTBlock() {
                         </div>
                         <div
                             className="w-6 h-3 rounded-full bg-foreground/10 relative cursor-pointer flex-shrink-0"
-                            onClick={() => setOvenOn(!ovenOn)}
+                            onClick={toggleOven}
                             role="button"
                             tabIndex={0}
                             aria-label={t('bento.iot.oven')}
-                            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setOvenOn(!ovenOn)}
+                            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleOven()}
                         >
                             <div
                                 className="absolute top-0.5 bottom-0.5 w-2 h-2 rounded-full bg-background shadow-sm transition-[left] duration-200"
