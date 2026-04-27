@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { sfx } from '@/lib/sound';
 
 const STORAGE_KEY = 'boot-played';
 const TOTAL_MS = 1800;
@@ -40,13 +39,11 @@ export function BootSequence() {
       // Tiny blip every ~25 units of progress (4 blips total)
       if (value > blipTimeRef.current && value % 25 === 0 && value > 0 && value < 100) {
         blipTimeRef.current = value;
-        sfx.bootBlip();
       }
 
       if (progress < 1) {
         raf = requestAnimationFrame(tick);
       } else {
-        sfx.bootDone();
         setExiting(true);
         // Match CSS transition (400ms)
         setTimeout(() => {
