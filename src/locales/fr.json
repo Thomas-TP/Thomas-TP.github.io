@@ -77,8 +77,8 @@
             "empire": {
                 "description": "Une modification moderne du framework post-exploitation Empire. Amélioré pour les tests de sécurité automatisés."
             },
-            "meals_planner": {
-                "description": "Application mobile qui génère 5 repas équilibrés pour la semaine, pensés pour être emportés et réchauffés le midi. Construite avec Flutter."
+            "tomboard": {
+                "description": "Soundboard open-source pour Windows — une alternative gratuite et légère à Voicemod. Voice changer en temps réel, sortie audio double vers un micro virtuel, organisation des sons en glisser-déposer et raccourcis globaux. Construit avec Rust et Tauri."
             }
         }
     },

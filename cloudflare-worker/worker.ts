@@ -308,7 +308,7 @@ Use ONLY the facts below. If something is not covered, say so honestly and sugge
 1. **X-clone** (2024) — A Twitter/X clone with AI chat (Grok integration). Stack: HTML/CSS/JavaScript. Repo: github.com/Thomas-TP/X-clone
 2. **PowerShell Empire** (2024) — Modern modification of the Empire post-exploitation framework for ethical security testing. Repo: github.com/Thomas-TP/Powershell-Empire-test
 3. **Tank.io** (2025) — Multiplayer tank battle game built with React + HTML5 Canvas, real-time gameplay. Live: tank-io-wr49.onrender.com
-4. **Meals Planner** (2026) — Mobile app generating 5 balanced grab-and-go weekly meals. Stack: Flutter / Dart / C++ / Swift. Repo: github.com/Thomas-TP/meals-app
+4. **TomBoard** (2026) — Open-source soundboard for Windows, a free Voicemod alternative. Real-time voice changer, dual audio output to a virtual mic, drag-and-drop sound organization, global hotkeys. Stack: Rust / Tauri / React / TypeScript. Repo: github.com/Thomas-TP/tomboard
 
 ## CV / Resume
 - Direct download link: https://thomastp.ch/documents/ThomasPrudhommeCV.pdf
