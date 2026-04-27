@@ -464,6 +464,9 @@ export function Projects() {
     const headerRef = useRef<HTMLDivElement>(null);
     const stageRef = useRef<HTMLDivElement>(null);
     const cardsRef = useRef<Array<HTMLDivElement | null>>([]);
+    // Cached GSAP instance — used sync inside high-frequency drag handlers so we don't
+    // pay the cost (or risk a cache desync) of writing transforms outside of GSAP.
+    const gsapRef = useRef<typeof import('gsap').gsap | null>(null);
     const watermarkRef = useRef<HTMLDivElement>(null);
     const infoTitleRef = useRef<HTMLHeadingElement>(null);
     const infoMetaRef = useRef<HTMLDivElement>(null);
@@ -471,8 +474,10 @@ export function Projects() {
     const infoTagsRef = useRef<HTMLDivElement>(null);
     const infoCtaRef = useRef<HTMLDivElement>(null);
     const progressRef = useRef<HTMLDivElement>(null);
+    const swipeHintRef = useRef<HTMLDivElement>(null);
 
     const [active, setActive] = useState(0);
+    const [hasInteracted, setHasInteracted] = useState(false);
     const [stageWidth, setStageWidth] = useState(0);
     const [cardWidth, setCardWidth] = useState(0);
 
@@ -519,10 +524,26 @@ export function Projects() {
     const goTo = useCallback((idx: number) => {
         const n = projects.length;
         setActive(((idx % n) + n) % n);
+        setHasInteracted(true);
     }, [projects.length]);
 
-    const next = useCallback(() => setActive(a => (a + 1) % projects.length), [projects.length]);
-    const prev = useCallback(() => setActive(a => (a - 1 + projects.length) % projects.length), [projects.length]);
+    const next = useCallback(() => {
+        setActive(a => (a + 1) % projects.length);
+        setHasInteracted(true);
+    }, [projects.length]);
+    const prev = useCallback(() => {
+        setActive(a => (a - 1 + projects.length) % projects.length);
+        setHasInteracted(true);
+    }, [projects.length]);
+
+    // Cache GSAP instance for sync use in drag handlers
+    useEffect(() => {
+        let cancelled = false;
+        loadGsap().then(({ gsap }) => {
+            if (!cancelled) gsapRef.current = gsap;
+        });
+        return () => { cancelled = true; };
+    }, []);
 
     // Measure stage and compute card width — layout effect to avoid zero-height flash on first paint
     useLayoutEffect(() => {
@@ -722,6 +743,38 @@ export function Projects() {
         return () => { cancelled = true; };
     }, [active]);
 
+    // Mobile swipe hint — pulse the chevrons outward to invite swiping; fade out on first interaction
+    useEffect(() => {
+        const el = swipeHintRef.current;
+        if (!el || hasInteracted) return;
+        let ctx: { revert: () => void } | undefined;
+        loadGsap().then(({ gsap }) => {
+            if (!el.isConnected || hasInteracted) return;
+            ctx = gsap.context(() => {
+                const left = el.querySelector('.swipe-hint-left');
+                const right = el.querySelector('.swipe-hint-right');
+                gsap.to(left, { x: -6, duration: 0.9, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+                gsap.to(right, { x: 6, duration: 0.9, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+                gsap.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.6, delay: 0.4, ease: 'power2.out' });
+            }, el);
+        });
+        return () => ctx?.revert();
+    }, [hasInteracted]);
+
+    // Fade out the hint on interaction
+    useEffect(() => {
+        const el = swipeHintRef.current;
+        if (!el || !hasInteracted) return;
+        let ctx: { revert: () => void } | undefined;
+        loadGsap().then(({ gsap }) => {
+            if (!el.isConnected) return;
+            ctx = gsap.context(() => {
+                gsap.to(el, { opacity: 0, duration: 0.4, ease: 'power2.out', pointerEvents: 'none' });
+            }, el);
+        });
+        return () => ctx?.revert();
+    }, [hasInteracted]);
+
     // Progress bar fill
     useEffect(() => {
         const bar = progressRef.current;
@@ -773,6 +826,8 @@ export function Projects() {
 
         const onDown = (e: PointerEvent) => {
             if ((e.target as HTMLElement).closest('a, button')) return;
+            const gsap = gsapRef.current;
+            if (!gsap) return; // GSAP not yet loaded — abort to avoid manual transform desync
             dragging = true;
             startX = e.clientX;
             startY = e.clientY;
@@ -781,23 +836,18 @@ export function Projects() {
             pointerId = e.pointerId;
             suppressClick = false;
             stage.style.cursor = 'grabbing';
-            // Snapshot each card's current x (works whether gsap-driven or inline-set)
+            setHasInteracted(true);
+            // Snapshot each card's current x via GSAP's getProperty — single source of truth
             baseSlots = cardsRef.current.map(card => {
                 if (!card) return 0;
-                const cs = getComputedStyle(card).transform;
-                if (cs && cs !== 'none') {
-                    const m = cs.match(/matrix.*\((.+)\)/);
-                    if (m) {
-                        const parts = m[1].split(', ').map(parseFloat);
-                        return parts.length === 6 ? parts[4] : (parts[12] ?? 0);
-                    }
-                }
-                return 0;
+                return (gsap.getProperty(card, 'x') as number) || 0;
             });
         };
 
         const onMove = (e: PointerEvent) => {
             if (!dragging) return;
+            const gsap = gsapRef.current;
+            if (!gsap) return;
             dx = e.clientX - startX;
             dy = e.clientY - startY;
 
@@ -811,12 +861,12 @@ export function Projects() {
             if (Math.abs(dx) > 6) {
                 e.preventDefault();
                 suppressClick = true;
-                // Apply same dx to each card; preserve current scale (active vs inactive)
+                // Use gsap.set so GSAP's internal transform cache stays in sync with the actual
+                // position. Without this, the next gsap.to() may animate from a stale cached x,
+                // causing a brief visual jump back before the slide.
                 cardsRef.current.forEach((card, i) => {
                     if (!card) return;
-                    const isActive = i === active;
-                    const scale = isActive ? 1 : 0.92;
-                    card.style.transform = `translate3d(${baseSlots[i] + dx}px, 0, 0) scale(${scale})`;
+                    gsap.set(card, { x: baseSlots[i] + dx });
                 });
             }
         };
@@ -833,19 +883,19 @@ export function Projects() {
             } else if (dx > threshold) {
                 setActive(a => (a - 1 + N) % N);
             } else if (suppressClick) {
-                // Snap back: re-trigger animation by re-setting same active (handled by useEffect on baseSlots restore)
-                loadGsap().then(({ gsap }) => {
-                    cardsRef.current.forEach((card, i) => {
-                        if (!card) return;
-                        const isActive = i === active;
-                        gsap.to(card, {
-                            x: canonicalSlot(i, active, N) * pitch,
-                            scale: isActive ? 1 : 0.92,
-                            opacity: isActive ? 1 : 0.3,
-                            duration: 0.45,
-                            ease: 'power3.out',
-                            overwrite: true,
-                        });
+                // Snap back to canonical positions without changing active
+                const gsap = gsapRef.current;
+                if (!gsap) return;
+                cardsRef.current.forEach((card, i) => {
+                    if (!card) return;
+                    const isActive = i === active;
+                    gsap.to(card, {
+                        x: canonicalSlot(i, active, N) * pitch,
+                        scale: isActive ? 1 : 0.92,
+                        opacity: isActive ? 1 : 0.3,
+                        duration: 0.45,
+                        ease: 'power3.out',
+                        overwrite: true,
                     });
                 });
             }
@@ -942,6 +992,18 @@ export function Projects() {
                         </div>
                     </div>
                 ))}
+            </div>
+
+            {/* Mobile-only swipe hint — pulses to invite the gesture, fades out after first interaction */}
+            <div
+                ref={swipeHintRef}
+                aria-hidden="true"
+                className="md:hidden flex items-center justify-center gap-2 mt-3 text-muted-foreground text-[11px] tracking-[0.18em] uppercase pointer-events-none"
+                style={{ opacity: 0 }}
+            >
+                <ChevronLeft size={14} className="swipe-hint-left" />
+                <span>{t('projects.swipe_hint')}</span>
+                <ChevronRight size={14} className="swipe-hint-right" />
             </div>
 
             {/* Info zone + controls — below carousel, internal 2-col on desktop */}
