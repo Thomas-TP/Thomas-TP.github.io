@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { sfx } from '@/lib/sound';
 
 const STORAGE_BEST = '404-best-score';
 
@@ -58,7 +57,6 @@ export function NotFound() {
         setScore(0);
         setGameOver(false);
         setRunning(true);
-        sfx.bootBlip();
     }, []);
 
     const jump = useCallback(() => {
@@ -74,7 +72,6 @@ export function NotFound() {
         if (s.onGround) {
             s.velY = -13;
             s.onGround = false;
-            sfx.click();
         }
     }, [startGame]);
 
@@ -198,7 +195,6 @@ export function NotFound() {
                     if (px2 > ox1 && px1 < ox2 && py2 > oy1 && py1 < oy2) {
                         s.gameOver = true;
                         s.running = false;
-                        sfx.error();
                         if (s.score > lastBest) {
                             lastBest = s.score;
                             try { localStorage.setItem(STORAGE_BEST, String(s.score)); } catch { /* noop */ }

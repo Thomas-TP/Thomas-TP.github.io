@@ -2,7 +2,6 @@ import { Moon, Sun } from "lucide-react"
 import { useTheme } from "@/components/ui/theme-provider"
 import { useCallback, useState, useEffect, useRef } from "react"
 import { loadGsap, getGsap } from "@/lib/gsap-init"
-import { sfx } from "@/lib/sound"
 
 export function ModeToggle() {
     const { theme, setTheme } = useTheme()
@@ -38,7 +37,6 @@ export function ModeToggle() {
 
     const handleToggle = useCallback(() => {
         const newTheme = resolvedDark ? "light" : "dark";
-        sfx.pop();
 
         // Use native View Transitions API if supported
         if (typeof document !== 'undefined' && 'startViewTransition' in document) {

@@ -1,7 +1,6 @@
 import { type ReactNode, useState, useRef, useEffect, forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { loadGsap } from '@/lib/gsap-init';
-import { sfx } from '@/lib/sound';
 import { cn } from '@/lib/utils';
 import { Brain, Code2, Database, Coffee, GraduationCap, Zap, Tv, Lightbulb, Wifi, Briefcase, Search, Loader, ExternalLink } from 'lucide-react';
 
@@ -338,11 +337,9 @@ function IoTBlock() {
         return () => clearInterval(interval);
     }, [isHovering]);
 
-    // Sounds only fire from explicit user clicks (handled in toggles below) so
-    // the auto-rotating ambient lamp doesn't beep every 3s.
-    const toggleLight = () => { setLightOn(v => { v ? sfx.switchOff() : sfx.switchOn(); return !v; }); };
-    const toggleTv = () => { setTvOn(v => { v ? sfx.switchOff() : sfx.switchOn(); return !v; }); };
-    const toggleOven = () => { setOvenOn(v => { v ? sfx.switchOff() : sfx.switchOn(); return !v; }); };
+    const toggleLight = () => { setLightOn(v => !v); };
+    const toggleTv = () => { setTvOn(v => !v); };
+    const toggleOven = () => { setOvenOn(v => !v); };
 
     return (
         <div
