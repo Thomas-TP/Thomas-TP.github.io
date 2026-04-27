@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef, useCallback, useMemo, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { loadGsap } from '@/lib/gsap-init';
-import { ExternalLink, ArrowUpRight } from 'lucide-react';
+import { ExternalLink, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 
 interface Project {
@@ -11,6 +11,7 @@ interface Project {
     link?: string;
     github?: string;
     year: string;
+    visual: ReactNode;
 }
 
 
@@ -85,19 +86,19 @@ const EmpireTerminal = () => {
                     break;
                 case 1: // Type "./empire"
                     await typeCommand('./empire');
-                    addLine('input', <span><span className="text-emerald-500">root@kali</span>:<span className="text-blue-500">~</span>$ ./empire</span>);
+                    addLine('input', <span><span className="text-white font-bold">root@kali</span><span className="text-white/40">:</span><span className="text-white/60">~</span><span className="text-white/40">$</span> ./empire</span>);
                     setCurrentCommand('');
                     setStep(2);
                     break;
                 case 2: // Empire loading output - Step by step
                     await new Promise(r => setTimeout(r, 400));
-                    addLine('output', <div className="text-white/60"><span className="text-blue-400 font-bold">[*]</span> Empire post-exploitation framework</div>);
+                    addLine('output', <div className="text-white/60"><span className="text-white/50 font-bold">[*]</span> Empire post-exploitation framework</div>);
 
                     await new Promise(r => setTimeout(r, 300));
-                    addLine('output', <div className="text-white/60"><span className="text-emerald-400 font-bold">[+]</span> Agents loaded: 0</div>);
+                    addLine('output', <div className="text-white/60"><span className="text-white font-bold">[+]</span> Agents loaded: 0</div>);
 
                     await new Promise(r => setTimeout(r, 300));
-                    addLine('output', <div className="text-white/60 mb-2"><span className="text-emerald-400 font-bold">[+]</span> Modules loaded: 396</div>);
+                    addLine('output', <div className="text-white/60 mb-2"><span className="text-white font-bold">[+]</span> Modules loaded: 396</div>);
 
                     setStep(3);
                     break;
@@ -111,23 +112,23 @@ const EmpireTerminal = () => {
                 case 4: // Type "set Port 80"
                     await new Promise(r => setTimeout(r, 500));
                     await typeCommand('set Port 80');
-                    addLine('input', <span><span className="underline decoration-white/30 text-white">(Empire: <span className="text-emerald-400">listeners/http</span>)</span> &gt; set Port 80</span>);
+                    addLine('input', <span><span className="underline decoration-white/30 text-white">(Empire: <span className="text-white">listeners/http</span>)</span> &gt; set Port 80</span>);
                     setCurrentCommand('');
                     setStep(5);
                     break;
                 case 5: // Type "execute"
                     await new Promise(r => setTimeout(r, 500));
                     await typeCommand('execute');
-                    addLine('input', <span><span className="underline decoration-white/30 text-white">(Empire: <span className="text-emerald-400">listeners/http</span>)</span> &gt; execute</span>);
+                    addLine('input', <span><span className="underline decoration-white/30 text-white">(Empire: <span className="text-white">listeners/http</span>)</span> &gt; execute</span>);
                     setCurrentCommand('');
                     setStep(6);
                     break;
                 case 6: // Execute output - Step by step
                     await new Promise(r => setTimeout(r, 600));
-                    addLine('output', <div className="text-white/80"><span className="text-emerald-400 font-bold">[*]</span> Starting listener &apos;http&apos;</div>);
+                    addLine('output', <div className="text-white/80"><span className="text-white font-bold">[*]</span> Starting listener &apos;http&apos;</div>);
 
                     await new Promise(r => setTimeout(r, 800));
-                    addLine('output', <div className="text-white/80"><span className="text-emerald-400 font-bold">[+]</span> Listener successfully started!</div>);
+                    addLine('output', <div className="text-white/80"><span className="text-white font-bold">[+]</span> Listener successfully started!</div>);
 
                     setStep(7);
                     break;
@@ -149,9 +150,9 @@ const EmpireTerminal = () => {
         <div ref={containerRef} className="relative w-full h-full bg-black flex flex-col p-4 font-mono text-[10px] sm:text-xs overflow-hidden leading-relaxed text-left">
             {/* Terminal Header */}
             <div className="flex gap-1.5 mb-2 opacity-50 shrink-0">
-                <div className="w-2.5 h-2.5 rounded-full bg-red-500/20" />
-                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/20" />
-                <div className="w-2.5 h-2.5 rounded-full bg-green-500/20" />
+                <div className="w-2.5 h-2.5 rounded-full bg-white/25" />
+                <div className="w-2.5 h-2.5 rounded-full bg-white/25" />
+                <div className="w-2.5 h-2.5 rounded-full bg-white/25" />
             </div>
 
             <div className="flex-1 flex flex-col relative z-10 space-y-1">
@@ -166,10 +167,10 @@ const EmpireTerminal = () => {
                     <div className="flex items-center gap-1">
                         {step <= 2 ? (
                             <>
-                                <span className="text-emerald-500 shrink-0">root@kali</span>
-                                <span className="text-white shrink-0">:</span>
-                                <span className="text-blue-500 shrink-0">~</span>
-                                <span className="text-white shrink-0">$</span>
+                                <span className="text-white font-bold shrink-0">root@kali</span>
+                                <span className="text-white/40 shrink-0">:</span>
+                                <span className="text-white/60 shrink-0">~</span>
+                                <span className="text-white/40 shrink-0">$</span>
                             </>
                         ) : step === 3 ? (
                             <>
@@ -178,7 +179,7 @@ const EmpireTerminal = () => {
                             </>
                         ) : (
                             <>
-                                <span className="underline decoration-white/30 text-white shrink-0">(Empire: <span className="text-emerald-400">listeners/http</span>)</span>
+                                <span className="underline decoration-white/30 text-white shrink-0">(Empire: <span className="text-white">listeners/http</span>)</span>
                                 <span className="text-white shrink-0">&gt;</span>
                             </>
                         )}
@@ -191,158 +192,131 @@ const EmpireTerminal = () => {
                 )}
             </div>
             {/* Matrix/Code Rain Overlay (Subtle) */}
-            <div className="absolute inset-0 pointer-events-none opacity-5 bg-[linear-gradient(rgba(16,185,129,0.1)_1px,transparent_1px)] bg-[size:100%_4px]" />
+            <div className="absolute inset-0 pointer-events-none opacity-5 bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:100%_4px]" />
         </div>
     );
 };
 
-const mealDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
-const mealNames = ['Pasta Bolognese', 'Chicken Wrap', 'Rice & Salmon', 'Veggie Bowl', 'Beef Stir-fry'];
+const tomboardPads = ['Airhorn', 'Tada', 'Boom', 'Wow', 'Ding', 'Laser'];
 
-const MealsPhoneMockup = () => {
-    const [phase, setPhase] = useState<'idle' | 'loading' | 'done'>('idle');
-    const genBtnRef = useRef<HTMLDivElement>(null);
-    const spinnerRef = useRef<HTMLDivElement>(null);
+const TomBoardPCMockup = () => {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const padsRef = useRef<HTMLDivElement>(null);
+    const waveRef = useRef<HTMLDivElement>(null);
     const glowRef = useRef<HTMLDivElement>(null);
-    const mealsRef = useRef<HTMLDivElement>(null);
-
-    const restart = useCallback(() => {
-        setPhase('idle');
-        const t1 = setTimeout(() => setPhase('loading'), 1500);
-        const t2 = setTimeout(() => setPhase('done'), 2800);
-        const t3 = setTimeout(() => setPhase('idle'), 8000);
-        return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
-    }, []);
 
     useEffect(() => {
-        const cleanup = restart();
-        const loop = setInterval(() => restart(), 8000);
-        return () => { cleanup(); clearInterval(loop); };
-    }, [restart]);
-
-    // Generate button pulse
-    useEffect(() => {
-        if (phase !== 'idle' || !genBtnRef.current) return;
-        let pulse: { kill: () => void } | undefined;
+        const el = containerRef.current;
+        if (!el) return;
+        let ctx: { revert: () => void } | undefined;
         loadGsap().then(({ gsap }) => {
-            if (!genBtnRef.current) return;
-            gsap.fromTo(genBtnRef.current, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.3 });
-            pulse = gsap.to(genBtnRef.current, { scale: 1.03, duration: 1.5, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-        });
-        return () => { pulse?.kill(); };
-    }, [phase]);
+            if (!el.isConnected) return;
+            ctx = gsap.context(() => {
+                const padsEl = padsRef.current;
+                const waveEl = waveRef.current;
+                const glowEl = glowRef.current;
+                if (!padsEl || !waveEl || !glowEl) return;
 
-    // Spinner rotate
-    useEffect(() => {
-        if (phase !== 'loading' || !spinnerRef.current) return;
-        let spin: { kill: () => void } | undefined;
-        loadGsap().then(({ gsap }) => {
-            if (!spinnerRef.current) return;
-            spin = gsap.to(spinnerRef.current, { rotation: 360, duration: 0.8, repeat: -1, ease: 'none' });
-        });
-        return () => { spin?.kill(); };
-    }, [phase]);
+                const pads = Array.from(padsEl.querySelectorAll<HTMLElement>('.tb-pad'));
+                const icons = Array.from(padsEl.querySelectorAll<HTMLElement>('.tb-icon'));
+                const bars = Array.from(waveEl.querySelectorAll<HTMLElement>('.tb-bar'));
 
-    // Meal items stagger
-    useEffect(() => {
-        if (phase !== 'done' || !mealsRef.current) return;
-        loadGsap().then(({ gsap }) => {
-            if (!mealsRef.current) return;
-            const items = mealsRef.current.querySelectorAll('.meal-item');
-            gsap.fromTo(items, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.25, stagger: 0.1, ease: 'power2.out' });
-        });
-    }, [phase]);
+                gsap.set(bars, { transformOrigin: 'center bottom', scaleY: 0.2 });
 
-    // Ambient glow
-    useEffect(() => {
-        if (!glowRef.current) return;
-        let glow: { kill: () => void } | undefined;
-        loadGsap().then(({ gsap }) => {
-            if (!glowRef.current) return;
-            glow = gsap.to(glowRef.current, { opacity: 0.6, scale: 1.15, duration: 4, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+                gsap.to(glowEl, { opacity: 0.55, scale: 1.1, duration: 4, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+
+                const tl = gsap.timeline({ repeat: -1 });
+                pads.forEach((pad, i) => {
+                    const icon = icons[i];
+                    tl.to(bars, {
+                        scaleY: () => 0.15 + Math.random() * 0.15,
+                        duration: 0.35,
+                        stagger: { each: 0.012, from: 'random' },
+                        ease: 'sine.inOut',
+                    })
+                    .to(pad, { backgroundColor: 'rgba(255,255,255,0.18)', borderColor: 'rgba(255,255,255,0.45)', scale: 0.95, duration: 0.08, ease: 'power2.out' })
+                    .to(icon, { opacity: 1, scale: 1.15, duration: 0.1 }, '<')
+                    .to(bars, {
+                        scaleY: () => 0.6 + Math.random() * 0.4,
+                        duration: 0.1,
+                        stagger: { each: 0.008, from: 'random' },
+                        ease: 'power2.out',
+                    }, '<')
+                    .to(pad, { scale: 1, duration: 0.2 })
+                    .to(bars, {
+                        scaleY: () => 0.35 + Math.random() * 0.25,
+                        duration: 0.25,
+                        stagger: { each: 0.012, from: 'random' },
+                        ease: 'sine.inOut',
+                    }, '<')
+                    .to(pad, { backgroundColor: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)', duration: 0.45 }, '+=0.15')
+                    .to(icon, { opacity: 0.55, scale: 1, duration: 0.4 }, '<');
+                });
+            }, el);
         });
-        return () => { glow?.kill(); };
+        return () => ctx?.revert();
     }, []);
 
     return (
-        <div className="relative w-full h-full bg-black flex items-center justify-center overflow-hidden">
-            {/* Phone frame — fits within the box */}
-            <div className="relative w-[130px] h-[250px] sm:w-[150px] sm:h-[290px] rounded-[22px] border-2 border-white/20 bg-neutral-950 overflow-hidden shadow-[0_0_60px_rgba(255,255,255,0.06)] z-10">
-                {/* Notch */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-14 h-3.5 bg-black rounded-b-xl z-20" />
+        <div ref={containerRef} className="relative w-full h-full bg-black overflow-hidden">
+            {/* Monitor bezel — fills almost the whole card, leaves room for stand */}
+            <div className="absolute left-[3%] right-[3%] top-[4%] bottom-[14%] bg-neutral-950 rounded-md border border-white/15 p-[3px] shadow-[0_0_50px_rgba(255,255,255,0.05)] z-10">
+                {/* Screen */}
+                <div className="relative w-full h-full bg-black rounded-[3px] overflow-hidden flex flex-col border border-white/[0.06]">
+                    {/* Title bar */}
+                    <div className="flex items-center justify-between px-2 py-[3px] bg-white/[0.04] border-b border-white/[0.06] shrink-0">
+                        <div className="flex items-center gap-1">
+                            <div className="w-[3px] h-[3px] rounded-full bg-white/30" />
+                            <div className="w-[3px] h-[3px] rounded-full bg-white/30" />
+                            <div className="w-[3px] h-[3px] rounded-full bg-white/30" />
+                            <span className="text-[7px] text-white/70 font-bold tracking-[0.15em] ml-1.5">TomBoard</span>
+                        </div>
+                        <span className="text-[6px] text-white/30 font-mono">v0.3.2</span>
+                    </div>
 
-                {/* Status bar */}
-                <div className="flex items-center justify-between px-3 pt-4 pb-0.5">
-                    <span className="text-[6px] text-white/40 font-medium">12:30</span>
-                    <div className="w-2.5 h-1.5 border border-white/30 rounded-[2px]"><div className="w-1.5 h-full bg-white/40 rounded-[1px]" /></div>
-                </div>
-
-                {/* Content */}
-                <div className="px-2.5 flex flex-col gap-1.5 mt-1">
-                    {phase === 'idle' && (
-                        <>
-                            {/* App logo + description */}
-                            <div className="flex flex-col items-center gap-1.5 pt-2 pb-2">
-                                <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center">
-                                    <svg className="w-4 h-4 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" /><path d="M7 2v20" /><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
-                                    </svg>
-                                </div>
-                                <div className="text-[8px] font-bold text-white/80 text-center">Meals Planner</div>
-                                <div className="text-[6px] text-white/30 text-center leading-relaxed px-1">Generate 5 grab-and-go meals for your work week</div>
-                            </div>
-                            {/* Generate button */}
+                    {/* Pads grid */}
+                    <div ref={padsRef} className="grid grid-cols-3 gap-1 p-1.5 flex-1">
+                        {tomboardPads.map((label) => (
                             <div
-                                ref={genBtnRef}
-                                className="flex items-center justify-center py-2 bg-white/10 rounded-lg border border-white/10"
-                                style={{ opacity: 0 }}
+                                key={label}
+                                className="tb-pad relative rounded-[3px] bg-white/[0.04] border border-white/[0.12] flex flex-col items-center justify-center gap-1 overflow-hidden"
+                                style={{ backgroundColor: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)' }}
                             >
-                                <span className="text-[7px] font-bold text-white/70 tracking-wide">Generate</span>
-                            </div>
-                        </>
-                    )}
-
-                    {phase === 'loading' && (
-                        <div className="flex flex-col items-center gap-2 py-6">
-                            <div
-                                ref={spinnerRef}
-                                className="w-5 h-5 rounded-full border-2 border-white/20 border-t-white/70"
-                            />
-                            <span className="text-[6px] text-white/40">Generating...</span>
-                        </div>
-                    )}
-
-                    {phase === 'done' && (
-                        <div ref={mealsRef}>
-                            <div className="text-[7px] font-bold text-white/60 px-0.5 mb-0.5">This Week</div>
-                            {mealDays.map((day, i) => (
-                                <div
-                                    key={day}
-                                    className="flex items-center gap-1.5 bg-white/[0.04] rounded-lg px-2 py-1.5 border border-white/[0.06] mb-1.5 meal-item"
-                                    style={{ opacity: 0 }}
-                                >
-                                    <div className="w-5 h-5 rounded bg-white/10 shrink-0 flex items-center justify-center">
-                                        <svg className="w-2.5 h-2.5 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" /><path d="M7 2v20" /><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
-                                        </svg>
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="text-[6px] font-semibold text-white/60">{day}</div>
-                                        <div className="text-[5px] text-white/30 truncate">{mealNames[i]}</div>
-                                    </div>
-                                    <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
+                                <div className="tb-icon flex items-end gap-[1.5px] h-2.5" style={{ opacity: 0.55 }}>
+                                    <div className="w-[2px] h-[40%] bg-white rounded-full" />
+                                    <div className="w-[2px] h-[80%] bg-white rounded-full" />
+                                    <div className="w-[2px] h-[55%] bg-white rounded-full" />
+                                    <div className="w-[2px] h-[100%] bg-white rounded-full" />
+                                    <div className="w-[2px] h-[65%] bg-white rounded-full" />
                                 </div>
-                            ))}
-                        </div>
-                    )}
+                                <span className="text-[7px] text-white/55 font-medium tracking-wide">{label}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Waveform */}
+                    <div ref={waveRef} className="flex items-end justify-center gap-[1px] h-4 px-2 pb-1 border-t border-white/[0.06] shrink-0">
+                        {Array.from({ length: 32 }).map((_, i) => (
+                            <div
+                                key={i}
+                                className="tb-bar w-[2px] bg-white/55 rounded-full"
+                                style={{ height: '100%' }}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
+
+            {/* Stand neck */}
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-[7%] w-2 h-[5%] bg-white/15" />
+            {/* Stand base */}
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-[5%] w-[22%] h-[3px] bg-white/15 rounded-full" />
 
             {/* Ambient glow */}
             <div
                 ref={glowRef}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/[0.03] rounded-full blur-[50px] pointer-events-none"
-                style={{ opacity: 0.3 }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white/[0.04] rounded-full blur-[60px] pointer-events-none"
+                style={{ opacity: 0.35 }}
             />
         </div>
     );
@@ -469,10 +443,101 @@ const TankIoVisual = () => {
     );
 };
 
+const CARD_WIDTH_RATIO_DESKTOP = 0.55;
+const CARD_WIDTH_RATIO_MOBILE = 0.88;
+const CARD_GAP = 24;
+const TRANSITION_DURATION = 0.85;
+const TRANSITION_EASE = 'power3.inOut';
+
+// Returns the canonical slot (signed offset from active) for card `i` given current `active`.
+// Slots are integers in range [-Math.floor(N/2), Math.ceil(N/2) - 1].
+// Active card is at slot 0; right peek at +1; left peek at -1; off-screen further out.
+function canonicalSlot(i: number, active: number, n: number): number {
+    const raw = ((i - active) % n + n) % n; // 0..n-1
+    return raw > Math.floor(n / 2) ? raw - n : raw;
+}
+
 export function Projects() {
     const { t } = useTranslation();
+
     const sectionRef = useRef<HTMLElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
+    const stageRef = useRef<HTMLDivElement>(null);
+    const cardsRef = useRef<Array<HTMLDivElement | null>>([]);
+    const watermarkRef = useRef<HTMLDivElement>(null);
+    const infoTitleRef = useRef<HTMLHeadingElement>(null);
+    const infoMetaRef = useRef<HTMLDivElement>(null);
+    const infoDescRef = useRef<HTMLParagraphElement>(null);
+    const infoTagsRef = useRef<HTMLDivElement>(null);
+    const infoCtaRef = useRef<HTMLDivElement>(null);
+    const progressRef = useRef<HTMLDivElement>(null);
+
+    const [active, setActive] = useState(0);
+    const [stageWidth, setStageWidth] = useState(0);
+    const [cardWidth, setCardWidth] = useState(0);
+
+    const projects: Project[] = useMemo(() => [
+        {
+            title: "X-clone",
+            description: t('projects.items.x_clone.description'),
+            tags: ["HTML/CSS", "JavaScript", "AI Integration", "Responsive"],
+            link: "https://x-clone-teal-phi.vercel.app/",
+            github: "https://github.com/Thomas-TP/X-clone",
+            year: "2024",
+            visual: <XCloneVisual />,
+        },
+        {
+            title: "PowerShell Empire",
+            description: t('projects.items.empire.description'),
+            tags: ["PowerShell", "Cybersecurity", "Automation", "Scripting"],
+            link: "https://vimeo.com/1085791100/a588dbfdf3?fl=pl&fe=sh",
+            github: "https://github.com/Thomas-TP/Powershell-Empire-test",
+            year: "2024",
+            visual: <EmpireTerminal />,
+        },
+        {
+            title: "Tank.io",
+            description: t('projects.items.tank_io.description'),
+            tags: ["React", "Canvas API", "Multiplayer", "Game Dev"],
+            link: "https://tank-io-wr49.onrender.com/",
+            github: "https://github.com/Thomas-TP/Tank.io",
+            year: "2025",
+            visual: <TankIoVisual />,
+        },
+        {
+            title: "TomBoard",
+            description: t('projects.items.tomboard.description'),
+            tags: ["Rust", "Tauri", "React", "Audio DSP"],
+            link: "https://github.com/Thomas-TP/TomBoard/releases",
+            github: "https://github.com/Thomas-TP/tomboard",
+            year: "2026",
+            visual: <TomBoardPCMockup />,
+        },
+    ], [t]);
+
+    // Infinite wrap: navigation always cycles through projects
+    const goTo = useCallback((idx: number) => {
+        const n = projects.length;
+        setActive(((idx % n) + n) % n);
+    }, [projects.length]);
+
+    const next = useCallback(() => setActive(a => (a + 1) % projects.length), [projects.length]);
+    const prev = useCallback(() => setActive(a => (a - 1 + projects.length) % projects.length), [projects.length]);
+
+    // Measure stage and compute card width — layout effect to avoid zero-height flash on first paint
+    useLayoutEffect(() => {
+        const update = () => {
+            const stage = stageRef.current;
+            if (!stage) return;
+            const w = stage.clientWidth;
+            const ratio = window.innerWidth < 768 ? CARD_WIDTH_RATIO_MOBILE : CARD_WIDTH_RATIO_DESKTOP;
+            setStageWidth(w);
+            setCardWidth(w * ratio);
+        };
+        update();
+        window.addEventListener('resize', update);
+        return () => window.removeEventListener('resize', update);
+    }, []);
 
     // Header reveal — word-by-word staggered lift
     useEffect(() => {
@@ -520,96 +585,308 @@ export function Projects() {
         return () => ctx?.revert();
     }, []);
 
-    // Project cards — individual ScrollTrigger per card (fix shared trigger bug)
+    // Initial reveal of carousel + info on scroll-in
     useEffect(() => {
-        const el = sectionRef.current;
-        if (!el) return;
-        let triggers: Array<{ kill: () => void }> = [];
+        const stage = stageRef.current;
+        if (!stage) return;
+        let ctx: { revert: () => void } | undefined;
         loadGsap().then(({ gsap, ScrollTrigger }) => {
-            if (!el.isConnected) return;
-            const cards = el.querySelectorAll('.project-card');
-            cards.forEach((card, i) => {
-                const visual = card.querySelector('.project-visual') as HTMLElement | null;
-                const content = card.querySelector('.project-content') as HTMLElement | null;
-
-                // Set initial state imperatively so no flash
-                gsap.set(card, { opacity: 0, y: 50 });
-
-                const st = ScrollTrigger.create({
-                    trigger: card as HTMLElement,
-                    start: 'top 95%',
-                    once: true,
-                    onEnter: () => {
-                        gsap.to(card, {
-                            opacity: 1, y: 0,
-                            duration: 0.55, ease: 'power3.out',
-                        });
-                        if (content) {
-                            const children = Array.from(content.children) as HTMLElement[];
-                            gsap.fromTo(children,
-                                { opacity: 0, y: 18 },
-                                { opacity: 1, y: 0, duration: 0.45, stagger: 0.05,
-                                  ease: 'power3.out', delay: 0.15 }
-                            );
-                        }
-                        if (visual) {
-                            gsap.fromTo(visual,
-                                { opacity: 0, scale: 0.95 },
-                                { opacity: 1, scale: 1, duration: 0.5,
-                                  ease: 'power3.out', delay: 0.1 }
-                            );
-                        }
-                    },
-                });
-                triggers.push(st);
+            if (!stage.isConnected) return;
+            ctx = gsap.context(() => {
+                gsap.fromTo(stage,
+                    { opacity: 0, y: 40 },
+                    {
+                        opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+                        scrollTrigger: { trigger: stage, start: 'top 92%', once: true },
+                    }
+                );
+                void ScrollTrigger;
             });
         });
-        return () => { triggers.forEach(t => t.kill()); };
+        return () => ctx?.revert();
     }, []);
 
-    const projects: Project[] = [
-        {
-            title: "X-clone",
-            description: t('projects.items.x_clone.description'),
-            tags: ["HTML/CSS", "JavaScript", "AI Integration", "Responsive"],
-            link: "https://x-clone-teal-phi.vercel.app/",
-            github: "https://github.com/Thomas-TP/X-clone",
-            year: "2024"
-        },
-        {
-            title: "PowerShell Empire",
-            description: t('projects.items.empire.description'),
-            tags: ["PowerShell", "Cybersecurity", "Automation", "Scripting"],
-            link: "https://vimeo.com/1085791100/a588dbfdf3?fl=pl&fe=sh",
-            github: "https://github.com/Thomas-TP/Powershell-Empire-test",
-            year: "2024"
-        },
-        {
-            title: "Tank.io",
-            description: t('projects.items.tank_io.description'),
-            tags: ["React", "Canvas API", "Multiplayer", "Game Dev"],
-            link: "https://tank-io-wr49.onrender.com/",
-            github: "https://github.com/Thomas-TP/Tank.io",
-            year: "2025"
-        },
-        {
-            title: "Meals Planner",
-            description: t('projects.items.meals_planner.description'),
-            tags: ["Flutter", "Dart", "C++", "CMake", "Swift"],
-            github: "https://github.com/Thomas-TP/meals-app",
-            year: "2026"
-        },
-    ];
+    // Per-card slot animation (infinite carousel with teleport-before-animate to avoid jumps)
+    useEffect(() => {
+        if (cardWidth === 0) return;
+        const cards = cardsRef.current;
+        if (!cards.length) return;
+
+        const N = projects.length;
+        const pitch = cardWidth + CARD_GAP;
+        let cancelled = false;
+
+        loadGsap().then(({ gsap }) => {
+            if (cancelled) return;
+
+            cards.forEach((card, i) => {
+                if (!card) return;
+
+                const canon = canonicalSlot(i, active, N);
+                const targetX = canon * pitch;
+
+                // Read current rendered x (could be mid-animation, or initial 0)
+                const currentX = (gsap.getProperty(card, 'x') as number) || 0;
+                const currentSlotApprox = currentX / pitch;
+                const delta = canon - currentSlotApprox;
+
+                // If the card needs to wrap > N/2 slots, teleport it to the closer side first
+                // (only happens to off-screen cards, so the teleport itself is invisible)
+                if (Math.abs(delta) > N / 2) {
+                    const wrapOffset = delta > 0 ? N : -N;
+                    gsap.set(card, { x: currentX + wrapOffset * pitch });
+                }
+
+                const isActive = i === active;
+                gsap.to(card, {
+                    x: targetX,
+                    scale: isActive ? 1 : 0.92,
+                    opacity: isActive ? 1 : 0.3,
+                    duration: TRANSITION_DURATION,
+                    ease: TRANSITION_EASE,
+                    overwrite: true,
+                });
+            });
+        });
+
+        return () => { cancelled = true; };
+    }, [active, cardWidth, projects.length]);
+
+    // Initial card placement once cardWidth is known (sync, no animation)
+    useLayoutEffect(() => {
+        if (cardWidth === 0) return;
+        const cards = cardsRef.current;
+        if (!cards.length) return;
+
+        const N = projects.length;
+        const pitch = cardWidth + CARD_GAP;
+
+        let cancelled = false;
+        loadGsap().then(({ gsap }) => {
+            if (cancelled) return;
+            cards.forEach((card, i) => {
+                if (!card) return;
+                // Only set if not already placed (i.e., x is 0 from initial render)
+                const currentX = (gsap.getProperty(card, 'x') as number) || 0;
+                if (currentX !== 0) return;
+                const canon = canonicalSlot(i, active, N);
+                const isActive = i === active;
+                gsap.set(card, {
+                    x: canon * pitch,
+                    scale: isActive ? 1 : 0.92,
+                    opacity: isActive ? 1 : 0.3,
+                });
+            });
+        });
+        return () => { cancelled = true; };
+        // Intentionally only run on cardWidth changes (initial placement + resize re-layout).
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cardWidth]);
+
+    // Info zone re-stagger on active change (run synchronously to avoid flash)
+    useLayoutEffect(() => {
+        const refs = [
+            infoMetaRef.current,
+            infoTitleRef.current,
+            infoDescRef.current,
+            infoTagsRef.current,
+            infoCtaRef.current,
+        ].filter(Boolean) as HTMLElement[];
+        if (!refs.length) return;
+
+        // Pre-set initial state synchronously so we don't flash full-opacity content
+        for (const el of refs) {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+        }
+
+        let cancelled = false;
+        loadGsap().then(({ gsap }) => {
+            if (cancelled) return;
+            gsap.to(refs, {
+                opacity: 1,
+                y: 0,
+                duration: 0.65,
+                stagger: 0.07,
+                ease: 'power3.out',
+                clearProps: 'transform',
+            });
+
+            if (watermarkRef.current) {
+                gsap.fromTo(watermarkRef.current,
+                    { opacity: 0, scale: 1.15, y: 30 },
+                    { opacity: 1, scale: 1, y: 0, duration: 0.95, ease: 'power3.out' }
+                );
+            }
+        });
+        return () => { cancelled = true; };
+    }, [active]);
+
+    // Progress bar fill
+    useEffect(() => {
+        const bar = progressRef.current;
+        if (!bar) return;
+        let ctx: { revert: () => void } | undefined;
+        loadGsap().then(({ gsap }) => {
+            if (!bar.isConnected) return;
+            ctx = gsap.context(() => {
+                const pct = ((active + 1) / projects.length) * 100;
+                gsap.to(bar, { width: `${pct}%`, duration: 0.7, ease: 'power3.inOut' });
+            });
+        });
+        return () => ctx?.revert();
+    }, [active, projects.length]);
+
+    // Keyboard navigation when section is in viewport
+    useEffect(() => {
+        const onKey = (e: KeyboardEvent) => {
+            const target = e.target as HTMLElement | null;
+            if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return;
+            const section = sectionRef.current;
+            if (!section) return;
+            const rect = section.getBoundingClientRect();
+            const inView = rect.top < window.innerHeight * 0.7 && rect.bottom > window.innerHeight * 0.3;
+            if (!inView) return;
+            if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
+            else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [next, prev]);
+
+    // Drag / swipe — translates each card individually since carousel is infinite (no track)
+    useEffect(() => {
+        const stage = stageRef.current;
+        if (!stage || cardWidth === 0) return;
+
+        const N = projects.length;
+        const pitch = cardWidth + CARD_GAP;
+
+        let dragging = false;
+        let startX = 0;
+        let startY = 0;
+        let dx = 0;
+        let dy = 0;
+        let pointerId = -1;
+        let suppressClick = false;
+        let baseSlots: number[] = [];
+
+        const onDown = (e: PointerEvent) => {
+            if ((e.target as HTMLElement).closest('a, button')) return;
+            dragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            dx = 0;
+            dy = 0;
+            pointerId = e.pointerId;
+            suppressClick = false;
+            stage.style.cursor = 'grabbing';
+            // Snapshot each card's current x (works whether gsap-driven or inline-set)
+            baseSlots = cardsRef.current.map(card => {
+                if (!card) return 0;
+                const cs = getComputedStyle(card).transform;
+                if (cs && cs !== 'none') {
+                    const m = cs.match(/matrix.*\((.+)\)/);
+                    if (m) {
+                        const parts = m[1].split(', ').map(parseFloat);
+                        return parts.length === 6 ? parts[4] : (parts[12] ?? 0);
+                    }
+                }
+                return 0;
+            });
+        };
+
+        const onMove = (e: PointerEvent) => {
+            if (!dragging) return;
+            dx = e.clientX - startX;
+            dy = e.clientY - startY;
+
+            // If gesture is mostly vertical, abandon drag (let page scroll naturally)
+            if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 18) {
+                dragging = false;
+                stage.style.cursor = 'grab';
+                return;
+            }
+
+            if (Math.abs(dx) > 6) {
+                e.preventDefault();
+                suppressClick = true;
+                // Apply same dx to each card; preserve current scale (active vs inactive)
+                cardsRef.current.forEach((card, i) => {
+                    if (!card) return;
+                    const isActive = i === active;
+                    const scale = isActive ? 1 : 0.92;
+                    card.style.transform = `translate3d(${baseSlots[i] + dx}px, 0, 0) scale(${scale})`;
+                });
+            }
+        };
+
+        const onUp = () => {
+            if (!dragging) return;
+            dragging = false;
+            stage.style.cursor = 'grab';
+            try { stage.releasePointerCapture(pointerId); } catch { /* noop */ }
+
+            const threshold = cardWidth * 0.18;
+            if (dx < -threshold) {
+                setActive(a => (a + 1) % N);
+            } else if (dx > threshold) {
+                setActive(a => (a - 1 + N) % N);
+            } else if (suppressClick) {
+                // Snap back: re-trigger animation by re-setting same active (handled by useEffect on baseSlots restore)
+                loadGsap().then(({ gsap }) => {
+                    cardsRef.current.forEach((card, i) => {
+                        if (!card) return;
+                        const isActive = i === active;
+                        gsap.to(card, {
+                            x: canonicalSlot(i, active, N) * pitch,
+                            scale: isActive ? 1 : 0.92,
+                            opacity: isActive ? 1 : 0.3,
+                            duration: 0.45,
+                            ease: 'power3.out',
+                            overwrite: true,
+                        });
+                    });
+                });
+            }
+        };
+
+        const onClickCapture = (e: MouseEvent) => {
+            if (suppressClick) {
+                e.stopPropagation();
+                e.preventDefault();
+                suppressClick = false;
+            }
+        };
+
+        stage.addEventListener('pointerdown', onDown);
+        stage.addEventListener('pointermove', onMove);
+        stage.addEventListener('pointerup', onUp);
+        stage.addEventListener('pointercancel', onUp);
+        stage.addEventListener('click', onClickCapture, true);
+
+        return () => {
+            stage.removeEventListener('pointerdown', onDown);
+            stage.removeEventListener('pointermove', onMove);
+            stage.removeEventListener('pointerup', onUp);
+            stage.removeEventListener('pointercancel', onUp);
+            stage.removeEventListener('click', onClickCapture, true);
+        };
+    }, [active, cardWidth, projects.length]);
+
+    const stageHeight = cardWidth > 0 ? Math.round((cardWidth * 9) / 16) : 0;
+    const activeProject = projects[active];
+    void stageWidth; // measured for resize re-render trigger; cards center via left:50% + marginLeft
 
     return (
-        <section ref={sectionRef} id="projects" className="py-32 container mx-auto px-4 cv-auto">
+        <section ref={sectionRef} id="projects" className="py-16 container mx-auto px-4 cv-auto">
             <div
                 ref={headerRef}
-                className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8"
+                className="flex flex-col md:flex-row justify-between items-end mb-8 gap-6"
             >
                 <div>
-                    <h2 className="projects-title text-4xl md:text-6xl font-bold mb-4" style={{ perspective: '800px' }}>{t('projects.title')}</h2>
-                    <p className="projects-subtitle text-muted-foreground text-lg max-w-md">
+                    <h2 className="projects-title text-3xl md:text-5xl font-bold mb-3" style={{ perspective: '800px' }}>{t('projects.title')}</h2>
+                    <p className="projects-subtitle text-muted-foreground text-base max-w-md">
                         {t('projects.subtitle')}
                     </p>
                 </div>
@@ -623,74 +900,180 @@ export function Projects() {
                 </a>
             </div>
 
-            <div className="grid gap-8">
-                {projects.map((project) => (
+            {/* Carousel stage — full width, cards absolute-positioned and animate to slot positions */}
+            <div
+                ref={stageRef}
+                className="relative w-full overflow-hidden select-none cursor-grab"
+                style={{ height: stageHeight || undefined, touchAction: 'pan-y' }}
+            >
+                {projects.map((project, i) => (
                     <div
                         key={project.title}
-                        className="project-card group relative bg-card border border-border rounded-3xl p-8 md:p-12 hover:bg-muted/50 transition-colors"
+                        ref={el => { cardsRef.current[i] = el; }}
+                        className="absolute top-0 left-1/2 will-change-transform bg-card border border-border rounded-3xl overflow-hidden shadow-2xl"
+                        style={{
+                            width: cardWidth,
+                            height: stageHeight,
+                            marginLeft: -cardWidth / 2,
+                            opacity: 0,
+                        }}
+                        onClick={() => { if (i !== active) goTo(i); }}
+                        role="button"
+                        tabIndex={i === active ? -1 : 0}
+                        aria-label={i === active ? `${project.title} — current project` : `Show ${project.title}`}
+                        onKeyDown={(e) => {
+                            if (i !== active && (e.key === 'Enter' || e.key === ' ')) {
+                                e.preventDefault();
+                                goTo(i);
+                            }
+                        }}
                     >
-                        <div className="flex flex-col md:flex-row gap-8 justify-between">
-                            <div className="project-content flex flex-col justify-between flex-1">
-                                <div>
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <span className="font-mono text-sm text-muted-foreground">{project.year}</span>
-                                        <div className="h-px bg-border w-12" />
-                                    </div>
-                                    <h3 className="text-3xl font-bold mb-4 group-hover:text-foreground/90 transition-colors">{project.title}</h3>
-                                    <p className="text-muted-foreground text-lg mb-8 max-w-xl leading-relaxed">
-                                        {project.description}
-                                    </p>
-                                    <div className="flex flex-wrap gap-2 mb-8">
-                                        {project.tags.map((tag) => (
-                                            <span key={tag} className="px-3 py-1 rounded-full bg-secondary text-xs font-medium text-muted-foreground border border-border">
-                                                {tag}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
+                        <div className="absolute inset-0">
+                            <div className="absolute inset-0 bg-grid-white/[0.05] pointer-events-none z-10" />
+                            {project.visual}
+                        </div>
 
-                                <div className="flex gap-4">
-                                    {project.github && (
-                                        <a
-                                            href={project.github}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="p-3 bg-secondary rounded-full hover:bg-foreground hover:text-background transition-all"
-                                            aria-label="View on GitHub"
-                                        >
-                                            <FaGithub size={20} />
-                                        </a>
-                                    )}
-                                    {project.link && (
-                                        <a
-                                            href={project.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-2 px-6 py-3 bg-secondary rounded-full hover:bg-foreground hover:text-background transition-all font-medium"
-                                        >
-                                            {t('projects.view_project')} <ExternalLink size={16} />
-                                        </a>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Project Visualization Block */}
-                            <div className="project-visual w-full md:w-1/3 aspect-video bg-black rounded-2xl border border-border flex items-center justify-center overflow-hidden relative group-hover:border-primary/20 transition-all shadow-2xl">
-                                <div className="absolute inset-0 bg-grid-white/[0.05]" />
-
-                                {project.title === "X-clone" ? (
-                                    <XCloneVisual />
-                                ) : project.title === "Tank.io" ? (
-                                    <TankIoVisual />
-                                ) : project.title === "Meals Planner" ? (
-                                    <MealsPhoneMockup />
-                                ) : (
-                                    <EmpireTerminal />
-                                )}
-                            </div>
+                        {/* Card label — bottom-left */}
+                        <div className="absolute bottom-3 left-3 flex items-center gap-2 z-20 pointer-events-none">
+                            <span className="font-mono text-[10px] text-white/70 backdrop-blur-md bg-black/50 px-1.5 py-0.5 rounded-md border border-white/10">
+                                {String(i + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
+                            </span>
+                            <span className="font-bold text-white text-xs tracking-wide drop-shadow-[0_0_8px_rgba(0,0,0,0.6)]">{project.title}</span>
                         </div>
                     </div>
                 ))}
+            </div>
+
+            {/* Info zone + controls — below carousel, internal 2-col on desktop */}
+            <div className="relative mt-6">
+                {/* Year watermark behind info */}
+                <div
+                    aria-hidden="true"
+                    className="absolute -top-10 -left-2 md:-left-6 pointer-events-none select-none z-0 overflow-hidden leading-none"
+                >
+                    <div
+                        ref={watermarkRef}
+                        className="font-black tracking-tighter text-foreground/[0.04]"
+                        style={{ fontSize: 'clamp(4.5rem, 11vw, 9rem)', lineHeight: 0.85 }}
+                    >
+                        {activeProject.year}
+                    </div>
+                </div>
+
+                <div className="relative z-10 grid md:grid-cols-12 gap-6 md:gap-8">
+                    {/* Left: project info */}
+                    <div className="md:col-span-7 space-y-3">
+                        <div ref={infoMetaRef} className="flex items-center gap-3">
+                            <span className="font-mono text-xs text-muted-foreground">
+                                {String(active + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
+                            </span>
+                            <div className="h-px bg-border w-10" />
+                            <span className="font-mono text-xs text-muted-foreground">{activeProject.year}</span>
+                        </div>
+
+                        <h3 ref={infoTitleRef} className="text-2xl md:text-3xl font-bold tracking-tight">
+                            {activeProject.title}
+                        </h3>
+
+                        <p ref={infoDescRef} className="text-muted-foreground text-sm leading-relaxed max-w-xl">
+                            {activeProject.description}
+                        </p>
+
+                        <div ref={infoTagsRef} className="flex flex-wrap gap-1.5">
+                            {activeProject.tags.map(tag => (
+                                <span key={tag} className="px-2.5 py-0.5 rounded-full bg-secondary text-[11px] font-medium text-muted-foreground border border-border">
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+
+                        <div ref={infoCtaRef} className="flex flex-wrap gap-2 pt-1">
+                            {activeProject.github && (
+                                <a
+                                    href={activeProject.github}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-2.5 bg-secondary rounded-full hover:bg-foreground hover:text-background transition-all"
+                                    aria-label="View on GitHub"
+                                >
+                                    <FaGithub size={16} />
+                                </a>
+                            )}
+                            {activeProject.link && (
+                                <a
+                                    href={activeProject.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-2 px-4 py-2 bg-secondary rounded-full hover:bg-foreground hover:text-background transition-all font-medium text-sm"
+                                >
+                                    {t('projects.view_project')} <ExternalLink size={14} />
+                                </a>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Right: navigation controls */}
+                    <div className="md:col-span-5 flex flex-col gap-3 md:pt-1">
+                        {/* Arrows + progress line */}
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={prev}
+                                aria-label="Previous project"
+                                className="w-10 h-10 shrink-0 rounded-full border border-border flex items-center justify-center transition-all hover:bg-foreground hover:text-background hover:border-foreground"
+                            >
+                                <ChevronLeft size={16} />
+                            </button>
+                            <button
+                                onClick={next}
+                                aria-label="Next project"
+                                className="w-10 h-10 shrink-0 rounded-full border border-border flex items-center justify-center transition-all hover:bg-foreground hover:text-background hover:border-foreground"
+                            >
+                                <ChevronRight size={16} />
+                            </button>
+                            <div className="flex-1 h-px bg-border relative ml-2 overflow-hidden">
+                                <div
+                                    ref={progressRef}
+                                    className="absolute inset-y-0 left-0 bg-foreground"
+                                    style={{ width: `${((active + 1) / projects.length) * 100}%` }}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Project list — click to jump */}
+                        <ol className="border-t border-border">
+                            {projects.map((p, i) => {
+                                const isActive = i === active;
+                                return (
+                                    <li key={p.title} className="border-b border-border">
+                                        <button
+                                            onClick={() => goTo(i)}
+                                            className={`group flex items-center gap-3 w-full text-left py-1.5 transition-colors ${
+                                                isActive ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                                            }`}
+                                            aria-current={isActive ? 'true' : undefined}
+                                        >
+                                            <span className="font-mono text-[11px] w-6 shrink-0">
+                                                {String(i + 1).padStart(2, '0')}
+                                            </span>
+                                            <span
+                                                className={`flex-1 text-xs font-medium tracking-wide transition-transform duration-500 ${
+                                                    isActive ? 'translate-x-2' : 'group-hover:translate-x-1'
+                                                }`}
+                                            >
+                                                {p.title}
+                                            </span>
+                                            <span
+                                                className={`h-px bg-foreground transition-all duration-500 ${
+                                                    isActive ? 'w-6 opacity-100' : 'w-0 opacity-0'
+                                                }`}
+                                            />
+                                        </button>
+                                    </li>
+                                );
+                            })}
+                        </ol>
+                    </div>
+                </div>
             </div>
         </section>
     );
