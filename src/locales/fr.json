@@ -67,6 +67,7 @@
         "subtitle": "Une collection de projets explorant le développement web, le game design et la cybersécurité.",
         "view_all": "Voir tous les dépôts",
         "view_project": "Voir le projet",
+        "swipe_hint": "Glissez pour explorer",
         "items": {
             "x_clone": {
                 "description": "Un clone complet de Twitter/X avec chat IA (intégration Grok). Construit avec des technologies web vanilla pour maîtriser les fondamentaux."

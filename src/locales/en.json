@@ -67,6 +67,7 @@
         "subtitle": "A collection of projects exploring web development, game design, and cybersecurity.",
         "view_all": "View all repositories",
         "view_project": "View Project",
+        "swipe_hint": "Swipe to explore",
         "items": {
             "x_clone": {
                 "description": "A full-featured Twitter/X clone with AI chat capabilities (Grok integration). Built with vanilla web technologies to master the fundamentals."
