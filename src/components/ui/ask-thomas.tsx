@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Sparkles, X, Send, RotateCcw, Loader2 } from 'lucide-react';
-import { sfx } from '@/lib/sound';
 
 // Inline markdown renderer — handles the subset the AI produces
 function renderInline(text: string): ReactNode[] {
@@ -179,7 +178,6 @@ export function AskThomas() {
         if (!trimmed || sending) return;
         if (trimmed.length > MAX_INPUT) {
             setError(`Max ${MAX_INPUT} chars.`);
-            sfx.error();
             return;
         }
         setError(null);
@@ -187,7 +185,6 @@ export function AskThomas() {
         setHistory(newHistory);
         setInput('');
         setSending(true);
-        sfx.click();
 
         try {
             const res = await fetch(ASK_URL, {
@@ -204,10 +201,8 @@ export function AskThomas() {
                 throw new Error(data.error ?? `HTTP ${res.status}`);
             }
             setHistory(h => [...h, { role: 'assistant', content: data.reply ?? '' }]);
-            sfx.pop();
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Network error');
-            sfx.error();
         } finally {
             setSending(false);
         }
@@ -218,7 +213,6 @@ export function AskThomas() {
         setError(null);
         setInput('');
         if (typeof localStorage !== 'undefined') localStorage.removeItem(STORAGE_KEY);
-        sfx.click();
     }, []);
 
     const isFr = i18n.language?.startsWith('fr');
@@ -234,7 +228,7 @@ export function AskThomas() {
         <>
             {/* Floating launcher — round icon by default, expands on hover */}
             <button
-                onClick={() => { setOpen(o => !o); sfx.pop(); }}
+                onClick={() => { setOpen(o => !o); }}
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
                 onFocus={() => setHovered(true)}
@@ -309,7 +303,7 @@ export function AskThomas() {
                             </button>
                         )}
                         <button
-                            onClick={() => { setOpen(false); sfx.click(); }}
+                            onClick={() => { setOpen(false); }}
                             className="p-2 rounded-full hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-colors"
                             aria-label="Close chat"
                         >

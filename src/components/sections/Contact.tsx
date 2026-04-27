@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/components/ui/theme-provider';
 import { useState, useRef, useCallback, FormEvent, useEffect } from 'react';
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
-import { sfx } from '@/lib/sound';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -91,13 +90,11 @@ export function Contact() {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        if (!validate()) { sfx.error(); return; }
+        if (!validate()) { return; }
         setStatus('sending');
-        sfx.whoosh();
 
         if (!turnstileToken) {
             setStatus('error');
-            sfx.error();
             return;
         }
         const duration = Date.now() - startTimeRef.current;
@@ -123,12 +120,9 @@ export function Contact() {
             setName(''); setEmail(''); setMessage(''); setHoney('');
             setTurnstileToken(null);
             turnstileRef.current?.reset();
-            // Success feedback: chime + vibration (chime respects mute toggle)
-            sfx.success();
             if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([80, 40, 80]);
         } catch {
             setStatus('error');
-            sfx.error();
             turnstileRef.current?.reset();
             setTurnstileToken(null);
         }
