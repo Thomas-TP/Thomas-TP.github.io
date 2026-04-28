@@ -877,7 +877,7 @@ export function Projects() {
                 return;
             }
 
-            if (Math.abs(dx) > 6) {
+            if (Math.abs(dx) > 8) {
                 e.preventDefault();
                 suppressClick = true;
                 // Use gsap.set so GSAP's internal transform cache stays in sync with the actual
@@ -967,45 +967,50 @@ export function Projects() {
             {/* Carousel stage — full width, cards absolute-positioned and animate to slot positions */}
             <div
                 ref={stageRef}
-                className="relative w-full overflow-hidden select-none cursor-grab"
+                className="relative w-full overflow-hidden select-none"
                 style={{ height: stageHeight || undefined, touchAction: 'pan-y' }}
             >
-                {projects.map((project, i) => (
-                    <div
-                        key={project.title}
-                        ref={el => { cardsRef.current[i] = el; }}
-                        className="absolute top-0 left-1/2 will-change-transform bg-card border border-border rounded-3xl overflow-hidden shadow-2xl"
-                        style={{
-                            width: cardWidth,
-                            height: stageHeight,
-                            marginLeft: -cardWidth / 2,
-                            opacity: 0,
-                        }}
-                        onClick={() => { if (i !== active) goTo(i); }}
-                        role="button"
-                        tabIndex={i === active ? -1 : 0}
-                        aria-label={i === active ? `${project.title} — current project` : `Show ${project.title}`}
-                        onKeyDown={(e) => {
-                            if (i !== active && (e.key === 'Enter' || e.key === ' ')) {
-                                e.preventDefault();
-                                goTo(i);
-                            }
-                        }}
-                    >
-                        <div className="absolute inset-0">
-                            <div className="absolute inset-0 bg-grid-white/[0.05] pointer-events-none z-10" />
-                            {project.visual}
-                        </div>
+                {projects.map((project, i) => {
+                    const isActive = i === active;
+                    return (
+                        <div
+                            key={project.title}
+                            ref={el => { cardsRef.current[i] = el; }}
+                            className={`absolute top-0 left-1/2 will-change-transform bg-card border border-border rounded-3xl overflow-hidden shadow-2xl transition-[border-color] duration-300 ${
+                                isActive ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer hover:border-foreground/40'
+                            }`}
+                            style={{
+                                width: cardWidth,
+                                height: stageHeight,
+                                marginLeft: -cardWidth / 2,
+                                opacity: 0,
+                            }}
+                            onClick={() => { if (!isActive) goTo(i); }}
+                            role="button"
+                            tabIndex={isActive ? -1 : 0}
+                            aria-label={isActive ? `${project.title} — current project` : `Show ${project.title}`}
+                            onKeyDown={(e) => {
+                                if (!isActive && (e.key === 'Enter' || e.key === ' ')) {
+                                    e.preventDefault();
+                                    goTo(i);
+                                }
+                            }}
+                        >
+                            <div className="absolute inset-0">
+                                <div className="absolute inset-0 bg-grid-white/[0.05] pointer-events-none z-10" />
+                                {project.visual}
+                            </div>
 
-                        {/* Card label — bottom-left */}
-                        <div className="absolute bottom-3 left-3 flex items-center gap-2 z-20 pointer-events-none">
-                            <span className="font-mono text-[10px] text-white/70 backdrop-blur-md bg-black/50 px-1.5 py-0.5 rounded-md border border-white/10">
-                                {String(i + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
-                            </span>
-                            <span className="font-bold text-white text-xs tracking-wide drop-shadow-[0_0_8px_rgba(0,0,0,0.6)]">{project.title}</span>
+                            {/* Card label — bottom-left. Slight backdrop boost on inactive so the title stays legible through the lowered opacity. */}
+                            <div className="absolute bottom-3 left-3 flex items-center gap-2 z-20 pointer-events-none">
+                                <span className="font-mono text-[10px] text-white/80 backdrop-blur-md bg-black/60 px-1.5 py-0.5 rounded-md border border-white/15">
+                                    {String(i + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
+                                </span>
+                                <span className="font-bold text-white text-xs tracking-wide drop-shadow-[0_0_8px_rgba(0,0,0,0.7)]">{project.title}</span>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
             {/* Mobile-only swipe hint — pulses to invite the gesture, fades out after first interaction */}

@@ -2,8 +2,32 @@ import { useState, useEffect, useRef, useCallback, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next';
 import { Sparkles, X, Send, RotateCcw, Loader2 } from 'lucide-react';
 
-// Inline markdown renderer — handles the subset the AI produces
-function renderInline(text: string): ReactNode[] {
+// Decide how a chatbot link should behave when clicked.
+//   - Hash-only ("#xxx") or same-site hash ("https://thomastp.ch/#xxx"): SPA smooth scroll
+//     to the target section without a full reload (a target="_blank" anchor would otherwise
+//     reopen the site and land at the top before the browser resolves the hash).
+//   - Same-site full path: open in same tab without closing the chat (e.g. /documents/CV.pdf).
+//   - Anything else: open in a new tab.
+type LinkKind = 'anchor' | 'same-origin' | 'external';
+function classifyLink(href: string): { kind: LinkKind; anchor?: string; resolved: string } {
+    if (typeof window === 'undefined') return { kind: 'external', resolved: href };
+    if (href.startsWith('#')) return { kind: 'anchor', anchor: href, resolved: href };
+    try {
+        const url = new URL(href, window.location.href);
+        const sameSite = url.hostname === window.location.hostname || url.hostname === 'thomastp.ch' || url.hostname === 'www.thomastp.ch';
+        if (sameSite && url.hash) return { kind: 'anchor', anchor: url.hash, resolved: url.hash };
+        if (sameSite) return { kind: 'same-origin', resolved: url.pathname + url.search + url.hash };
+        return { kind: 'external', resolved: href };
+    } catch {
+        return { kind: 'external', resolved: href };
+    }
+}
+
+// Inline markdown renderer — handles the subset the AI produces.
+// `onAnchorNavigate` is called when the user clicks a link that should resolve as
+// in-app navigation (hash anchor) — the parent uses it to close the chat panel and
+// smooth-scroll to the target section.
+function renderInline(text: string, onAnchorNavigate?: (anchor: string) => void): ReactNode[] {
     const parts: ReactNode[] = [];
     // Patterns: **bold**, *italic*, `code`, [text](url)
     const re = /(\*\*(.+?)\*\*|\*(.+?)\*|`([^`]+)`|\[([^\]]+)\]\(([^)]+)\))/g;
@@ -13,14 +37,57 @@ function renderInline(text: string): ReactNode[] {
         if (m[2]) parts.push(<strong key={key++} className="font-semibold">{m[2]}</strong>);
         else if (m[3]) parts.push(<em key={key++}>{m[3]}</em>);
         else if (m[4]) parts.push(<code key={key++} className="bg-foreground/10 rounded px-1 py-0.5 font-mono text-xs">{m[4]}</code>);
-        else if (m[5]) parts.push(<a key={key++} href={m[6]} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:opacity-70 transition-opacity">{m[5]}</a>);
+        else if (m[5]) {
+            const linkText = m[5];
+            const href = m[6];
+            const info = classifyLink(href);
+            if (info.kind === 'anchor' && info.anchor) {
+                const anchor = info.anchor;
+                parts.push(
+                    <a
+                        key={key++}
+                        href={anchor}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            onAnchorNavigate?.(anchor);
+                        }}
+                        className="underline underline-offset-2 hover:opacity-70 transition-opacity"
+                    >
+                        {linkText}
+                    </a>
+                );
+            } else if (info.kind === 'same-origin') {
+                // Same-tab navigation for same-site non-hash URLs (CV download, etc.)
+                parts.push(
+                    <a
+                        key={key++}
+                        href={info.resolved}
+                        className="underline underline-offset-2 hover:opacity-70 transition-opacity"
+                    >
+                        {linkText}
+                    </a>
+                );
+            } else {
+                parts.push(
+                    <a
+                        key={key++}
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline underline-offset-2 hover:opacity-70 transition-opacity"
+                    >
+                        {linkText}
+                    </a>
+                );
+            }
+        }
         last = m.index + m[0].length;
     }
     if (last < text.length) parts.push(text.slice(last));
     return parts;
 }
 
-function MdMessage({ content }: { content: string }) {
+function MdMessage({ content, onAnchorNavigate }: { content: string; onAnchorNavigate?: (anchor: string) => void }) {
     const nodes: ReactNode[] = [];
     const lines = content.split('\n');
     let i = 0, key = 0;
@@ -44,18 +111,18 @@ function MdMessage({ content }: { content: string }) {
         }
 
         // Headers
-        if (line.startsWith('### ')) { nodes.push(<h3 key={key++} className="font-semibold mt-2 mb-0.5 first:mt-0">{renderInline(line.slice(4))}</h3>); i++; continue; }
-        if (line.startsWith('## ')) { nodes.push(<h2 key={key++} className="font-bold text-base mt-3 mb-1 first:mt-0">{renderInline(line.slice(3))}</h2>); i++; continue; }
-        if (line.startsWith('# ')) { nodes.push(<h2 key={key++} className="font-bold text-base mt-3 mb-1 first:mt-0">{renderInline(line.slice(2))}</h2>); i++; continue; }
+        if (line.startsWith('### ')) { nodes.push(<h3 key={key++} className="font-semibold mt-2 mb-0.5 first:mt-0">{renderInline(line.slice(4), onAnchorNavigate)}</h3>); i++; continue; }
+        if (line.startsWith('## ')) { nodes.push(<h2 key={key++} className="font-bold text-base mt-3 mb-1 first:mt-0">{renderInline(line.slice(3), onAnchorNavigate)}</h2>); i++; continue; }
+        if (line.startsWith('# ')) { nodes.push(<h2 key={key++} className="font-bold text-base mt-3 mb-1 first:mt-0">{renderInline(line.slice(2), onAnchorNavigate)}</h2>); i++; continue; }
 
         // Blockquote
-        if (line.startsWith('> ')) { nodes.push(<blockquote key={key++} className="border-l-2 border-foreground/20 pl-3 italic text-foreground/70 my-1">{renderInline(line.slice(2))}</blockquote>); i++; continue; }
+        if (line.startsWith('> ')) { nodes.push(<blockquote key={key++} className="border-l-2 border-foreground/20 pl-3 italic text-foreground/70 my-1">{renderInline(line.slice(2), onAnchorNavigate)}</blockquote>); i++; continue; }
 
         // Bullet list — collect consecutive items
         if (/^[-*] /.test(line)) {
             const items: ReactNode[] = [];
             while (i < lines.length && /^[-*] /.test(lines[i])) {
-                items.push(<li key={i} className="leading-relaxed">{renderInline(lines[i].slice(2))}</li>);
+                items.push(<li key={i} className="leading-relaxed">{renderInline(lines[i].slice(2), onAnchorNavigate)}</li>);
                 i++;
             }
             nodes.push(<ul key={key++} className="list-disc pl-4 my-1 space-y-0.5">{items}</ul>);
@@ -66,7 +133,7 @@ function MdMessage({ content }: { content: string }) {
         if (/^\d+\. /.test(line)) {
             const items: ReactNode[] = [];
             while (i < lines.length && /^\d+\. /.test(lines[i])) {
-                items.push(<li key={i} className="leading-relaxed">{renderInline(lines[i].replace(/^\d+\. /, ''))}</li>);
+                items.push(<li key={i} className="leading-relaxed">{renderInline(lines[i].replace(/^\d+\. /, ''), onAnchorNavigate)}</li>);
                 i++;
             }
             nodes.push(<ol key={key++} className="list-decimal pl-4 my-1 space-y-0.5">{items}</ol>);
@@ -77,7 +144,7 @@ function MdMessage({ content }: { content: string }) {
         if (line.trim() === '') { nodes.push(<div key={key++} className="h-1" />); i++; continue; }
 
         // Paragraph
-        nodes.push(<p key={key++} className="mb-1 last:mb-0">{renderInline(line)}</p>);
+        nodes.push(<p key={key++} className="mb-1 last:mb-0">{renderInline(line, onAnchorNavigate)}</p>);
         i++;
     }
 
@@ -215,6 +282,26 @@ export function AskThomas() {
         if (typeof localStorage !== 'undefined') localStorage.removeItem(STORAGE_KEY);
     }, []);
 
+    // SPA-aware navigation when the AI emits a hash anchor like #contact:
+    // close the panel, update history.hash so the URL reflects the section,
+    // and smooth-scroll to it. Avoids a full page reload that would land at the top.
+    const handleAnchorNavigate = useCallback((anchor: string) => {
+        setOpen(false);
+        const id = anchor.startsWith('#') ? anchor.slice(1) : anchor;
+        if (!id) return;
+        // Defer scroll until the panel-close transition has started so the layout
+        // doesn't shift mid-animation.
+        requestAnimationFrame(() => {
+            const target = document.getElementById(id);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                if (typeof window !== 'undefined' && window.history?.replaceState) {
+                    window.history.replaceState(null, '', `#${id}`);
+                }
+            }
+        });
+    }, []);
+
     const isFr = i18n.language?.startsWith('fr');
     const placeholder = isFr ? 'Posez une question…' : 'Ask anything…';
     const greeting = isFr
@@ -345,7 +432,7 @@ export function AskThomas() {
                                             : 'bg-foreground/5 border border-border text-foreground rounded-bl-sm prose-chat'
                                     }`}
                                 >
-                                    {m.role === 'user' ? m.content : <MdMessage content={m.content} />}
+                                    {m.role === 'user' ? m.content : <MdMessage content={m.content} onAnchorNavigate={handleAnchorNavigate} />}
                                 </div>
                             </div>
                         ))
