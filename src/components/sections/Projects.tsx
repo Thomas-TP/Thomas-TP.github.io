@@ -849,6 +849,11 @@ export function Projects() {
             suppressClick = false;
             stage.style.cursor = 'grabbing';
             setHasInteracted(true);
+            // Capture the pointer so all subsequent move/up events route to the stage even if
+            // the cursor leaves the original target. Without this, a desktop click-drag that
+            // started on the active card could be interrupted (native text-selection / focus
+            // behaviors steal the gesture before our drag threshold engages).
+            try { stage.setPointerCapture(e.pointerId); } catch { /* noop */ }
             // Kill any in-flight tweens so the drag doesn't fight an active transition,
             // then snapshot each card's current x as the drag baseline.
             baseSlots = cardsRef.current.map(card => {
