@@ -467,6 +467,10 @@ export function Projects() {
     // Cached GSAP instance — used sync inside high-frequency drag handlers so we don't
     // pay the cost (or risk a cache desync) of writing transforms outside of GSAP.
     const gsapRef = useRef<typeof import('gsap').gsap | null>(null);
+    // When true, the next active-change effect run skips its own animation because the
+    // drag-release handler already started the slide directly (avoids a double-trigger
+    // that would feel like a small "stop" between drag and transition).
+    const skipNextActiveAnimationRef = useRef(false);
     const watermarkRef = useRef<HTMLDivElement>(null);
     const infoTitleRef = useRef<HTMLHeadingElement>(null);
     const infoMetaRef = useRef<HTMLDivElement>(null);
@@ -627,51 +631,59 @@ export function Projects() {
         return () => ctx?.revert();
     }, []);
 
-    // Per-card slot animation (infinite carousel with teleport-before-animate to avoid jumps)
-    useEffect(() => {
-        if (cardWidth === 0) return;
-        const cards = cardsRef.current;
-        if (!cards.length) return;
-
+    // Animate each card to its canonical slot for a given active index. Used by the active-change
+    // effect (smooth power3.inOut for clicks/keyboard) and by drag-release (power3.out for natural
+    // momentum-style deceleration). Includes the wrap-before-animate logic so off-screen cards
+    // teleport to the closer side and never visibly jump.
+    const animateCardsToActive = useCallback((
+        targetActive: number,
+        ease: string = TRANSITION_EASE,
+        duration: number = TRANSITION_DURATION,
+    ) => {
+        const gsap = gsapRef.current;
+        if (!gsap || cardWidth === 0) return;
         const N = projects.length;
         const pitch = cardWidth + CARD_GAP;
-        let cancelled = false;
 
-        loadGsap().then(({ gsap }) => {
-            if (cancelled) return;
+        cardsRef.current.forEach((card, i) => {
+            if (!card) return;
 
-            cards.forEach((card, i) => {
-                if (!card) return;
+            const canon = canonicalSlot(i, targetActive, N);
+            const targetX = canon * pitch;
+            const currentX = (gsap.getProperty(card, 'x') as number) || 0;
+            const currentSlotApprox = currentX / pitch;
+            const delta = canon - currentSlotApprox;
 
-                const canon = canonicalSlot(i, active, N);
-                const targetX = canon * pitch;
+            // Wrap-before-animate: cards crossing more than N/2 slots are teleported off-screen
+            // on the closer side first (invisible) so the visible part of the move is < N/2 slots.
+            if (Math.abs(delta) > N / 2) {
+                const wrapOffset = delta > 0 ? N : -N;
+                gsap.set(card, { x: currentX + wrapOffset * pitch });
+            }
 
-                // Read current rendered x (could be mid-animation, or initial 0)
-                const currentX = (gsap.getProperty(card, 'x') as number) || 0;
-                const currentSlotApprox = currentX / pitch;
-                const delta = canon - currentSlotApprox;
-
-                // If the card needs to wrap > N/2 slots, teleport it to the closer side first
-                // (only happens to off-screen cards, so the teleport itself is invisible)
-                if (Math.abs(delta) > N / 2) {
-                    const wrapOffset = delta > 0 ? N : -N;
-                    gsap.set(card, { x: currentX + wrapOffset * pitch });
-                }
-
-                const isActive = i === active;
-                gsap.to(card, {
-                    x: targetX,
-                    scale: isActive ? 1 : 0.92,
-                    opacity: isActive ? 1 : 0.3,
-                    duration: TRANSITION_DURATION,
-                    ease: TRANSITION_EASE,
-                    overwrite: true,
-                });
+            const isActive = i === targetActive;
+            gsap.to(card, {
+                x: targetX,
+                scale: isActive ? 1 : 0.92,
+                opacity: isActive ? 1 : 0.3,
+                duration,
+                ease,
+                overwrite: true,
             });
         });
+    }, [cardWidth, projects.length]);
 
-        return () => { cancelled = true; };
-    }, [active, cardWidth, projects.length]);
+    // Per-card slot animation triggered when `active` changes via clicks/keyboard.
+    // Drag-release pre-runs the animation directly in onUp and sets skipNextActiveAnimationRef
+    // so this effect doesn't double-fire (which would feel like a small "stop" then re-start).
+    useEffect(() => {
+        if (cardWidth === 0) return;
+        if (skipNextActiveAnimationRef.current) {
+            skipNextActiveAnimationRef.current = false;
+            return;
+        }
+        animateCardsToActive(active);
+    }, [active, cardWidth, animateCardsToActive]);
 
     // Initial card placement once cardWidth is known (sync, no animation)
     useLayoutEffect(() => {
@@ -837,9 +849,11 @@ export function Projects() {
             suppressClick = false;
             stage.style.cursor = 'grabbing';
             setHasInteracted(true);
-            // Snapshot each card's current x via GSAP's getProperty — single source of truth
+            // Kill any in-flight tweens so the drag doesn't fight an active transition,
+            // then snapshot each card's current x as the drag baseline.
             baseSlots = cardsRef.current.map(card => {
                 if (!card) return 0;
+                gsap.killTweensOf(card);
                 return (gsap.getProperty(card, 'x') as number) || 0;
             });
         };
@@ -879,25 +893,20 @@ export function Projects() {
 
             const threshold = cardWidth * 0.18;
             if (dx < -threshold) {
-                setActive(a => (a + 1) % N);
+                // Trigger the slide BEFORE setActive so there's no perceptible gap between the
+                // finger lifting and the animation starting. power3.out for natural momentum feel.
+                const newActive = (active + 1) % N;
+                skipNextActiveAnimationRef.current = true;
+                animateCardsToActive(newActive, 'power3.out');
+                setActive(newActive);
             } else if (dx > threshold) {
-                setActive(a => (a - 1 + N) % N);
+                const newActive = (active - 1 + N) % N;
+                skipNextActiveAnimationRef.current = true;
+                animateCardsToActive(newActive, 'power3.out');
+                setActive(newActive);
             } else if (suppressClick) {
-                // Snap back to canonical positions without changing active
-                const gsap = gsapRef.current;
-                if (!gsap) return;
-                cardsRef.current.forEach((card, i) => {
-                    if (!card) return;
-                    const isActive = i === active;
-                    gsap.to(card, {
-                        x: canonicalSlot(i, active, N) * pitch,
-                        scale: isActive ? 1 : 0.92,
-                        opacity: isActive ? 1 : 0.3,
-                        duration: 0.45,
-                        ease: 'power3.out',
-                        overwrite: true,
-                    });
-                });
+                // Snap back without changing active — also ease-out for momentum continuity
+                animateCardsToActive(active, 'power3.out', 0.45);
             }
         };
 
@@ -922,7 +931,7 @@ export function Projects() {
             stage.removeEventListener('pointercancel', onUp);
             stage.removeEventListener('click', onClickCapture, true);
         };
-    }, [active, cardWidth, projects.length]);
+    }, [active, cardWidth, projects.length, animateCardsToActive]);
 
     const stageHeight = cardWidth > 0 ? Math.round((cardWidth * 9) / 16) : 0;
     const activeProject = projects[active];
