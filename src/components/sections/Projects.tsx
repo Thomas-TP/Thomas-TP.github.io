@@ -481,6 +481,7 @@ export function Projects() {
     const swipeHintRef = useRef<HTMLDivElement>(null);
 
     const [active, setActive] = useState(0);
+    const prevActiveRef = useRef(0);
     const [hasInteracted, setHasInteracted] = useState(false);
     const [stageWidth, setStageWidth] = useState(0);
     const [cardWidth, setCardWidth] = useState(0);
@@ -787,19 +788,56 @@ export function Projects() {
         return () => ctx?.revert();
     }, [hasInteracted]);
 
-    // Progress bar fill
+    // Progress bar — GSAP owns the width entirely (no React inline style).
+    // Linear easing; on wrap-around the bar fills/empties to the edge first
+    // so it feels like a continuous loop instead of jumping backward.
     useEffect(() => {
         const bar = progressRef.current;
         if (!bar) return;
-        let ctx: { revert: () => void } | undefined;
+
+        const prev = prevActiveRef.current;
+        prevActiveRef.current = active;
+
+        const N = projects.length;
+        const pct = ((active + 1) / N) * 100;
+        const isInitial = prev === active;
+        const isForwardWrap = prev === N - 1 && active === 0;
+        const isBackwardWrap = prev === 0 && active === N - 1;
+
+        let cancelled = false;
         loadGsap().then(({ gsap }) => {
-            if (!bar.isConnected) return;
-            ctx = gsap.context(() => {
-                const pct = ((active + 1) / projects.length) * 100;
-                gsap.to(bar, { width: `${pct}%`, duration: 0.7, ease: 'power3.inOut' });
-            });
+            if (!bar.isConnected || cancelled) return;
+            gsap.killTweensOf(bar);
+
+            if (isInitial) {
+                gsap.set(bar, { width: `${pct}%` });
+            } else if (isForwardWrap) {
+                gsap.to(bar, {
+                    width: '100%', duration: 0.25, ease: 'none',
+                    onComplete: () => {
+                        if (cancelled) return;
+                        gsap.set(bar, { width: '0%' });
+                        gsap.to(bar, { width: `${pct}%`, duration: 0.25, ease: 'none' });
+                    },
+                });
+            } else if (isBackwardWrap) {
+                gsap.to(bar, {
+                    width: '0%', duration: 0.25, ease: 'none',
+                    onComplete: () => {
+                        if (cancelled) return;
+                        gsap.set(bar, { width: '100%' });
+                        gsap.to(bar, { width: `${pct}%`, duration: 0.25, ease: 'none' });
+                    },
+                });
+            } else {
+                gsap.to(bar, { width: `${pct}%`, duration: 0.5, ease: 'none' });
+            }
         });
-        return () => ctx?.revert();
+        return () => {
+            cancelled = true;
+            const g = gsapRef.current;
+            if (g) g.killTweensOf(bar);
+        };
     }, [active, projects.length]);
 
     // Keyboard navigation when section is in viewport
@@ -834,6 +872,7 @@ export function Projects() {
         let dy = 0;
         let pointerId = -1;
         let suppressClick = false;
+        let startTarget: EventTarget | null = null;
         let baseSlots: number[] = [];
 
         const onDown = (e: PointerEvent) => {
@@ -841,6 +880,7 @@ export function Projects() {
             const gsap = gsapRef.current;
             if (!gsap) return; // GSAP not yet loaded — abort to avoid manual transform desync
             dragging = true;
+            startTarget = e.target;
             startX = e.clientX;
             startY = e.clientY;
             dx = 0;
@@ -912,7 +952,15 @@ export function Projects() {
             } else if (suppressClick) {
                 // Snap back without changing active — also ease-out for momentum continuity
                 animateCardsToActive(active, 'power3.out', 0.45);
+            } else if (startTarget) {
+                const targetEl = startTarget as HTMLElement;
+                const idx = cardsRef.current.findIndex(card => card?.contains(targetEl));
+                if (idx !== -1 && idx !== active) {
+                    goTo(idx);
+                    suppressClick = true;
+                }
             }
+            startTarget = null;
         };
 
         const onClickCapture = (e: MouseEvent) => {
@@ -936,7 +984,7 @@ export function Projects() {
             stage.removeEventListener('pointercancel', onUp);
             stage.removeEventListener('click', onClickCapture, true);
         };
-    }, [active, cardWidth, projects.length, animateCardsToActive]);
+    }, [active, cardWidth, projects.length, animateCardsToActive, goTo]);
 
     const stageHeight = cardWidth > 0 ? Math.round((cardWidth * 9) / 16) : 0;
     const activeProject = projects[active];
@@ -1115,7 +1163,6 @@ export function Projects() {
                                 <div
                                     ref={progressRef}
                                     className="absolute inset-y-0 left-0 bg-foreground"
-                                    style={{ width: `${((active + 1) / projects.length) * 100}%` }}
                                 />
                             </div>
                         </div>
