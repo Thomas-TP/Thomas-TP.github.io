@@ -1,0 +1,80 @@
+# Thomas Prudhomme – Portfolio
+
+> Personal portfolio of Thomas Prudhomme, a Computer Science student at the Geneva Institute of Technology (CFPT Informatique), Switzerland. Specializing in Web Development, Cybersecurity, IoT, and Cloud Computing. Available for internships and freelance work in the Lake Geneva region.
+
+## Identity
+
+- **Name:** Thomas Prudhomme
+- **Location:** Geneva, Switzerland (available across the Lake Geneva region: Geneva – Nyon – Lausanne)
+- **Status:** Computer Science student, Swiss CFC track (specialization year 2026, graduation 2028)
+- **Languages:** French (native), English (fluent)
+
+## Contact
+
+- **Email:** thomas@prudhomme.li
+- **Portfolio:** https://thomastp.ch
+- **Contact form:** https://thomastp.ch/#contact
+- **GitHub:** https://github.com/Thomas-TP
+- **LinkedIn:** https://www.linkedin.com/in/thomas-tp/
+- **Credly (certifications):** https://www.credly.com/users/thomas-prudhomme
+- **All links:** https://links.thomastp.ch
+- **CV / Resume:** https://thomastp.ch/documents/ThomasPrudhommeCV.pdf
+
+## Technical Skills
+
+### Web Development
+- React 19, TypeScript 6, Three.js, react-three-fiber, GSAP, UnoCSS
+- Bun, Rsbuild + Rspack, Cloudflare Pages & Workers
+- i18next (FR/EN), Cloudflare Turnstile, Resend API
+
+### Systems & Security
+- Rust + Tauri (desktop applications)
+- PowerShell scripting & system automation
+- Ethical hacking, PowerShell Empire framework
+- Cisco Packet Tracer (networking)
+
+### Cloud & IoT
+- Cloudflare ecosystem (Pages, Workers, KV, Workers AI, Vectorize)
+- IoT & Smart Home solutions
+
+### Mobile
+- Flutter / Dart, Swift, C++
+
+## Featured Projects
+
+1. **X-clone** (2024) — Full-featured Twitter/X clone with AI chat (Grok integration). Built with HTML, CSS, JavaScript.
+   - Live: https://x-clone-teal-phi.vercel.app/
+   - Repo: https://github.com/Thomas-TP/X-clone
+
+2. **Tank.io** (2025) — Multiplayer tank battle game with real-time gameplay. Built with React, HTML5 Canvas, WebSocket.
+   - Live: https://tank-io-wr49.onrender.com/
+   - Repo: https://github.com/Thomas-TP/Tank.io
+
+3. **PowerShell Empire Automation** (2024) — Modernized fork of the Empire post-exploitation framework for ethical security testing and educational red-teaming.
+   - Repo: https://github.com/Thomas-TP/Powershell-Empire-test
+
+4. **TomBoard** (2026) — Open-source Windows soundboard, free Voicemod alternative. Real-time voice changer, dual audio output to virtual mic, drag-and-drop sounds, global hotkeys. Built with Rust + Tauri.
+   - Repo: https://github.com/Thomas-TP/tomboard
+   - Releases: https://github.com/Thomas-TP/TomBoard/releases
+
+## Education Timeline
+
+| Year | Milestone |
+|------|-----------|
+| 2024 | School entry at Geneva Institute of Technology |
+| 2025 | Development phase |
+| 2026 | Specialization (current year) |
+| 2027 | Internship |
+| 2028 | Graduation — Swiss CFC in Computer Science |
+
+## Certifications
+
+Thomas holds verified professional certifications in cloud computing, cybersecurity, and software development, all publicly verifiable on Credly: https://www.credly.com/users/thomas-prudhomme
+
+## About This Site
+
+This portfolio is built with React 19, TypeScript 6, Three.js (3D hero), GSAP (animations), UnoCSS, and deployed on Cloudflare Pages. It features an AI chatbot ("Ask Thomas") powered by Cloudflare Workers AI (Llama 3.3 70B), speech-to-text (Whisper), text-to-speech, and a semantic search RAG pipeline (Vectorize). The site targets Lighthouse 100 across all categories.
+
+---
+
+*Thomas Prudhomme is open to internships and freelance opportunities in the Lake Geneva region (Geneva to Lausanne, Switzerland).*

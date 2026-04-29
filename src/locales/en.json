@@ -1,4 +1,10 @@
 {
+    "seo": {
+        "title": "Thomas Prudhomme | Computer Science & Web Developer – Geneva, Switzerland",
+        "description": "Portfolio of Thomas Prudhomme — Computer Science student at Geneva Institute of Technology. Web Development (React, TypeScript, Rust), Cybersecurity, IoT & Cloud Computing. Projects, CV, and contact.",
+        "og_title": "Thomas Prudhomme | Web Developer & Computer Science – Geneva",
+        "og_description": "Projects in React, Rust, ethical hacking, and IoT by Thomas Prudhomme, Computer Science student at Geneva Institute of Technology. Open to internships and freelance."
+    },
     "navbar": {
         "home": "Home",
         "about": "About",

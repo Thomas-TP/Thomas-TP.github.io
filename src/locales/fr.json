@@ -1,4 +1,10 @@
 {
+    "seo": {
+        "title": "Thomas Prudhomme | Informaticien & Développeur Web – Genève, Suisse",
+        "description": "Portfolio de Thomas Prudhomme — Étudiant en informatique au CFPT Genève. Développement Web (React, TypeScript, Rust), Cybersécurité, IoT & Cloud. Projets, CV et contact.",
+        "og_title": "Thomas Prudhomme | Développeur Web & Informatique – Genève",
+        "og_description": "Projets en React, Rust, ethical hacking et IoT par Thomas Prudhomme, étudiant en informatique au CFPT Genève. Disponible pour stages et freelance sur l'arc lémanique."
+    },
     "navbar": {
         "home": "Accueil",
         "about": "À propos",

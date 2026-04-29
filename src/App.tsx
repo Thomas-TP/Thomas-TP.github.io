@@ -4,6 +4,7 @@ import { GsapProvider } from '@/components/ui/motion-provider';
 import { ClientLayout } from '@/components/layout/ClientLayout';
 import { Home } from '@/components/Home';
 import { BootSequence } from '@/components/ui/boot-sequence';
+import { useDocumentMeta } from '@/hooks/useDocumentMeta';
 
 const NotFound = lazy(() => import('@/components/NotFound').then(m => ({ default: m.NotFound })));
 
@@ -17,6 +18,7 @@ function isUnknownPath(): boolean {
 
 export function App() {
   const [unknown] = useState(isUnknownPath);
+  useDocumentMeta();
 
   useEffect(() => {
     document.getElementById('lcp-prerender')?.remove();
