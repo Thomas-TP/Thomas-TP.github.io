@@ -5,6 +5,7 @@ import { ExternalLink, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-re
 import { FaGithub } from 'react-icons/fa';
 
 interface Project {
+    slug: string;
     title: string;
     description: string;
     tags: string[];
@@ -12,6 +13,16 @@ interface Project {
     github?: string;
     year: string;
     visual: ReactNode;
+}
+
+const PROJECT_SLUGS = ['x-clone', 'powershell-empire', 'tank-io', 'tomboard'] as const;
+
+function getInitialProject(): number {
+    if (typeof window === 'undefined') return 0;
+    const slug = new URLSearchParams(window.location.search).get('p');
+    if (!slug) return 0;
+    const idx = PROJECT_SLUGS.indexOf(slug as (typeof PROJECT_SLUGS)[number]);
+    return idx >= 0 ? idx : 0;
 }
 
 
@@ -480,14 +491,15 @@ export function Projects() {
     const progressRef = useRef<HTMLDivElement>(null);
     const swipeHintRef = useRef<HTMLDivElement>(null);
 
-    const [active, setActive] = useState(0);
-    const prevActiveRef = useRef(0);
+    const [active, setActive] = useState(getInitialProject);
+    const prevActiveRef = useRef(active);
     const [hasInteracted, setHasInteracted] = useState(false);
     const [stageWidth, setStageWidth] = useState(0);
     const [cardWidth, setCardWidth] = useState(0);
 
     const projects: Project[] = useMemo(() => [
         {
+            slug: 'x-clone',
             title: "X-clone",
             description: t('projects.items.x_clone.description'),
             tags: ["HTML/CSS", "JavaScript", "AI Integration", "Responsive"],
@@ -497,6 +509,7 @@ export function Projects() {
             visual: <XCloneVisual />,
         },
         {
+            slug: 'powershell-empire',
             title: "PowerShell Empire",
             description: t('projects.items.empire.description'),
             tags: ["PowerShell", "Cybersecurity", "Automation", "Scripting"],
@@ -506,6 +519,7 @@ export function Projects() {
             visual: <EmpireTerminal />,
         },
         {
+            slug: 'tank-io',
             title: "Tank.io",
             description: t('projects.items.tank_io.description'),
             tags: ["React", "Canvas API", "Multiplayer", "Game Dev"],
@@ -515,6 +529,7 @@ export function Projects() {
             visual: <TankIoVisual />,
         },
         {
+            slug: 'tomboard',
             title: "TomBoard",
             description: t('projects.items.tomboard.description'),
             tags: ["Rust", "Tauri", "React", "Audio DSP"],
@@ -839,6 +854,17 @@ export function Projects() {
             if (g) g.killTweensOf(bar);
         };
     }, [active, projects.length]);
+
+    // Auto-scroll to projects section when loaded via ?p=slug
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const slug = new URLSearchParams(window.location.search).get('p');
+        if (!slug) return;
+        const timer = setTimeout(() => {
+            sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 800);
+        return () => clearTimeout(timer);
+    }, []);
 
     // Keyboard navigation when section is in viewport
     useEffect(() => {

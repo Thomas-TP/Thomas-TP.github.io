@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Sparkles, X, Send, RotateCcw, Loader2 } from 'lucide-react';
+import { Sparkles, X, Send, RotateCcw, Loader2, Mic, Volume2 } from 'lucide-react';
 
 // Decide how a chatbot link should behave when clicked.
 //   - Hash-only ("#xxx") or same-site hash ("https://thomastp.ch/#xxx"): SPA smooth scroll
@@ -152,6 +152,8 @@ function MdMessage({ content, onAnchorNavigate }: { content: string; onAnchorNav
 }
 
 const ASK_URL = 'https://portfolio-contact.thomastp.workers.dev/ask';
+const STT_URL = 'https://portfolio-contact.thomastp.workers.dev/ask/stt';
+const TTS_URL = 'https://portfolio-contact.thomastp.workers.dev/ask/tts';
 const STORAGE_KEY = 'ask-thomas-history-v1';
 const MAX_INPUT = 500;
 
@@ -179,6 +181,7 @@ function saveHistory(msgs: Msg[]) {
 
 export function AskThomas() {
     const { t, i18n } = useTranslation();
+    const isFr = i18n.language?.startsWith('fr');
     const [open, setOpen] = useState(false);
     const [input, setInput] = useState('');
     const [history, setHistory] = useState<Msg[]>(() => loadHistory());
@@ -186,8 +189,12 @@ export function AskThomas() {
     const [error, setError] = useState<string | null>(null);
     const [footerVisible, setFooterVisible] = useState(false);
     const [hovered, setHovered] = useState(false);
+    const [recording, setRecording] = useState<'idle' | 'recording' | 'transcribing'>('idle');
+    const [ttsPlaying, setTtsPlaying] = useState<number | null>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
+    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+    const audioChunksRef = useRef<Blob[]>([]);
     const labelRef = useRef<HTMLSpanElement>(null);
     const [labelWidth, setLabelWidth] = useState(0);
 
@@ -282,6 +289,65 @@ export function AskThomas() {
         if (typeof localStorage !== 'undefined') localStorage.removeItem(STORAGE_KEY);
     }, []);
 
+    const startRecording = useCallback(async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const recorder = new MediaRecorder(stream);
+            audioChunksRef.current = [];
+            recorder.ondataavailable = (e) => {
+                if (e.data.size > 0) audioChunksRef.current.push(e.data);
+            };
+            recorder.onstop = async () => {
+                setRecording('transcribing');
+                const audioBlob = new Blob(audioChunksRef.current, { type: recorder.mimeType });
+                stream.getTracks().forEach(t => t.stop());
+                try {
+                    const res = await fetch(STT_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': recorder.mimeType },
+                        body: audioBlob,
+                    });
+                    const data = await res.json() as { text?: string; error?: string };
+                    if (!res.ok || data.error) throw new Error(data.error ?? `HTTP ${res.status}`);
+                    if (data.text) send(data.text);
+                } catch (err) {
+                    setError(err instanceof Error ? err.message : 'Transcription failed');
+                }
+                setRecording('idle');
+            };
+            recorder.start();
+            mediaRecorderRef.current = recorder;
+            setRecording('recording');
+        } catch {
+            setError(isFr ? 'Accès micro refusé' : 'Microphone access denied');
+        }
+    }, [isFr, send]);
+
+    const stopRecording = useCallback(() => {
+        mediaRecorderRef.current?.stop();
+    }, []);
+
+    const playTTS = useCallback(async (text: string, index: number) => {
+        if (ttsPlaying !== null) return;
+        setTtsPlaying(index);
+        try {
+            const res = await fetch(TTS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: text.slice(0, 2000) }),
+            });
+            if (!res.ok) throw new Error('TTS failed');
+            const audioBlob = await res.blob();
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            audio.onended = () => { setTtsPlaying(null); URL.revokeObjectURL(audioUrl); };
+            audio.onerror = () => { setTtsPlaying(null); URL.revokeObjectURL(audioUrl); };
+            await audio.play();
+        } catch {
+            setTtsPlaying(null);
+        }
+    }, [ttsPlaying]);
+
     // SPA-aware navigation when the AI emits a hash anchor like #contact:
     // close the panel, update history.hash so the URL reflects the section,
     // and smooth-scroll to it. Avoids a full page reload that would land at the top.
@@ -302,7 +368,6 @@ export function AskThomas() {
         });
     }, []);
 
-    const isFr = i18n.language?.startsWith('fr');
     const placeholder = isFr ? 'Posez une question…' : 'Ask anything…';
     const greeting = isFr
         ? 'Salut ! Je suis l\'assistant de Thomas. Demandez-moi tout ce que vous voulez sur sa stack, ses projets ou son parcours.'
@@ -434,6 +499,17 @@ export function AskThomas() {
                                 >
                                     {m.role === 'user' ? m.content : <MdMessage content={m.content} onAnchorNavigate={handleAnchorNavigate} />}
                                 </div>
+                                {m.role === 'assistant' && (
+                                    <button
+                                        onClick={() => playTTS(m.content, i)}
+                                        disabled={ttsPlaying !== null}
+                                        className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground/50 hover:text-muted-foreground transition-colors disabled:opacity-30 self-start"
+                                        aria-label={isFr ? 'Écouter' : 'Listen'}
+                                    >
+                                        {ttsPlaying === i ? <Loader2 size={10} className="animate-spin" /> : <Volume2 size={10} />}
+                                        <span>{isFr ? 'Écouter' : 'Listen'}</span>
+                                    </button>
+                                )}
                             </div>
                         ))
                     )}
@@ -480,6 +556,19 @@ export function AskThomas() {
                             className="flex-1 bg-transparent border-none outline-none text-sm text-foreground placeholder:text-muted-foreground resize-none max-h-24 leading-relaxed disabled:opacity-50"
                             style={{ scrollbarWidth: 'none' }}
                         />
+                        <button
+                            type="button"
+                            onClick={recording === 'recording' ? stopRecording : startRecording}
+                            disabled={sending || recording === 'transcribing'}
+                            className={`p-2 rounded-lg transition-all ${
+                                recording === 'recording'
+                                    ? 'bg-red-500 text-white animate-pulse'
+                                    : 'text-muted-foreground hover:text-foreground hover:bg-foreground/10'
+                            } disabled:opacity-30 disabled:cursor-not-allowed`}
+                            aria-label={recording === 'recording' ? (isFr ? 'Arrêter' : 'Stop') : (isFr ? 'Entrée vocale' : 'Voice input')}
+                        >
+                            {recording === 'transcribing' ? <Loader2 size={14} className="animate-spin" /> : <Mic size={14} />}
+                        </button>
                         <button
                             type="submit"
                             disabled={sending || !input.trim()}

@@ -109,7 +109,7 @@
     },
     "privacy_modal": {
         "title": "Privacy Policy",
-        "last_updated": "Last updated: March 2026",
+        "last_updated": "Last updated: April 2026",
         "section1_title": "1. Information Collection",
         "section1_text": "This portfolio is a static website. No personal data is stored in any database, no login is required, and no cookies are used for tracking. Anonymous usage statistics are collected via Cloudflare Web Analytics (see Section 4).",
         "section2_title": "2. External Links",
@@ -119,20 +119,20 @@
         "section4_title": "4. Analytics",
         "section4_text": "This site uses Cloudflare Web Analytics, a privacy-friendly, cookie-free service. It collects anonymous data: pages visited, country of origin (IP is not stored), browser type, device type, and Core Web Vitals. No personal data is collected, no cookies are set, and no cross-site tracking is performed.",
         "section5_title": "5. AI Chat Assistant (Ask Thomas)",
-        "section5_text": "This site features an AI assistant powered by Cloudflare Workers AI (Meta Llama 3.3 70B). When you use the chat, your message and the last few turns of conversation are sent to Cloudflare's AI infrastructure for processing. These messages are not stored in any database and are used solely to generate a response. Your conversation history is stored locally in your browser (localStorage) and never transmitted to any server. A per-IP rate limit (12 messages/hour) is enforced via a Cloudflare KV store (IP address, counter, TTL). No personal data beyond the message content itself is collected.",
+        "section5_text": "This site features an AI assistant powered by Cloudflare Workers AI (Meta Llama 3.3 70B). When you use the chat, your message and the last few turns of conversation are sent to Cloudflare's AI infrastructure for processing. These messages are not stored in any database and are used solely to generate a response. Your conversation history is stored locally in your browser (localStorage) and never transmitted to any server. A per-IP rate limit (12 messages/hour) is enforced via a Cloudflare KV store (IP address, counter, TTL). Voice input: if you use the microphone button, your audio is sent to Cloudflare Workers AI (OpenAI Whisper) for transcription — the audio is processed in real time and not stored. Text-to-speech playback uses Cloudflare Workers AI to generate audio from the assistant's response; no personal data is involved. A semantic knowledge base (Cloudflare Vectorize) may augment responses with relevant portfolio content — no personal data is stored in or retrieved from this index. No personal data beyond the message content itself is collected.",
         "github_note": "This website is hosted on GitHub Pages. GitHub may collect technical logs (IP addresses) for security and maintenance purposes. Cloudflare processes anonymous analytics data in accordance with their privacy policy.",
         "close": "Close"
     },
     "terms_modal": {
         "title": "Terms of Service",
-        "last_updated": "Last updated: January 2026",
+        "last_updated": "Last updated: April 2026",
         "section1_title": "1. Introduction",
         "section1_text": "Welcome to my portfolio. By accessing this website, you agree to be bound by these Terms of Service. If you disagree with any part of these terms, please do not use this website.",
         "section2_title": "2. Intellectual Property",
         "section2_text": "The content, design, and specific code implementations displayed on this portfolio are the intellectual property of Thomas P., unless otherwise stated (e.g., open-source libraries used).",
         "section2_sub": "You may view, download, and copy materials for personal, non-commercial use, provided you acknowledge the source.",
         "section3_title": "3. Disclaimer",
-        "section3_text": "The projects and code examples provided here are for educational and demonstration purposes. They are provided \"as is\" without warranty of any kind, express or implied. I am not liable for any damages arising from the use of the code or information on this site. The AI chat assistant (Ask Thomas) generates responses automatically and may contain inaccuracies. Its responses do not constitute professional, legal, or contractual commitments.",
+        "section3_text": "The projects and code examples provided here are for educational and demonstration purposes. They are provided \"as is\" without warranty of any kind, express or implied. I am not liable for any damages arising from the use of the code or information on this site. The AI chat assistant (Ask Thomas) generates responses automatically and may contain inaccuracies. Its responses do not constitute professional, legal, or contractual commitments. Voice features (speech-to-text and text-to-speech) are provided for convenience and may contain transcription or pronunciation errors.",
         "section4_title": "4. Governing Law",
         "section4_text": "These terms shall be governed by and construed in accordance with the laws of Switzerland. Any disputes relating to these terms will be subject to the exclusive jurisdiction of the courts of Geneva.",
         "close": "Accept & Close"

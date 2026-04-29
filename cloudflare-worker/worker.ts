@@ -13,11 +13,13 @@ interface Env {
   TURNSTILE_SECRET_KEY: string;
   RATE_LIMIT: KVNamespace;
   AI: Ai;
+  VECTORIZE?: VectorizeIndex;
 }
 
 // Workers AI binding type — minimal surface used here
 interface Ai {
   run(model: string, input: AiTextInput): Promise<AiTextOutput | ReadableStream>;
+  run(model: string, input: Record<string, unknown>): Promise<unknown>;
 }
 interface AiTextInput {
   messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }>;
@@ -27,6 +29,13 @@ interface AiTextInput {
 }
 interface AiTextOutput {
   response: string;
+}
+
+interface VectorizeIndex {
+  query(vector: number[], options?: { topK?: number; returnMetadata?: 'all' | 'indexed' | 'none' }): Promise<VectorizeMatches>;
+}
+interface VectorizeMatches {
+  matches: Array<{ id: string; score: number; metadata?: Record<string, string> }>;
 }
 
 interface ContactBody {
@@ -410,6 +419,83 @@ That's outside what I can answer for him — Thomas handles compensation discuss
 - Only facts from this prompt, no inventions
 - Concise — short sentences, tight bullets`;
 
+// ── Voice: Speech-to-Text (Whisper) ─────────────────────────────────────────
+
+async function handleSTT(request: Request, env: Env, origin: string): Promise<Response> {
+  const audioData = await request.arrayBuffer();
+  if (!audioData.byteLength) {
+    return jsonResp({ error: 'No audio data' }, 400, origin);
+  }
+
+  const clientIp = request.headers.get('CF-Connecting-IP') ?? 'unknown';
+  const rateKey = `ask:${clientIp}`;
+  const current = parseInt((await env.RATE_LIMIT.get(rateKey)) ?? '0', 10);
+  if (current >= 12) {
+    return jsonResp({ error: 'Rate limit exceeded. Please try again later.' }, 429, origin);
+  }
+
+  if (!env.AI) {
+    return jsonResp({ error: 'AI binding not configured.' }, 500, origin);
+  }
+
+  try {
+    const result = (await env.AI.run('@cf/openai/whisper', {
+      audio: [...new Uint8Array(audioData)],
+    })) as { text: string };
+    return jsonResp({ text: result.text ?? '' }, 200, origin);
+  } catch (err) {
+    console.error('STT error:', err);
+    return jsonResp({ error: 'Transcription failed' }, 500, origin);
+  }
+}
+
+// ── Voice: Text-to-Speech ───────────────────────────────────────────────────
+
+interface TtsBody {
+  text?: string;
+}
+
+async function handleTTS(request: Request, env: Env, origin: string): Promise<Response> {
+  let body: TtsBody;
+  try {
+    body = await request.json<TtsBody>();
+  } catch {
+    return jsonResp({ error: 'Invalid JSON' }, 400, origin);
+  }
+
+  const text = (body.text ?? '').trim();
+  if (!text) return jsonResp({ error: 'Empty text' }, 400, origin);
+  if (text.length > 2000) return jsonResp({ error: 'Text too long (max 2000 chars)' }, 400, origin);
+
+  const clientIp = request.headers.get('CF-Connecting-IP') ?? 'unknown';
+  const rateKey = `tts:${clientIp}`;
+  const current = parseInt((await env.RATE_LIMIT.get(rateKey)) ?? '0', 10);
+  if (current >= 30) {
+    return jsonResp({ error: 'Rate limit exceeded. Please try again later.' }, 429, origin);
+  }
+  await env.RATE_LIMIT.put(rateKey, String(current + 1), { expirationTtl: 3600 });
+
+  if (!env.AI) {
+    return jsonResp({ error: 'AI binding not configured.' }, 500, origin);
+  }
+
+  try {
+    const audio = (await env.AI.run('@cf/myshell-ai/melotts', {
+      text,
+    })) as ReadableStream | ArrayBuffer;
+
+    return new Response(audio as BodyInit, {
+      status: 200,
+      headers: { 'Content-Type': 'audio/wav', ...corsHeaders(origin) },
+    });
+  } catch (err) {
+    console.error('TTS error:', err);
+    return jsonResp({ error: 'Speech synthesis failed' }, 500, origin);
+  }
+}
+
+// ── Ask Thomas (Workers AI) ──────────────────────────────────────────────────
+
 interface AskBody {
   message?: string;
   history?: Array<{ role: 'user' | 'assistant'; content: string }>;
@@ -442,8 +528,30 @@ async function handleAsk(request: Request, env: Env, origin: string): Promise<Re
     return jsonResp({ error: 'AI binding not configured on this Worker.' }, 500, origin);
   }
 
+  // Optional RAG: query Vectorize for relevant knowledge chunks
+  let ragContext = '';
+  if (env.VECTORIZE) {
+    try {
+      const embResult = (await env.AI.run('@cf/baai/bge-base-en-v1.5', {
+        text: [message],
+      })) as { data: number[][] };
+      const matches = await env.VECTORIZE.query(embResult.data[0], { topK: 3, returnMetadata: 'all' });
+      ragContext = matches.matches
+        .filter(m => m.score > 0.65)
+        .map(m => m.metadata?.text ?? '')
+        .filter(Boolean)
+        .join('\n\n');
+    } catch (e) {
+      console.error('RAG query failed (non-fatal):', e);
+    }
+  }
+
+  const systemContent = ragContext
+    ? `${SYSTEM_PROMPT}\n\n# Additional context (knowledge base)\n${ragContext}`
+    : SYSTEM_PROMPT;
+
   const messages = [
-    { role: 'system' as const, content: SYSTEM_PROMPT },
+    { role: 'system' as const, content: systemContent },
     ...history.map(h => ({ role: h.role, content: h.content })),
     { role: 'user' as const, content: message },
   ];
@@ -481,10 +589,10 @@ export default {
       return jsonResp({ error: 'Method not allowed' }, 405, origin);
     }
 
-    // Route: /ask → AI chatbot, default → contact form (legacy unprefixed)
-    if (url.pathname === '/ask') {
-      return handleAsk(request, env, origin);
-    }
+    // Route: /ask/* → AI chatbot + voice, default → contact form
+    if (url.pathname === '/ask') return handleAsk(request, env, origin);
+    if (url.pathname === '/ask/stt') return handleSTT(request, env, origin);
+    if (url.pathname === '/ask/tts') return handleTTS(request, env, origin);
 
     let body: ContactBody;
     try {
