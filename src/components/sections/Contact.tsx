@@ -183,7 +183,7 @@ export function Contact() {
 
         const ctx = gsap.context(() => {
             const trigger = svg;
-            const start = 'bottom 100%';
+            const start = 'top 95%';
 
             // Fade in SVG
             gsap.fromTo(svg, { opacity: 0 }, {
@@ -264,7 +264,7 @@ export function Contact() {
         const ctx = gsap.context(() => {
             gsap.fromTo(labels, { opacity: 0 }, {
                 opacity: 1, duration: 0.3, stagger: 0.25, delay: 0.9,
-                scrollTrigger: { trigger: svg, start: 'bottom 100%', once: true, toggleActions: 'play none none none' },
+                scrollTrigger: { trigger: svg, start: 'top 95%', once: true, toggleActions: 'play none none none' },
             });
         }, el);
         return () => ctx.revert();
