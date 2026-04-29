@@ -185,7 +185,7 @@ export function Navbar() {
         <>
             {/* TOP NAVBAR - CSS Transition for Performance */}
             <header
-                className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 glass border-b border-border/10 backdrop-blur-md transition-all duration-500 ease-in-out transform will-change-transform ${isScrolled ? '-translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100 pointer-events-auto'}`}
+                className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 glass border-b border-border/50 shadow-lg shadow-black/5 dark:shadow-black/20 transition-all duration-500 ease-in-out transform will-change-transform ${isScrolled ? '-translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100 pointer-events-auto'}`}
             >
                 <div className="flex gap-1">
                     {navItems.map((item) => (
