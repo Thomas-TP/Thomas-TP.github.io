@@ -75,10 +75,10 @@ const BentoGridItem = ({
             {header}
             <div className="group-hover/bento:translate-x-2 transition duration-200">
                 {icon}
-                <div className="font-bold font-sans text-foreground mb-2 mt-2">
+                <div className="font-bold text-foreground mb-2 mt-2">
                     {title}
                 </div>
-                <div className="font-sans font-normal text-muted-foreground text-xs">
+                <div className="font-normal text-muted-foreground text-xs">
                     {description}
                 </div>
             </div>
@@ -154,7 +154,7 @@ function WebDevBlock() {
 
                             aria-label={t('bento.web_dev.searching')}
                             placeholder={t('bento.web_dev.searching')}
-                            className="flex-1 bg-transparent border-none outline-none text-[10px] text-foreground placeholder:text-muted-foreground h-full font-mono"
+                            className="flex-1 bg-transparent border-none outline-none text-[10px] text-foreground placeholder:text-muted-foreground h-full"
                         />
                         {isSearching && <Loader size={10} className="text-white/50 animate-spin" />}
                     </form>
@@ -183,7 +183,7 @@ function WebDevBlock() {
                     ) : (
                         // Search Results State
                         <div className="flex flex-col gap-3">
-                            <div className="text-[10px] text-muted-foreground font-mono mb-1">
+                            <div className="text-[10px] text-muted-foreground mb-1">
                                 {isSearching ? t('bento.web_dev.searching') : `${results.length} results found for "${query}"`}
                             </div>
 
@@ -288,13 +288,13 @@ function TerminalBlock() {
                     <div className="w-2 h-2 rounded-full bg-border" />
                     <div className="w-2 h-2 rounded-full bg-border" />
                     <div className="w-2 h-2 rounded-full bg-border" />
-                    <div className="ml-2 text-[8px] font-mono text-muted-foreground tracking-wide">bash — 80x24</div>
+                    <div className="ml-2 text-[8px] text-muted-foreground tracking-wide">bash — 80x24</div>
                 </div>
 
                 {/* Terminal Content */}
                 <div
                     ref={containerRef}
-                    className="flex-1 p-3 font-mono text-[10px] text-muted-foreground overflow-y-auto cursor-text"
+                    className="flex-1 p-3 text-[10px] text-muted-foreground overflow-y-auto cursor-text"
                     style={{ scrollbarWidth: 'none' }}
                 >
                     {history.map((line, i) => (
@@ -519,7 +519,7 @@ function IoTBlock() {
                             <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 16.5 8 4.5 4.5 0 0 0 12 3.5 4.5 4.5 0 0 0 7.5 8c0 1.42.7 2.61 1.91 3.5A2.51 2.51 0 0 1 10.9 14" />
                         </svg>
                     </div>
-                    <div className="mt-1 text-[8px] font-mono text-muted-foreground">{lightOn ? `${brightness}%` : 'OFF'}</div>
+                    <div className="mt-1 text-[8px] text-muted-foreground">{lightOn ? `${brightness}%` : 'OFF'}</div>
                 </div>
 
                 {/* Smart TV - Detailed */}
@@ -542,7 +542,7 @@ function IoTBlock() {
                                 </div>
                             </>
                         ) : (
-                            <div className="text-[6px] text-muted-foreground/30 font-mono">SONY</div>
+                            <div className="text-[6px] text-muted-foreground/30">SONY</div>
                         )}
                     </div>
                     <div className="mt-1.5 w-4 h-0.5 bg-border rounded-full" />
@@ -571,7 +571,7 @@ function IoTBlock() {
                             <div className="w-0.5 h-0.5 rounded-full bg-foreground/30" />
                         </div>
                     </div>
-                    <div className="mt-1 text-[8px] font-mono" style={{ color: ovenOn ? '#f87171' : 'rgb(var(--muted-foreground))' }}>
+                    <div className="mt-1 text-[8px]" style={{ color: ovenOn ? '#f87171' : 'rgb(var(--muted-foreground))' }}>
                         {ovenOn ? '200°C' : 'OFF'}
                     </div>
                 </div>
@@ -616,7 +616,7 @@ function GenevaStudentBlock() {
             title: t('bento.student.school_entry'),
             subtitle: t('bento.student.start'),
             icon: <div className="w-8 h-8 rounded-full bg-background flex items-center justify-center border border-border">
-                <span className="font-mono text-xs font-bold text-foreground">01</span>
+                <span className="text-xs font-bold text-foreground">01</span>
             </div>
         },
         2025: {
@@ -669,15 +669,15 @@ function GenevaStudentBlock() {
                             </span>
                             <span
                                 key={`sub-${year}`}
-                                className="text-[10px] text-muted-foreground font-mono"
+                                className="text-[10px] text-muted-foreground"
                             >
                                 {stages[year as keyof typeof stages].subtitle}
                             </span>
                         </div>
                     </div>
                     <div className="flex flex-col items-end">
-                        <span className="text-2xl font-bold text-foreground font-mono">{year}</span>
-                        <span className="text-[9px] text-muted-foreground font-mono tracking-widest">TIMELINE</span>
+                        <span className="text-2xl font-bold text-foreground">{year}</span>
+                        <span className="text-[9px] text-muted-foreground tracking-widest">TIMELINE</span>
                     </div>
                 </div>
 
@@ -720,7 +720,7 @@ function GenevaStudentBlock() {
                             ))}
                         </div>
                     </div>
-                    <div className="flex justify-between text-[9px] font-mono text-muted-foreground">
+                    <div className="flex justify-between text-[9px] text-muted-foreground">
                         <span>START</span>
                         <span>DIPLOMA</span>
                     </div>

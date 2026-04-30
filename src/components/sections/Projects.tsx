@@ -158,7 +158,7 @@ const EmpireTerminal = () => {
     }, [step, isVisible]);
 
     return (
-        <div ref={containerRef} className="relative w-full h-full bg-black flex flex-col p-4 font-mono text-[10px] sm:text-xs overflow-hidden leading-relaxed text-left">
+        <div ref={containerRef} className="relative w-full h-full bg-black flex flex-col p-4 text-[10px] sm:text-xs overflow-hidden leading-relaxed text-left">
             {/* Terminal Header */}
             <div className="flex gap-1.5 mb-2 opacity-50 shrink-0">
                 <div className="w-2.5 h-2.5 rounded-full bg-white/25" />
