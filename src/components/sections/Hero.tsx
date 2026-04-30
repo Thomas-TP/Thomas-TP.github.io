@@ -191,20 +191,33 @@ export function Hero() {
                     </div>
 
                     <div className="shrink-0">
-                        <div className="relative w-44 h-44 md:w-56 md:h-56 lg:w-64 lg:h-64">
-                            <div className="absolute inset-0 rounded-full bg-primary/10 blur-2xl scale-110" />
-                            <div className="absolute inset-[-6px] rounded-full border border-dashed border-border/40 animate-spin-slow" />
-                            <div className="relative w-full h-full rounded-full ring-1 ring-border overflow-hidden bg-secondary/30">
+                        <div className="group relative w-44 h-44 md:w-56 md:h-56 lg:w-64 lg:h-64">
+                            <div className="absolute inset-0 rounded-full bg-primary/10 blur-2xl scale-110 transition-all duration-500 group-hover:scale-125 group-hover:bg-primary/15 group-focus-within:scale-125 group-focus-within:bg-primary/15" />
+                            <div className="absolute inset-[-6px] rounded-full border border-dashed border-border/40 animate-spin-slow transition-opacity duration-500 group-hover:opacity-20 group-focus-within:opacity-20" />
+                            <div className="absolute inset-[-12px] rounded-full border border-primary/0 transition-all duration-500 group-hover:inset-[-18px] group-hover:border-primary/20 group-focus-within:inset-[-18px] group-focus-within:border-primary/20" />
+                            <div className="relative w-full h-full rounded-full ring-1 ring-border overflow-hidden bg-secondary/30 shadow-2xl shadow-primary/10">
                                 <img
-                                    src="/images/memoji-nobg.webp"
+                                    src="/images/photo.webp"
                                     alt="Thomas P."
                                     width={256}
                                     height={256}
-                                    className="w-full h-full object-cover object-center scale-110"
+                                    className="absolute inset-0 w-full h-full object-cover object-center transition-all duration-500 ease-out group-hover:scale-105 group-hover:opacity-30 group-hover:blur-[2px] group-focus-within:scale-105 group-focus-within:opacity-30 group-focus-within:blur-[2px]"
                                     loading="eager"
                                     decoding="sync"
                                     fetchPriority="high"
                                 />
+                                <img
+                                    src="/images/memoji-nobg.webp"
+                                    alt=""
+                                    width={256}
+                                    height={256}
+                                    className="absolute inset-0 w-full h-full object-cover object-center scale-75 opacity-0 translate-y-8 rotate-[-6deg] transition-all duration-500 ease-out group-hover:scale-110 group-hover:opacity-100 group-hover:translate-y-0 group-hover:rotate-0 group-focus-within:scale-110 group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:rotate-0"
+                                    loading="lazy"
+                                    decoding="async"
+                                    fetchPriority="low"
+                                    aria-hidden="true"
+                                />
+                                <div className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-t from-background/20 via-transparent to-primary/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100" />
                             </div>
                         </div>
                     </div>
