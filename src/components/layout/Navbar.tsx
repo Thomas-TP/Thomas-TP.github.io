@@ -73,12 +73,12 @@ function NavLink({ item, isActive, forceShowLabel }: { item: NavItem; isActive?:
             onClick={handleClick}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className={`relative flex items-center justify-center p-2 md:p-3 rounded-full transition-all duration-300 ${isActive ? 'bg-foreground/10 text-foreground shadow-[0_0_20px_rgba(255,255,255,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.1)] shadow-black/5' : 'text-muted-foreground hover:text-foreground hover:bg-foreground/10'}`}
+            className={`relative flex items-center justify-center p-2 md:p-2.5 rounded-full transition-all duration-300 ${isActive ? 'bg-foreground/10 text-foreground shadow-[0_0_20px_rgba(255,255,255,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.1)] shadow-black/5' : 'text-muted-foreground hover:text-foreground hover:bg-foreground/10'}`}
             aria-label={item.label}
         >
             <span
                 ref={labelRef}
-                className="overflow-hidden whitespace-nowrap font-medium text-sm mr-2 hidden md:block"
+                className="overflow-hidden whitespace-nowrap font-medium text-xs mr-2 hidden md:block"
                 style={{
                     width: showLabel ? `${naturalWidth}px` : '0px',
                     opacity: showLabel ? 1 : 0,
@@ -87,7 +87,7 @@ function NavLink({ item, isActive, forceShowLabel }: { item: NavItem; isActive?:
             >
                 {item.label}
             </span>
-            <item.icon size={20} className="md:w-6 md:h-6" strokeWidth={1.5} />
+            <item.icon size={20} className="md:w-5 md:h-5" strokeWidth={1.5} />
         </a>
     );
 }
@@ -185,16 +185,16 @@ export function Navbar() {
         <>
             {/* TOP NAVBAR - CSS Transition for Performance */}
             <header
-                className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 glass border-b border-border/50 shadow-lg shadow-black/5 dark:shadow-black/20 transition-all duration-500 ease-in-out transform will-change-transform ${isScrolled ? '-translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100 pointer-events-auto'}`}
+                className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 glass border-b border-border/50 shadow-lg shadow-black/5 dark:shadow-black/20 transition-all duration-500 ease-in-out transform will-change-transform ${isScrolled ? '-translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100 pointer-events-auto'}`}
             >
-                <div className="flex gap-1">
+                <div className="flex gap-0.5">
                     {navItems.map((item) => (
                         <NavLink key={item.id} item={item} isActive={activeSection === item.id} forceShowLabel={isDesktop} />
                     ))}
                 </div>
 
-                <div className="flex items-center gap-2">
-                    <div className="hidden md:flex gap-1">
+                <div className="flex items-center gap-1.5">
+                    <div className="hidden md:flex gap-0.5">
                         {socialItems.map((item) => (
                             <NavLink key={item.id} item={item} forceShowLabel={isDesktop} />
                         ))}

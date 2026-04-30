@@ -149,11 +149,11 @@ export function Hero() {
                 <div className="w-full flex flex-col-reverse md:flex-row items-center justify-center gap-10 md:gap-10 lg:gap-12">
 
                     <div className="max-w-xl text-center md:text-left">
-                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-6 text-foreground pb-2">
+                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-foreground pb-2">
                             <GlitchText text={t('hero.name')} />
                         </h1>
 
-                        <p className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed mb-10 font-light mx-auto md:mx-0">
+                        <p className="text-base md:text-lg text-muted-foreground max-w-xl leading-relaxed mb-10 font-light mx-auto md:mx-0">
                             {t('hero.role_prefix')} <span className="text-foreground font-medium">{t('hero.school')}</span>.
                             <br className="hidden md:block" />
                             <span className="text-foreground font-medium">

@@ -112,8 +112,8 @@ function MdMessage({ content, onAnchorNavigate }: { content: string; onAnchorNav
 
         // Headers
         if (line.startsWith('### ')) { nodes.push(<h3 key={key++} className="font-semibold mt-2 mb-0.5 first:mt-0">{renderInline(line.slice(4), onAnchorNavigate)}</h3>); i++; continue; }
-        if (line.startsWith('## ')) { nodes.push(<h2 key={key++} className="font-bold text-base mt-3 mb-1 first:mt-0">{renderInline(line.slice(3), onAnchorNavigate)}</h2>); i++; continue; }
-        if (line.startsWith('# ')) { nodes.push(<h2 key={key++} className="font-bold text-base mt-3 mb-1 first:mt-0">{renderInline(line.slice(2), onAnchorNavigate)}</h2>); i++; continue; }
+        if (line.startsWith('## ')) { nodes.push(<h2 key={key++} className="font-bold text-sm mt-3 mb-1 first:mt-0">{renderInline(line.slice(3), onAnchorNavigate)}</h2>); i++; continue; }
+        if (line.startsWith('# ')) { nodes.push(<h2 key={key++} className="font-bold text-sm mt-3 mb-1 first:mt-0">{renderInline(line.slice(2), onAnchorNavigate)}</h2>); i++; continue; }
 
         // Blockquote
         if (line.startsWith('> ')) { nodes.push(<blockquote key={key++} className="border-l-2 border-foreground/20 pl-3 italic text-foreground/70 my-1">{renderInline(line.slice(2), onAnchorNavigate)}</blockquote>); i++; continue; }
@@ -148,7 +148,7 @@ function MdMessage({ content, onAnchorNavigate }: { content: string; onAnchorNav
         i++;
     }
 
-    return <div className="text-sm leading-relaxed">{nodes}</div>;
+    return <div className="text-xs leading-relaxed">{nodes}</div>;
 }
 
 const ASK_URL = 'https://portfolio-contact.thomastp.workers.dev/ask';
@@ -410,7 +410,7 @@ export function AskThomas() {
                     <Sparkles size={16} className="shrink-0" />
                     <span
                         ref={labelRef}
-                        className="whitespace-nowrap font-medium text-sm pl-2"
+                        className="whitespace-nowrap font-medium text-xs pl-2"
                         style={{
                             opacity: hovered ? 1 : 0,
                             transition: 'opacity 200ms ease',
@@ -437,8 +437,8 @@ export function AskThomas() {
                             <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-card" />
                         </div>
                         <div>
-                            <div className="text-sm font-bold text-foreground leading-tight">Ask Thomas</div>
-                            <div className="text-[10px] text-muted-foreground font-mono uppercase tracking-widest">
+                            <div className="text-xs font-bold text-foreground leading-tight">Ask Thomas</div>
+                            <div className="text-[8px] text-muted-foreground font-mono uppercase tracking-wide">
                                 {isFr ? 'Propulsé par Llama 3 · Cloudflare AI' : 'Powered by Llama 3 · Cloudflare AI'}
                             </div>
                         </div>
@@ -468,7 +468,7 @@ export function AskThomas() {
                 <div ref={scrollRef} className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 space-y-4 custom-scrollbar" onWheel={e => e.stopPropagation()}>
                     {history.length === 0 ? (
                         <div className="flex flex-col gap-4">
-                            <div className="text-sm text-muted-foreground leading-relaxed">{greeting}</div>
+                            <div className="text-xs text-muted-foreground leading-relaxed">{greeting}</div>
                             <div className="flex flex-col gap-2">
                                 <div className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-mono">
                                     {isFr ? 'Suggestions' : 'Try asking'}
@@ -477,7 +477,7 @@ export function AskThomas() {
                                     <button
                                         key={s}
                                         onClick={() => send(s)}
-                                        className="text-left text-sm px-3 py-2 rounded-lg border border-border bg-foreground/[0.02] hover:bg-foreground/[0.06] hover:border-foreground/20 text-foreground transition-colors"
+                                        className="text-left text-xs px-3 py-2 rounded-lg border border-border bg-foreground/[0.02] hover:bg-foreground/[0.06] hover:border-foreground/20 text-foreground transition-colors"
                                     >
                                         {s}
                                     </button>
@@ -491,7 +491,7 @@ export function AskThomas() {
                                 className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
                             >
                                 <div
-                                    className={`max-w-[85%] px-3.5 py-2 rounded-2xl text-sm leading-relaxed ${
+                                    className={`max-w-[85%] px-3.5 py-2 rounded-2xl text-xs leading-relaxed ${
                                         m.role === 'user'
                                             ? 'bg-foreground text-background rounded-br-sm whitespace-pre-wrap'
                                             : 'bg-foreground/5 border border-border text-foreground rounded-bl-sm prose-chat'
@@ -553,7 +553,7 @@ export function AskThomas() {
                             placeholder={placeholder}
                             disabled={sending}
                             aria-label="Message"
-                            className="flex-1 bg-transparent border-none outline-none text-sm text-foreground placeholder:text-muted-foreground resize-none max-h-24 leading-relaxed disabled:opacity-50"
+                            className="flex-1 bg-transparent border-none outline-none text-xs text-foreground placeholder:text-muted-foreground resize-none max-h-24 leading-relaxed disabled:opacity-50"
                             style={{ scrollbarWidth: 'none' }}
                         />
                         <button

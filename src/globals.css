@@ -98,6 +98,10 @@
   border-color: rgb(var(--border));
 }
 
+html {
+  font-size: 15px;
+}
+
 /* Hero 3D particles: start invisible, fade in when Three.js is ready */
 .hero3d-fade {
   opacity: 0;
