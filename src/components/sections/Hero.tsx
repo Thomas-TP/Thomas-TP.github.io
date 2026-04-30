@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense, type CSSProperties, type PointerEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GlitchText } from '@/components/ui/glitch-text';
 import { loadGsap } from '@/lib/gsap-init';
@@ -78,6 +78,7 @@ export function Hero() {
     const sectionRef = useRef<HTMLElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const scrollIndicatorRef = useRef<HTMLDivElement>(null);
+    const avatarRef = useRef<HTMLDivElement>(null);
 
     // Magnetic buttons via GSAP quickTo
     const cvBtnRef = useMagnetic(0.3);
@@ -137,6 +138,42 @@ export function Hero() {
 
     const roles = t('hero.roles', { returnObjects: true }) as string[];
     const typedRole = useTypingAnimation(Array.isArray(roles) ? roles : []);
+    const avatarStyle = {
+        '--avatar-x': '50%',
+        '--avatar-y': '42%',
+        '--avatar-rx': '0deg',
+        '--avatar-ry': '0deg',
+        '--avatar-tx': '0px',
+        '--avatar-ty': '0px',
+    } as CSSProperties;
+
+    const handleAvatarMove = (event: PointerEvent<HTMLDivElement>) => {
+        const el = avatarRef.current;
+        if (!el || event.pointerType === 'touch') return;
+        const rect = el.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width;
+        const y = (event.clientY - rect.top) / rect.height;
+        const clampedX = Math.min(Math.max(x, 0), 1);
+        const clampedY = Math.min(Math.max(y, 0), 1);
+
+        el.style.setProperty('--avatar-x', `${Math.round(clampedX * 100)}%`);
+        el.style.setProperty('--avatar-y', `${Math.round(clampedY * 100)}%`);
+        el.style.setProperty('--avatar-rx', `${((0.5 - clampedY) * 13).toFixed(2)}deg`);
+        el.style.setProperty('--avatar-ry', `${((clampedX - 0.5) * 15).toFixed(2)}deg`);
+        el.style.setProperty('--avatar-tx', `${((clampedX - 0.5) * 10).toFixed(2)}px`);
+        el.style.setProperty('--avatar-ty', `${((clampedY - 0.5) * 10).toFixed(2)}px`);
+    };
+
+    const resetAvatar = () => {
+        const el = avatarRef.current;
+        if (!el) return;
+        el.style.setProperty('--avatar-x', '50%');
+        el.style.setProperty('--avatar-y', '42%');
+        el.style.setProperty('--avatar-rx', '0deg');
+        el.style.setProperty('--avatar-ry', '0deg');
+        el.style.setProperty('--avatar-tx', '0px');
+        el.style.setProperty('--avatar-ty', '0px');
+    };
 
     return (
         <>
@@ -191,17 +228,24 @@ export function Hero() {
                     </div>
 
                     <div className="shrink-0">
-                        <div className="group relative w-44 h-44 md:w-56 md:h-56 lg:w-64 lg:h-64">
-                            <div className="absolute inset-0 rounded-full bg-primary/10 blur-2xl scale-110 transition-all duration-500 group-hover:scale-125 group-hover:bg-primary/15 group-focus-within:scale-125 group-focus-within:bg-primary/15" />
-                            <div className="absolute inset-[-6px] rounded-full border border-dashed border-border/40 animate-spin-slow transition-opacity duration-500 group-hover:opacity-20 group-focus-within:opacity-20" />
-                            <div className="absolute inset-[-12px] rounded-full border border-primary/0 transition-all duration-500 group-hover:inset-[-18px] group-hover:border-primary/20 group-focus-within:inset-[-18px] group-focus-within:border-primary/20" />
-                            <div className="relative w-full h-full rounded-full ring-1 ring-border overflow-hidden bg-secondary/30 shadow-2xl shadow-primary/10">
+                        <div
+                            ref={avatarRef}
+                            className="hero-avatar-stage group relative w-48 h-52 md:w-60 md:h-[16.5rem] lg:w-72 lg:h-[19.5rem]"
+                            style={avatarStyle}
+                            onPointerMove={handleAvatarMove}
+                            onPointerLeave={resetAvatar}
+                            onPointerCancel={resetAvatar}
+                        >
+                            <div className="hero-avatar-shadow" />
+                            <div className="hero-avatar-orbit hero-avatar-orbit-a" />
+                            <div className="hero-avatar-orbit hero-avatar-orbit-b" />
+                            <div className="hero-avatar-card">
                                 <img
                                     src="/images/photo.webp"
                                     alt="Thomas P."
                                     width={256}
                                     height={256}
-                                    className="absolute inset-0 w-full h-full object-cover object-center transition-all duration-500 ease-out group-hover:scale-105 group-hover:opacity-30 group-hover:blur-[2px] group-focus-within:scale-105 group-focus-within:opacity-30 group-focus-within:blur-[2px]"
+                                    className="hero-avatar-photo"
                                     loading="eager"
                                     decoding="sync"
                                     fetchPriority="high"
@@ -211,13 +255,14 @@ export function Hero() {
                                     alt=""
                                     width={256}
                                     height={256}
-                                    className="absolute inset-0 w-full h-full object-cover object-center scale-75 opacity-0 translate-y-8 rotate-[-6deg] transition-all duration-500 ease-out group-hover:scale-110 group-hover:opacity-100 group-hover:translate-y-0 group-hover:rotate-0 group-focus-within:scale-110 group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:rotate-0"
+                                    className="hero-avatar-memoji"
                                     loading="lazy"
                                     decoding="async"
                                     fetchPriority="low"
                                     aria-hidden="true"
                                 />
-                                <div className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-t from-background/20 via-transparent to-primary/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100" />
+                                <div className="hero-avatar-glare" />
+                                <div className="hero-avatar-depth" />
                             </div>
                         </div>
                     </div>

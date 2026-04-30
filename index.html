@@ -26,6 +26,11 @@
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
 
+    <!-- Anti-FOUC: apply theme class before the first paint -->
+    <script>
+      (function(){try{var s=localStorage.getItem('vite-ui-theme');var t=s==='dark'||s==='light'?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.classList.add(t);document.documentElement.style.backgroundColor=t==='dark'?'#000000':'#ffffff';}catch(e){}})()
+    </script>
+
     <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" media="(prefers-color-scheme: dark)" />
     <link rel="icon" type="image/svg+xml" href="/icons/favicon-light.svg" media="(prefers-color-scheme: light)" />
@@ -67,8 +72,10 @@
     <!-- Critical inline CSS for skeleton (renders before external CSS loads) -->
     <style>
       /* Prevent background flash while JS loads */
-      body{background:#ffffff;margin:0}
-      .dark body{background:#09090b}
+      html,body,#root{min-height:100%;background:#ffffff;margin:0}
+      .dark,.dark body,.dark #root{background:#000000}
+      html{color-scheme:light}
+      html.dark{color-scheme:dark}
     </style>
 
     <!-- Google Fonts: Bruno Ace — load async, never block rendering -->
@@ -76,9 +83,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
     <noscript><link href="https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap" rel="stylesheet" /></noscript>
 
-    <!-- Anti-FOUC: apply theme class before render + force scroll to top on every load -->
+    <!-- Force scroll to top on every load -->
     <script>
-      (function(){try{var s=localStorage.getItem('vite-ui-theme');var t=s==='dark'||s==='light'?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.classList.add(t);}catch(e){}})()
       if('scrollRestoration' in history) history.scrollRestoration='manual';
       window.scrollTo(0,0);
     </script>
@@ -266,8 +272,6 @@
     </script>
   </head>
   <body>
-    <!-- LCP prerender: stays visible until React mounts, avoids re-triggering LCP -->
-    <img id="lcp-prerender" src="/images/photo.webp" alt="" width="256" height="256" fetchpriority="high" decoding="sync" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(1.1);width:176px;height:176px;border-radius:9999px;object-fit:cover;z-index:9999;pointer-events:none"/>
     <div id="root"></div>
   </body>
 </html>
