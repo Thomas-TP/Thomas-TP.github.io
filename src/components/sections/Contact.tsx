@@ -180,11 +180,10 @@ export function Contact() {
     useEffect(() => {
         const svg = svgRef.current;
         if (!svg || prefersReduced) return;
+        const trigger = labelContainerRef.current ?? svg;
+        const start = 'top bottom-=48px';
 
         const ctx = gsap.context(() => {
-            const trigger = svg;
-            const start = 'top 95%';
-
             // Fade in SVG
             gsap.fromTo(svg, { opacity: 0 }, {
                 opacity: 1, duration: 0.4,
@@ -252,7 +251,18 @@ export function Contact() {
             });
         }, svg);
 
-        return () => ctx.revert();
+        const refresh = () => ScrollTrigger.refresh();
+        const raf = requestAnimationFrame(refresh);
+        const timeout = window.setTimeout(refresh, 250);
+        void document.fonts?.ready.then(refresh);
+        window.addEventListener('load', refresh, { once: true });
+
+        return () => {
+            cancelAnimationFrame(raf);
+            window.clearTimeout(timeout);
+            window.removeEventListener('load', refresh);
+            ctx.revert();
+        };
     }, [prefersReduced]);
 
     // City HTML labels
@@ -264,7 +274,7 @@ export function Contact() {
         const ctx = gsap.context(() => {
             gsap.fromTo(labels, { opacity: 0 }, {
                 opacity: 1, duration: 0.3, stagger: 0.25, delay: 0.9,
-                scrollTrigger: { trigger: svg, start: 'top 95%', once: true, toggleActions: 'play none none none' },
+                scrollTrigger: { trigger: el, start: 'top bottom-=48px', once: true, toggleActions: 'play none none none' },
             });
         }, el);
         return () => ctx.revert();
@@ -485,7 +495,7 @@ export function Contact() {
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
                         className="w-full block -mt-px"
-                        style={{ overflow: 'visible', opacity: 0 }}
+                        style={{ overflow: 'visible', opacity: prefersReduced ? 1 : 0 }}
                         role="img"
                         aria-label={t('service_area.map_alt')}
                     >
