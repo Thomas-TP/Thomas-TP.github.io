@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
 const STORAGE_KEY = 'boot-played';
-const TOTAL_MS = 2200;
-const EXIT_MS = 820;
+const TOTAL_MS = 650;
+const EXIT_MS = 220;
 
 interface BootSequenceProps {
   onExitStart?: () => void;
@@ -181,7 +181,7 @@ export function BootSequence({ onExitStart, onComplete }: BootSequenceProps) {
             strokeWidth="6"
             strokeLinecap="round"
             strokeDasharray="30"
-            strokeDashoffset={Math.max(0, 30 - Math.max(0, counter - 30) / 50 * 30)}
+            strokeDashoffset={Math.max(0, 30 - (Math.max(0, counter - 30) / 50) * 30)}
             style={{ transition: 'stroke-dashoffset 80ms linear' }}
           />
         </svg>
@@ -193,9 +193,7 @@ export function BootSequence({ onExitStart, onComplete }: BootSequenceProps) {
           {String(counter).padStart(3, '0')}
           <span className="text-muted-foreground">%</span>
         </div>
-        <div className="text-[10px] uppercase tracking-[0.5em] text-muted-foreground">
-          {status}
-        </div>
+        <div className="text-[10px] uppercase tracking-[0.5em] text-muted-foreground">{status}</div>
       </div>
 
       {/* Loading bar */}

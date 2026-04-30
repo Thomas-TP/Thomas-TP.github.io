@@ -1,6 +1,7 @@
-import { defineConfig, presetWind } from 'unocss';
+import type { UserConfig } from '@unocss/core';
+import { presetWind } from '@unocss/preset-wind';
 
-export default defineConfig({
+export default {
   content: {
     filesystem: ['./src/**/*.{html,js,ts,jsx,tsx}'],
   },
@@ -53,7 +54,9 @@ export default defineConfig({
     },
   },
   shortcuts: {
-    'glass': 'bg-white/70 backdrop-blur-md border border-black/5 dark:bg-black/40 dark:border-white/10 shadow-sm dark:shadow-none',
-    'text-gradient': 'bg-clip-text text-transparent bg-gradient-to-br from-black via-black/80 to-black/40 dark:from-white dark:via-white/80 dark:to-white/40',
+    glass:
+      'bg-white/70 backdrop-blur-md border border-black/5 dark:bg-black/40 dark:border-white/10 shadow-sm dark:shadow-none',
+    'text-gradient':
+      'bg-clip-text text-transparent bg-gradient-to-br from-black via-black/80 to-black/40 dark:from-white dark:via-white/80 dark:to-white/40',
   },
-});
+} satisfies UserConfig;

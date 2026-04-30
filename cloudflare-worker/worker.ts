@@ -32,7 +32,10 @@ interface AiTextOutput {
 }
 
 interface VectorizeIndex {
-  query(vector: number[], options?: { topK?: number; returnMetadata?: 'all' | 'indexed' | 'none' }): Promise<VectorizeMatches>;
+  query(
+    vector: number[],
+    options?: { topK?: number; returnMetadata?: 'all' | 'indexed' | 'none' }
+  ): Promise<VectorizeMatches>;
 }
 interface VectorizeMatches {
   matches: Array<{ id: string; score: number; metadata?: Record<string, string> }>;
@@ -46,28 +49,49 @@ interface ContactBody {
   theme?: string;
   turnstileToken?: string;
   companyWebsite?: string; // Honeypot field
-  duration?: number;       // Time taken to fill form in ms
+  duration?: number; // Time taken to fill form in ms
 }
 
 type Lang = 'en' | 'fr';
 type Theme = 'dark' | 'light';
 
+const MAX_CONTACT_NAME = 120;
+const MAX_CONTACT_EMAIL = 254;
+const MAX_CONTACT_MESSAGE = 4000;
+const MAX_STT_BYTES = 5 * 1024 * 1024;
+const ASK_LIMIT_PER_HOUR = 12;
+
+async function incrementRateLimit(
+  kv: KVNamespace,
+  key: string,
+  limit: number,
+  ttlSeconds = 3600
+): Promise<boolean> {
+  const current = parseInt((await kv.get(key)) ?? '0', 10);
+  if (current >= limit) return false;
+  await kv.put(key, String(current + 1), { expirationTtl: ttlSeconds });
+  return true;
+}
+
 // ── i18n ─────────────────────────────────────────────────────────────────────
 
-const i18n: Record<Lang, {
-  subject: string;
-  title: string;
-  subtitle: (name: string) => string;
-  yourMessage: string;
-  responseTime: string;
-  responseValue: string;
-  connect: string;
-  footer: string;
-}> = {
+const i18n: Record<
+  Lang,
+  {
+    subject: string;
+    title: string;
+    subtitle: (name: string) => string;
+    yourMessage: string;
+    responseTime: string;
+    responseValue: string;
+    connect: string;
+    footer: string;
+  }
+> = {
   en: {
     subject: 'Message received — thomastp.ch',
     title: 'Message received',
-    subtitle: (name) => `Hi ${name}, thanks for getting in touch. I'll reply as soon as possible.`,
+    subtitle: name => `Hi ${name}, thanks for getting in touch. I'll reply as soon as possible.`,
     yourMessage: 'Your message',
     responseTime: 'Typical response time',
     responseValue: 'Within 24 – 48 hours',
@@ -77,7 +101,8 @@ const i18n: Record<Lang, {
   fr: {
     subject: 'Message reçu — thomastp.ch',
     title: 'Message reçu',
-    subtitle: (name) => `Bonjour ${name}, merci de m'avoir contacté. Je vous répondrai dans les plus brefs délais.`,
+    subtitle: name =>
+      `Bonjour ${name}, merci de m'avoir contacté. Je vous répondrai dans les plus brefs délais.`,
     yourMessage: 'Votre message',
     responseTime: 'Délai de réponse habituel',
     responseValue: '24 à 48 heures',
@@ -105,33 +130,63 @@ function getReversedIconImg(icon: string, theme: Theme, size = 20): string {
 // ── Theme palettes ────────────────────────────────────────────────────────────
 
 interface Palette {
-  bg: string; card: string; header: string;
-  border: string; borderInner: string;
-  text: string; muted: string; subtle: string;
-  blockBg: string; blockBorder: string;
-  btnBg: string; btnText: string; btnBorder: string;
-  divider: string; accentBorder: string;
-  ctaBg: string; ctaText: string;
+  bg: string;
+  card: string;
+  header: string;
+  border: string;
+  borderInner: string;
+  text: string;
+  muted: string;
+  subtle: string;
+  blockBg: string;
+  blockBorder: string;
+  btnBg: string;
+  btnText: string;
+  btnBorder: string;
+  divider: string;
+  accentBorder: string;
+  ctaBg: string;
+  ctaText: string;
 }
 
 const darkPalette: Palette = {
-  bg: '#000000', card: '#111111', header: '#111111',
-  border: '#222222', borderInner: '#1e1e1e',
-  text: '#ffffff', muted: '#777777', subtle: '#444444',
-  blockBg: '#0a0a0a', blockBorder: '#1e1e1e',
-  btnBg: '#1a1a1a', btnText: '#cccccc', btnBorder: '#2a2a2a',
-  divider: '#1e1e1e', accentBorder: '#ffffff',
-  ctaBg: '#ffffff', ctaText: '#000000',
+  bg: '#000000',
+  card: '#111111',
+  header: '#111111',
+  border: '#222222',
+  borderInner: '#1e1e1e',
+  text: '#ffffff',
+  muted: '#777777',
+  subtle: '#444444',
+  blockBg: '#0a0a0a',
+  blockBorder: '#1e1e1e',
+  btnBg: '#1a1a1a',
+  btnText: '#cccccc',
+  btnBorder: '#2a2a2a',
+  divider: '#1e1e1e',
+  accentBorder: '#ffffff',
+  ctaBg: '#ffffff',
+  ctaText: '#000000',
 };
 
 const lightPalette: Palette = {
-  bg: '#f5f5f5', card: '#ffffff', header: '#ffffff',
-  border: '#e5e5e5', borderInner: '#eeeeee',
-  text: '#000000', muted: '#666666', subtle: '#888888',
-  blockBg: '#fafafa', blockBorder: '#e5e5e5',
-  btnBg: '#f0f0f0', btnText: '#333333', btnBorder: '#dddddd',
-  divider: '#eeeeee', accentBorder: '#000000',
-  ctaBg: '#000000', ctaText: '#ffffff',
+  bg: '#f5f5f5',
+  card: '#ffffff',
+  header: '#ffffff',
+  border: '#e5e5e5',
+  borderInner: '#eeeeee',
+  text: '#000000',
+  muted: '#666666',
+  subtle: '#888888',
+  blockBg: '#fafafa',
+  blockBorder: '#e5e5e5',
+  btnBg: '#f0f0f0',
+  btnText: '#333333',
+  btnBorder: '#dddddd',
+  divider: '#eeeeee',
+  accentBorder: '#000000',
+  ctaBg: '#000000',
+  ctaText: '#ffffff',
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -147,13 +202,20 @@ async function verifyTurnstile(token: string, secret: string, ip: string): Promi
 }
 
 function escapeHtml(str: string): string {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function corsHeaders(origin: string): Record<string, string> {
   const ALLOWED_ORIGINS = [
-    'https://thomastp.ch', 'https://www.thomastp.ch',
-    'https://thomas-tp.github.io', 'http://localhost:3000',
+    'https://thomastp.ch',
+    'https://www.thomastp.ch',
+    'https://thomas-tp.github.io',
+    'http://localhost:3000',
   ];
   const allowed = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
@@ -422,16 +484,24 @@ That's outside what I can answer for him — Thomas handles compensation discuss
 // ── Voice: Speech-to-Text (Whisper) ─────────────────────────────────────────
 
 async function handleSTT(request: Request, env: Env, origin: string): Promise<Response> {
-  const audioData = await request.arrayBuffer();
-  if (!audioData.byteLength) {
-    return jsonResp({ error: 'No audio data' }, 400, origin);
+  const contentLength = Number(request.headers.get('Content-Length') ?? '0');
+  if (contentLength > MAX_STT_BYTES) {
+    return jsonResp({ error: 'Audio too large (max 5 MB)' }, 413, origin);
   }
 
   const clientIp = request.headers.get('CF-Connecting-IP') ?? 'unknown';
   const rateKey = `ask:${clientIp}`;
-  const current = parseInt((await env.RATE_LIMIT.get(rateKey)) ?? '0', 10);
-  if (current >= 12) {
+  const withinLimit = await incrementRateLimit(env.RATE_LIMIT, rateKey, ASK_LIMIT_PER_HOUR);
+  if (!withinLimit) {
     return jsonResp({ error: 'Rate limit exceeded. Please try again later.' }, 429, origin);
+  }
+
+  const audioData = await request.arrayBuffer();
+  if (!audioData.byteLength) {
+    return jsonResp({ error: 'No audio data' }, 400, origin);
+  }
+  if (audioData.byteLength > MAX_STT_BYTES) {
+    return jsonResp({ error: 'Audio too large (max 5 MB)' }, 413, origin);
   }
 
   if (!env.AI) {
@@ -469,11 +539,10 @@ async function handleTTS(request: Request, env: Env, origin: string): Promise<Re
 
   const clientIp = request.headers.get('CF-Connecting-IP') ?? 'unknown';
   const rateKey = `tts:${clientIp}`;
-  const current = parseInt((await env.RATE_LIMIT.get(rateKey)) ?? '0', 10);
-  if (current >= 30) {
+  const withinLimit = await incrementRateLimit(env.RATE_LIMIT, rateKey, 30);
+  if (!withinLimit) {
     return jsonResp({ error: 'Rate limit exceeded. Please try again later.' }, 429, origin);
   }
-  await env.RATE_LIMIT.put(rateKey, String(current + 1), { expirationTtl: 3600 });
 
   if (!env.AI) {
     return jsonResp({ error: 'AI binding not configured.' }, 500, origin);
@@ -511,18 +580,18 @@ async function handleAsk(request: Request, env: Env, origin: string): Promise<Re
 
   const message = (body.message ?? '').trim();
   if (!message) return jsonResp({ error: 'Empty message' }, 400, origin);
-  if (message.length > 500) return jsonResp({ error: 'Message too long (max 500 chars)' }, 400, origin);
+  if (message.length > 500)
+    return jsonResp({ error: 'Message too long (max 500 chars)' }, 400, origin);
 
   const history = Array.isArray(body.history) ? body.history.slice(-6) : [];
 
   // Per-IP rate limit: 12 messages per hour
   const clientIp = request.headers.get('CF-Connecting-IP') ?? 'unknown';
   const rateKey = `ask:${clientIp}`;
-  const current = parseInt((await env.RATE_LIMIT.get(rateKey)) ?? '0', 10);
-  if (current >= 12) {
+  const withinLimit = await incrementRateLimit(env.RATE_LIMIT, rateKey, ASK_LIMIT_PER_HOUR);
+  if (!withinLimit) {
     return jsonResp({ error: 'Rate limit exceeded. Please try again later.' }, 429, origin);
   }
-  await env.RATE_LIMIT.put(rateKey, String(current + 1), { expirationTtl: 3600 });
 
   if (!env.AI) {
     return jsonResp({ error: 'AI binding not configured on this Worker.' }, 500, origin);
@@ -535,7 +604,10 @@ async function handleAsk(request: Request, env: Env, origin: string): Promise<Re
       const embResult = (await env.AI.run('@cf/baai/bge-base-en-v1.5', {
         text: [message],
       })) as { data: number[][] };
-      const matches = await env.VECTORIZE.query(embResult.data[0], { topK: 3, returnMetadata: 'all' });
+      const matches = await env.VECTORIZE.query(embResult.data[0], {
+        topK: 3,
+        returnMetadata: 'all',
+      });
       ragContext = matches.matches
         .filter(m => m.score > 0.65)
         .map(m => m.metadata?.text ?? '')
@@ -612,6 +684,14 @@ export default {
       return jsonResp({ error: 'Missing required fields' }, 400, origin);
     }
 
+    if (
+      name.length > MAX_CONTACT_NAME ||
+      email.length > MAX_CONTACT_EMAIL ||
+      message.length > MAX_CONTACT_MESSAGE
+    ) {
+      return jsonResp({ error: 'Field too long' }, 400, origin);
+    }
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return jsonResp({ error: 'Invalid email address' }, 400, origin);
     }
@@ -643,21 +723,22 @@ export default {
 
     // Rate limiting — max 3 messages per IP per hour
     const rateLimitKey = `rate:${clientIp}`;
-    const currentCount = await env.RATE_LIMIT.get(rateLimitKey);
-    const count = currentCount ? parseInt(currentCount, 10) : 0;
-    if (count >= 3) {
+    const contactWithinLimit = await incrementRateLimit(env.RATE_LIMIT, rateLimitKey, 3);
+    if (!contactWithinLimit) {
       return jsonResp({ error: 'Rate limit exceeded. Please try again later.' }, 429, origin);
     }
-    await env.RATE_LIMIT.put(rateLimitKey, String(count + 1), { expirationTtl: 3600 });
 
     const date = new Date().toLocaleDateString('en-GB', {
-      day: '2-digit', month: 'long', year: 'numeric',
-      hour: '2-digit', minute: '2-digit',
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
       timeZone: 'Europe/Zurich',
     });
 
     const resendHeaders: HeadersInit = {
-      'Authorization': `Bearer ${env.RESEND_API_KEY}`,
+      Authorization: `Bearer ${env.RESEND_API_KEY}`,
       'Content-Type': 'application/json',
     };
 

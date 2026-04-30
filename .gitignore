@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 *.local
+*.tsbuildinfo
 
 # Other lockfiles (using bun)
 package-lock.json
