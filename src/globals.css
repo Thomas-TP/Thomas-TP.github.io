@@ -28,7 +28,7 @@
 }
 
 :root {
-  --font-inter: 'Inter', sans-serif;
+  --font-main: 'Bruno Ace', system-ui, sans-serif;
 
   /* Light Mode (High Contrast Monochrome) — RGB channels for UnoCSS opacity support */
   --background: 255 255 255;
@@ -113,7 +113,7 @@
 body {
   background-color: rgb(var(--background));
   color: rgb(var(--foreground));
-  font-family: var(--font-inter), 'Inter', sans-serif;
+  font-family: var(--font-main);
   font-feature-settings: "rlig" 1, "calt" 1;
 }
 
@@ -210,7 +210,7 @@ body {
 
 /* Lac Léman label – outside @layer for proper specificity */
 .lake-label {
-  font-family: var(--font-inter), 'Inter', sans-serif;
+  font-family: var(--font-main);
   font-size: 22px;
   letter-spacing: 0.2em;
 }

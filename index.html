@@ -62,7 +62,7 @@
     <link rel="dns-prefetch" href="https://api.github.com" />
 
     <!-- Preload LCP hero image -->
-    <link rel="preload" as="image" href="/images/memoji-nobg.webp" type="image/webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/images/photo.webp" type="image/webp" fetchpriority="high" />
 
     <!-- Critical inline CSS for skeleton (renders before external CSS loads) -->
     <style>
@@ -71,10 +71,10 @@
       .dark body{background:#09090b}
     </style>
 
-    <!-- Google Fonts: Inter — load async, never block rendering -->
+    <!-- Google Fonts: Bruno Ace — load async, never block rendering -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" rel="stylesheet" /></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap" rel="stylesheet" /></noscript>
 
     <!-- Anti-FOUC: apply theme class before render + force scroll to top on every load -->
     <script>
@@ -267,7 +267,7 @@
   </head>
   <body>
     <!-- LCP prerender: stays visible until React mounts, avoids re-triggering LCP -->
-    <img id="lcp-prerender" src="/images/memoji-nobg.webp" alt="" width="256" height="256" fetchpriority="high" decoding="sync" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(1.1);width:176px;height:176px;border-radius:9999px;object-fit:cover;z-index:9999;pointer-events:none"/>
+    <img id="lcp-prerender" src="/images/photo.webp" alt="" width="256" height="256" fetchpriority="high" decoding="sync" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(1.1);width:176px;height:176px;border-radius:9999px;object-fit:cover;z-index:9999;pointer-events:none"/>
     <div id="root"></div>
   </body>
 </html>
