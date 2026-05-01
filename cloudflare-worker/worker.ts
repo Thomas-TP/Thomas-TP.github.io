@@ -535,7 +535,7 @@ async function handleTTS(request: Request, env: Env, origin: string): Promise<Re
   }
 
   const text = (body.text ?? '').trim();
-  const lang = body.lang?.startsWith('fr') ? 'fr' : 'en';
+  const lang = body.lang?.toLowerCase().startsWith('fr') ? 'FR' : 'EN';
   if (!text) return jsonResp({ error: 'Empty text' }, 400, origin);
   if (text.length > 2000) return jsonResp({ error: 'Text too long (max 2000 chars)' }, 400, origin);
 

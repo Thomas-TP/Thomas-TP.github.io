@@ -383,7 +383,6 @@ export function AskThomas() {
     return () => {
       mediaRecorderRef.current?.stream.getTracks().forEach(track => track.stop());
       audioRef.current?.pause();
-      window.speechSynthesis?.cancel();
     };
   }, []);
 
@@ -528,33 +527,13 @@ export function AskThomas() {
   const playTTS = useCallback(
     async (text: string, index: number) => {
       if (ttsPlaying === index) {
-        audioRef.current?.pause();
-        window.speechSynthesis?.cancel();
-        setTtsPlaying(null);
-        return;
-      }
+      audioRef.current?.pause();
+      setTtsPlaying(null);
+      return;
+    }
 
       audioRef.current?.pause();
-      window.speechSynthesis?.cancel();
       setTtsPlaying(index);
-
-      const speakInBrowser = () => {
-        if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
-          return false;
-        }
-
-        const spokenText = cleanTextForSpeech(text);
-        if (!spokenText) return false;
-
-        const utterance = new SpeechSynthesisUtterance(spokenText);
-        utterance.lang = i18n.language?.startsWith('fr') ? 'fr-FR' : 'en-US';
-        utterance.rate = 1;
-        utterance.pitch = 1;
-        utterance.onend = () => setTtsPlaying(null);
-        utterance.onerror = () => setTtsPlaying(null);
-        window.speechSynthesis.speak(utterance);
-        return true;
-      };
 
       try {
         const res = await fetch(TTS_URL, {
@@ -584,17 +563,13 @@ export function AskThomas() {
         audio.onerror = () => {
           audioRef.current = null;
           URL.revokeObjectURL(audioUrl);
-          if (!speakInBrowser()) {
-            setTtsPlaying(null);
-            setError(t('ask.errors.tts'));
-          }
+          setTtsPlaying(null);
+          setError(t('ask.errors.tts'));
         };
         await audio.play();
       } catch {
-        if (!speakInBrowser()) {
-          setTtsPlaying(null);
-          setError(t('ask.errors.tts'));
-        }
+        setTtsPlaying(null);
+        setError(t('ask.errors.tts'));
       }
     },
     [i18n.language, t, ttsPlaying]

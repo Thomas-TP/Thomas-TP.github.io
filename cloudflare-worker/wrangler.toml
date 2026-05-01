@@ -1,6 +1,6 @@
 name = "portfolio-contact"
 main = "worker.ts"
-compatibility_date = "2024-01-01"
+compatibility_date = "2026-04-21"
 
 # After deploying, set your secrets:
 #   wrangler secret put RESEND_API_KEY
