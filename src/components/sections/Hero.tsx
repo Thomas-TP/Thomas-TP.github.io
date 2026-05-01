@@ -340,7 +340,7 @@ export function Hero() {
                 <div className="hero-avatar-orbit hero-avatar-orbit-b" />
                 <div className="hero-avatar-card">
                   <img
-                    src="/images/photo.webp"
+                    src="/images/photo.webp?v=20260501"
                     alt="Thomas P."
                     width={576}
                     height={624}
