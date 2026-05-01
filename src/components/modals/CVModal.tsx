@@ -20,8 +20,14 @@ interface CVModalProps {
 }
 
 export function CVModal({ isOpen, onClose }: CVModalProps) {
-  const { t } = useTranslation();
-  const cvPath = '/documents/ThomasPrudhommeCV.pdf';
+  const { t, i18n } = useTranslation();
+  const cvLang = (i18n.resolvedLanguage ?? i18n.language).toLowerCase().startsWith('fr')
+    ? 'fr'
+    : 'en';
+  const cvPath =
+    cvLang === 'fr'
+      ? '/documents/CV_Thomas_Prudhomme_FR.pdf'
+      : '/documents/CV_Thomas_Prudhomme_EN.pdf';
 
   const [mounted, setMounted] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
@@ -77,10 +83,12 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
     return () => cancelAnimationFrame(raf);
   }, [shouldRender, isOpen]);
 
-  // Reset to first page when modal opens
+  // Reset to first page when modal opens or when the site language changes
   useEffect(() => {
-    if (isOpen) setCurrentPage(1);
-  }, [isOpen]);
+    if (!isOpen) return;
+    setCurrentPage(1);
+    setNumPages(0);
+  }, [isOpen, cvPath]);
 
   // Measure content area width responsively
   useEffect(() => {
@@ -149,7 +157,7 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
 
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => window.open(cvPath)}
+                  onClick={() => window.open(cvPath, '_blank', 'noopener,noreferrer')}
                   aria-label={t('cv.print', 'Imprimer le CV')}
                   className="flex items-center gap-2 px-4 py-2 rounded-full border border-border text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all hover:scale-105 active:scale-95 cursor-pointer"
                 >
@@ -159,7 +167,8 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
 
                 <a
                   href={cvPath}
-                  download="ThomasPrudhommeCV.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={t('cv.download', 'Télécharger le CV')}
                   className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-all hover:scale-105 active:scale-95"
                 >

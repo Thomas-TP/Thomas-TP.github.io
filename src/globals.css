@@ -320,6 +320,10 @@ body {
   box-shadow: 0 0 0 2px rgb(var(--background)), 0 0 0 4px rgb(var(--ring));
 }
 
+.ask-thomas-input:focus-visible {
+  box-shadow: none;
+}
+
 /* Accessibility: Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
   *,

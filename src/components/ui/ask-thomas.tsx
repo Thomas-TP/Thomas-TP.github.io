@@ -4,6 +4,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type ReactNode,
 } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -44,6 +45,14 @@ function classifyLink(href: string): { kind: LinkKind; anchor?: string; resolved
   }
 }
 
+function isPdfLink(href: string) {
+  try {
+    return new URL(href, window.location.href).pathname.toLowerCase().endsWith('.pdf');
+  } catch {
+    return href.toLowerCase().split(/[?#]/, 1)[0].endsWith('.pdf');
+  }
+}
+
 function renderInline(text: string, onAnchorNavigate?: (anchor: string) => void): ReactNode[] {
   const parts: ReactNode[] = [];
   const re = /(\*\*(.+?)\*\*|\*(.+?)\*|`([^`]+)`|\[([^\]]+)\]\(([^)]+)\))/g;
@@ -75,7 +84,19 @@ function renderInline(text: string, onAnchorNavigate?: (anchor: string) => void)
       const className =
         'font-medium underline underline-offset-3 decoration-foreground/30 transition-colors hover:decoration-foreground';
 
-      if (info.kind === 'anchor' && info.anchor) {
+      if (isPdfLink(href)) {
+        parts.push(
+          <a
+            key={key++}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={className}
+          >
+            {linkText}
+          </a>
+        );
+      } else if (info.kind === 'anchor' && info.anchor) {
         const anchor = info.anchor;
         parts.push(
           <a
@@ -418,7 +439,7 @@ function canUseTextToSpeech(text: string) {
 }
 
 export function AskThomas() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<Msg[]>(() => loadHistory());
@@ -427,13 +448,17 @@ export function AskThomas() {
   const [recording, setRecording] = useState<'idle' | 'recording' | 'transcribing'>('idle');
   const [ttsPlaying, setTtsPlaying] = useState<number | null>(null);
   const [copied, setCopied] = useState<number | null>(null);
+  const [mobileKeyboardOpen, setMobileKeyboardOpen] = useState(false);
+  const [mobileViewportStyle, setMobileViewportStyle] = useState<CSSProperties>();
   const suggestions = useMemo(() => getTranslatedList(t, 'ask.suggestions'), [t]);
   const capabilities = useMemo(() => getTranslatedList(t, 'ask.capabilities'), [t]);
+  const siteLang = i18n.resolvedLanguage ?? i18n.language;
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useTextAreaAutosize(input);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const mobileBaselineHeightRef = useRef(0);
 
   const hasConversation = history.length > 0;
   const canSend = input.trim().length > 0 && !sending && recording !== 'transcribing';
@@ -464,7 +489,14 @@ export function AskThomas() {
   }, [open]);
 
   useEffect(() => {
-    const openChat = () => setOpen(true);
+    const openChat = () => {
+      try {
+        window.sessionStorage.removeItem(OPEN_EVENT);
+      } catch {
+        // Storage may be disabled.
+      }
+      setOpen(current => !current);
+    };
     window.addEventListener(OPEN_EVENT, openChat);
 
     try {
@@ -478,6 +510,56 @@ export function AskThomas() {
 
     return () => window.removeEventListener(OPEN_EVENT, openChat);
   }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const visualViewport = window.visualViewport;
+
+    const updateKeyboardState = () => {
+      const isMobile = window.matchMedia('(max-width: 639px)').matches;
+      const activeInput = document.activeElement === inputRef.current;
+      const viewportHeight = visualViewport?.height ?? window.innerHeight;
+      const currentHeight = Math.max(viewportHeight, window.innerHeight);
+
+      if (!open || !isMobile) {
+        mobileBaselineHeightRef.current = currentHeight;
+      } else if (!activeInput) {
+        mobileBaselineHeightRef.current = Math.max(
+          mobileBaselineHeightRef.current,
+          currentHeight
+        );
+      }
+
+      const baseline = mobileBaselineHeightRef.current || currentHeight;
+      const keyboardOpen = open && isMobile && activeInput && viewportHeight < baseline - 80;
+
+      setMobileKeyboardOpen(keyboardOpen);
+      setMobileViewportStyle(
+        keyboardOpen && visualViewport
+          ? {
+              top: `${Math.max(0, visualViewport.offsetTop)}px`,
+              height: `${Math.max(360, Math.round(visualViewport.height))}px`,
+            }
+          : undefined
+      );
+    };
+
+    updateKeyboardState();
+    visualViewport?.addEventListener('resize', updateKeyboardState);
+    visualViewport?.addEventListener('scroll', updateKeyboardState);
+    window.addEventListener('resize', updateKeyboardState);
+    window.addEventListener('focusin', updateKeyboardState);
+    window.addEventListener('focusout', updateKeyboardState);
+
+    return () => {
+      visualViewport?.removeEventListener('resize', updateKeyboardState);
+      visualViewport?.removeEventListener('scroll', updateKeyboardState);
+      window.removeEventListener('resize', updateKeyboardState);
+      window.removeEventListener('focusin', updateKeyboardState);
+      window.removeEventListener('focusout', updateKeyboardState);
+    };
+  }, [inputRef, open]);
 
   useEffect(() => {
     return () => {
@@ -521,6 +603,7 @@ export function AskThomas() {
           body: JSON.stringify({
             message: trimmed,
             history: nextHistory.slice(-7, -1),
+            lang: siteLang,
           }),
         });
         const data = (await res.json()) as { reply?: string; error?: string };
@@ -534,7 +617,7 @@ export function AskThomas() {
         setSending(false);
       }
     },
-    [friendlyError, history, sending, t]
+    [friendlyError, history, sending, siteLang, t]
   );
 
   const reset = useCallback(() => {
@@ -627,10 +710,10 @@ export function AskThomas() {
   const playTTS = useCallback(
     async (text: string, index: number) => {
       if (ttsPlaying === index) {
-      audioRef.current?.pause();
-      setTtsPlaying(null);
-      return;
-    }
+        audioRef.current?.pause();
+        setTtsPlaying(null);
+        return;
+      }
 
       audioRef.current?.pause();
       setTtsPlaying(index);
@@ -696,6 +779,7 @@ export function AskThomas() {
             ? 'translate-y-0 scale-100 opacity-100'
             : 'pointer-events-none translate-y-5 scale-95 opacity-0'
         }`}
+        style={mobileViewportStyle}
         role="dialog"
         aria-modal="false"
         aria-label={t('ask.dialog_label')}
@@ -760,7 +844,11 @@ export function AskThomas() {
           onWheel={e => e.stopPropagation()}
         >
           {!hasConversation ? (
-            <div className="flex min-h-full flex-col justify-end gap-5 pb-2 pt-6">
+            <div
+              className={`flex min-h-full flex-col ${
+                mobileKeyboardOpen ? 'justify-start gap-3 pb-1 pt-3' : 'justify-end gap-5 pb-2 pt-6'
+              }`}
+            >
               <div className="mx-auto flex max-w-[22rem] flex-col items-center text-center">
                 <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl border border-border bg-card shadow-sm">
                   <Sparkles size={22} />
@@ -771,33 +859,37 @@ export function AskThomas() {
                 </p>
               </div>
 
-              <div className="grid gap-2">
-                {suggestions.map(suggestion => (
-                  <button
-                    key={suggestion}
-                    type="button"
-                    onClick={() => send(suggestion)}
-                    className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-card px-3.5 py-3 text-left text-[0.82rem] transition-colors hover:border-foreground/20 hover:bg-foreground/[0.04]"
-                  >
-                    <span>{suggestion}</span>
-                    <MessageCircle
-                      size={15}
-                      className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
-                    />
-                  </button>
-                ))}
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                {capabilities.map(item => (
-                  <div
-                    key={item}
-                    className="rounded-lg border border-border bg-card/70 px-3 py-2 text-[0.66rem] leading-relaxed text-muted-foreground"
-                  >
-                    {item}
+              {!mobileKeyboardOpen && (
+                <>
+                  <div className="grid gap-2">
+                    {suggestions.map(suggestion => (
+                      <button
+                        key={suggestion}
+                        type="button"
+                        onClick={() => send(suggestion)}
+                        className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-card px-3.5 py-3 text-left text-[0.82rem] transition-colors hover:border-foreground/20 hover:bg-foreground/[0.04]"
+                      >
+                        <span>{suggestion}</span>
+                        <MessageCircle
+                          size={15}
+                          className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                        />
+                      </button>
+                    ))}
                   </div>
-                ))}
-              </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    {capabilities.map(item => (
+                      <div
+                        key={item}
+                        className="rounded-lg border border-border bg-card/70 px-3 py-2 text-[0.66rem] leading-relaxed text-muted-foreground"
+                      >
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           ) : (
             <div className="space-y-5">
@@ -921,7 +1013,7 @@ export function AskThomas() {
               placeholder={t('ask.placeholder')}
               disabled={sending || recording === 'transcribing'}
               aria-label={t('ask.message_label')}
-              className="block max-h-33 min-h-10 w-full resize-none bg-transparent px-2 py-2 text-[0.88rem] leading-relaxed text-foreground outline-none placeholder:text-muted-foreground disabled:opacity-50"
+              className="ask-thomas-input block max-h-33 min-h-10 w-full resize-none bg-transparent px-2 py-2 text-[0.88rem] leading-relaxed text-foreground outline-none placeholder:text-muted-foreground disabled:opacity-50"
               style={{ scrollbarWidth: 'none' }}
             />
             <div className="flex items-center justify-between gap-2">

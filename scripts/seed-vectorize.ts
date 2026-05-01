@@ -14,6 +14,9 @@
 const ACCOUNT_ID = process.env.CF_ACCOUNT_ID;
 const API_TOKEN = process.env.CF_API_TOKEN;
 const INDEX_NAME = 'portfolio-knowledge';
+const CV_FR_URL = 'https://thomastp.ch/documents/CV_Thomas_Prudhomme_FR.pdf';
+const CV_EN_URL = 'https://thomastp.ch/documents/CV_Thomas_Prudhomme_EN.pdf';
+const CV_SOURCES = `CV FR ${CV_FR_URL}; CV EN ${CV_EN_URL}`;
 
 if (!ACCOUNT_ID || !API_TOKEN) {
   console.error('Missing CF_ACCOUNT_ID or CF_API_TOKEN environment variables.');
@@ -30,27 +33,27 @@ const chunks: Chunk[] = [
   {
     id: 'bio',
     category: 'identity',
-    text: 'Sources: CV https://thomastp.ch/documents/ThomasPrudhommeCV.pdf; Portfolio https://thomastp.ch/llms.txt; GitHub profile https://github.com/Thomas-TP. Thomas Prudhomme is a Swiss CFC computer science apprentice/student in exploitation and infrastructure at Geneva Institute of Technology. In 2026 he is in the second year / specialization period and is looking to continue the CFC in company/alternance from July 2026 across the Lake Geneva region. Public GitHub handle: Thomas-TP. GitHub display name: Thomas. Location: Switzerland / Lake Geneva region.',
+    text: `Sources: ${CV_SOURCES}; Portfolio https://thomastp.ch/llms.txt; GitHub profile https://github.com/Thomas-TP. Thomas Prudhomme is a Swiss CFC computer science apprentice/student in exploitation and infrastructure at Geneva Institute of Technology. In 2026 he is in the second year / specialization period and is looking to continue the CFC in company/alternance from July 2026 across the Lake Geneva region. Public GitHub handle: Thomas-TP. GitHub display name: Thomas. Location: Switzerland / Lake Geneva region.`,
   },
   {
     id: 'education',
     category: 'education',
-    text: 'Source: CV https://thomastp.ch/documents/ThomasPrudhommeCV.pdf. Education: 2024-2028 Geneva Institute of Technology, CFC Informaticien exploitation et infrastructure. 2023-2024 FuturPlus Lausanne, pre-apprenticeship year. 2020-2023 compulsory school in Gland / Grand-Champ, option architecture and technical drawing.',
+    text: `Source: ${CV_SOURCES}. Education: 2024-2028 Geneva Institute of Technology, CFC Informaticien exploitation et infrastructure. 2023-2024 FuturPlus Lausanne, pre-apprenticeship year. 2020-2023 compulsory school in Gland / Grand-Champ, option architecture and technical drawing.`,
   },
   {
     id: 'experience',
     category: 'experience',
-    text: 'Source: CV https://thomastp.ch/documents/ThomasPrudhommeCV.pdf. Professional experiences: February 20-22, 2024 EPFL discovery internship / IT activity. April 22-26, 2024 LRG Informatique internship focused on PC installation/configuration.',
+    text: `Source: ${CV_SOURCES}. Professional experiences: February 20-22, 2024 EPFL discovery internship / IT activity. April 22-26, 2024 LRG Informatique internship focused on PC installation/configuration.`,
   },
   {
     id: 'skills-cv',
     category: 'skills',
-    text: 'Sources: CV https://thomastp.ch/documents/ThomasPrudhommeCV.pdf; Portfolio https://thomastp.ch/llms.txt. Core skills and interests: web development, cloud, cybersecurity/ethical hacking, IoT and smart home, systems/infrastructure. CV skills: Linux (Debian, APT, SSH), React, Node, TypeScript, AWS, Azure, Google Cloud, Home Assistant, Zigbee, Matter, Claude Code, GitHub Copilot, LM Studio.',
+    text: `Sources: ${CV_SOURCES}; Portfolio https://thomastp.ch/llms.txt. Core skills and interests: web development, cloud, cybersecurity/ethical hacking, IoT and smart home, systems/infrastructure. CV skills: Linux (Debian, APT, SSH), React, Node, TypeScript, AWS, Azure, Google Cloud, Home Assistant, Zigbee, Matter, Claude Code, GitHub Copilot, LM Studio.`,
   },
   {
     id: 'certifications',
     category: 'credentials',
-    text: 'Sources: CV https://thomastp.ch/documents/ThomasPrudhommeCV.pdf; Credly https://www.credly.com/users/thomas-prudhomme; LinkedIn https://www.linkedin.com/in/thomas-tp/. Certifications are public via Credly and LinkedIn. Examples listed on the CV: GitHub Foundations, English for IT 1/2, Linux Essentials, Microsoft generative AI, EF SET English Certificate 69/100. Do not invent additional badges; link to Credly/LinkedIn for the complete verified list.',
+    text: `Sources: ${CV_SOURCES}; Credly https://www.credly.com/users/thomas-prudhomme; LinkedIn https://www.linkedin.com/in/thomas-tp/. Certifications are public via Credly and LinkedIn. Examples listed on the CV: GitHub Foundations, English for IT 1/2, Linux Essentials, Microsoft generative AI, EF SET English Certificate 69/100. Do not invent additional badges; link to Credly/LinkedIn for the complete verified list.`,
   },
   {
     id: 'tech-portfolio',
@@ -90,7 +93,7 @@ const chunks: Chunk[] = [
   {
     id: 'contact',
     category: 'contact',
-    text: 'Sources: Portfolio https://thomastp.ch/llms.txt; CV https://thomastp.ch/documents/ThomasPrudhommeCV.pdf; Link hub https://links.thomastp.ch. Contact Thomas: portfolio email thomas@prudhomme.li, contact form https://thomastp.ch/#contact, all links https://links.thomastp.ch, GitHub https://github.com/Thomas-TP, LinkedIn https://www.linkedin.com/in/thomas-tp/, Credly https://www.credly.com/users/thomas-prudhomme, CV PDF https://thomastp.ch/documents/ThomasPrudhommeCV.pdf. CV email: T+CV@prudhomme.li.',
+    text: `Sources: Portfolio https://thomastp.ch/llms.txt; ${CV_SOURCES}; Link hub https://links.thomastp.ch. Contact Thomas: portfolio email thomas@prudhomme.li, contact form https://thomastp.ch/#contact, all links https://links.thomastp.ch, GitHub https://github.com/Thomas-TP, LinkedIn https://www.linkedin.com/in/thomas-tp/, Credly https://www.credly.com/users/thomas-prudhomme, CV PDFs ${CV_FR_URL} and ${CV_EN_URL}. CV email: T+CV@prudhomme.li.`,
   },
   {
     id: 'source-rules',

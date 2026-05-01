@@ -60,6 +60,12 @@ const MAX_CONTACT_EMAIL = 254;
 const MAX_CONTACT_MESSAGE = 4000;
 const MAX_STT_BYTES = 5 * 1024 * 1024;
 const ASK_LIMIT_PER_HOUR = 12;
+const CV_URLS: Record<Lang, string> = {
+  fr: 'https://thomastp.ch/documents/CV_Thomas_Prudhomme_FR.pdf',
+  en: 'https://thomastp.ch/documents/CV_Thomas_Prudhomme_EN.pdf',
+};
+const CV_URL_PATTERN =
+  /https:\/\/thomastp\.ch\/documents\/(?:ThomasPrudhommeCV|CV_Thomas_Prudhomme_(?:FR|EN))\.pdf/g;
 
 async function incrementRateLimit(
   kv: KVNamespace,
@@ -71,6 +77,24 @@ async function incrementRateLimit(
   if (current >= limit) return false;
   await kv.put(key, String(current + 1), { expirationTtl: ttlSeconds });
   return true;
+}
+
+function cvLinkLabel(url: string, lang: Lang): string {
+  if (url.includes('_EN')) return lang === 'fr' ? 'CV EN' : 'Resume';
+  if (url.includes('_FR')) return lang === 'fr' ? 'CV' : 'French CV';
+  return lang === 'fr' ? 'CV' : 'Resume';
+}
+
+function normalizeCvLinks(reply: string, lang: Lang): string {
+  return reply
+    .replace(/\[(https:\/\/thomastp\.ch\/documents\/(?:ThomasPrudhommeCV|CV_Thomas_Prudhomme_(?:FR|EN))\.pdf)\]\(\1\)/g, (_match, url: string) => {
+      return `[${cvLinkLabel(url, lang)}](${url})`;
+    })
+    .replace(CV_URL_PATTERN, (url, offset, fullText) => {
+      const previous = fullText[offset - 1];
+      if (previous === '(') return url;
+      return `[${cvLinkLabel(url, lang)}](${url})`;
+    });
 }
 
 // ── i18n ─────────────────────────────────────────────────────────────────────
@@ -339,7 +363,9 @@ Use this as the single source of truth for Ask Thomas. It consolidates Thomas's 
 ## Source Registry
 
 - [Portfolio] https://thomastp.ch and https://thomastp.ch/llms.txt
-- [CV] https://thomastp.ch/documents/ThomasPrudhommeCV.pdf
+- [CV FR] ${CV_URLS.fr}
+- [CV EN] ${CV_URLS.en}
+- [CV] means the current-language CV selected by the active site language.
 - [GitHub profile] https://github.com/Thomas-TP
 - [GitHub repositories] https://github.com/Thomas-TP?tab=repositories
 - [LinkedIn] https://www.linkedin.com/in/thomas-tp/
@@ -383,7 +409,7 @@ Use only sources that support the answer. For project answers, cite the exact re
 - GitHub: https://github.com/Thomas-TP. Source: [GitHub profile].
 - LinkedIn: https://www.linkedin.com/in/thomas-tp/. Source: [LinkedIn].
 - Credly: https://www.credly.com/users/thomas-prudhomme. Source: [Credly].
-- CV PDF: https://thomastp.ch/documents/ThomasPrudhommeCV.pdf. Source: [CV].
+- CV PDFs: French ${CV_URLS.fr}; English ${CV_URLS.en}. Use the current-language version unless the user explicitly asks for another language. Source: [CV].
 
 ## Education and Experience
 
@@ -460,6 +486,7 @@ ${SOURCE_GROUNDED_KNOWLEDGE}
 # Linking rules — apply rigorously
 
 1. **Always Markdown links** \`[label](url)\` — never bare URLs.
+   For CV links, the visible label must be \`CV\`, \`CV EN\`, \`Resume\`, or \`French CV\`; never use the full PDF URL as the visible label.
 2. **Contact form URL is exactly** \`https://thomastp.ch/#contact\`. The \`#\` is mandatory. Never write \`/contact\`.
 3. **In-page sections** of the portfolio use the hash form too: \`https://thomastp.ch/#contact\`, \`https://thomastp.ch/#projects\`, \`https://thomastp.ch/#about\`.
 4. **When the user asks "how to find/reach Thomas online" generally**, prefer pointing to the central hub https://links.thomastp.ch rather than enumerating every platform.
@@ -478,7 +505,7 @@ Assistant:
 
 Il connaît aussi \`Rust + Tauri\`, \`PowerShell\`, \`Flutter / Dart\`, et \`Cisco Packet Tracer\`.
 
-**Sources :** [Portfolio](https://thomastp.ch/llms.txt), [CV](https://thomastp.ch/documents/ThomasPrudhommeCV.pdf), [GitHub repositories](https://github.com/Thomas-TP?tab=repositories)
+**Sources :** [Portfolio](https://thomastp.ch/llms.txt), [CV](${CV_URLS.fr}), [GitHub repositories](https://github.com/Thomas-TP?tab=repositories)
 
 ---
 
@@ -513,7 +540,7 @@ User: "Est-ce qu'il a des certifications ?"
 Assistant:
 Oui ! Thomas détient des certifications vérifiées en cloud, cybersécurité et développement logiciel. Tous ses badges sont consultables sur son [profil Credly](https://www.credly.com/users/thomas-prudhomme).
 
-**Sources :** [CV](https://thomastp.ch/documents/ThomasPrudhommeCV.pdf), [Credly](https://www.credly.com/users/thomas-prudhomme)
+**Sources :** [CV](${CV_URLS.fr}), [Credly](https://www.credly.com/users/thomas-prudhomme)
 
 ---
 
@@ -644,6 +671,7 @@ async function handleTTS(request: Request, env: Env, origin: string): Promise<Re
 interface AskBody {
   message?: string;
   history?: Array<{ role: 'user' | 'assistant'; content: string }>;
+  lang?: string;
 }
 
 async function handleAsk(request: Request, env: Env, origin: string): Promise<Response> {
@@ -659,6 +687,9 @@ async function handleAsk(request: Request, env: Env, origin: string): Promise<Re
   if (message.length > 500)
     return jsonResp({ error: 'Message too long (max 500 chars)' }, 400, origin);
 
+  const lang: Lang = body.lang?.toLowerCase().startsWith('fr') ? 'fr' : 'en';
+  const cvUrl = CV_URLS[lang];
+  const activeLanguage = lang === 'fr' ? 'French' : 'English';
   const history = Array.isArray(body.history) ? body.history.slice(-6) : [];
 
   // Per-IP rate limit: 12 messages per hour
@@ -694,9 +725,16 @@ async function handleAsk(request: Request, env: Env, origin: string): Promise<Re
     }
   }
 
+  const languageContext = `# Active site language
+
+The visitor is using the ${activeLanguage} version of the site.
+Use ${activeLanguage} by default unless the user's message is clearly in another language.
+When citing or linking the CV, use this current-language CV URL: ${cvUrl}
+If the user explicitly asks for the other language version, use ${lang === 'fr' ? CV_URLS.en : CV_URLS.fr}.`;
+
   const systemContent = ragContext
-    ? `${SYSTEM_PROMPT}\n\n# Additional context (knowledge base)\n${ragContext}`
-    : SYSTEM_PROMPT;
+    ? `${SYSTEM_PROMPT}\n\n${languageContext}\n\n# Additional context (knowledge base)\n${ragContext}`
+    : `${SYSTEM_PROMPT}\n\n${languageContext}`;
 
   const messages = [
     { role: 'system' as const, content: systemContent },
@@ -714,7 +752,7 @@ async function handleAsk(request: Request, env: Env, origin: string): Promise<Re
       temperature: 0.45,
       top_p: 0.9,
     })) as AiTextOutput;
-    const reply = (out.response ?? '').trim();
+    const reply = normalizeCvLinks((out.response ?? '').trim(), lang);
     return jsonResp({ reply }, 200, origin);
   } catch (err) {
     console.error('AI error:', err);
