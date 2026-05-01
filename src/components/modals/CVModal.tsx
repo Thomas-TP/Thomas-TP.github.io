@@ -130,10 +130,11 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
   const zoomOut = useCallback(() => setZoom(value => Math.max(1, Number((value - 0.15).toFixed(2)))), []);
   const zoomIn = useCallback(() => setZoom(value => Math.min(2.2, Number((value + 0.15).toFixed(2)))), []);
   const resetZoom = useCallback(() => setZoom(1), []);
+  const mobileAvailableHeight = Math.max(240, viewportSize.height - 96);
   const fitPageWidth = Math.max(
-    280,
+    220,
     viewportSize.width < 640
-      ? Math.min(viewportSize.width - 32, (viewportSize.height - 48) / 1.414)
+      ? Math.min(viewportSize.width - 40, mobileAvailableHeight / 1.414)
       : viewportSize.width - 32
   );
   const pageWidth = Math.round(fitPageWidth * zoom);
@@ -153,8 +154,8 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
       <div className="fixed inset-0 z-[901] flex items-center justify-center pointer-events-none">
         <div
           ref={panelRef}
-          className="w-[95vw] max-w-4xl pointer-events-auto"
-          style={{ height: '90vh', opacity: 0 }}
+          className="w-[95vw] max-w-4xl pointer-events-auto sm:w-[95vw]"
+          style={{ height: '92dvh', opacity: 0 }}
         >
           <div className="bg-card border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col h-full">
             {/* Header */}
@@ -210,7 +211,7 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
               className="flex-1 overflow-auto min-h-0 custom-scrollbar bg-muted/30"
               style={{ touchAction: 'pan-x pan-y pinch-zoom' }}
             >
-              <div className="min-w-max flex flex-col items-center py-6 px-4">
+              <div className="min-w-max flex flex-col items-center py-3 px-4 sm:py-6">
                 <Document
                   file={cvPath}
                   onLoadSuccess={onDocumentLoadSuccess}

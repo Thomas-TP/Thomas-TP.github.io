@@ -448,6 +448,7 @@ export function AskThomas() {
   const [recording, setRecording] = useState<'idle' | 'recording' | 'transcribing'>('idle');
   const [ttsPlaying, setTtsPlaying] = useState<number | null>(null);
   const [copied, setCopied] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const [mobileKeyboardOpen, setMobileKeyboardOpen] = useState(false);
   const [mobileInputFocused, setMobileInputFocused] = useState(false);
   const [mobileViewportStyle, setMobileViewportStyle] = useState<CSSProperties>();
@@ -463,7 +464,7 @@ export function AskThomas() {
 
   const hasConversation = history.length > 0;
   const canSend = input.trim().length > 0 && !sending && recording !== 'transcribing';
-  const mobileCompact = mobileKeyboardOpen || mobileInputFocused;
+  const mobileCompact = isMobile && (mobileKeyboardOpen || mobileInputFocused);
 
   useEffect(() => saveHistory(history), [history]);
 
@@ -475,10 +476,7 @@ export function AskThomas() {
 
   useEffect(() => {
     if (!open) return;
-    const id = window.setTimeout(() => {
-      if (window.matchMedia('(max-width: 639px)').matches) return;
-      inputRef.current?.focus();
-    }, 120);
+    const id = window.setTimeout(() => inputRef.current?.focus(), 120);
     return () => window.clearTimeout(id);
   }, [inputRef, open]);
 
@@ -522,13 +520,19 @@ export function AskThomas() {
     const visualViewport = window.visualViewport;
 
     const updateKeyboardState = () => {
-      const isMobile = window.matchMedia('(max-width: 639px)').matches;
+      const nextIsMobile = window.matchMedia('(max-width: 639px)').matches;
       const activeInput = document.activeElement === inputRef.current;
       const viewportHeight = visualViewport?.height ?? window.innerHeight;
       const currentHeight = Math.max(viewportHeight, window.innerHeight);
 
-      if (!open || !isMobile) {
+      setIsMobile(nextIsMobile);
+
+      if (!open || !nextIsMobile) {
         mobileBaselineHeightRef.current = currentHeight;
+        setMobileKeyboardOpen(false);
+        setMobileViewportStyle(undefined);
+        if (!nextIsMobile) setMobileInputFocused(false);
+        return;
       } else if (!activeInput) {
         mobileBaselineHeightRef.current = Math.max(
           mobileBaselineHeightRef.current,
@@ -537,7 +541,7 @@ export function AskThomas() {
       }
 
       const baseline = mobileBaselineHeightRef.current || currentHeight;
-      const keyboardOpen = open && isMobile && activeInput && viewportHeight < baseline - 80;
+      const keyboardOpen = open && nextIsMobile && activeInput && viewportHeight < baseline - 80;
 
       setMobileKeyboardOpen(keyboardOpen);
       setMobileViewportStyle(
@@ -1017,7 +1021,7 @@ export function AskThomas() {
             <textarea
               ref={inputRef}
               value={input}
-              onFocus={() => setMobileInputFocused(true)}
+              onFocus={() => setMobileInputFocused(window.matchMedia('(max-width: 639px)').matches)}
               onBlur={() => setMobileInputFocused(false)}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => {
