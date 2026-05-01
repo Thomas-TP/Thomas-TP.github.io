@@ -318,36 +318,99 @@ function cleanTextForSpeech(text: string) {
 }
 
 function detectSpeechLanguage(text: string) {
-  const normalized = text.toLowerCase();
-  const frenchHints = [
-    'à',
-    'â',
-    'ç',
-    'é',
-    'è',
-    'ê',
-    'ë',
-    'î',
-    'ï',
-    'ô',
-    'ù',
-    'û',
-    'ü',
-    'œ',
-    'bonjour',
-    'salut',
-    'projet',
-    'parcours',
-    'stage',
-    'cfc',
-    'informatique',
-    'développement',
-    'certification',
-    'contact',
-    'disponible',
+  const normalized = ` ${text
+    .toLowerCase()
+    .normalize('NFC')
+    .replace(/https?:\/\/\S+/g, ' ')
+    .replace(/[^\p{L}\p{N}'’]+/gu, ' ')} `;
+
+  if (/[àâçéèêëîïôùûüœ]/i.test(normalized)) return 'fr';
+
+  const frenchWords = [
+    ' a ',
+    ' au ',
+    ' aux ',
+    ' avec ',
+    ' ce ',
+    ' ces ',
+    ' cette ',
+    ' de ',
+    ' des ',
+    ' du ',
+    ' dans ',
+    ' donc ',
+    ' elle ',
+    ' en ',
+    ' est ',
+    ' et ',
+    ' il ',
+    ' je ',
+    ' la ',
+    ' le ',
+    ' les ',
+    ' lui ',
+    ' mais ',
+    ' mon ',
+    ' par ',
+    ' pas ',
+    ' pour ',
+    ' que ',
+    ' qui ',
+    ' sa ',
+    ' ses ',
+    ' son ',
+    ' sur ',
+    ' un ',
+    ' une ',
+    ' vous ',
+    ' oui ',
+    ' bonjour ',
+    ' salut ',
+    ' thomas est ',
+    ' projet ',
+    ' projets ',
+    ' parcours ',
+    ' stage ',
+    ' cfc ',
+    ' informatique ',
+    ' certification ',
+    ' certifications ',
+    ' disponible ',
+    ' alternance ',
+    ' apprentissage ',
+    ' sources ',
   ];
 
-  return frenchHints.some(hint => normalized.includes(hint)) ? 'fr' : 'en';
+  const englishWords = [
+    ' the ',
+    ' and ',
+    ' with ',
+    ' for ',
+    ' from ',
+    ' his ',
+    ' her ',
+    ' this ',
+    ' that ',
+    ' you ',
+    ' can ',
+    ' thomas is ',
+    ' project ',
+    ' projects ',
+    ' internship ',
+    ' available ',
+    ' sources ',
+  ];
+
+  const frenchScore = frenchWords.reduce(
+    (score, word) => score + (normalized.includes(word) ? 1 : 0),
+    0
+  );
+  const englishScore = englishWords.reduce(
+    (score, word) => score + (normalized.includes(word) ? 1 : 0),
+    0
+  );
+
+  return frenchScore >= englishScore && frenchScore > 0 ? 'fr' : 'en';
 }
 
 export function AskThomas() {

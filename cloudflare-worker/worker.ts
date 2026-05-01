@@ -613,7 +613,7 @@ async function handleTTS(request: Request, env: Env, origin: string): Promise<Re
     if (audio instanceof ReadableStream || audio instanceof ArrayBuffer) {
       return new Response(audio as BodyInit, {
         status: 200,
-        headers: { 'Content-Type': 'audio/mpeg', ...corsHeaders(origin) },
+        headers: { 'Content-Type': 'audio/mpeg', 'X-TTS-Lang': lang, ...corsHeaders(origin) },
       });
     }
 
@@ -626,7 +626,7 @@ async function handleTTS(request: Request, env: Env, origin: string): Promise<Re
 
         return new Response(bytes, {
           status: 200,
-          headers: { 'Content-Type': 'audio/mpeg', ...corsHeaders(origin) },
+          headers: { 'Content-Type': 'audio/mpeg', 'X-TTS-Lang': lang, ...corsHeaders(origin) },
         });
       }
     }
