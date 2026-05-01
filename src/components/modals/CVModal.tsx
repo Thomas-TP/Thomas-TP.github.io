@@ -1,4 +1,4 @@
-import { X, Download, Printer, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, Download, Printer, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
@@ -33,7 +33,8 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
   const [mounted, setMounted] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
   const [numPages, setNumPages] = useState<number>(0);
-  const [pageWidth, setPageWidth] = useState(760);
+  const [viewportSize, setViewportSize] = useState({ width: 760, height: 980 });
+  const [zoom, setZoom] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const contentRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
@@ -89,6 +90,7 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
     if (!isOpen) return;
     setCurrentPage(1);
     setNumPages(0);
+    setZoom(1);
   }, [isOpen, cvPath]);
 
   // Measure content area width responsively
@@ -98,7 +100,10 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
     if (!el) return;
     const observer = new ResizeObserver(entries => {
       for (const entry of entries) {
-        setPageWidth(Math.max(300, entry.contentRect.width - 32));
+        setViewportSize({
+          width: Math.max(300, entry.contentRect.width),
+          height: Math.max(360, entry.contentRect.height),
+        });
       }
     });
     observer.observe(el);
@@ -122,6 +127,16 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
 
   const prevPage = useCallback(() => setCurrentPage(p => Math.max(1, p - 1)), []);
   const nextPage = useCallback(() => setCurrentPage(p => Math.min(numPages, p + 1)), [numPages]);
+  const zoomOut = useCallback(() => setZoom(value => Math.max(1, Number((value - 0.15).toFixed(2)))), []);
+  const zoomIn = useCallback(() => setZoom(value => Math.min(2.2, Number((value + 0.15).toFixed(2)))), []);
+  const resetZoom = useCallback(() => setZoom(1), []);
+  const fitPageWidth = Math.max(
+    280,
+    viewportSize.width < 640
+      ? Math.min(viewportSize.width - 32, (viewportSize.height - 48) / 1.414)
+      : viewportSize.width - 32
+  );
+  const pageWidth = Math.round(fitPageWidth * zoom);
 
   // Don't render server-side — portal requires document.body
   if (!mounted) return null;
@@ -192,9 +207,10 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
             <div
               ref={contentRef}
               data-lenis-prevent
-              className="flex-1 overflow-y-auto min-h-0 custom-scrollbar bg-muted/30"
+              className="flex-1 overflow-auto min-h-0 custom-scrollbar bg-muted/30"
+              style={{ touchAction: 'pan-x pan-y pinch-zoom' }}
             >
-              <div className="flex flex-col items-center py-6 px-4">
+              <div className="min-w-max flex flex-col items-center py-6 px-4">
                 <Document
                   file={cvPath}
                   onLoadSuccess={onDocumentLoadSuccess}
@@ -224,8 +240,33 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
             </div>
 
             {/* Page navigator */}
-            {numPages > 1 && (
-              <div className="flex items-center justify-center gap-4 px-5 py-3 border-t border-border shrink-0">
+            {numPages > 0 && (
+              <div className="flex items-center justify-center gap-3 px-5 py-3 border-t border-border shrink-0">
+                <button
+                  onClick={zoomOut}
+                  disabled={zoom <= 1}
+                  aria-label="Dézoomer"
+                  className="w-8 h-8 flex items-center justify-center rounded-full border border-border text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  <ZoomOut size={16} />
+                </button>
+                <button
+                  onClick={resetZoom}
+                  disabled={zoom === 1}
+                  className="min-w-12 h-8 px-2 rounded-full border border-border text-xs text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                  aria-label="Réinitialiser le zoom"
+                >
+                  {Math.round(zoom * 100)}%
+                </button>
+                <button
+                  onClick={zoomIn}
+                  disabled={zoom >= 2.2}
+                  aria-label="Zoomer"
+                  className="w-8 h-8 flex items-center justify-center rounded-full border border-border text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  <ZoomIn size={16} />
+                </button>
+                <div className="w-px h-6 bg-border mx-1" />
                 <button
                   onClick={prevPage}
                   disabled={currentPage <= 1}
