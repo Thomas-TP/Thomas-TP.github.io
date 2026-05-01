@@ -774,7 +774,7 @@ export function AskThomas() {
   return (
     <>
       <div
-        className={`fixed bottom-0 right-0 z-[60] flex h-[100dvh] w-full origin-bottom-right flex-col overflow-hidden border-border bg-card shadow-2xl shadow-black/25 transition-all duration-300 sm:bottom-6 sm:right-6 sm:h-[680px] sm:max-h-[calc(100vh-3rem)] sm:w-[430px] sm:rounded-2xl sm:border ${
+        className={`fixed bottom-0 right-0 z-[60] flex h-[100dvh] w-full origin-bottom-right flex-col overflow-hidden border-border bg-card shadow-2xl shadow-black/25 transition-[height,top,transform,opacity] duration-300 ease-out sm:bottom-6 sm:right-6 sm:h-[680px] sm:max-h-[calc(100vh-3rem)] sm:w-[430px] sm:rounded-2xl sm:border ${
           open
             ? 'translate-y-0 scale-100 opacity-100'
             : 'pointer-events-none translate-y-5 scale-95 opacity-0'
@@ -845,8 +845,8 @@ export function AskThomas() {
         >
           {!hasConversation ? (
             <div
-              className={`flex min-h-full flex-col ${
-                mobileKeyboardOpen ? 'justify-start gap-3 pb-1 pt-3' : 'justify-end gap-5 pb-2 pt-6'
+              className={`flex min-h-full flex-col justify-end transition-[gap,padding] duration-300 ease-out ${
+                mobileKeyboardOpen ? 'gap-3 pb-1 pt-3' : 'gap-5 pb-2 pt-6'
               }`}
             >
               <div className="mx-auto flex max-w-[22rem] flex-col items-center text-center">
@@ -859,37 +859,48 @@ export function AskThomas() {
                 </p>
               </div>
 
-              {!mobileKeyboardOpen && (
-                <>
-                  <div className="grid gap-2">
-                    {suggestions.map(suggestion => (
-                      <button
-                        key={suggestion}
-                        type="button"
-                        onClick={() => send(suggestion)}
-                        className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-card px-3.5 py-3 text-left text-[0.82rem] transition-colors hover:border-foreground/20 hover:bg-foreground/[0.04]"
-                      >
-                        <span>{suggestion}</span>
-                        <MessageCircle
-                          size={15}
-                          className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
-                        />
-                      </button>
-                    ))}
-                  </div>
+              <div
+                aria-hidden={mobileKeyboardOpen}
+                className={`grid gap-2 overflow-hidden transition-[max-height,opacity,transform,margin] duration-300 ease-out ${
+                  mobileKeyboardOpen
+                    ? 'max-h-0 -translate-y-2 opacity-0 pointer-events-none'
+                    : 'max-h-56 translate-y-0 opacity-100'
+                }`}
+              >
+                {suggestions.map(suggestion => (
+                  <button
+                    key={suggestion}
+                    type="button"
+                    tabIndex={mobileKeyboardOpen ? -1 : undefined}
+                    onClick={() => send(suggestion)}
+                    className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-card px-3.5 py-3 text-left text-[0.82rem] transition-colors hover:border-foreground/20 hover:bg-foreground/[0.04]"
+                  >
+                    <span>{suggestion}</span>
+                    <MessageCircle
+                      size={15}
+                      className="shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                    />
+                  </button>
+                ))}
+              </div>
 
-                  <div className="grid grid-cols-2 gap-2">
-                    {capabilities.map(item => (
-                      <div
-                        key={item}
-                        className="rounded-lg border border-border bg-card/70 px-3 py-2 text-[0.66rem] leading-relaxed text-muted-foreground"
-                      >
-                        {item}
-                      </div>
-                    ))}
+              <div
+                aria-hidden={mobileKeyboardOpen}
+                className={`grid grid-cols-2 gap-2 overflow-hidden transition-[max-height,opacity,transform,margin] duration-300 ease-out ${
+                  mobileKeyboardOpen
+                    ? 'max-h-0 -translate-y-2 opacity-0 pointer-events-none'
+                    : 'max-h-32 translate-y-0 opacity-100'
+                }`}
+              >
+                {capabilities.map(item => (
+                  <div
+                    key={item}
+                    className="rounded-lg border border-border bg-card/70 px-3 py-2 text-[0.66rem] leading-relaxed text-muted-foreground"
+                  >
+                    {item}
                   </div>
-                </>
-              )}
+                ))}
+              </div>
             </div>
           ) : (
             <div className="space-y-5">

@@ -25,9 +25,7 @@ export function CVModal({ isOpen, onClose }: CVModalProps) {
     ? 'fr'
     : 'en';
   const cvPath =
-    cvLang === 'fr'
-      ? '/documents/CV_Thomas_Prudhomme_FR.pdf'
-      : '/documents/CV_Thomas_Prudhomme_EN.pdf';
+    cvLang === 'fr' ? '/documents/cv-fr.pdf' : '/documents/cv-en.pdf';
 
   const [mounted, setMounted] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);

@@ -61,11 +61,11 @@ const MAX_CONTACT_MESSAGE = 4000;
 const MAX_STT_BYTES = 5 * 1024 * 1024;
 const ASK_LIMIT_PER_HOUR = 12;
 const CV_URLS: Record<Lang, string> = {
-  fr: 'https://thomastp.ch/documents/CV_Thomas_Prudhomme_FR.pdf',
-  en: 'https://thomastp.ch/documents/CV_Thomas_Prudhomme_EN.pdf',
+  fr: 'https://thomastp.ch/documents/cv-fr.pdf',
+  en: 'https://thomastp.ch/documents/cv-en.pdf',
 };
 const CV_URL_PATTERN =
-  /https:\/\/thomastp\.ch\/documents\/(?:ThomasPrudhommeCV|CV_Thomas_Prudhomme_(?:FR|EN))\.pdf/g;
+  /https:\/\/thomastp\.ch\/documents\/(?:ThomasPrudhommeCV|CV_Thomas_Prudhomme_(?:FR|EN)|cv-(?:fr|en))\.pdf/g;
 
 async function incrementRateLimit(
   kv: KVNamespace,
@@ -80,14 +80,14 @@ async function incrementRateLimit(
 }
 
 function cvLinkLabel(url: string, lang: Lang): string {
-  if (url.includes('_EN')) return lang === 'fr' ? 'CV EN' : 'Resume';
-  if (url.includes('_FR')) return lang === 'fr' ? 'CV' : 'French CV';
+  if (url.includes('_EN') || url.includes('cv-en')) return lang === 'fr' ? 'CV EN' : 'Resume';
+  if (url.includes('_FR') || url.includes('cv-fr')) return lang === 'fr' ? 'CV' : 'French CV';
   return lang === 'fr' ? 'CV' : 'Resume';
 }
 
 function normalizeCvLinks(reply: string, lang: Lang): string {
   return reply
-    .replace(/\[(https:\/\/thomastp\.ch\/documents\/(?:ThomasPrudhommeCV|CV_Thomas_Prudhomme_(?:FR|EN))\.pdf)\]\(\1\)/g, (_match, url: string) => {
+    .replace(/\[(https:\/\/thomastp\.ch\/documents\/(?:ThomasPrudhommeCV|CV_Thomas_Prudhomme_(?:FR|EN)|cv-(?:fr|en))\.pdf)\]\(\1\)/g, (_match, url: string) => {
       return `[${cvLinkLabel(url, lang)}](${url})`;
     })
     .replace(CV_URL_PATTERN, (url, offset, fullText) => {

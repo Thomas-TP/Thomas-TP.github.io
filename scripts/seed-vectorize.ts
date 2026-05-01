@@ -14,8 +14,8 @@
 const ACCOUNT_ID = process.env.CF_ACCOUNT_ID;
 const API_TOKEN = process.env.CF_API_TOKEN;
 const INDEX_NAME = 'portfolio-knowledge';
-const CV_FR_URL = 'https://thomastp.ch/documents/CV_Thomas_Prudhomme_FR.pdf';
-const CV_EN_URL = 'https://thomastp.ch/documents/CV_Thomas_Prudhomme_EN.pdf';
+const CV_FR_URL = 'https://thomastp.ch/documents/cv-fr.pdf';
+const CV_EN_URL = 'https://thomastp.ch/documents/cv-en.pdf';
 const CV_SOURCES = `CV FR ${CV_FR_URL}; CV EN ${CV_EN_URL}`;
 
 if (!ACCOUNT_ID || !API_TOKEN) {
