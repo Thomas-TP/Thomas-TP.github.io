@@ -523,6 +523,7 @@ async function handleSTT(request: Request, env: Env, origin: string): Promise<Re
 
 interface TtsBody {
   text?: string;
+  lang?: string;
 }
 
 async function handleTTS(request: Request, env: Env, origin: string): Promise<Response> {
@@ -534,6 +535,7 @@ async function handleTTS(request: Request, env: Env, origin: string): Promise<Re
   }
 
   const text = (body.text ?? '').trim();
+  const lang = body.lang?.startsWith('fr') ? 'fr' : 'en';
   if (!text) return jsonResp({ error: 'Empty text' }, 400, origin);
   if (text.length > 2000) return jsonResp({ error: 'Text too long (max 2000 chars)' }, 400, origin);
 
@@ -549,14 +551,33 @@ async function handleTTS(request: Request, env: Env, origin: string): Promise<Re
   }
 
   try {
-    const audio = (await env.AI.run('@cf/myshell-ai/melotts', {
-      text,
-    })) as ReadableStream | ArrayBuffer;
-
-    return new Response(audio as BodyInit, {
-      status: 200,
-      headers: { 'Content-Type': 'audio/wav', ...corsHeaders(origin) },
+    const audio = await env.AI.run('@cf/myshell-ai/melotts', {
+      prompt: text,
+      lang,
     });
+
+    if (audio instanceof ReadableStream || audio instanceof ArrayBuffer) {
+      return new Response(audio as BodyInit, {
+        status: 200,
+        headers: { 'Content-Type': 'audio/mpeg', ...corsHeaders(origin) },
+      });
+    }
+
+    if (audio && typeof audio === 'object' && 'audio' in audio) {
+      const encoded = (audio as { audio?: unknown }).audio;
+      if (typeof encoded === 'string' && encoded) {
+        const binary = atob(encoded);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+
+        return new Response(bytes, {
+          status: 200,
+          headers: { 'Content-Type': 'audio/mpeg', ...corsHeaders(origin) },
+        });
+      }
+    }
+
+    return jsonResp({ error: 'Speech synthesis returned no audio' }, 502, origin);
   } catch (err) {
     console.error('TTS error:', err);
     return jsonResp({ error: 'Speech synthesis failed' }, 500, origin);

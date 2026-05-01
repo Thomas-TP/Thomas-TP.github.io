@@ -1,4 +1,4 @@
-import { Home, User, Code, Mail, Link as LinkIcon } from 'lucide-react';
+import { Home, User, Code, Mail, Link as LinkIcon, Sparkles } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { useState, useEffect, useRef, type ComponentType } from 'react';
 import { ModeToggle } from '@/components/ui/mode-toggle';
@@ -11,6 +11,17 @@ interface NavItem {
   icon: ComponentType<{ size?: number; className?: string; strokeWidth?: number }>;
   href: string;
   external?: boolean;
+}
+
+const ASK_THOMAS_EVENT = 'ask-thomas:open';
+
+function openAskThomas() {
+  try {
+    window.sessionStorage.setItem(ASK_THOMAS_EVENT, '1');
+  } catch {
+    // Storage may be disabled; the live event still opens the mounted chat.
+  }
+  window.dispatchEvent(new Event(ASK_THOMAS_EVENT));
 }
 
 function NavLink({
@@ -96,6 +107,61 @@ function NavLink({
       </span>
       <item.icon size={20} className="md:w-5 md:h-5" strokeWidth={1.5} />
     </a>
+  );
+}
+
+function AskThomasNavButton({ forceShowLabel }: { forceShowLabel?: boolean }) {
+  const { t } = useTranslation();
+  const label = t('ask.launcher');
+  const [isHovered, setIsHovered] = useState(false);
+  const showLabel = forceShowLabel === false ? isHovered : isHovered || forceShowLabel;
+  const labelRef = useRef<HTMLSpanElement>(null);
+  const hasMeasured = useRef(false);
+  const [naturalWidth, setNaturalWidth] = useState(0);
+
+  useEffect(() => {
+    const el = labelRef.current;
+    if (!el) return;
+    el.style.position = 'absolute';
+    el.style.visibility = 'hidden';
+    el.style.width = 'auto';
+    const w = el.scrollWidth;
+    el.style.position = '';
+    el.style.visibility = '';
+    el.style.width = '0px';
+    setNaturalWidth(w);
+    requestAnimationFrame(() => {
+      hasMeasured.current = true;
+    });
+  }, [label]);
+
+  return (
+    <button
+      type="button"
+      onClick={openAskThomas}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onFocus={() => setIsHovered(true)}
+      onBlur={() => setIsHovered(false)}
+      className="relative flex items-center justify-center p-2 md:p-2.5 rounded-full transition-all duration-300 text-muted-foreground hover:text-foreground hover:bg-foreground/10"
+      aria-label={label}
+      title={label}
+    >
+      <span
+        ref={labelRef}
+        className="mr-2 hidden overflow-hidden whitespace-nowrap text-xs font-medium md:block"
+        style={{
+          width: showLabel ? `${naturalWidth}px` : '0px',
+          opacity: showLabel ? 1 : 0,
+          transition: hasMeasured.current
+            ? 'width 0.25s cubic-bezier(0.4,0,0.2,1), opacity 0.2s ease'
+            : 'none',
+        }}
+      >
+        {label}
+      </span>
+      <Sparkles size={20} className="md:h-5 md:w-5" strokeWidth={1.5} />
+    </button>
   );
 }
 
@@ -234,6 +300,7 @@ export function Navbar() {
               <NavLink key={item.id} item={item} forceShowLabel={isDesktop} />
             ))}
           </div>
+          <AskThomasNavButton forceShowLabel={isDesktop} />
           <div className="hidden md:block w-px h-8 bg-border/50 mx-2" />
           <LanguageToggle />
           <ModeToggle />
@@ -260,6 +327,7 @@ export function Navbar() {
                 <NavLink key={item.id} item={item} forceShowLabel={false} />
               ))}
             </div>
+            <AskThomasNavButton forceShowLabel={false} />
             <div className="hidden md:block w-px h-8 bg-border/50 mx-2" />
             <LanguageToggle />
             <ModeToggle />

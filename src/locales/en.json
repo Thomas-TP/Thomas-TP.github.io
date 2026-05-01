@@ -108,6 +108,55 @@
             "error_email": "Please enter a valid email address."
         }
     },
+    "ask": {
+        "launcher": "Ask Thomas",
+        "launcher_subtitle": "Portfolio assistant",
+        "dialog_label": "Ask Thomas chat",
+        "title": "Ask Thomas",
+        "subtitle": "Thomas's portfolio AI assistant",
+        "status": "online",
+        "empty_title": "What would you like to know about Thomas?",
+        "empty_body": "Ask about his background, stack, projects, certifications, or the best way to reach him.",
+        "suggestions": [
+            "What's his technical stack?",
+            "Tell me about TomBoard",
+            "Is he available for an internship?",
+            "How can I contact him quickly?"
+        ],
+        "capabilities": [
+            "Background and CFC track",
+            "Projects and stack",
+            "CV, GitHub, and contact",
+            "Verified certifications"
+        ],
+        "placeholder": "Write your question...",
+        "message_label": "Message",
+        "thinking": "Ask Thomas is thinking",
+        "recording": "Recording",
+        "transcribing": "Transcribing...",
+        "disclaimer": "AI-generated answers",
+        "footer_note": "AI can make mistakes, verify important details.",
+        "send": "Send",
+        "voice": "Voice input",
+        "stop_recording": "Stop recording",
+        "listen": "Listen",
+        "playing": "Playing",
+        "copy": "Copy",
+        "copied": "Copied",
+        "clear": "Clear conversation",
+        "close": "Close",
+        "minimize": "Minimize",
+        "regenerate": "Send last question again",
+        "errors": {
+            "generic": "I can't answer right now. Please try again in a moment.",
+            "rate_limit": "Rate limit reached. Please try again a little later.",
+            "too_long": "Your message is too long. Keep it under 500 characters.",
+            "microphone": "The microphone is unavailable or access was denied.",
+            "transcription": "Transcription failed. You can type your question instead.",
+            "tts": "Voice playback could not start.",
+            "copy": "Could not copy the message."
+        }
+    },
     "footer": {
         "rights": "All rights reserved.",
         "privacy": "Privacy Policy",

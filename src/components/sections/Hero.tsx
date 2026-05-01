@@ -34,6 +34,38 @@ function FileTextIcon({ size = 18 }: { size?: number }) {
   );
 }
 
+function SparklesIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />
+      <path d="M20 2v4" />
+      <path d="M22 4h-4" />
+      <path d="M4 18v2" />
+      <path d="M5 19H3" />
+    </svg>
+  );
+}
+
+const ASK_THOMAS_EVENT = 'ask-thomas:open';
+
+function openAskThomas() {
+  try {
+    window.sessionStorage.setItem(ASK_THOMAS_EVENT, '1');
+  } catch {
+    // Storage may be disabled; the live event still opens the mounted chat.
+  }
+  window.dispatchEvent(new Event(ASK_THOMAS_EVENT));
+}
+
 const CVModal = lazy(() =>
   import('@/components/modals/CVModal').then(mod => ({ default: mod.CVModal }))
 );
@@ -119,6 +151,7 @@ export function Hero() {
   const avatarRef = useRef<HTMLDivElement>(null);
   const cvBtnRef = useMagnetic(0.3);
   const contactBtnRef = useMagnetic(0.3);
+  const askBtnRef = useMagnetic(0.3);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -297,9 +330,18 @@ export function Hero() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start items-center">
                 <button
+                  ref={askBtnRef as React.Ref<HTMLButtonElement>}
+                  onClick={openAskThomas}
+                  className="group bg-primary text-primary-foreground px-8 py-4 rounded-full font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer"
+                >
+                  <SparklesIcon size={18} />
+                  {t('ask.launcher')}
+                </button>
+
+                <button
                   ref={cvBtnRef as React.Ref<HTMLButtonElement>}
                   onClick={() => setCvOpen(true)}
-                  className="group bg-primary text-primary-foreground px-8 py-4 rounded-full font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer"
+                  className="group px-8 py-4 rounded-full border border-border hover:bg-muted/50 transition-colors text-foreground flex items-center gap-2 cursor-pointer"
                 >
                   <FileTextIcon size={18} />
                   {t('hero.view_cv', 'Voir le CV')}

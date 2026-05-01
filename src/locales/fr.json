@@ -108,6 +108,55 @@
             "error_email": "Veuillez entrer une adresse e-mail valide."
         }
     },
+    "ask": {
+        "launcher": "Ask Thomas",
+        "launcher_subtitle": "Assistant portfolio",
+        "dialog_label": "Discussion Ask Thomas",
+        "title": "Ask Thomas",
+        "subtitle": "Assistant IA du portfolio de Thomas",
+        "status": "en ligne",
+        "empty_title": "Que voulez-vous savoir sur Thomas ?",
+        "empty_body": "Posez une question sur son parcours, sa stack, ses projets, ses certifications ou les meilleures façons de le contacter.",
+        "suggestions": [
+            "Quelle est sa stack technique ?",
+            "Parle-moi de TomBoard",
+            "Est-il disponible pour un stage ?",
+            "Comment le contacter rapidement ?"
+        ],
+        "capabilities": [
+            "Parcours et CFC",
+            "Projets et stack",
+            "CV, GitHub et contact",
+            "Certifications vérifiées"
+        ],
+        "placeholder": "Écrivez votre question...",
+        "message_label": "Message",
+        "thinking": "Ask Thomas réfléchit",
+        "recording": "Enregistrement en cours",
+        "transcribing": "Transcription...",
+        "disclaimer": "Réponses générées par IA",
+        "footer_note": "L'IA peut se tromper, vérifiez les infos importantes.",
+        "send": "Envoyer",
+        "voice": "Entrée vocale",
+        "stop_recording": "Arrêter l'enregistrement",
+        "listen": "Écouter",
+        "playing": "Lecture",
+        "copy": "Copier",
+        "copied": "Copié",
+        "clear": "Effacer la conversation",
+        "close": "Fermer",
+        "minimize": "Réduire",
+        "regenerate": "Renvoyer la dernière question",
+        "errors": {
+            "generic": "Impossible de répondre pour le moment. Réessayez dans un instant.",
+            "rate_limit": "Limite atteinte. Réessayez un peu plus tard.",
+            "too_long": "Votre message est trop long. Gardez-le sous 500 caractères.",
+            "microphone": "Le microphone n'est pas disponible ou l'accès a été refusé.",
+            "transcription": "La transcription a échoué. Vous pouvez écrire votre question à la place.",
+            "tts": "La lecture vocale n'a pas pu démarrer.",
+            "copy": "Impossible de copier le message."
+        }
+    },
     "footer": {
         "rights": "Tous droits réservés.",
         "privacy": "Politique de confidentialité",
