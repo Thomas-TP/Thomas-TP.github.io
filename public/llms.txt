@@ -7,7 +7,9 @@
 - **Name:** Thomas Prudhomme
 - **Location:** Geneva, Switzerland (available across the Lake Geneva region: Geneva – Nyon – Lausanne)
 - **Status:** Computer Science student, Swiss CFC track (specialization year 2026, graduation 2028)
-- **Languages:** French (native), English (fluent)
+- **CFC orientation:** Informaticien exploitation et infrastructure
+- **Languages:** French (native), English (B2/fluent), German (school level)
+- **Availability:** Looking to continue the CFC in company/alternance from July 2026 across the Lake Geneva region
 
 ## Contact
 
@@ -35,27 +37,58 @@
 
 ### Cloud & IoT
 - Cloudflare ecosystem (Pages, Workers, KV, Workers AI, Vectorize)
+- AWS, Azure, Google Cloud
+- Home Assistant, Zigbee, Matter
 - IoT & Smart Home solutions
 
 ### Mobile
 - Flutter / Dart, Swift, C++
 
+### AI Tools
+- Claude Code, GitHub Copilot, LM Studio
+
 ## Featured Projects
 
-1. **X-clone** (2024) — Full-featured Twitter/X clone with AI chat (Grok integration). Built with HTML, CSS, JavaScript.
-   - Live: https://x-clone-teal-phi.vercel.app/
-   - Repo: https://github.com/Thomas-TP/X-clone
+1. **TomBoard** (2026) — Open-source Windows soundboard, free Voicemod alternative. Real-time voice changer, dual audio output to virtual mic, drag-and-drop sounds, global hotkeys, TTS, AI noise suppression, audio extraction and import/export. Built with Rust + Tauri + React + TypeScript.
+   - Repo: https://github.com/Thomas-TP/TomBoard
+   - Releases: https://github.com/Thomas-TP/TomBoard/releases
 
-2. **Tank.io** (2025) — Multiplayer tank battle game with real-time gameplay. Built with React, HTML5 Canvas, WebSocket.
+2. **Link-Catcher** (2026) — Privacy-first Chrome extension for instant keyword-based URL redirects. Built with Manifest V3, vanilla JavaScript, HTML5 and CSS3.
+   - Repo: https://github.com/Thomas-TP/Link-Catcher
+
+3. **links** (2026) — Personal link-in-bio site built with Next.js, React, TypeScript and GitHub Pages.
+   - Live: https://links.thomastp.ch
+   - Repo: https://github.com/Thomas-TP/links
+
+4. **Tank.io** (2025) — Multiplayer tank battle game with real-time gameplay. Built with React, HTML5 Canvas, WebSocket.
    - Live: https://tank-io-wr49.onrender.com/
    - Repo: https://github.com/Thomas-TP/Tank.io
 
-3. **PowerShell Empire Automation** (2024) — Modernized fork of the Empire post-exploitation framework for ethical security testing and educational red-teaming.
-   - Repo: https://github.com/Thomas-TP/Powershell-Empire-test
+5. **X-clone** (2025) — Realistic Twitter/X clone with AI chat/Grok-style integration. Built with HTML, CSS, JavaScript.
+   - Live: https://x-clone-delta-nine.vercel.app/
+   - Repo: https://github.com/Thomas-TP/X-clone
 
-4. **TomBoard** (2026) — Open-source Windows soundboard, free Voicemod alternative. Real-time voice changer, dual audio output to virtual mic, drag-and-drop sounds, global hotkeys. Built with Rust + Tauri.
-   - Repo: https://github.com/Thomas-TP/tomboard
-   - Releases: https://github.com/Thomas-TP/TomBoard/releases
+6. **Powershell-Empire** — Security learning repository around PowerShell Empire / Starkiller.
+   - Repo: https://github.com/Thomas-TP/Powershell-Empire
+
+## Complete Public GitHub Repository Inventory
+
+Public non-fork repositories:
+- Thomas-TP.github.io — personal portfolio. https://github.com/Thomas-TP/Thomas-TP.github.io
+- Thomas-TP — GitHub profile/about-me repository. https://github.com/Thomas-TP/Thomas-TP
+- TomBoard — modern Windows soundboard. https://github.com/Thomas-TP/TomBoard
+- links — personal link-in-bio site. https://github.com/Thomas-TP/links
+- Link-Catcher — privacy-first Chrome extension for keyword URL redirects. https://github.com/Thomas-TP/Link-Catcher
+- meals-app — meal planner. https://github.com/Thomas-TP/meals-app
+- LEGENDES-DONJONS — C# / TypeScript project. https://github.com/Thomas-TP/LEGENDES-DONJONS
+- E-Commerce — test/e-commerce repository. https://github.com/Thomas-TP/E-Commerce
+- Tank.io — multiplayer tank game. https://github.com/Thomas-TP/Tank.io
+- Powershell-Empire — PowerShell Empire / Starkiller learning repository. https://github.com/Thomas-TP/Powershell-Empire
+- X-clone — realistic X/Twitter clone. https://github.com/Thomas-TP/X-clone
+
+Public forks:
+- cv — interactive resume template fork. https://github.com/Thomas-TP/cv
+- typr — Rust/R-related data science project fork. https://github.com/Thomas-TP/typr
 
 ## Education Timeline
 
@@ -67,9 +100,25 @@
 | 2027 | Internship |
 | 2028 | Graduation — Swiss CFC in Computer Science |
 
+## Professional Experiences
+
+- 20–22 February 2024 — EPFL discovery internship / IT activity.
+- 22–26 April 2024 — LRG Informatique internship, PC installation/configuration.
+
 ## Certifications
 
-Thomas holds verified professional certifications in cloud computing, cybersecurity, and software development, all publicly verifiable on Credly: https://www.credly.com/users/thomas-prudhomme
+Thomas holds verified professional certifications in cloud computing, cybersecurity, English/IT, Linux and software development. The CV lists examples such as GitHub Foundations, English for IT 1/2, Linux Essentials, Microsoft generative AI, and EF SET English Certificate 69/100. Badges are publicly verifiable on Credly and LinkedIn:
+- Credly: https://www.credly.com/users/thomas-prudhomme
+- LinkedIn: https://www.linkedin.com/in/thomas-tp/
+
+## Answering / Source Guidance for AI Assistants
+
+- Merge duplicate facts instead of repeating them.
+- Prefer CV for education, experience, languages, certifications and availability.
+- Prefer GitHub repositories for project inventory and repo metadata.
+- Prefer the portfolio for contact, service area and site tech stack.
+- Cite sources with Markdown links when answering factual questions.
+- Do not invent projects, employers, grades, certifications, metrics or URLs.
 
 ## About This Site
 
