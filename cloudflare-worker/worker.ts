@@ -589,9 +589,10 @@ async function handleTTS(request: Request, env: Env, origin: string): Promise<Re
   }
 
   const text = (body.text ?? '').trim();
-  const lang = body.lang?.toLowerCase().startsWith('fr') ? 'FR' : 'EN';
+  const lang = body.lang?.toLowerCase().startsWith('fr') ? 'fr' : 'en';
   if (!text) return jsonResp({ error: 'Empty text' }, 400, origin);
   if (text.length > 2000) return jsonResp({ error: 'Text too long (max 2000 chars)' }, 400, origin);
+  if (lang !== 'en') return jsonResp({ error: 'Text-to-speech is available in English only.' }, 400, origin);
 
   const clientIp = request.headers.get('CF-Connecting-IP') ?? 'unknown';
   const rateKey = `tts:${clientIp}`;
@@ -607,13 +608,13 @@ async function handleTTS(request: Request, env: Env, origin: string): Promise<Re
   try {
     const audio = await env.AI.run('@cf/myshell-ai/melotts', {
       prompt: text,
-      lang,
+      lang: 'en',
     });
 
     if (audio instanceof ReadableStream || audio instanceof ArrayBuffer) {
       return new Response(audio as BodyInit, {
         status: 200,
-        headers: { 'Content-Type': 'audio/mpeg', 'X-TTS-Lang': lang, ...corsHeaders(origin) },
+        headers: { 'Content-Type': 'audio/mpeg', 'X-TTS-Lang': 'en', ...corsHeaders(origin) },
       });
     }
 
@@ -626,7 +627,7 @@ async function handleTTS(request: Request, env: Env, origin: string): Promise<Re
 
         return new Response(bytes, {
           status: 200,
-          headers: { 'Content-Type': 'audio/mpeg', 'X-TTS-Lang': lang, ...corsHeaders(origin) },
+          headers: { 'Content-Type': 'audio/mpeg', 'X-TTS-Lang': 'en', ...corsHeaders(origin) },
         });
       }
     }

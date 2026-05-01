@@ -413,6 +413,10 @@ function detectSpeechLanguage(text: string) {
   return frenchScore >= englishScore && frenchScore > 0 ? 'fr' : 'en';
 }
 
+function canUseTextToSpeech(text: string) {
+  return detectSpeechLanguage(text) === 'en';
+}
+
 export function AskThomas() {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -799,6 +803,7 @@ export function AskThomas() {
             <div className="space-y-5">
               {history.map((message, index) => {
                 const isUser = message.role === 'user';
+                const showTTS = !isUser && canUseTextToSpeech(message.content);
                 return (
                   <div
                     key={`${message.role}-${index}`}
@@ -841,20 +846,24 @@ export function AskThomas() {
                             {copied === index ? <Check size={12} /> : <Copy size={12} />}
                             <span>{copied === index ? t('ask.copied') : t('ask.copy')}</span>
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => playTTS(message.content, index)}
-                            className="flex h-7 items-center gap-1 rounded-md px-2 text-[0.68rem] transition-colors hover:bg-foreground/10 hover:text-foreground"
-                            aria-label={t('ask.listen')}
-                            title={t('ask.listen')}
-                          >
-                            {ttsPlaying === index ? (
-                              <Loader2 size={12} className="animate-spin" />
-                            ) : (
-                              <Volume2 size={12} />
-                            )}
-                            <span>{ttsPlaying === index ? t('ask.playing') : t('ask.listen')}</span>
-                          </button>
+                          {showTTS && (
+                            <button
+                              type="button"
+                              onClick={() => playTTS(message.content, index)}
+                              className="flex h-7 items-center gap-1 rounded-md px-2 text-[0.68rem] transition-colors hover:bg-foreground/10 hover:text-foreground"
+                              aria-label={t('ask.listen')}
+                              title={t('ask.listen')}
+                            >
+                              {ttsPlaying === index ? (
+                                <Loader2 size={12} className="animate-spin" />
+                              ) : (
+                                <Volume2 size={12} />
+                              )}
+                              <span>
+                                {ttsPlaying === index ? t('ask.playing') : t('ask.listen')}
+                              </span>
+                            </button>
+                          )}
                         </div>
                       )}
                     </div>
