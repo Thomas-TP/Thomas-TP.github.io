@@ -317,8 +317,41 @@ function cleanTextForSpeech(text: string) {
     .trim();
 }
 
+function detectSpeechLanguage(text: string) {
+  const normalized = text.toLowerCase();
+  const frenchHints = [
+    'à',
+    'â',
+    'ç',
+    'é',
+    'è',
+    'ê',
+    'ë',
+    'î',
+    'ï',
+    'ô',
+    'ù',
+    'û',
+    'ü',
+    'œ',
+    'bonjour',
+    'salut',
+    'projet',
+    'parcours',
+    'stage',
+    'cfc',
+    'informatique',
+    'développement',
+    'certification',
+    'contact',
+    'disponible',
+  ];
+
+  return frenchHints.some(hint => normalized.includes(hint)) ? 'fr' : 'en';
+}
+
 export function AskThomas() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<Msg[]>(() => loadHistory());
@@ -541,7 +574,7 @@ export function AskThomas() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             text: cleanTextForSpeech(text).slice(0, 2000),
-            lang: i18n.language?.startsWith('fr') ? 'fr' : 'en',
+            lang: detectSpeechLanguage(text),
           }),
         });
 
@@ -572,7 +605,7 @@ export function AskThomas() {
         setError(t('ask.errors.tts'));
       }
     },
-    [i18n.language, t, ttsPlaying]
+    [t, ttsPlaying]
   );
 
   const handleAnchorNavigate = useCallback((anchor: string) => {
