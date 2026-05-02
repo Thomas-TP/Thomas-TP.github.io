@@ -393,14 +393,13 @@ export function Hero() {
                   />
                   <img
                     src="/images/memoji-nobg.webp"
-                    alt=""
+                    alt="Memoji de Thomas Prudhomme"
                     width={256}
                     height={256}
                     className="hero-avatar-memoji"
                     loading="lazy"
                     decoding="async"
                     fetchPriority="low"
-                    aria-hidden="true"
                   />
                   <div className="hero-avatar-glare" />
                   <div className="hero-avatar-depth" />
