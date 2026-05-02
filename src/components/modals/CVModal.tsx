@@ -21,14 +21,14 @@ interface CVModalProps {
 
 export function CVModal({ isOpen, onClose }: CVModalProps) {
   const { t, i18n } = useTranslation();
-  const cvVersion = '20260502';
+  const cvBaseUrl = 'https://cv.thomastp.ch';
   const cvLang = (i18n.resolvedLanguage ?? i18n.language).toLowerCase().startsWith('fr')
     ? 'fr'
     : 'en';
   const cvPath =
     cvLang === 'fr'
-      ? `/documents/cv-fr.pdf?v=${cvVersion}`
-      : `/documents/cv-en.pdf?v=${cvVersion}`;
+      ? `${cvBaseUrl}/cv-fr.pdf`
+      : `${cvBaseUrl}/cv-en.pdf`;
 
   const [mounted, setMounted] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);

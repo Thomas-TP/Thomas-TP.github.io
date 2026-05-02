@@ -60,13 +60,13 @@ const MAX_CONTACT_EMAIL = 254;
 const MAX_CONTACT_MESSAGE = 4000;
 const MAX_STT_BYTES = 5 * 1024 * 1024;
 const ASK_LIMIT_PER_HOUR = 12;
-const CV_VERSION = '20260502';
+const CV_BASE_URL = 'https://cv.thomastp.ch';
 const CV_URLS: Record<Lang, string> = {
-  fr: `https://thomastp.ch/documents/cv-fr.pdf?v=${CV_VERSION}`,
-  en: `https://thomastp.ch/documents/cv-en.pdf?v=${CV_VERSION}`,
+  fr: `${CV_BASE_URL}/cv-fr.pdf`,
+  en: `${CV_BASE_URL}/cv-en.pdf`,
 };
 const CV_URL_PATTERN =
-  /https:\/\/thomastp\.ch\/documents\/(?:ThomasPrudhommeCV|CV_Thomas_Prudhomme_(?:FR|EN)|cv-(?:fr|en))\.pdf(?:\?v=\d+)?/g;
+  /https:\/\/(?:thomastp\.ch\/documents\/(?:ThomasPrudhommeCV|CV_Thomas_Prudhomme_(?:FR|EN)|cv-(?:fr|en))|cv\.thomastp\.ch\/(?:\d{8}\/)?cv-(?:fr|en))\.pdf(?:\?v=\d+)?/g;
 
 async function incrementRateLimit(
   kv: KVNamespace,
@@ -88,7 +88,7 @@ function cvLinkLabel(url: string, lang: Lang): string {
 
 function normalizeCvLinks(reply: string, lang: Lang): string {
   return reply
-    .replace(/\[(https:\/\/thomastp\.ch\/documents\/(?:ThomasPrudhommeCV|CV_Thomas_Prudhomme_(?:FR|EN)|cv-(?:fr|en))\.pdf(?:\?v=\d+)?)\]\(\1\)/g, (_match, url: string) => {
+    .replace(/\[(https:\/\/(?:thomastp\.ch\/documents\/(?:ThomasPrudhommeCV|CV_Thomas_Prudhomme_(?:FR|EN)|cv-(?:fr|en))|cv\.thomastp\.ch\/(?:\d{8}\/)?cv-(?:fr|en))\.pdf(?:\?v=\d+)?)\]\(\1\)/g, (_match, url: string) => {
       return `[${cvLinkLabel(url, lang)}](${url})`;
     })
     .replace(CV_URL_PATTERN, (url, offset, fullText) => {

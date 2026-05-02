@@ -1,4 +1,8 @@
 /favicon.ico /icons/favicon.svg 200
+/documents/cv-fr.pdf https://cv.thomastp.ch/cv-fr.pdf 301
+/documents/cv-en.pdf https://cv.thomastp.ch/cv-en.pdf 301
+/documents/CV_Thomas_Prudhomme_FR.pdf https://cv.thomastp.ch/cv-fr.pdf 301
+/documents/CV_Thomas_Prudhomme_EN.pdf https://cv.thomastp.ch/cv-en.pdf 301
 # SPA fallback — serve index.html for unknown paths so the React 404 page
 # (with its mini game) renders instead of the default Cloudflare 404.
 /* /index.html 200

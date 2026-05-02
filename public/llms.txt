@@ -20,8 +20,8 @@
 - **LinkedIn:** https://www.linkedin.com/in/thomas-tp/
 - **Credly (certifications):** https://www.credly.com/users/thomas-prudhomme
 - **All links:** https://links.thomastp.ch
-- **CV (French):** https://thomastp.ch/documents/cv-fr.pdf?v=20260502
-- **Resume (English):** https://thomastp.ch/documents/cv-en.pdf?v=20260502
+- **CV (French):** https://cv.thomastp.ch/cv-fr.pdf
+- **Resume (English):** https://cv.thomastp.ch/cv-en.pdf
 
 ## Technical Skills
 
