@@ -7,6 +7,7 @@
     "dev": "rsbuild dev",
     "build": "bun run build:og && rsbuild build",
     "build:og": "bun run scripts/generate-og.ts",
+    "indexnow": "bun run scripts/submit-indexnow.ts",
     "preview": "rsbuild preview",
     "lint": "eslint .",
     "format": "prettier --write ."
