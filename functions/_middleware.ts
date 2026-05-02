@@ -18,6 +18,12 @@ interface PagesContext {
 
 export async function onRequest(context: PagesContext): Promise<Response> {
   const url = new URL(context.request.url);
+
+  if (url.hostname === 'www.thomastp.ch') {
+    url.hostname = 'thomastp.ch';
+    return Response.redirect(url.toString(), 301);
+  }
+
   const slug = url.searchParams.get('p');
 
   if (!slug || (url.pathname !== '/' && url.pathname !== '/index.html')) {
