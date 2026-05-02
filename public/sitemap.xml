@@ -4,11 +4,12 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://thomastp.ch/</loc>
-    <lastmod>2026-04-29</lastmod>
+    <lastmod>2026-05-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://thomastp.ch/" />
     <xhtml:link rel="alternate" hreflang="fr" href="https://thomastp.ch/" />
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://thomastp.ch/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://thomastp.ch/?lng=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://thomastp.ch/" />
     <image:image>
       <image:loc>https://thomastp.ch/images/og-image.png</image:loc>
@@ -18,5 +19,15 @@
       <image:loc>https://thomastp.ch/images/memoji-nobg.webp</image:loc>
       <image:title>Thomas Prudhomme</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://thomastp.ch/?lng=en</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://thomastp.ch/" />
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://thomastp.ch/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://thomastp.ch/?lng=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://thomastp.ch/" />
   </url>
 </urlset>

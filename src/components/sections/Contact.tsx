@@ -435,6 +435,9 @@ export function Contact() {
               <p className="text-base text-muted-foreground max-w-xl mx-auto">
                 {t('contact.desc')}
               </p>
+              <p className="mt-3 text-sm text-muted-foreground/80 max-w-2xl mx-auto">
+                {t('service_area.summary')}
+              </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">

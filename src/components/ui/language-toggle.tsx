@@ -35,7 +35,16 @@ export function LanguageToggle() {
     }, [isEn]);
 
     const toggleLanguage = useCallback(() => {
-        i18n.changeLanguage(isEn ? 'fr' : 'en');
+        const nextLang = isEn ? 'fr' : 'en';
+        i18n.changeLanguage(nextLang);
+
+        const url = new URL(window.location.href);
+        if (nextLang === 'en') {
+            url.searchParams.set('lng', 'en');
+        } else {
+            url.searchParams.delete('lng');
+        }
+        window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
     }, [i18n, isEn]);
 
     return (

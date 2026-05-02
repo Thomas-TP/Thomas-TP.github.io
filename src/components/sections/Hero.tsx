@@ -383,7 +383,7 @@ export function Hero() {
                 <div className="hero-avatar-card">
                   <img
                     src="/images/photo.webp?v=20260501"
-                    alt="Thomas P."
+                    alt="Thomas Prudhomme"
                     width={576}
                     height={624}
                     className="hero-avatar-photo"

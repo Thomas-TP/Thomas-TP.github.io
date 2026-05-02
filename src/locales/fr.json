@@ -1,9 +1,10 @@
 {
     "seo": {
-        "title": "Thomas Prudhomme | Informaticien & Développeur Web – Genève, Suisse",
-        "description": "Portfolio de Thomas Prudhomme — Étudiant en informatique au CFPT Genève. Développement Web (React, TypeScript, Rust), Cybersécurité, IoT & Cloud. Projets, CV et contact.",
-        "og_title": "Thomas Prudhomme | Développeur Web & Informatique – Genève",
-        "og_description": "Projets en React, Rust, ethical hacking et IoT par Thomas Prudhomme, étudiant en informatique au CFPT Genève. Disponible pour stages et freelance sur l'arc lémanique."
+        "title": "Thomas Prudhomme | Informaticien Genève, Lausanne & Vaud",
+        "description": "Portfolio de Thomas Prudhomme, aussi ThomasTP et Thomas P. — étudiant informaticien au CFPT Genève. Développement web, cybersécurité, IoT et cloud à Genève, Lausanne et dans le canton de Vaud.",
+        "keywords": "Thomas Prudhomme, Thomas Prud'homme, Thomas P, ThomasTP, Thomas-TP, Prudhomme, informaticien Genève, informaticien Lausanne, informaticien Vaud, développeur web Genève, CFPT Informatique",
+        "og_title": "Thomas Prudhomme | Informaticien & Développeur Web – Genève",
+        "og_description": "Projets React, Rust, ethical hacking et IoT par Thomas Prudhomme, étudiant informaticien au CFPT Genève. Disponible pour stages et freelance de Genève à Lausanne."
     },
     "navbar": {
         "home": "Accueil",
@@ -15,10 +16,10 @@
     },
     "skip_content": "Aller au contenu principal",
     "hero": {
-        "name": "Thomas P.",
+        "name": "Thomas Prudhomme",
         "role_prefix": "Futur Informaticien à ",
         "school": "Geneva Institute of Technology",
-        "roles": ["Étudiant en informatique", "Créateur de sites web", "Monteur de PC"],
+        "roles": ["Étudiant en informatique", "Informaticien Genève", "Développeur web Lausanne"],
         "view_cv": "Voir le CV",
         "contact_me": "Me Contacter",
         "scroll": "Défiler"
@@ -30,7 +31,7 @@
     },
     "bento": {
         "header_about": "À Propos",
-        "header_desc": "Je suis un informaticien passionné concentré sur la Cloud, l'IOT, et la CyberSec.",
+        "header_desc": "Je suis Thomas Prudhomme, aussi connu sous ThomasTP ou Thomas P. : étudiant informaticien à Genève, disponible pour des projets web, cloud, IoT et cybersécurité sur l'arc lémanique.",
         "web_dev": {
             "title": "Développement Web",
             "desc": "Création d'applications web modernes et réactives.",
@@ -196,7 +197,8 @@
         "label": "Zone d'activité",
         "badge": "Zone d'activité",
         "title": "Arc Lémanique",
-        "subtitle": "Disponible sur l'ensemble de l'arc lémanique, de Genève à Lausanne.",
+        "subtitle": "Informaticien basé à Genève, disponible pour des projets, stages et collaborations à Lausanne, dans le canton de Vaud et sur l'ensemble de l'arc lémanique.",
+        "summary": "Thomas Prudhomme (ThomasTP, Thomas P.) est basé à Genève et disponible comme informaticien pour des missions à Lausanne, dans le canton de Vaud et sur l'arc lémanique.",
         "lake": "Lac Léman",
         "map_alt": "Carte schématique de la zone d'activité : Genève, Nyon, Lausanne"
     },

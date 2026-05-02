@@ -5,7 +5,8 @@
 ## Identity
 
 - **Name:** Thomas Prudhomme
-- **Location:** Geneva, Switzerland (available across the Lake Geneva region: Geneva – Nyon – Lausanne)
+- **Also searched as:** Thomas Prud'homme, Thomas P., ThomasTP, Thomas-TP, Prudhomme
+- **Location:** Geneva, Switzerland (available across the Lake Geneva region: Geneva – Nyon – Lausanne – Vaud)
 - **Status:** Computer Science student, Swiss CFC track (specialization year 2026, graduation 2028)
 - **CFC orientation:** Informaticien exploitation et infrastructure
 - **Languages:** French (native), English (B2/fluent), German (school level)
@@ -127,4 +128,4 @@ This portfolio is built with React 19, TypeScript 6, Three.js (3D hero), GSAP (a
 
 ---
 
-*Thomas Prudhomme is open to internships and freelance opportunities in the Lake Geneva region (Geneva to Lausanne, Switzerland).*
+*Thomas Prudhomme is open to internships and freelance opportunities in the Lake Geneva region (Geneva to Lausanne and the canton of Vaud, Switzerland).*
