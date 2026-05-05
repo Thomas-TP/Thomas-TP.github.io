@@ -185,6 +185,7 @@ export function Contact() {
 
     loadGsap().then(({ gsap }) => {
       if (!active || !el.isConnected) return;
+      const start = window.innerWidth < 768 ? 'top 98%' : 'top 85%';
       ctx = gsap.context(() => {
         gsap.fromTo(
           el,
@@ -196,7 +197,7 @@ export function Contact() {
             ease: 'power3.out',
             scrollTrigger: {
               trigger: el,
-              start: 'top 85%',
+              start,
               once: true,
               toggleActions: 'play none none none',
             },
@@ -211,43 +212,46 @@ export function Contact() {
     };
   }, []);
 
-  // SVG map animations — trigger fires when the SVG is fully visible on screen
+  // SVG map animations — trigger early enough for mobile/short viewports.
   useEffect(() => {
     const svg = svgRef.current;
+    const container = labelContainerRef.current;
     if (!svg || prefersReduced) return;
-    const trigger = labelContainerRef.current ?? svg;
-    const start = 'top bottom-=48px';
+    const trigger = container ?? svg;
+    const start = 'top 98%';
 
     let ctx: { revert: () => void } | undefined;
     let active = true;
+    let observer: IntersectionObserver | undefined;
     let refreshGsap = () => {};
 
     loadGsap().then(({ gsap, ScrollTrigger }) => {
       if (!active || !svg.isConnected) return;
+      const labels = container?.querySelectorAll('.city-label') ?? [];
       ctx = gsap.context(() => {
-        // Fade in SVG
-        gsap.fromTo(
-          svg,
-          { opacity: 0 },
-          {
-            opacity: 1,
-            duration: 0.4,
-            scrollTrigger: { trigger, start, once: true, toggleActions: 'play none none none' },
-          }
-        );
+        const tl = gsap.timeline({ paused: true });
+        const rippleTweens: Array<{ play: (from?: number) => void }> = [];
+        let played = false;
+        const playMap = () => {
+          if (played) return;
+          played = true;
+          tl.play();
+          rippleTweens.forEach(tween => tween.play(0));
+        };
+
+        tl.fromTo(svg, { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0);
 
         // Lake body fade
         const lakeEl = svg.querySelector('.lake-body');
         if (lakeEl)
-          gsap.fromTo(
+          tl.fromTo(
             lakeEl,
             { opacity: 0 },
             {
               opacity: 1,
               duration: 0.8,
-              delay: 0.5,
-              scrollTrigger: { trigger, start, once: true, toggleActions: 'play none none none' },
-            }
+            },
+            0.5
           );
 
         // Shore path draws
@@ -255,28 +259,29 @@ export function Contact() {
         shores.forEach((path, i) => {
           const pathEl = path as SVGPathElement;
           const length = pathEl.getTotalLength();
-          gsap.set(pathEl, { strokeDasharray: length, strokeDashoffset: length });
-          gsap.to(pathEl, {
-            strokeDashoffset: 0,
-            duration: i === 0 ? 1.2 : 1.6,
-            delay: 0.1 + i * 0.2,
-            ease: 'power2.inOut',
-            scrollTrigger: { trigger, start, once: true, toggleActions: 'play none none none' },
-          });
+          tl.fromTo(
+            pathEl,
+            { strokeDasharray: length, strokeDashoffset: length },
+            {
+              strokeDashoffset: 0,
+              duration: i === 0 ? 1.2 : 1.6,
+              ease: 'power2.inOut',
+            },
+            0.1 + i * 0.2
+          );
         });
 
         // Lake label text
         const lakeLabel = svg.querySelector('.lake-label-text');
         if (lakeLabel)
-          gsap.fromTo(
+          tl.fromTo(
             lakeLabel,
             { opacity: 0 },
             {
               opacity: 1,
               duration: 0.5,
-              delay: 1.2,
-              scrollTrigger: { trigger, start, once: true, toggleActions: 'play none none none' },
-            }
+            },
+            1.2
           );
 
         // City dots
@@ -285,50 +290,81 @@ export function Contact() {
         const cityRipples = svg.querySelectorAll('.city-ripple');
 
         cityDots.forEach((dot, i) => {
-          gsap.fromTo(
+          tl.fromTo(
             dot,
             { attr: { r: 0 } },
             {
               attr: { r: 6 },
               duration: 0.5,
-              delay: 0.6 + i * 0.25,
               ease: 'back.out(3)',
-              scrollTrigger: { trigger, start, once: true, toggleActions: 'play none none none' },
-            }
+            },
+            0.6 + i * 0.25
           );
         });
 
         cityInners.forEach((dot, i) => {
-          gsap.fromTo(
+          tl.fromTo(
             dot,
             { attr: { r: 0 } },
             {
               attr: { r: 2.5 },
               duration: 0.5,
-              delay: 0.7 + i * 0.25,
               ease: 'back.out(3)',
-              scrollTrigger: { trigger, start, once: true, toggleActions: 'play none none none' },
-            }
+            },
+            0.7 + i * 0.25
           );
         });
 
         cityRipples.forEach((ripple, i) => {
-          gsap.fromTo(
-            ripple,
-            { attr: { r: 6 }, opacity: 0.4 },
-            {
-              attr: { r: 18 },
-              opacity: 0,
-              duration: 2.8,
-              delay: 1 + i * 0.3,
-              repeat: -1,
-              repeatDelay: 2.2,
-              ease: 'power2.out',
-              scrollTrigger: { trigger, start, toggleActions: 'play none none none' },
-            }
+          rippleTweens.push(
+            gsap.fromTo(
+              ripple,
+              { attr: { r: 6 }, opacity: 0.4 },
+              {
+                attr: { r: 18 },
+                opacity: 0,
+                duration: 2.8,
+                delay: i * 0.3,
+                repeat: -1,
+                repeatDelay: 2.2,
+                ease: 'power2.out',
+                paused: true,
+              }
+            )
           );
         });
-      }, svg);
+
+        if (labels.length)
+          tl.fromTo(
+            labels,
+            { opacity: 0 },
+            {
+              opacity: 1,
+              duration: 0.3,
+              stagger: 0.25,
+            },
+            0.9
+          );
+
+        ScrollTrigger.create({
+          trigger,
+          start,
+          once: true,
+          onEnter: playMap,
+          onEnterBack: playMap,
+        });
+
+        observer = new IntersectionObserver(
+          entries => {
+            if (entries.some(entry => entry.isIntersecting)) playMap();
+          },
+          { rootMargin: '0px 0px 35% 0px', threshold: 0 }
+        );
+        observer.observe(trigger);
+
+        const rect = trigger.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 1.05 && rect.bottom > -80) playMap();
+      }, trigger);
       refreshGsap = () => ScrollTrigger.refresh();
       refreshGsap();
     });
@@ -344,44 +380,7 @@ export function Contact() {
       cancelAnimationFrame(raf);
       window.clearTimeout(timeout);
       window.removeEventListener('load', refresh);
-      ctx?.revert();
-    };
-  }, [prefersReduced]);
-
-  // City HTML labels
-  useEffect(() => {
-    const el = labelContainerRef.current;
-    const svg = svgRef.current;
-    if (!el || !svg || prefersReduced) return;
-    const labels = el.querySelectorAll('.city-label');
-
-    let ctx: { revert: () => void } | undefined;
-    let active = true;
-
-    loadGsap().then(({ gsap }) => {
-      if (!active || !el.isConnected) return;
-      ctx = gsap.context(() => {
-        gsap.fromTo(
-          labels,
-          { opacity: 0 },
-          {
-            opacity: 1,
-            duration: 0.3,
-            stagger: 0.25,
-            delay: 0.9,
-            scrollTrigger: {
-              trigger: el,
-              start: 'top bottom-=48px',
-              once: true,
-              toggleActions: 'play none none none',
-            },
-          }
-        );
-      }, el);
-    });
-
-    return () => {
-      active = false;
+      observer?.disconnect();
       ctx?.revert();
     };
   }, [prefersReduced]);
@@ -419,7 +418,7 @@ export function Contact() {
   }, []);
 
   return (
-    <section id="contact" className="py-32 container mx-auto px-4 cv-auto">
+    <section id="contact" className="py-20 md:py-32 container mx-auto px-4 cv-auto">
       <div className="max-w-4xl mx-auto">
         <div
           ref={cardRef}

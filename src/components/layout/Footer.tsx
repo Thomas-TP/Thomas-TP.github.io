@@ -39,18 +39,21 @@ export function Footer() {
     const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
     const [isTermsOpen, setIsTermsOpen] = useState(false);
     const stats = useGitHubStats();
+    const currentYear = new Date().getFullYear();
 
     return (
         <footer className="py-8 border-t border-border">
-            <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-                <p>&copy; {new Date().getFullYear()} Thomas P. {t('footer.rights')}</p>
+            <div className="container mx-auto px-4 flex flex-col items-center gap-4 text-center text-sm text-muted-foreground md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:text-left">
+                <p className="md:col-start-1 md:justify-self-start">
+                    &copy; {currentYear} Thomas P. {t('footer.rights')}
+                </p>
 
                 {stats && (
                     <a
                         href="https://github.com/Thomas-TP"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-4 text-xs hover:text-foreground transition-colors"
+                        className="flex items-center gap-4 text-xs hover:text-foreground transition-colors md:col-start-2 md:row-start-1 md:justify-self-center"
                     >
                         <span className="flex items-center gap-1.5">
                             <FaGithub size={14} />
@@ -63,7 +66,7 @@ export function Footer() {
                     </a>
                 )}
 
-                <div className="flex gap-6">
+                <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 md:col-start-3 md:row-start-1 md:justify-self-end md:text-right">
                     <button
                         onClick={() => setIsPrivacyOpen(true)}
                         className="hover:text-foreground transition-colors cursor-pointer"

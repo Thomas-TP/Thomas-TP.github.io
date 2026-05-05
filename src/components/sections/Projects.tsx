@@ -368,11 +368,11 @@ const XCloneVisual = () => {
     return (
         <div ref={containerRef} className="relative w-full h-full bg-black flex flex-col items-center justify-center overflow-hidden">
             <div className="relative z-10 flex flex-col items-center gap-4">
-                <svg className="x-top-logo drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" width="50" height="50" viewBox="0 0 24 24" fill="white" style={{ opacity: 0 }}>
+                <svg className="x-top-logo drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" width="50" height="50" viewBox="0 0 24 24" fill="white">
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
-                <div className="x-mirror w-40 h-[2px] bg-gradient-to-r from-transparent via-blue-200/50 to-transparent shadow-[0_0_15px_rgba(255,255,255,0.8)]" style={{ opacity: 0 }} />
-                <div className="x-bottom-logo transform scale-y-[-1]" style={{ opacity: 0 }}>
+                <div className="x-mirror w-40 h-[2px] bg-gradient-to-r from-transparent via-blue-200/50 to-transparent shadow-[0_0_15px_rgba(255,255,255,0.8)]" />
+                <div className="x-bottom-logo transform scale-y-[-1] opacity-40">
                     <svg width="50" height="50" viewBox="0 0 24 24" fill="white">
                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
@@ -565,19 +565,34 @@ export function Projects() {
         return () => { cancelled = true; };
     }, []);
 
-    // Measure stage and compute card width — layout effect to avoid zero-height flash on first paint
+    // Measure stage and compute card width. ResizeObserver also catches mobile/content-visibility
+    // reveals where the first layout pass can report 0px.
     useLayoutEffect(() => {
         const update = () => {
             const stage = stageRef.current;
             if (!stage) return;
-            const w = stage.clientWidth;
+            const w =
+                stage.getBoundingClientRect().width ||
+                stage.parentElement?.getBoundingClientRect().width ||
+                Math.max(0, window.innerWidth - 32);
+            if (w <= 0) return;
             const ratio = window.innerWidth < 768 ? CARD_WIDTH_RATIO_MOBILE : CARD_WIDTH_RATIO_DESKTOP;
             setStageWidth(w);
             setCardWidth(w * ratio);
         };
+
         update();
+        const raf = requestAnimationFrame(update);
+        const observer = new ResizeObserver(update);
+        if (stageRef.current) observer.observe(stageRef.current);
         window.addEventListener('resize', update);
-        return () => window.removeEventListener('resize', update);
+        window.addEventListener('orientationchange', update);
+        return () => {
+            cancelAnimationFrame(raf);
+            observer.disconnect();
+            window.removeEventListener('resize', update);
+            window.removeEventListener('orientationchange', update);
+        };
     }, []);
 
     // Header reveal — word-by-word staggered lift
@@ -587,6 +602,7 @@ export function Projects() {
         let ctx: { revert: () => void } | undefined;
         loadGsap().then(({ gsap, ScrollTrigger }) => {
             if (!el.isConnected) return;
+            const start = window.innerWidth < 768 ? 'top 98%' : 'top 88%';
             ctx = gsap.context(() => {
                 const title = el.querySelector('.projects-title') as HTMLElement | null;
                 const subtitle = el.querySelector('.projects-subtitle') as HTMLElement | null;
@@ -602,21 +618,21 @@ export function Projects() {
                         { y: '110%', rotateX: -40, opacity: 0 },
                         { y: '0%', rotateX: 0, opacity: 1, duration: 0.8, stagger: 0.06,
                           ease: 'power3.out', delay: 0.1,
-                          scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
+                          scrollTrigger: { trigger: el, start, once: true } }
                     );
                 }
                 if (subtitle) {
                     gsap.fromTo(subtitle,
                         { opacity: 0, y: 18 },
                         { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 0.35,
-                          scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
+                          scrollTrigger: { trigger: el, start, once: true } }
                     );
                 }
                 if (link) {
                     gsap.fromTo(link,
                         { opacity: 0, x: 20 },
                         { opacity: 1, x: 0, duration: 0.6, ease: 'power3.out', delay: 0.45,
-                          scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
+                          scrollTrigger: { trigger: el, start, once: true } }
                     );
                 }
 
@@ -633,12 +649,14 @@ export function Projects() {
         let ctx: { revert: () => void } | undefined;
         loadGsap().then(({ gsap, ScrollTrigger }) => {
             if (!stage.isConnected) return;
+            const start = window.innerWidth < 768 ? 'top 98%' : 'top 92%';
             ctx = gsap.context(() => {
                 gsap.fromTo(stage,
                     { opacity: 0, y: 40 },
                     {
                         opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-                        scrollTrigger: { trigger: stage, start: 'top 92%', once: true },
+                        immediateRender: false,
+                        scrollTrigger: { trigger: stage, start, once: true },
                     }
                 );
                 void ScrollTrigger;
@@ -1017,7 +1035,7 @@ export function Projects() {
     void stageWidth; // measured for resize re-render trigger; cards center via left:50% + marginLeft
 
     return (
-        <section ref={sectionRef} id="projects" className="py-16 container mx-auto px-4 cv-auto">
+        <section ref={sectionRef} id="projects" className="py-10 md:py-16 container mx-auto px-4 cv-auto">
             <div
                 ref={headerRef}
                 className="flex flex-col md:flex-row justify-between items-end mb-8 gap-6"
@@ -1057,7 +1075,7 @@ export function Projects() {
                                 width: cardWidth,
                                 height: stageHeight,
                                 marginLeft: -cardWidth / 2,
-                                opacity: 0,
+                                opacity: isActive ? 1 : 0.3,
                             }}
                             onClick={() => { if (!isActive) goTo(i); }}
                             role="button"
