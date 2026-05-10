@@ -15,7 +15,7 @@
     <link rel="canonical" href="https://thomastp.ch/" />
     <link rel="alternate" hreflang="fr" href="https://thomastp.ch/" />
     <link rel="alternate" hreflang="fr-CH" href="https://thomastp.ch/" />
-    <link rel="alternate" hreflang="en" href="https://thomastp.ch/?lng=en" />
+    <link rel="alternate" hreflang="en" href="https://thomastp.ch/" />
     <link rel="alternate" hreflang="x-default" href="https://thomastp.ch/" />
 
     <!-- Geo (Local SEO – Geneva, Lausanne, Vaud, Switzerland) -->
@@ -78,6 +78,15 @@
       .dark,.dark body,.dark #root{background:#000000}
       html{color-scheme:light}
       html.dark{color-scheme:dark}
+      #lcp-prerender{min-height:100vh;box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:96px 24px 56px;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#18181b;background:#fff}
+      .dark #lcp-prerender{color:#fafafa;background:#000}
+      #lcp-prerender .seo-shell{max-width:920px}
+      #lcp-prerender h1{margin:0 0 18px;font-size:clamp(42px,7vw,84px);line-height:1;font-weight:800;letter-spacing:0}
+      #lcp-prerender p{max-width:760px;margin:0 0 16px;font-size:18px;line-height:1.65;color:#52525b}
+      .dark #lcp-prerender p{color:#d4d4d8}
+      #lcp-prerender nav{display:flex;flex-wrap:wrap;gap:14px;margin-top:28px}
+      #lcp-prerender a{color:inherit;text-decoration:underline;text-underline-offset:4px}
+      #lcp-prerender .seo-links{font-size:15px}
     </style>
 
     <!-- Google Fonts: Bruno Ace — load async, never block rendering -->
@@ -102,7 +111,7 @@
           "name": "Thomas Prudhomme – Portfolio",
           "alternateName": ["ThomasTP", "Thomas-TP", "Thomas P.", "Thomas Prud'homme"],
           "url": "https://thomastp.ch/",
-          "inLanguage": ["fr-CH", "en"],
+          "inLanguage": "fr-CH",
           "publisher": { "@id": "https://thomastp.ch/#person" }
         },
         {
@@ -136,12 +145,6 @@
             "@type": "Place",
             "name": "Genève, Suisse"
           },
-          "areaServed": [
-            { "@type": "City", "name": "Genève" },
-            { "@type": "City", "name": "Lausanne" },
-            { "@type": "AdministrativeArea", "name": "Vaud" },
-            { "@type": "AdministrativeArea", "name": "Arc lémanique" }
-          ],
           "alumniOf": {
             "@type": "EducationalOrganization",
             "name": "Geneva Institute of Technology",
@@ -168,124 +171,46 @@
             "https://www.credly.com/users/thomas-prudhomme",
             "https://links.thomastp.ch"
           ]
-        },
-        {
-          "@type": "ItemList",
-          "@id": "https://thomastp.ch/#projects",
-          "name": "Projects by Thomas Prudhomme",
-          "numberOfItems": 4,
-          "itemListElement": [
-            {
-              "@type": "ListItem",
-              "position": 1,
-              "item": {
-                "@type": "SoftwareSourceCode",
-                "name": "X-clone",
-                "description": "A full-featured Twitter/X clone with AI chat (Grok integration). Built with vanilla web technologies.",
-                "url": "https://x-clone-teal-phi.vercel.app/",
-                "codeRepository": "https://github.com/Thomas-TP/X-clone",
-                "programmingLanguage": ["HTML", "CSS", "JavaScript"],
-                "dateCreated": "2024",
-                "author": { "@id": "https://thomastp.ch/#person" }
-              }
-            },
-            {
-              "@type": "ListItem",
-              "position": 2,
-              "item": {
-                "@type": "SoftwareApplication",
-                "name": "Tank.io",
-                "description": "A multiplayer tank battle game with real-time gameplay using React and HTML5 Canvas.",
-                "url": "https://tank-io-wr49.onrender.com/",
-                "codeRepository": "https://github.com/Thomas-TP/Tank.io",
-                "applicationCategory": "Game",
-                "operatingSystem": "Web Browser",
-                "dateCreated": "2025",
-                "author": { "@id": "https://thomastp.ch/#person" }
-              }
-            },
-            {
-              "@type": "ListItem",
-              "position": 3,
-              "item": {
-                "@type": "SoftwareSourceCode",
-                "name": "PowerShell Empire Automation",
-                "description": "Modernized fork of the Empire post-exploitation framework for automated ethical security testing.",
-                "url": "https://github.com/Thomas-TP/Powershell-Empire-test",
-                "codeRepository": "https://github.com/Thomas-TP/Powershell-Empire-test",
-                "programmingLanguage": "PowerShell",
-                "dateCreated": "2024",
-                "author": { "@id": "https://thomastp.ch/#person" }
-              }
-            },
-            {
-              "@type": "ListItem",
-              "position": 4,
-              "item": {
-                "@type": "SoftwareApplication",
-                "name": "TomBoard",
-                "description": "Open-source Windows soundboard — a free Voicemod alternative with real-time voice changer, dual audio output, and global hotkeys. Built with Rust and Tauri.",
-                "codeRepository": "https://github.com/Thomas-TP/tomboard",
-                "applicationCategory": "Multimedia",
-                "operatingSystem": "Windows",
-                "programmingLanguage": ["Rust", "TypeScript"],
-                "dateCreated": "2026",
-                "author": { "@id": "https://thomastp.ch/#person" }
-              }
-            }
-          ]
-        },
-        {
-          "@type": "FAQPage",
-          "@id": "https://thomastp.ch/#faq",
-          "mainEntity": [
-            {
-              "@type": "Question",
-              "name": "Who is Thomas Prudhomme?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Thomas Prudhomme, also searched as Thomas Prud'homme, Thomas P. or ThomasTP, is a Computer Science student at the Geneva Institute of Technology (CFPT Informatique) in Switzerland, pursuing a Swiss CFC diploma. He specializes in Web Development (React, TypeScript), Cybersecurity, IoT, and Cloud Computing. Based in Geneva, he is available across the Lake Geneva region, including Lausanne and Vaud."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "What technologies does Thomas Prudhomme use?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Thomas works with React 19, TypeScript, Rust (Tauri), Three.js, GSAP, UnoCSS, Bun, and Cloudflare Workers. He also has experience with PowerShell scripting, Flutter/Dart, Cisco Packet Tracer, and ethical hacking tools like PowerShell Empire."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "What projects has Thomas Prudhomme built?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Thomas has built X-clone (a Twitter/X clone with AI chat), Tank.io (a multiplayer tank battle game), PowerShell Empire Automation (ethical security testing), and TomBoard (an open-source Windows soundboard built with Rust and Tauri, a free Voicemod alternative)."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "How can I contact Thomas Prudhomme?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "You can reach Thomas via his portfolio contact form at thomastp.ch/#contact, by email at thomas@prudhomme.li, through LinkedIn at linkedin.com/in/thomas-tp/, or find all his links at links.thomastp.ch."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Is Thomas Prudhomme available for internships or freelance work?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes, Thomas is open to internships and freelance opportunities, particularly in the Lake Geneva region (Geneva to Lausanne). He is in his specialization year (2026) at the Geneva Institute of Technology and will begin his internship phase in 2027."
-              }
-            }
-          ]
         }
       ]
     }
     </script>
   </head>
   <body>
+    <div id="lcp-prerender" aria-label="Portfolio de Thomas Prudhomme">
+      <div class="seo-shell">
+        <h1>Thomas Prudhomme</h1>
+        <p>
+          Portfolio de Thomas Prudhomme, aussi connu sous ThomasTP et Thomas-TP,
+          étudiant informaticien au Geneva Institute of Technology, CFPT Informatique
+          à Genève. Il développe des projets web, cloud, cybersécurité et IoT avec
+          React, TypeScript, Rust, Tauri, Three.js, GSAP, Cloudflare Workers et Bun.
+        </p>
+        <p>
+          Basé en Suisse romande, Thomas travaille sur des expériences interactives,
+          des interfaces performantes, des outils open source et des prototypes
+          techniques pour Genève, Lausanne, Vaud et l'arc lémanique. Ses projets
+          incluent X-clone, Tank.io, PowerShell Empire Automation et TomBoard, une
+          soundboard Windows open source construite avec Rust et Tauri.
+        </p>
+        <p>
+          Ce site présente son profil, ses compétences, ses projets publics, ses liens
+          professionnels et un formulaire de contact sécurisé par Cloudflare Turnstile.
+        </p>
+        <nav class="seo-links" aria-label="Liens principaux">
+          <a href="https://thomastp.ch/">Accueil</a>
+          <a href="#about">À propos</a>
+          <a href="#projects">Projets</a>
+          <a href="#contact">Contact</a>
+          <a href="https://github.com/Thomas-TP">GitHub</a>
+          <a href="https://www.linkedin.com/in/thomas-tp/">LinkedIn</a>
+          <a href="https://links.thomastp.ch">Liens</a>
+        </nav>
+      </div>
+    </div>
+    <script>
+      document.getElementById('lcp-prerender')?.remove();
+    </script>
     <div id="root"></div>
   </body>
 </html>

@@ -17,7 +17,7 @@ export function useDocumentMeta() {
 
   useEffect(() => {
     const isFr = lang.startsWith('fr');
-    const canonicalUrl = isFr ? 'https://thomastp.ch/' : 'https://thomastp.ch/?lng=en';
+    const canonicalUrl = 'https://thomastp.ch/';
 
     document.title = t('seo.title');
     document.documentElement.lang = isFr ? 'fr' : 'en';
