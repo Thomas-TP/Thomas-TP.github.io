@@ -27,6 +27,31 @@ export function App() {
   useDocumentMeta();
 
   useEffect(() => {
+    if (!unknown) return;
+
+    let robotsMeta = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
+    const previousContent = robotsMeta?.content;
+    const createdMeta = !robotsMeta;
+
+    if (!robotsMeta) {
+      robotsMeta = document.createElement('meta');
+      robotsMeta.name = 'robots';
+      document.head.appendChild(robotsMeta);
+    }
+
+    const meta = robotsMeta;
+    meta.content = 'noindex, follow';
+
+    return () => {
+      if (createdMeta) {
+        meta.remove();
+      } else if (previousContent) {
+        meta.content = previousContent;
+      }
+    };
+  }, [unknown]);
+
+  useEffect(() => {
     document.getElementById('lcp-prerender')?.remove();
   }, []);
 
